@@ -1,97 +1,157 @@
 	.build_version macos, 27, 0	sdk_version 27, 0
 	.section	__TEXT,__text,regular,pure_instructions
-	.globl	_evaluate_arbitrum_tick_fast    ; -- Begin function evaluate_arbitrum_tick_fast
+	.globl	_evaluate_v3_route_batch_asm    ; -- Begin function evaluate_v3_route_batch_asm
 	.p2align	2
-_evaluate_arbitrum_tick_fast:           ; @evaluate_arbitrum_tick_fast
+_evaluate_v3_route_batch_asm:           ; @evaluate_v3_route_batch_asm
 	.cfi_startproc
 ; %bb.0:
-	ucvtf	d6, x0
-	mov	x8, #17324                      ; =0x43ac
-	movk	x8, #53714, lsl #16
-	movk	x8, #29277, lsl #32
-	movk	x8, #15410, lsl #48
-	fmov	d7, x8
-	fmul	d7, d6, d7
-	fcmp	d7, #0.0
-	mov.16b	v6, v0
-	b.le	LBB0_2
+	cmp	w0, #1
+	b.lt	LBB0_12
 ; %bb.1:
-	ucvtf	d6, x1
-	mov	x8, #60813                      ; =0xed8d
-	movk	x8, #41141, lsl #16
-	movk	x8, #50935, lsl #32
-	movk	x8, #16048, lsl #48
-	fmov	d16, x8
-	fmul	d6, d6, d16
-	fdiv	d6, d6, d7
-LBB0_2:
-	fcmp	d0, d1
-	fcsel	d7, d0, d1, mi
-	fcmp	d6, d7
-	fcsel	d17, d6, d7, mi
-	movi.2d	v7, #0000000000000000
-	fcmp	d17, #0.0
-	movi.2d	v16, #0000000000000000
-	b.le	LBB0_4
-; %bb.3:
-	fcmp	d0, d1
-	fcsel	d16, d0, d1, gt
-	fcmp	d6, d16
-	fcsel	d16, d6, d16, gt
-	fsub	d16, d16, d17
-	fdiv	d16, d16, d17
-	mov	x8, #149533581377536            ; =0x880000000000
-	movk	x8, #16579, lsl #48
-	fmov	d17, x8
-	fmul	d16, d16, d17
-LBB0_4:
-	fsub	d3, d16, d3
-	mov	x8, #17197                      ; =0x432d
-	movk	x8, #60188, lsl #16
-	movk	x8, #14050, lsl #32
-	movk	x8, #16154, lsl #48
-	fmov	d17, x8
-	fmul	d17, d3, d17
-	fmul	d2, d2, d17
-	fcmp	d3, #0.0
-	fcsel	d2, d2, d7, gt
-	ucvtf	d3, x2
-	fsub	d17, d2, d4
-	mov	x8, #17324                      ; =0x43ac
-	movk	x8, #53714, lsl #16
-	movk	x8, #29277, lsl #32
-	movk	x8, #15410, lsl #48
-	fmov	d18, x8
-	fmul	d3, d3, d18
-	sub	x8, x2, #1
-	mov	x9, #-1486618625                ; =0xffffffffa763ffff
-	movk	x9, #46771, lsl #32
-	movk	x9, #3552, lsl #48
-	cmp	x8, x9
-	cset	w8, lo
-	mov	x9, #54002                      ; =0xd2f2
-	movk	x9, #25165, lsl #16
-	movk	x9, #22544, lsl #32
-	movk	x9, #16297, lsl #48
-	fmov	d18, x9
-	fnmsub	d5, d5, d18, d4
-	fcsel	d5, d5, d7, lo
-	stp	d0, d6, [x3]
-	stp	d1, d16, [x3, #16]
-	stp	d2, d4, [x3, #32]
-	stp	d17, d3, [x3, #48]
-	str	d5, [x3, #64]
-	mov	x9, #-7378697629483820647       ; =0x9999999999999999
-	movk	x9, #39322
-	movk	x9, #16297, lsl #48
-	fmov	d0, x9
-	fcmp	d17, d0
-	cset	w9, gt
-	fmov	d0, #0.50000000
-	fcmp	d5, d0
-	csel	w8, wzr, w8, le
-	stp	w9, w8, [x3, #72]
+	mov	x11, #0                         ; =0x0
+	ldp	x12, x8, [sp, #24]
+	ldr	x9, [sp, #16]
+	mov	x10, #54933                     ; =0xd695
+	movk	x10, #59430, lsl #16
+	movk	x10, #11787, lsl #32
+	movk	x10, #15889, lsl #48
+	fmov	d1, x10
+	mov	x10, #149533581377536           ; =0x880000000000
+	movk	x10, #16579, lsl #48
+	fmov	d2, x10
+	mov	x10, #60813                     ; =0xed8d
+	movk	x10, #41141, lsl #16
+	movk	x10, #50935, lsl #32
+	movk	x10, #16048, lsl #48
+	fmov	d3, x10
+	mov	x10, #17197                     ; =0x432d
+	movk	x10, #60188, lsl #16
+	movk	x10, #14050, lsl #32
+	movk	x10, #16154, lsl #48
+	fmov	d4, x10
+	mov	x10, #22038                     ; =0x5616
+	movk	x10, #40679, lsl #16
+	movk	x10, #943, lsl #32
+	movk	x10, #15570, lsl #48
+	fmov	d5, x10
+	mov	x10, #116548232544256           ; =0x6a0000000000
+	movk	x10, #16600, lsl #48
+	fmov	d6, x10
+	mov	x10, #61572651155456            ; =0x380000000000
+	movk	x10, #49295, lsl #48
+	fmov	d7, x10
+	ldp	x14, x13, [sp]
+	fmov	d16, #1.00000000
+	fmov	d17, #25.00000000
+	fmov	d18, #10.00000000
+	mov	w10, w0
+	b	LBB0_4
+LBB0_2:                                 ;   in Loop: Header=BB0_4 Depth=1
+	str	xzr, [x13, x11, lsl #3]
+	fadd	d19, d21, d7
+LBB0_3:                                 ;   in Loop: Header=BB0_4 Depth=1
+	str	d19, [x9, x11, lsl #3]
+	fsub	d19, d19, d0
+	str	d19, [x12, x11, lsl #3]
+	add	x11, x11, #1
+	cmp	x10, x11
+	b.eq	LBB0_11
+LBB0_4:                                 ; =>This Inner Loop Header: Depth=1
+	ldr	d19, [x1, x11, lsl #3]
+	ldr	d21, [x2, x11, lsl #3]
+	fcmp	d19, d21
+	fcsel	d20, d19, d21, ls
+	fcsel	d19, d21, d19, ls
+	csel	x15, x3, x4, ls
+	csel	x16, x4, x3, ls
+	movi.2d	v21, #0000000000000000
+	fcmp	d20, d1
+	b.le	LBB0_6
+; %bb.5:                                ;   in Loop: Header=BB0_4 Depth=1
+	fsub	d21, d19, d20
+	fdiv	d21, d21, d20
+	fmul	d21, d21, d2
+LBB0_6:                                 ;   in Loop: Header=BB0_4 Depth=1
+	ldr	d23, [x15, x11, lsl #3]
+	ldr	d22, [x16, x11, lsl #3]
+	ldr	d24, [x5, x11, lsl #3]
+	str	d21, [x7, x11, lsl #3]
+	fsub	d21, d21, d24
+	str	d21, [x14, x11, lsl #3]
+	str	w11, [x8, x11, lsl #2]
+	fcmp	d21, #0.0
+	b.ls	LBB0_2
+; %bb.7:                                ;   in Loop: Header=BB0_4 Depth=1
+	fmaxnm	d23, d23, d3
+	fmul	d20, d20, d23
+	fmaxnm	d22, d22, d3
+	fmul	d19, d19, d22
+	fdiv	d20, d16, d20
+	fdiv	d19, d16, d19
+	fadd	d19, d20, d19
+	fmul	d20, d21, d4
+	fcmp	d19, d5
+	b.le	LBB0_9
+; %bb.8:                                ;   in Loop: Header=BB0_4 Depth=1
+	fadd	d21, d19, d19
+	fdiv	d21, d20, d21
+	b	LBB0_10
+LBB0_9:                                 ;   in Loop: Header=BB0_4 Depth=1
+	mov	x15, #4636737291354636288       ; =0x4059000000000000
+	fmov	d21, x15
+LBB0_10:                                ;   in Loop: Header=BB0_4 Depth=1
+	ldr	d22, [x6, x11, lsl #3]
+	fcmp	d22, d17
+	fcsel	d22, d6, d22, mi
+	fcmp	d21, d18
+	fcsel	d21, d18, d21, mi
+	fcmp	d21, d22
+	fcsel	d21, d22, d21, gt
+	fmul	d22, d21, d21
+	fnmul	d19, d19, d22
+	fmadd	d19, d21, d20, d19
+	str	d21, [x13, x11, lsl #3]
+	b	LBB0_3
+LBB0_11:
+	cmp	w10, #1
+	b.ne	LBB0_13
+LBB0_12:
 	ret
+LBB0_13:
+	add	x11, x8, #4
+	mov	w12, #1                         ; =0x1
+	mov	w13, #2                         ; =0x2
+	b	LBB0_16
+LBB0_14:                                ;   in Loop: Header=BB0_16 Depth=1
+	sub	x15, x15, #1
+LBB0_15:                                ;   in Loop: Header=BB0_16 Depth=1
+	sbfiz	x15, x15, #2, #32
+	str	w14, [x8, x15]
+	add	x12, x12, #1
+	add	x13, x13, #1
+	add	x11, x11, #4
+	cmp	x12, x10
+	b.eq	LBB0_12
+LBB0_16:                                ; =>This Loop Header: Depth=1
+                                        ;     Child Loop BB0_17 Depth 2
+	ldrsw	x14, [x8, x12, lsl #2]
+	ldr	d0, [x9, x14, lsl #3]
+	mov	x16, x11
+	mov	x15, x13
+LBB0_17:                                ;   Parent Loop BB0_16 Depth=1
+                                        ; =>  This Inner Loop Header: Depth=2
+	ldursw	x17, [x16, #-4]
+	ldr	d1, [x9, x17, lsl #3]
+	fcmp	d1, d0
+	b.pl	LBB0_14
+; %bb.18:                               ;   in Loop: Header=BB0_17 Depth=2
+	str	w17, [x16], #-4
+	sub	x15, x15, #1
+	cmp	x15, #1
+	b.gt	LBB0_17
+; %bb.19:                               ;   in Loop: Header=BB0_16 Depth=1
+	mov	x15, #0                         ; =0x0
+	b	LBB0_15
 	.cfi_endproc
                                         ; -- End function
 	.section	__TEXT,__literal8,8byte_literals
@@ -111,20 +171,28 @@ lCPI1_0:
 _encode_gasless_arb_calldata:           ; @encode_gasless_arb_calldata
 	.cfi_startproc
 ; %bb.0:
-	str	wzr, [x6, #384]
 	movi.2d	v0, #0000000000000000
-	stp	q0, q0, [x6, #352]
-	stp	q0, q0, [x6, #320]
-	stp	q0, q0, [x6, #288]
-	stp	q0, q0, [x6, #256]
-	stp	q0, q0, [x6, #224]
-	stp	q0, q0, [x6, #192]
-	stp	q0, q0, [x6, #160]
-	stp	q0, q0, [x6, #128]
-	stp	q0, q0, [x6, #96]
-	stp	q0, q0, [x6, #64]
-	stp	q0, q0, [x6, #32]
-	stp	q0, q0, [x6]
+	stur	q0, [x6, #244]
+	stur	q0, [x6, #228]
+	stur	q0, [x6, #212]
+	stur	q0, [x6, #196]
+	stur	q0, [x6, #180]
+	stur	q0, [x6, #164]
+	stur	q0, [x6, #148]
+	stur	q0, [x6, #132]
+	stur	q0, [x6, #116]
+	stur	q0, [x6, #100]
+	stur	q0, [x6, #84]
+	stur	q0, [x6, #68]
+	stur	q0, [x6, #52]
+	stur	q0, [x6, #36]
+	mov	x8, x6
+	str	q0, [x8, #4]!
+	stur	q0, [x6, #20]
+	stp	q0, q0, [x8, #352]
+	stp	q0, q0, [x8, #320]
+	stp	q0, q0, [x8, #288]
+	stp	q0, q0, [x8, #256]
 Lloh0:
 	adrp	x8, lCPI1_0@PAGE
 Lloh1:
@@ -161,98 +229,121 @@ Lloh1:
 _main:                                  ; @main
 	.cfi_startproc
 ; %bb.0:
-	sub	sp, sp, #128
-	stp	d11, d10, [sp, #64]             ; 16-byte Folded Spill
-	stp	d9, d8, [sp, #80]               ; 16-byte Folded Spill
-	stp	x20, x19, [sp, #96]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #112]            ; 16-byte Folded Spill
-	add	x29, sp, #112
+	sub	sp, sp, #448
+	stp	d13, d12, [sp, #304]            ; 16-byte Folded Spill
+	stp	d11, d10, [sp, #320]            ; 16-byte Folded Spill
+	stp	d9, d8, [sp, #336]              ; 16-byte Folded Spill
+	stp	x28, x27, [sp, #352]            ; 16-byte Folded Spill
+	stp	x26, x25, [sp, #368]            ; 16-byte Folded Spill
+	stp	x24, x23, [sp, #384]            ; 16-byte Folded Spill
+	stp	x22, x21, [sp, #400]            ; 16-byte Folded Spill
+	stp	x20, x19, [sp, #416]            ; 16-byte Folded Spill
+	stp	x29, x30, [sp, #432]            ; 16-byte Folded Spill
+	add	x29, sp, #432
 	.cfi_def_cfa w29, 16
 	.cfi_offset w30, -8
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
 	.cfi_offset w20, -32
-	.cfi_offset b8, -40
-	.cfi_offset b9, -48
-	.cfi_offset b10, -56
-	.cfi_offset b11, -64
-	mov	w20, #16960                     ; =0x4240
-	movk	w20, #15, lsl #16
+	.cfi_offset w21, -40
+	.cfi_offset w22, -48
+	.cfi_offset w23, -56
+	.cfi_offset w24, -64
+	.cfi_offset w25, -72
+	.cfi_offset w26, -80
+	.cfi_offset w27, -88
+	.cfi_offset w28, -96
+	.cfi_offset b8, -104
+	.cfi_offset b9, -112
+	.cfi_offset b10, -120
+	.cfi_offset b11, -128
+	.cfi_offset b12, -136
+	.cfi_offset b13, -144
+Lloh2:
+	adrp	x8, ___stack_chk_guard@GOTPAGE
+Lloh3:
+	ldr	x8, [x8, ___stack_chk_guard@GOTPAGEOFF]
+Lloh4:
+	ldr	x8, [x8]
+	stur	x8, [x29, #-144]
+Lloh5:
+	adrp	x8, l___const.main.p2@PAGE
+Lloh6:
+	add	x8, x8, l___const.main.p2@PAGEOFF
+	ldp	q0, q1, [x8]
+	stp	q0, q1, [x29, #-176]
+	add	x1, sp, #64
+	mov	w0, #6                          ; =0x6
+	bl	_clock_gettime
+	mov	x8, #7864                       ; =0x1eb8
+	movk	x8, #60293, lsl #16
+	movk	x8, #35153, lsl #32
+	movk	x8, #16546, lsl #48
+	fmov	d9, x8
+	movi.2d	v10, #0000000000000000
+	mov	x8, #48571                      ; =0xbdbb
+	movk	x8, #55767, lsl #16
+	movk	x8, #31967, lsl #32
+	movk	x8, #15835, lsl #48
+	fmov	d11, x8
+	add	x26, sp, #96
+	add	x27, sp, #128
+	add	x28, sp, #160
+	add	x24, sp, #192
+Lloh7:
+	adrp	x19, l___const.main.p1@PAGE
+Lloh8:
+	add	x19, x19, l___const.main.p1@PAGEOFF
+Lloh9:
+	adrp	x20, l___const.main.y1@PAGE
+Lloh10:
+	add	x20, x20, l___const.main.y1@PAGEOFF
+Lloh11:
+	adrp	x21, l___const.main.y2@PAGE
+Lloh12:
+	add	x21, x21, l___const.main.y2@PAGEOFF
+Lloh13:
+	adrp	x22, l___const.main.fl@PAGE
+Lloh14:
+	add	x22, x22, l___const.main.fl@PAGEOFF
+	mov	x8, #5243                       ; =0x147b
+	movk	x8, #18350, lsl #16
+	movk	x8, #31457, lsl #32
+	movk	x8, #16276, lsl #48
+	fmov	d8, x8
+	fmov	d12, #1.00000000
+	mov	w25, #16960                     ; =0x4240
+	movk	w25, #15, lsl #16
+Lloh15:
+	adrp	x23, l___const.main.bm@PAGE
+Lloh16:
+	add	x23, x23, l___const.main.bm@PAGEOFF
+LBB2_1:                                 ; =>This Inner Loop Header: Depth=1
+	fmadd	d0, d10, d11, d9
+	stur	d0, [x29, #-168]
+	add	x8, sp, #80
+	stp	x26, x8, [sp, #24]
+	sub	x2, x29, #176
+	sub	x7, x29, #208
+	stp	x28, x27, [sp, #8]
+	str	x24, [sp]
+	mov	w0, #4                          ; =0x4
+	mov	x1, x19
+	mov	x3, x20
+	mov	x4, x21
+	mov	x5, x22
+	mov	x6, x23
+	mov.16b	v0, v8
+	bl	_evaluate_v3_route_batch_asm
+	fadd	d10, d10, d12
+	subs	w25, w25, #1
+	b.ne	LBB2_1
+; %bb.2:
 	add	x1, sp, #48
 	mov	w0, #6                          ; =0x6
 	bl	_clock_gettime
-	mov	x8, #3689348814741910323        ; =0x3333333333333333
-	movk	x8, #14643, lsl #32
-	movk	x8, #16545, lsl #48
-	fmov	d0, x8
-	movi.2d	v1, #0000000000000000
-	mov	x8, #54933                      ; =0xd695
-	movk	x8, #59430, lsl #16
-	movk	x8, #11787, lsl #32
-	movk	x8, #15889, lsl #48
-	fmov	d2, x8
-	mov	x8, #31457                      ; =0x7ae1
-	movk	x8, #44564, lsl #16
-	movk	x8, #16071, lsl #32
-	movk	x8, #16545, lsl #48
-	fmov	d3, x8
-	mov	x8, #41500                      ; =0xa21c
-	movk	x8, #60035, lsl #16
-	movk	x8, #14650, lsl #32
-	movk	x8, #16545, lsl #48
-	fmov	d4, x8
-	mov	x8, #149533581377536            ; =0x880000000000
-	movk	x8, #16579, lsl #48
-	fmov	d5, x8
-	fmov	d6, #1.00000000
-	mov	w8, #16960                      ; =0x4240
-	movk	w8, #15, lsl #16
-	b	LBB2_2
-LBB2_1:                                 ;   in Loop: Header=BB2_2 Depth=1
-	fadd	d1, d1, d6
-	subs	w8, w8, #1
-	b.eq	LBB2_4
-LBB2_2:                                 ; =>This Inner Loop Header: Depth=1
-	fmadd	d16, d1, d2, d0
-	fminnm	d7, d16, d3
-	fcmp	d7, d4
-	fcsel	d7, d4, d7, gt
-	fcmp	d7, #0.0
-	movi.2d	v8, #0000000000000000
-	b.le	LBB2_1
-; %bb.3:                                ;   in Loop: Header=BB2_2 Depth=1
-	fmaxnm	d16, d16, d3
-	fcmp	d16, d4
-	fcsel	d16, d4, d16, mi
-	fsub	d16, d16, d7
-	fdiv	d7, d16, d7
-	fmul	d8, d7, d5
-	b	LBB2_1
-LBB2_4:
-	fmov	d0, #-10.00000000
-	fadd	d0, d8, d0
-	mov	x8, #17197                      ; =0x432d
-	movk	x8, #60188, lsl #16
-	movk	x8, #14050, lsl #32
-	movk	x8, #16154, lsl #48
-	fmov	d1, x8
-	fmul	d1, d0, d1
-	mov	x8, #211106232532992            ; =0xc00000000000
-	movk	x8, #16530, lsl #48
-	fmov	d2, x8
-	fmul	d1, d1, d2
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #49081, lsl #48
-	fmov	d2, x8
-	fadd	d1, d1, d2
-	fcmp	d0, #0.0
-	fcsel	d9, d1, d2, gt
-	add	x1, sp, #32
-	mov	w0, #6                          ; =0x6
-	bl	_clock_gettime
-	ldp	x8, x9, [sp, #32]
-	ldp	x10, x11, [sp, #48]
+	ldp	x8, x9, [sp, #48]
+	ldp	x10, x11, [sp, #64]
 	sub	x8, x8, x10
 	scvtf	d0, x8
 	sub	x8, x9, x11
@@ -264,108 +355,173 @@ LBB2_4:
 	mov	x8, #145685290680320            ; =0x848000000000
 	movk	x8, #16686, lsl #48
 	fmov	d1, x8
-	fdiv	d10, d0, d1
-Lloh2:
-	adrp	x19, l_str.10@PAGE
-Lloh3:
-	add	x19, x19, l_str.10@PAGEOFF
+	fdiv	d8, d0, d1
+	ldrsw	x20, [sp, #80]
+Lloh17:
+	adrp	x19, l_str.9@PAGE
+Lloh18:
+	add	x19, x19, l_str.9@PAGEOFF
 	mov	x0, x19
 	bl	_puts
-Lloh4:
-	adrp	x0, l_str.8@PAGE
-Lloh5:
-	add	x0, x0, l_str.8@PAGEOFF
+Lloh19:
+	adrp	x0, l_str.7@PAGE
+Lloh20:
+	add	x0, x0, l_str.7@PAGEOFF
 	bl	_puts
 	mov	x0, x19
 	bl	_puts
-	str	x20, [sp]
-Lloh6:
+	mov	w8, #16960                      ; =0x4240
+	movk	w8, #15, lsl #16
+	str	x8, [sp]
+Lloh21:
 	adrp	x0, l_.str.2@PAGE
-Lloh7:
+Lloh22:
 	add	x0, x0, l_.str.2@PAGEOFF
 	bl	_printf
-	str	d10, [sp]
-Lloh8:
+	str	d8, [sp]
+Lloh23:
 	adrp	x0, l_.str.3@PAGE
-Lloh9:
+Lloh24:
 	add	x0, x0, l_.str.3@PAGEOFF
 	bl	_printf
-	stp	d10, d10, [sp]
-Lloh10:
+	str	d8, [sp]
+Lloh25:
 	adrp	x0, l_.str.4@PAGE
-Lloh11:
+Lloh26:
 	add	x0, x0, l_.str.4@PAGEOFF
 	bl	_printf
-	mov	w8, #99                         ; =0x63
-	mov	w9, #239                        ; =0xef
-	stp	x9, x8, [sp, #16]
-	mov	w8, #52                         ; =0x34
-	mov	w9, #16                         ; =0x10
-	stp	x9, x8, [sp]
-Lloh12:
+	sub	x8, x29, #208
+	ldr	d0, [x8, x20, lsl #3]
+	add	x8, sp, #160
+	ldr	d1, [x8, x20, lsl #3]
+	add	x8, sp, #128
+	ldr	d2, [x8, x20, lsl #3]
+	add	x8, sp, #96
+	ldr	d3, [x8, x20, lsl #3]
+	stp	d2, d3, [sp, #24]
+	stp	d0, d1, [sp, #8]
+	str	x20, [sp]
+Lloh27:
 	adrp	x0, l_.str.5@PAGE
-Lloh13:
+Lloh28:
 	add	x0, x0, l_.str.5@PAGEOFF
 	bl	_printf
-	stp	d8, d9, [sp]
-Lloh14:
+	ldur	d0, [x29, #-208]
+	ldr	d1, [sp, #160]
+	ldr	d2, [sp, #128]
+	stp	d1, d2, [sp, #8]
+	str	d0, [sp]
+Lloh29:
 	adrp	x0, l_.str.6@PAGE
-Lloh15:
+Lloh30:
 	add	x0, x0, l_.str.6@PAGEOFF
-	bl	_printf
-	mov	w8, #1                          ; =0x1
-	mov	x9, #11535                      ; =0x2d0f
-	movk	x9, #40370, lsl #16
-	movk	x9, #64495, lsl #32
-	movk	x9, #16548, lsl #48
-	stp	x9, x8, [sp]
-Lloh16:
-	adrp	x0, l_.str.7@PAGE
-Lloh17:
-	add	x0, x0, l_.str.7@PAGEOFF
 	bl	_printf
 	mov	x0, x19
 	bl	_puts
+	ldur	x8, [x29, #-144]
+Lloh31:
+	adrp	x9, ___stack_chk_guard@GOTPAGE
+Lloh32:
+	ldr	x9, [x9, ___stack_chk_guard@GOTPAGEOFF]
+Lloh33:
+	ldr	x9, [x9]
+	cmp	x9, x8
+	b.ne	LBB2_4
+; %bb.3:
 	mov	w0, #0                          ; =0x0
-	ldp	x29, x30, [sp, #112]            ; 16-byte Folded Reload
-	ldp	x20, x19, [sp, #96]             ; 16-byte Folded Reload
-	ldp	d9, d8, [sp, #80]               ; 16-byte Folded Reload
-	ldp	d11, d10, [sp, #64]             ; 16-byte Folded Reload
-	add	sp, sp, #128
+	ldp	x29, x30, [sp, #432]            ; 16-byte Folded Reload
+	ldp	x20, x19, [sp, #416]            ; 16-byte Folded Reload
+	ldp	x22, x21, [sp, #400]            ; 16-byte Folded Reload
+	ldp	x24, x23, [sp, #384]            ; 16-byte Folded Reload
+	ldp	x26, x25, [sp, #368]            ; 16-byte Folded Reload
+	ldp	x28, x27, [sp, #352]            ; 16-byte Folded Reload
+	ldp	d9, d8, [sp, #336]              ; 16-byte Folded Reload
+	ldp	d11, d10, [sp, #320]            ; 16-byte Folded Reload
+	ldp	d13, d12, [sp, #304]            ; 16-byte Folded Reload
+	add	sp, sp, #448
 	ret
-	.loh AdrpAdd	Lloh16, Lloh17
-	.loh AdrpAdd	Lloh14, Lloh15
-	.loh AdrpAdd	Lloh12, Lloh13
-	.loh AdrpAdd	Lloh10, Lloh11
-	.loh AdrpAdd	Lloh8, Lloh9
-	.loh AdrpAdd	Lloh6, Lloh7
-	.loh AdrpAdd	Lloh4, Lloh5
-	.loh AdrpAdd	Lloh2, Lloh3
+LBB2_4:
+	bl	___stack_chk_fail
+	.loh AdrpAdd	Lloh15, Lloh16
+	.loh AdrpAdd	Lloh13, Lloh14
+	.loh AdrpAdd	Lloh11, Lloh12
+	.loh AdrpAdd	Lloh9, Lloh10
+	.loh AdrpAdd	Lloh7, Lloh8
+	.loh AdrpAdd	Lloh5, Lloh6
+	.loh AdrpLdrGotLdr	Lloh2, Lloh3, Lloh4
+	.loh AdrpLdrGotLdr	Lloh31, Lloh32, Lloh33
+	.loh AdrpAdd	Lloh29, Lloh30
+	.loh AdrpAdd	Lloh27, Lloh28
+	.loh AdrpAdd	Lloh25, Lloh26
+	.loh AdrpAdd	Lloh23, Lloh24
+	.loh AdrpAdd	Lloh21, Lloh22
+	.loh AdrpAdd	Lloh19, Lloh20
+	.loh AdrpAdd	Lloh17, Lloh18
 	.cfi_endproc
                                         ; -- End function
+	.section	__TEXT,__const
+	.p2align	3, 0x0                          ; @__const.main.p1
+l___const.main.p1:
+	.quad	0x40a2883333333333              ; double 2372.0999999999999
+	.quad	0x40a2880000000000              ; double 2372
+	.quad	0x40a287999999999a              ; double 2371.8000000000002
+	.quad	0x3ff00068db8bac71              ; double 1.0001
+
+	.p2align	3, 0x0                          ; @__const.main.p2
+l___const.main.p2:
+	.quad	0x40a28ad70a3d70a4              ; double 2373.4200000000001
+	.quad	0x40a28951eb851eb8              ; double 2372.6599999999999
+	.quad	0x40a288c28f5c28f6              ; double 2372.3800000000001
+	.quad	0x3ff0012599ed7c70              ; double 1.0002800000000001
+
+	.p2align	3, 0x0                          ; @__const.main.y1
+l___const.main.y1:
+	.quad	0x3fdccccccccccccd              ; double 0.45000000000000001
+	.quad	0x4088ac7ae147ae14              ; double 789.55999999999995
+	.quad	0x4088ac7ae147ae14              ; double 789.55999999999995
+	.quad	0x40df658000000000              ; double 32150
+
+	.p2align	3, 0x0                          ; @__const.main.y2
+l___const.main.y2:
+	.quad	0x405c83d70a3d70a4              ; double 114.06
+	.quad	0x4069047ae147ae14              ; double 200.13999999999999
+	.quad	0x408235999999999a              ; double 582.70000000000005
+	.quad	0x40d7250000000000              ; double 23700
+
+	.p2align	3, 0x0                          ; @__const.main.fl
+l___const.main.fl:
+	.quad	0x4000000000000000              ; double 2
+	.quad	0x4000000000000000              ; double 2
+	.quad	0x4000000000000000              ; double 2
+	.quad	0x3ff0cccccccccccd              ; double 1.05
+
+	.p2align	3, 0x0                          ; @__const.main.bm
+l___const.main.bm:
+	.quad	0x410f496000000000              ; double 256300
+	.quad	0x410f496000000000              ; double 256300
+	.quad	0x410f496000000000              ; double 256300
+	.quad	0x410337e000000000              ; double 157436
+
 	.section	__TEXT,__cstring,cstring_literals
 l_.str.2:                               ; @.str.2
-	.asciz	"Iterations Executed      : %d ticks + BSWAP64 EVM calldata encodings\n"
+	.asciz	"Iterations Executed      : %d full 4-route V3 batches + BSWAP64 encodings\n"
 
 l_.str.3:                               ; @.str.3
 	.asciz	"Total CPU Time           : %.3f ms\n"
 
 l_.str.4:                               ; @.str.4
-	.asciz	"Latency Per Tick         : %.2f nanoseconds (0.0000%.0f ms)\n"
+	.asciz	"Latency Per Batch        : %.2f nanoseconds\n"
 
 l_.str.5:                               ; @.str.5
-	.asciz	"Calldata Prefix (Hex)    : 0x%02x%02x%02x%02x...\n"
+	.asciz	"Best Route Index         : #%d (Spread=%.2f bps | Optimal Loan=$%.2f | Gross=$%+.4f | Net=$%+.4f)\n"
 
 l_.str.6:                               ; @.str.6
-	.asciz	"DEX Spread               : %.2f bps | DEX Net Profit: $%.4f\n"
+	.asciz	"Thin Pool Index (#0)     : Spread=%.2f bps | Optimal Loan=$%.2f | Gross=$%+.4f (Demoted Below Deep Pool!)\n"
 
-l_.str.7:                               ; @.str.7
-	.asciz	"Aave HF (0.9950) Bounty  : $%.2f USD Net Profit | Execute Liq: %d\n"
+l_str.7:                                ; @str.7
+	.asciz	"ARBITRUM v8.0 HARDWARE ASSEMBLY V3 CONCENTRATED-LIQUIDITY KERNEL"
 
-l_str.8:                                ; @str.8
-	.asciz	"AWS EC2 x86_64 & ARM64 HARDWARE ASSEMBLY SNIPER KERNEL BENCHMARK"
-
-l_str.10:                               ; @str.10
+l_str.9:                                ; @str.9
 	.asciz	"======================================================================"
 
 .subsections_via_symbols

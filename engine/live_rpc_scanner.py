@@ -99,22 +99,53 @@ LIVE_AAVE_TARGETS = [
 ]
 
 
+import ctypes
+
+_ASM_LIB = None
+for _lib_name in ("libfast_sniper.so", "libfast_sniper.dylib"):
+    _lib_path = Path(__file__).resolve().parent / _lib_name
+    if _lib_path.exists():
+        try:
+            _ASM_LIB = ctypes.CDLL(str(_lib_path))
+            _ASM_LIB.evaluate_v3_route_batch_asm.argtypes = [
+                ctypes.c_int,
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.c_double,
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_double),
+                ctypes.POINTER(ctypes.c_int),
+            ]
+            _ASM_LIB.evaluate_v3_route_batch_asm.restype = None
+            break
+        except Exception:
+            _ASM_LIB = None
+
+
 class PersistentRpcPool:
     """
     Maintains persistent HTTP/1.1 Keep-Alive TLS sockets to Alchemy & Arbitrum One RPC endpoints
-    and records exact error telemetry (HTTP 429 rate limits, socket drops, failovers).
+    with sticky fastest-endpoint routing and records exact error telemetry.
     """
 
     def __init__(self, endpoints: List[str] = RPC_ENDPOINTS) -> None:
         self.endpoints = endpoints
         self._conns: Dict[str, http.client.HTTPSConnection] = {}
         self._ssl_ctx = ssl.create_default_context()
+        self.active_ep_idx = 0
         self.rpc_error_count = 0
         self.http_429_count = 0
         self.failover_count = 0
         self.last_error: Optional[str] = None
 
-    def _get_conn(self, endpoint: str, timeout: float = 4.0) -> http.client.HTTPSConnection:
+    def _get_conn(self, endpoint: str, timeout: float = 2.5) -> http.client.HTTPSConnection:
         conn = self._conns.get(endpoint)
         if conn is None:
             parsed = urlparse(endpoint)
@@ -134,7 +165,7 @@ class PersistentRpcPool:
             except Exception:
                 pass
 
-    def call(self, method: str, params: List[Any], timeout: float = 4.0) -> Dict[str, Any]:
+    def call(self, method: str, params: List[Any], timeout: float = 2.5) -> Dict[str, Any]:
         payload = json.dumps({
             "jsonrpc": "2.0",
             "method": method,
@@ -142,7 +173,10 @@ class PersistentRpcPool:
             "id": 1,
         }).encode("utf-8")
 
-        for ep_idx, endpoint in enumerate(self.endpoints):
+        n_eps = len(self.endpoints)
+        for offset in range(n_eps):
+            ep_idx = (self.active_ep_idx + offset) % n_eps
+            endpoint = self.endpoints[ep_idx]
             parsed = urlparse(endpoint)
             path = parsed.path or "/"
             for _attempt in range(2):
@@ -156,7 +190,7 @@ class PersistentRpcPool:
                         headers={
                             "Content-Type": "application/json",
                             "Connection": "keep-alive",
-                            "User-Agent": "ArbFlashEngine-KeepAlive/7.0",
+                            "User-Agent": "ArbFlashEngine-KeepAlive/8.0-ASM",
                         },
                     )
                     resp = conn.getresponse()
@@ -167,12 +201,14 @@ class PersistentRpcPool:
                         self.rpc_error_count += 1
                         self.last_error = f"HTTP 429 Rate Limit on {parsed.netloc}"
                         self._close_conn(endpoint)
+                        self.active_ep_idx = (ep_idx + 1) % n_eps
                         break
                     if resp.status == 200:
                         body = json.loads(raw.decode("utf-8"))
                         if "result" in body:
-                            if ep_idx > 0:
+                            if offset > 0:
                                 self.failover_count += 1
+                            self.active_ep_idx = ep_idx
                             return {
                                 "ok": True,
                                 "endpoint": endpoint,
@@ -186,17 +222,21 @@ class PersistentRpcPool:
                     self.rpc_error_count += 1
                     self.last_error = f"{type(exc).__name__} on {parsed.netloc}: {exc}"
                     self._close_conn(endpoint)
+                    self.active_ep_idx = (ep_idx + 1) % n_eps
                     continue
         return {"ok": False, "endpoint": None, "latency_ms": None, "result": None}
 
-    def batch_call(self, calls: List[Dict[str, Any]], timeout: float = 4.5) -> Dict[str, Any]:
+    def batch_call(self, calls: List[Dict[str, Any]], timeout: float = 2.5) -> Dict[str, Any]:
         """Executes multiple JSON-RPC calls in a single HTTP Keep-Alive round-trip."""
         batch_payload = json.dumps([
             {"jsonrpc": "2.0", "method": c["method"], "params": c["params"], "id": idx + 1}
             for idx, c in enumerate(calls)
         ]).encode("utf-8")
 
-        for ep_idx, endpoint in enumerate(self.endpoints):
+        n_eps = len(self.endpoints)
+        for offset in range(n_eps):
+            ep_idx = (self.active_ep_idx + offset) % n_eps
+            endpoint = self.endpoints[ep_idx]
             parsed = urlparse(endpoint)
             path = parsed.path or "/"
             for _attempt in range(2):
@@ -210,7 +250,7 @@ class PersistentRpcPool:
                         headers={
                             "Content-Type": "application/json",
                             "Connection": "keep-alive",
-                            "User-Agent": "ArbFlashEngine-KeepAlive/7.0",
+                            "User-Agent": "ArbFlashEngine-KeepAlive/8.0-ASM",
                         },
                     )
                     resp = conn.getresponse()
@@ -221,6 +261,7 @@ class PersistentRpcPool:
                         self.rpc_error_count += 1
                         self.last_error = f"HTTP 429 Rate Limit on {parsed.netloc}"
                         self._close_conn(endpoint)
+                        self.active_ep_idx = (ep_idx + 1) % n_eps
                         break
                     if resp.status == 200:
                         body = json.loads(raw.decode("utf-8"))
@@ -229,10 +270,12 @@ class PersistentRpcPool:
                                 self.http_429_count += 1
                                 self.rpc_error_count += 1
                                 self.last_error = f"Partial batch error/429 on {parsed.netloc}"
+                                self.active_ep_idx = (ep_idx + 1) % n_eps
                                 break
                             body.sort(key=lambda x: x.get("id", 0))
-                            if ep_idx > 0:
+                            if offset > 0:
                                 self.failover_count += 1
+                            self.active_ep_idx = ep_idx
                             return {
                                 "ok": True,
                                 "endpoint": endpoint,
@@ -243,6 +286,7 @@ class PersistentRpcPool:
                     self.rpc_error_count += 1
                     self.last_error = f"{type(exc).__name__} on {parsed.netloc}: {exc}"
                     self._close_conn(endpoint)
+                    self.active_ep_idx = (ep_idx + 1) % n_eps
                     continue
         return {"ok": False, "endpoint": None, "latency_ms": None, "results": []}
 
@@ -461,8 +505,8 @@ def _verify_route_onchain_quoter(
     if not cfg:
         return None
     addr_b, dec_b, sym_b, px_b, addr_m, dec_m, sym_m, d1, f1, d2, f2 = cfg
-    loan_candidates = [100.0, 500.0, 2500.0]
-    if loan_usd > 25.0:
+    loan_candidates = [15.0, 40.0, 100.0, 300.0, 1000.0]
+    if loan_usd >= 10.0 and round(loan_usd, 2) not in loan_candidates:
         loan_candidates.append(round(loan_usd, 2))
 
     c1 = []
@@ -1013,7 +1057,7 @@ def scan_single_cycle(
                 "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
                 "p1": p_usdt_cam_1,
                 "p2": p_usdt_pcs_1,
-                "y1": 19.56,      # Real Camelot V3 WETH/USDT active tick virtual WETH depth ($49k)
+                "y1": 0.45,       # Real Camelot V3 WETH/USDT single-tick active depth before tick crossing
                 "y2": 114.06,     # Real PancakeSwap V3 1bps WETH/USDT active tick virtual WETH depth ($286k)
                 "gamma1": 0.99990,
                 "gamma2": 0.99990,
@@ -1026,8 +1070,8 @@ def scan_single_cycle(
                 "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
                 "p1": p_usdt_cam_1,
                 "p2": p_usdt_uni_1,
-                "y1": 19.56,
-                "y2": 4.17,
+                "y1": 0.45,
+                "y2": 0.35,
                 "gamma1": 0.99990,
                 "gamma2": 0.99990,
                 "fee_floor_bps": 2.00,
@@ -1078,7 +1122,7 @@ def scan_single_cycle(
                 "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
                 "p1": p_usdt_cam_1,
                 "p2": p_usdt_uni_5,
-                "y1": 19.56,
+                "y1": 0.45,
                 "y2": 5545.24,
                 "gamma1": 0.99990,
                 "gamma2": 0.99950,
@@ -1127,49 +1171,106 @@ def scan_single_cycle(
             },
         ]
 
+        n_routes = len(route_defs)
         evaluated_routes = []
-        for r in route_defs:
-            p_low = min(r["p1"], r["p2"])
-            p_high = max(r["p1"], r["p2"])
-            spread_bps = round(((p_high - p_low) / max(p_low, 1e-9)) * 10000.0, 2)
-            if r["p1"] <= r["p2"]:
-                y_low, y_high = r["y1"], r["y2"]
-                g_low, g_high = r["gamma1"], r["gamma2"]
-            else:
-                y_low, y_high = r["y2"], r["y1"]
-                g_low, g_high = r["gamma2"], r["gamma1"]
 
-            x1_usd = p_low * y_low
-            x2_usd = p_high * y_high
+        if _ASM_LIB is not None:
+            c_d_arr = ctypes.c_double * n_routes
+            c_i_arr = ctypes.c_int * n_routes
+            p1_arr = c_d_arr(*(float(r["p1"]) for r in route_defs))
+            p2_arr = c_d_arr(*(float(r["p2"]) for r in route_defs))
+            y1_arr = c_d_arr(*(float(r["y1"]) for r in route_defs))
+            y2_arr = c_d_arr(*(float(r["y2"]) for r in route_defs))
+            fl_arr = c_d_arr(*(float(r["fee_floor_bps"]) for r in route_defs))
+            bm_arr = c_d_arr(*(float(r["bal_max_usd"]) for r in route_defs))
 
-            eval_res = evaluate_best_loan_option(
-                x1_usd=x1_usd,
-                y1_units=y_low,
-                x2_usd=x2_usd,
-                y2_units=y_high,
-                gamma1=g_low,
-                gamma2=g_high,
-                balancer_zero_fee_max_usd=r["bal_max_usd"],
-                borrow_symbol=r["borrow_symbol"],
-                gas_fee_usd=live_gas_fee_usd,
+            out_sp = c_d_arr()
+            out_nm = c_d_arr()
+            out_opt = c_d_arr()
+            out_gr = c_d_arr()
+            out_nt = c_d_arr()
+            out_rk = c_i_arr()
+
+            _ASM_LIB.evaluate_v3_route_batch_asm(
+                n_routes,
+                p1_arr,
+                p2_arr,
+                y1_arr,
+                y2_arr,
+                fl_arr,
+                bm_arr,
+                ctypes.c_double(float(live_gas_fee_usd)),
+                out_sp,
+                out_nm,
+                out_opt,
+                out_gr,
+                out_nt,
+                out_rk,
             )
-            evaluated_routes.append({
-                **r,
-                "spread_bps": spread_bps,
-                "net_margin_bps": round(spread_bps - r["fee_floor_bps"], 2),
-                "eval": eval_res,
-            })
 
-        # Sort by highest actual net trade profit first, then by highest net margin over fee floor
-        evaluated_routes.sort(
-            key=lambda item: (item["eval"]["net_trade_profit_usd"], item["net_margin_bps"]),
-            reverse=True,
-        )
+            for idx_pos in range(n_routes):
+                i = out_rk[idx_pos]
+                r = route_defs[i]
+                opt_loan = round(float(out_opt[i]), 2)
+                gr_val = round(float(out_gr[i]), 4)
+                nt_val = round(float(out_nt[i]), 4)
+                is_prof = nt_val > 0.0
+                evaluated_routes.append({
+                    **r,
+                    "spread_bps": round(float(out_sp[i]), 2),
+                    "net_margin_bps": round(float(out_nm[i]), 2),
+                    "asm_v3_gross_usd": gr_val,
+                    "eval": {
+                        "profitable": is_prof,
+                        "vault_name": f"Balancer V2 (0.00% Fee, {r['borrow_symbol']} Max=${r['bal_max_usd']:,.0f})" if is_prof else "NONE_SKIPPED",
+                        "borrow_symbol": r["borrow_symbol"],
+                        "optimal_loan_usd": opt_loan if opt_loan > 0 else 100.0,
+                        "gross_trade_profit_usd": round(max(0.0, gr_val), 2),
+                        "vault_fee_usd": 0.00,
+                        "gas_relayer_fee_usd": live_gas_fee_usd if is_prof else 0.00,
+                        "total_fees_deducted_from_profit_usd": live_gas_fee_usd if is_prof else 0.00,
+                        "net_trade_profit_usd": round(max(0.0, nt_val), 2),
+                    },
+                })
+        else:
+            for r in route_defs:
+                p_low = min(r["p1"], r["p2"])
+                p_high = max(r["p1"], r["p2"])
+                spread_bps = round(((p_high - p_low) / max(p_low, 1e-9)) * 10000.0, 2)
+                if r["p1"] <= r["p2"]:
+                    y_low, y_high = r["y1"], r["y2"]
+                    g_low, g_high = r["gamma1"], r["gamma2"]
+                else:
+                    y_low, y_high = r["y2"], r["y1"]
+                    g_low, g_high = r["gamma2"], r["gamma1"]
+
+                x1_usd = p_low * y_low
+                x2_usd = p_high * y_high
+
+                eval_res = evaluate_best_loan_option(
+                    x1_usd=x1_usd,
+                    y1_units=y_low,
+                    x2_usd=x2_usd,
+                    y2_units=y_high,
+                    gamma1=g_low,
+                    gamma2=g_high,
+                    balancer_zero_fee_max_usd=r["bal_max_usd"],
+                    borrow_symbol=r["borrow_symbol"],
+                    gas_fee_usd=live_gas_fee_usd,
+                )
+                evaluated_routes.append({
+                    **r,
+                    "spread_bps": spread_bps,
+                    "net_margin_bps": round(spread_bps - r["fee_floor_bps"], 2),
+                    "eval": eval_res,
+                })
+            evaluated_routes.sort(
+                key=lambda item: (item["eval"]["net_trade_profit_usd"], item["net_margin_bps"]),
+                reverse=True,
+            )
 
         # Mandatory On-Chain QuoterV2 / AlgebraQuoter Verification Gate:
-        # Check all candidate routes where spot spread > fee floor (net_margin_bps > 0) so that:
-        # 1) The V2 constant-product pre-filter never blocks a real concentrated-liquidity trade, and
-        # 2) A thin-tick pool with high spot spread never masks a deeper pool that is actually profitable.
+        # Check top assembly-ranked candidates where spot spread > fee floor (net_margin_bps > 0)
         positive_candidates = [
             item for item in evaluated_routes if item["eval"]["profitable"] or item["net_margin_bps"] > 0.0
         ][:3]

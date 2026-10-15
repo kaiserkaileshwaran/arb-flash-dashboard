@@ -23,9 +23,9 @@ ALCHEMY_HTTPS_URL = "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtw
 ALCHEMY_WSS_URL = "wss://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX"
 
 RPC_ENDPOINTS = [
-    "https://arbitrum-one-rpc.publicnode.com",
     ALCHEMY_HTTPS_URL,
     "https://arb1.arbitrum.io/rpc",
+    "https://arbitrum-one-rpc.publicnode.com",
     "https://1rpc.io/arb",
 ]
 
