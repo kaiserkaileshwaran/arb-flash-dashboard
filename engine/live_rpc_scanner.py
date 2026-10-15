@@ -76,14 +76,14 @@ BALANCER_V2_VAULT_BALANCE_CALLDATA = (
 
 # Real Near-Liquidation Arbitrum One Aave V3 Borrowers Discovered On-Chain (Closed-Loop Iteration 3)
 LIVE_AAVE_TARGETS = [
-    "0xc358f7803a0a28afe56b5bbce157664fe5e1624d",  # ~$54.26k USDC Debt / WETH Coll, HF ~1.0236 (2.30% away!)
-    "0x99e0516ecb79fd9a9f5daba4327a99808c058263",  # ~$2.45k  USDC Debt / WETH Coll, HF ~1.0240 (2.34% away!)
-    "0xd710cfb897f5eb6898ff1b4bab8453186d53736b",  # ~$2.39k  USDC Debt / WETH Coll, HF ~1.0245 (2.39% away!)
-    "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",  # ~$61.89k USDC Debt / WETH Coll, HF ~1.0283 (2.75% away!)
-    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36",  # ~$11.48k USDC Debt / WETH Coll, HF ~1.0304 (2.95% away!)
-    "0x572372831a9d6b2e3ee8fa284505599e6125fea9",  # ~$1.03k  Debt,                  HF ~1.0416
-    "0xad1a9e8864e74a654a9ecb9439bf6897045a9db8",  # ~$80.74k Debt,                  HF ~1.0576
-    "0x4c2707ec572416256c939ca9cc653acbb1473145",  # ~$20.62k Debt,                  HF ~1.0675
+    "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",  # ~$119.8k Debt / $145.0k Coll, HF ~1.0165 (ONLY 1.62% away!)
+    "0xc358f7803a0a28afe56b5bbce157664fe5e1624d",  # ~$54.26k USDC Debt / WETH Coll, HF ~1.0192 (1.88% away!)
+    "0x99e0516ecb79fd9a9f5daba4327a99808c058263",  # ~$2.45k  USDC Debt / WETH Coll, HF ~1.0185 (1.81% away!)
+    "0xd710cfb897f5eb6898ff1b4bab8453186d53736b",  # ~$2.39k  USDC Debt / WETH Coll, HF ~1.0190 (1.86% away!)
+    "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",  # ~$61.89k USDC Debt / WETH Coll, HF ~1.0238 (2.32% away!)
+    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36",  # ~$11.48k USDC Debt / WETH Coll, HF ~1.0262 (2.55% away!)
+    "0xd54daa05976cd37816868fe800a4db5d99ddd22c",  # ~$9.00k  Debt / $11.48k Coll,   HF ~1.0306 (2.97% away!)
+    "0x572372831a9d6b2e3ee8fa284505599e6125fea9",  # ~$27.04k Debt / $36.34k Coll,   HF ~1.0485
 ]
 
 
