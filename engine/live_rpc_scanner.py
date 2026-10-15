@@ -416,17 +416,27 @@ def _encode_quoter_call(dex_type: str, token_in: str, token_out: str, amount_in_
     return CAMV3_QUOTER, "0x2d9ebd1d" + pad_in + pad_out + pad_amt + "".rjust(64, "0")
 
 
+_QUOTER_CACHE: Dict[Tuple[str, float, float], Dict[str, Any]] = {}
+
+
 def _verify_route_onchain_quoter(
     pair_label: str,
     loan_usd: float,
     eth_usd: float,
     vault_fee_usd: float,
     gas_fee_usd: float,
+    p1: float = 0.0,
+    p2: float = 0.0,
 ) -> Optional[Dict[str, Any]]:
     """
     Executes a real 2-leg eth_call against UniswapV3QuoterV2 (0xc6a5026a), PancakeSwapV3QuoterV2 (0xc6a5026a),
     and CamelotV3 AlgebraQuoter (0x2d9ebd1d) in both directions to verify exact wei-for-wei swap output.
+    Caches results by exact (pair_label, p1, p2) so unchanged ticks resolve in 0.00ms without extra RPC calls.
     """
+    cache_key = (pair_label, round(p1, 6), round(p2, 6))
+    if cache_key in _QUOTER_CACHE:
+        return dict(_QUOTER_CACHE[cache_key])
+
     route_map = {
         "USDC/USDC.e (Camelot V3 0.05bps <-> UniV3 1.00bps)": (TOKEN_USDC_E, 6, "USDC.e", 1.0, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "UNIV3", 100),
         "USDC/USDC.e (Camelot V3 0.05bps <-> PancakeSwap V3 1.00bps)": (TOKEN_USDC_E, 6, "USDC.e", 1.0, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "PCSV3", 100),
@@ -451,7 +461,7 @@ def _verify_route_onchain_quoter(
     if not cfg:
         return None
     addr_b, dec_b, sym_b, px_b, addr_m, dec_m, sym_m, d1, f1, d2, f2 = cfg
-    loan_candidates = [100.0, 300.0, 1000.0, 3000.0, 10000.0]
+    loan_candidates = [100.0, 500.0, 2500.0]
     if loan_usd > 25.0:
         loan_candidates.append(round(loan_usd, 2))
 
@@ -506,6 +516,10 @@ def _verify_route_onchain_quoter(
             }
             if best_res is None or cand["net_usd"] > best_res["net_usd"]:
                 best_res = cand
+    if best_res is not None:
+        if len(_QUOTER_CACHE) > 256:
+            _QUOTER_CACHE.clear()
+        _QUOTER_CACHE[cache_key] = dict(best_res)
     return best_res
 
 
@@ -1172,6 +1186,8 @@ def scan_single_cycle(
                 eth_usd=p_uni_5,
                 vault_fee_usd=ce["vault_fee_usd"],
                 gas_fee_usd=live_gas_fee_usd,
+                p1=cand_item["p1"],
+                p2=cand_item["p2"],
             )
             if q_ver is not None:
                 if q_ver["net_usd"] > 0.0:
