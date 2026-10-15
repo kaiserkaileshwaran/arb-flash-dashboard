@@ -1,0 +1,5 @@
+{
+  "name": "Arbitrum Flash Engine (US-East Virginia Low-Latency Node)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "postCreateCommand": "chmod +x scripts/deploy_free_us_server.sh && ./scripts/deploy_free_us_server.sh"
+}
