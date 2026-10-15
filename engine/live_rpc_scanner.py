@@ -1096,7 +1096,7 @@ def main() -> None:
         "--wallet",
         type=str,
         default=os.environ.get("OWNER_ADDRESS", "0x3DFb9B3E8691388886F2f048E2e11E027194F018"),
-        help="Your public Arbitrum wallet address (0x...) to receive 100% of net profits",
+        help="Your public Arbitrum wallet address (0x...) to receive 100%% of net profits",
     )
     args = parser.parse_args()
 
