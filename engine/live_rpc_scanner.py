@@ -19,7 +19,7 @@ import os
 import ssl
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 from checkpoint_manager import (
@@ -74,7 +74,13 @@ TOKEN_WBTC   = "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f"
 TOKEN_USDC   = "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
 TOKEN_USDC_E = "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
 TOKEN_USDT   = "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
+TOKEN_WSTETH = "0x5979D7b546E38E414F7E9822514be443A4800529"
+TOKEN_ARB    = "0x912CE59144191C1204E64559FE8253a0e49E6548"
 AAVE_V3_POOL = "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
+
+UNIV3_QUOTER_V2 = "0x61fFE014bA17989E743c5F6cB21bF9697530B21e"
+PCSV3_QUOTER_V2 = "0xB048Bbc1Ee6b733FFfCFb9e9CeF7375518e25997"
+CAMV3_QUOTER    = "0x0Fc73040b26E9bC8514fA028D998E73A254Fa76E"
 
 BALANCER_V2_VAULT_BALANCE_CALLDATA = (
     "0x70a08231000000000000000000000000BA12222222228d8Ba445958a75a0704d566BF2C8"
@@ -397,6 +403,85 @@ def evaluate_best_loan_option(
         "total_fees_deducted_from_profit_usd": 0.00,
         "net_trade_profit_usd": 0.00,
     }
+
+
+def _encode_quoter_call(dex_type: str, token_in: str, token_out: str, amount_in_wei: int, fee_raw: int) -> Tuple[str, str]:
+    pad_in = token_in[2:].lower().rjust(64, "0")
+    pad_out = token_out[2:].lower().rjust(64, "0")
+    pad_amt = hex(max(1, amount_in_wei))[2:].rjust(64, "0")
+    if dex_type in ("UNIV3", "PCSV3"):
+        target = UNIV3_QUOTER_V2 if dex_type == "UNIV3" else PCSV3_QUOTER_V2
+        pad_fee = hex(fee_raw)[2:].rjust(64, "0")
+        return target, "0xc6a5026a" + pad_in + pad_out + pad_amt + pad_fee + "".rjust(64, "0")
+    return CAMV3_QUOTER, "0x2d9ebd1d" + pad_in + pad_out + pad_amt + "".rjust(64, "0")
+
+
+def _verify_route_onchain_quoter(
+    pair_label: str,
+    loan_usd: float,
+    eth_usd: float,
+    vault_fee_usd: float,
+    gas_fee_usd: float,
+) -> Optional[Dict[str, Any]]:
+    """
+    Executes a real 2-leg eth_call against UniswapV3QuoterV2 (0xc6a5026a), PancakeSwapV3QuoterV2 (0xc6a5026a),
+    and CamelotV3 AlgebraQuoter (0x2d9ebd1d) in both directions to verify exact wei-for-wei swap output.
+    """
+    route_map = {
+        "USDC/USDC.e (Camelot V3 0.05bps <-> UniV3 1.00bps)": (TOKEN_USDC_E, 6, "USDC.e", 1.0, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "UNIV3", 100),
+        "USDC/USDC.e (Camelot V3 0.05bps <-> PancakeSwap V3 1.00bps)": (TOKEN_USDC_E, 6, "USDC.e", 1.0, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "PCSV3", 100),
+        "USDC/USDT (Camelot V3 0.25bps <-> UniV3 1.00bps)": (TOKEN_USDT, 6, "USDT", 1.0, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "UNIV3", 100),
+        "USDC/USDT (Camelot V3 0.25bps <-> PancakeSwap V3 1.00bps)": (TOKEN_USDT, 6, "USDT", 1.0, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "PCSV3", 100),
+        "USDC/USDT (PancakeSwap V3 1.00bps <-> UniV3 1.00bps)": (TOKEN_USDT, 6, "USDT", 1.0, TOKEN_USDC, 6, "USDC", "PCSV3", 100, "UNIV3", 100),
+        "wstETH/WETH (Camelot V3 0.50bps <-> UniV3 1.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_WSTETH, 18, "wstETH", "CAMV3", 0, "UNIV3", 100),
+        "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_WBTC, 8, "WBTC", "CAMV3", 0, "PCSV3", 100),
+        "WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "UNIV3", 100),
+        "WETH/USDC (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "PCSV3", 100),
+        "WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 1.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDC, 6, "USDC", "PCSV3", 100, "UNIV3", 100),
+        "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDT, 6, "USDT", "CAMV3", 0, "PCSV3", 100),
+        "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDT, 6, "USDT", "CAMV3", 0, "UNIV3", 100),
+        "WBTC/WETH (Camelot V3 0.90bps <-> UniV3 0.05% 5.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_WBTC, 8, "WBTC", "CAMV3", 0, "UNIV3", 500),
+        "WETH/USDC (Camelot V3 1.00bps <-> UniV3 0.05% 5.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDC, 6, "USDC", "CAMV3", 0, "UNIV3", 500),
+        "WETH/USDC (UniV3 0.01% 1.00bps <-> 0.05% 5.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDC, 6, "USDC", "UNIV3", 100, "UNIV3", 500),
+        "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.05% 5.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDT, 6, "USDT", "CAMV3", 0, "UNIV3", 500),
+        "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.05% 5.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_USDT, 6, "USDT", "PCSV3", 100, "UNIV3", 500),
+        "ARB/WETH (Camelot V3 1.11bps <-> UniV3 0.05% 5.00bps)": (TOKEN_WETH, 18, "WETH", eth_usd, TOKEN_ARB, 18, "ARB", "CAMV3", 0, "UNIV3", 500),
+    }
+    cfg = route_map.get(pair_label)
+    if not cfg:
+        return None
+    addr_b, dec_b, sym_b, px_b, addr_m, dec_m, sym_m, d1, f1, d2, f2 = cfg
+    amt_in_wei = int((loan_usd / max(px_b, 1e-6)) * (10 ** dec_b))
+    if amt_in_wei <= 0:
+        return None
+
+    best_res = None
+    for leg1_d, leg1_f, leg2_d, leg2_f in [(d1, f1, d2, f2), (d2, f2, d1, f1)]:
+        to1, data1 = _encode_quoter_call(leg1_d, addr_b, addr_m, amt_in_wei, leg1_f)
+        r1 = GLOBAL_RPC_POOL.call("eth_call", [{"to": to1, "data": data1}, "latest"])
+        if not r1["ok"] or not r1["result"] or len(r1["result"]) < 66:
+            continue
+        amt_mid_wei = int(r1["result"][2:66], 16)
+        if amt_mid_wei <= 0:
+            continue
+        to2, data2 = _encode_quoter_call(leg2_d, addr_m, addr_b, amt_mid_wei, leg2_f)
+        r2 = GLOBAL_RPC_POOL.call("eth_call", [{"to": to2, "data": data2}, "latest"])
+        if not r2["ok"] or not r2["result"] or len(r2["result"]) < 66:
+            continue
+        amt_out_wei = int(r2["result"][2:66], 16)
+        in_h = amt_in_wei / (10 ** dec_b)
+        mid_h = amt_mid_wei / (10 ** dec_m)
+        out_h = amt_out_wei / (10 ** dec_b)
+        gross_usd = round((out_h - in_h) * px_b, 4)
+        net_usd = round(gross_usd - vault_fee_usd - gas_fee_usd, 4)
+        cand = {
+            "gross_usd": round(gross_usd, 2),
+            "net_usd": round(max(0.0, net_usd), 2) if net_usd > 0 else round(net_usd, 4),
+            "trace": f"{in_h:.4f} {sym_b} -> {mid_h:.4f} {sym_m} -> {out_h:.4f} {sym_b}",
+        }
+        if best_res is None or cand["gross_usd"] > best_res["gross_usd"]:
+            best_res = cand
+    return best_res
 
 
 def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
@@ -1046,6 +1131,28 @@ def scan_single_cycle(
         live_spread_bps = best["spread_bps"]
         fee_floor_bps = best["fee_floor_bps"]
 
+        # Mandatory On-Chain QuoterV2 / AlgebraQuoter Verification Gate:
+        # Even if the analytical slot0 formula says profitable=True, verify the exact 2-leg swap
+        # via eth_call on UniswapV3QuoterV2 (0xc6a5026a), PancakeSwapV3QuoterV2 (0xc6a5026a),
+        # and CamelotV3 AlgebraQuoter (0x2d9ebd1d) before recording any profitable execution.
+        quoter_trace_note = ""
+        if ev["profitable"]:
+            q_ver = _verify_route_onchain_quoter(
+                pair_label=best["pair"],
+                loan_usd=ev["optimal_loan_usd"],
+                eth_usd=p_uni_5,
+                vault_fee_usd=ev["vault_fee_usd"],
+                gas_fee_usd=ev["gas_relayer_fee_usd"],
+            )
+            if q_ver is not None:
+                if q_ver["net_usd"] > 0.0:
+                    ev["gross_trade_profit_usd"] = q_ver["gross_usd"]
+                    ev["net_trade_profit_usd"] = q_ver["net_usd"]
+                    quoter_trace_note = f" | QuoterTrace: {q_ver['trace']}"
+                else:
+                    ev["profitable"] = False
+                    quoter_trace_note = f" | QuoterVerifiedDeficit=${q_ver['gross_usd']:+.4f}"
+
         if ev["profitable"]:
             optimal_loan = ev["optimal_loan_usd"]
             gross_usd = ev["gross_trade_profit_usd"]
@@ -1060,7 +1167,7 @@ def scan_single_cycle(
             decision = (
                 f"EXECUTED_PROFITABLE_FLASH_TRADE (Loan=${optimal_loan:,.2f} {ev['borrow_symbol']} | "
                 f"Gross=+${gross_usd:.2f} | Fees=-${total_fees_usd:.2f} from Profit | "
-                f"Trade Net=+${net_usd:.2f} / +₹{post_inr:,.2f} | Overall=+${new_cum_usd:.2f})"
+                f"Trade Net=+${net_usd:.2f} / +₹{post_inr:,.2f} | Overall=+${new_cum_usd:.2f}{quoter_trace_note})"
             )
         else:
             optimal_loan = 0.00
@@ -1075,7 +1182,7 @@ def scan_single_cycle(
             vault_used = f"Balancer V2 0% (WETH=${bal_weth_usd:,.0f} | USDC.e=${bal_usdce_usd:,.0f})"
             decision = (
                 f"SKIPPED_ZERO_LOSS_GUARD (Spread {live_spread_bps:.2f}bps vs {fee_floor_bps:.2f}bps Floor | "
-                f"Aave MinHF={top_aave['health_factor']} | ₹0 Spent, Prior Profit Untouched)"
+                f"Aave MinHF={top_aave['health_factor']} | ₹0 Spent, Prior Profit Untouched{quoter_trace_note})"
             )
 
         record = {

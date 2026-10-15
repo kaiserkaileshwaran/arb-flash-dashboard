@@ -114,10 +114,10 @@
     "UNI": "0xFa7F8980b0f1E64A2062791cc3b0871572f1F7f0",
     "AAVE": "0xba5DdD1f9d7F570dc94a51479a000E3BCE967196"
   },
-  "updated_at": "2026-10-15T06:55:06Z",
-  "last_scanner_block": 514985402,
+  "updated_at": "2026-10-15T07:07:33Z",
+  "last_scanner_block": 514988086,
   "last_scanner_rpc": "https://arbitrum-one-rpc.publicnode.com",
-  "last_scanner_latency_ms": 942.93,
+  "last_scanner_latency_ms": 247.14,
   "v4_multicall3_speedup": "6.0x faster",
   "v4_live_balancer_usdc_liquidity_usd": 9138.46,
   "v4_cascade_single_block_lakhs_inr": 23.33,
