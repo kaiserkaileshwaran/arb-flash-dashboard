@@ -1,16 +1,17 @@
 /*
  * ============================================================================
  * Arbitrum One Ultra-Low-Latency Native C / Assembly Flash-Loan Sniper Kernel
- * v8.0 — Concentrated-Liquidity V3 Active-Tick Calculus + Hardware BSWAP64
+ * v8.1 — Active-Tick Thin-Pool Hardware Rejection + Directional V3 Calculus
  * (US-East x86_64 AVX2/BMI2 + ARM64 Hardware Assembly)
  * ============================================================================
- * 1. Generate Fresh Assembly (.s):
+ * 1. Delete old assembly & generate fresh Assembly (.s):
+ *    rm -f engine/fast_sniper_native.s engine/fast_sniper_aws_x86_64.s engine/fast_sniper_native engine/libfast_sniper.*
  *    clang -O3 -S engine/fast_sniper_native.c -o engine/fast_sniper_native.s
  *    clang --target=x86_64-unknown-linux-gnu -O3 -mavx2 -mbmi2 -ffreestanding -nostdinc -DFREESTANDING_ASM_ONLY -S engine/fast_sniper_native.c -o engine/fast_sniper_aws_x86_64.s
  *
  * 2. Compile Shared Library (.so / .dylib) & Standalone Binary:
- *    gcc -O3 -march=native -shared -fPIC engine/fast_sniper_native.c -o engine/libfast_sniper.so
- *    gcc -O3 -march=native engine/fast_sniper_native.c -o engine/fast_sniper_native
+ *    gcc -O3 -mavx2 -mbmi2 -shared -fPIC engine/fast_sniper_native.c -o engine/libfast_sniper.so
+ *    gcc -O3 -mavx2 -mbmi2 engine/fast_sniper_native.c -o engine/fast_sniper_native
  */
 
 #ifndef FREESTANDING_ASM_ONLY
@@ -55,15 +56,13 @@ static inline __attribute__((always_inline)) uint32_t asm_evm_be32(uint32_t val)
 }
 
 /*
- * Exported C-ABI Hardware-Compiled V3 Concentrated-Liquidity Batch Kernel:
- * Evaluates N candidate routes simultaneously in CPU hardware registers (< 15 ns total):
- * - Computes exact spot spread in bps
- * - Computes active-tick concentrated-liquidity USD depth V1 = 0.025 * p_low * y_low, V2 = 0.025 * p_high * y_high
+ * Exported C-ABI Hardware-Compiled V3 Concentrated-Liquidity Batch Kernel (v8.1):
+ * Evaluates N candidate routes simultaneously in CPU hardware registers (< 35 ns total):
+ * - Computes exact spot spread in bps & swap direction (0: p1->p2, 1: p2->p1)
+ * - Computes active-tick concentrated-liquidity USD depth V1 = p_low * y_low, V2 = p_high * y_high
  * - Solves exact calculus derivative dG/dD = 0 for optimal V3 flash loan D*:
  *     D* = (net_edge_bps * 1e-4) / (2 * (1/V1 + 1/V2))
- * - Computes exact slippage-adjusted V3 Gross Profit:
- *     G(D*) = D* * (net_edge_bps * 1e-4) - (D*)^2 * (1/V1 + 1/V2)
- * - Demotes thin-tick pools (high 1-wei spot spread but high tick-crossing slippage) below deep liquid pools!
+ * - Rejects thin-tick pools where un-clamped D* < $10.00 in hardware registers so zero RPC calls are wasted!
  */
 void evaluate_v3_route_batch_asm(
     int           num_routes,
@@ -110,11 +109,18 @@ void evaluate_v3_route_batch_asm(
         double slip_coeff = (1.0 / v1_usd) + (1.0 / v2_usd);
 
         double edge_frac = edge_bps * 0.0001;
-        double d_star = (slip_coeff > 1e-15) ? (edge_frac / (2.0 * slip_coeff)) : 100.0;
+        double d_star = (slip_coeff > 1e-15) ? (edge_frac / (2.0 * slip_coeff)) : 0.0;
+
+        /* Hardware rejection of thin-tick pools that cannot even absorb a $10.00 flash loan */
+        if (d_star < 10.0) {
+            out_optimal_loan_usd[i] = 0.0;
+            out_gross_usd[i]        = -500.0 + d_star;
+            out_net_usd[i]          = -500.0 + d_star - gas_fee_usd;
+            continue;
+        }
 
         double max_loan = bal_max_usd_arr[i];
         if (max_loan < 25.0) max_loan = 25000.0;
-        if (d_star < 10.0)   d_star = 10.0;
         if (d_star > max_loan) d_star = max_loan;
 
         double gross = (d_star * edge_frac) - (d_star * d_star * slip_coeff);
@@ -176,9 +182,9 @@ void encode_gasless_arb_calldata(
 int main(void) {
     const int N = 4;
     double p1[4]  = {2372.10, 2372.00, 2371.80, 1.00010};
-    double p2[4]  = {2373.42, 2372.66, 2372.38, 1.00028};
+    double p2[4]  = {2374.29, 2372.66, 2372.38, 1.00028};
     double y1[4]  = {0.45,    789.56,  789.56,  32150.0};
-    double y2[4]  = {114.06,  200.14,  582.70,  23700.0};
+    double y2[4]  = {0.35,    200.14,  582.70,  23700.0};
     double fl[4]  = {2.00,    2.00,    2.00,    1.05};
     double bm[4]  = {256300.0,256300.0,256300.0,157436.0};
 
@@ -202,15 +208,15 @@ int main(void) {
 
     int best_idx = ranked[0];
     printf("======================================================================\n");
-    printf("ARBITRUM v8.0 HARDWARE ASSEMBLY V3 CONCENTRATED-LIQUIDITY KERNEL\n");
+    printf("ARBITRUM v8.1 HARDWARE ASSEMBLY V3 CONCENTRATED-LIQUIDITY KERNEL\n");
     printf("======================================================================\n");
     printf("Iterations Executed      : %d full 4-route V3 batches + BSWAP64 encodings\n", ITERATIONS);
     printf("Total CPU Time           : %.3f ms\n", elapsed_ns / 1e6);
     printf("Latency Per Batch        : %.2f nanoseconds\n", ns_per_op);
     printf("Best Route Index         : #%d (Spread=%.2f bps | Optimal Loan=$%.2f | Gross=$%+.4f | Net=$%+.4f)\n",
            best_idx, sp[best_idx], opt[best_idx], gr[best_idx], nt[best_idx]);
-    printf("Thin Pool Index (#0)     : Spread=%.2f bps | Optimal Loan=$%.2f | Gross=$%+.4f (Demoted Below Deep Pool!)\n",
-           sp[0], opt[0], gr[0]);
+    printf("Thin Pool Index (#0)     : Spread=%.2f bps | Optimal Loan=$%.2f | Hardware Rejected (d_star < $10)!\n",
+           sp[0], opt[0]);
     printf("======================================================================\n");
     return 0;
 }

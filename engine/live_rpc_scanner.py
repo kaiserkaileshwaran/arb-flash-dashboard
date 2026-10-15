@@ -505,9 +505,12 @@ def _verify_route_onchain_quoter(
     if not cfg:
         return None
     addr_b, dec_b, sym_b, px_b, addr_m, dec_m, sym_m, d1, f1, d2, f2 = cfg
-    loan_candidates = [15.0, 40.0, 100.0, 300.0, 1000.0]
-    if loan_usd >= 10.0 and round(loan_usd, 2) not in loan_candidates:
-        loan_candidates.append(round(loan_usd, 2))
+    opt_l = round(max(25.0, min(loan_usd, 2500.0)), 2)
+    loan_candidates = sorted(set([15.0, opt_l, 100.0]))
+    if p1 > 0.0 and p2 > 0.0:
+        dir_pairs = [(d1, f1, d2, f2)] if p1 <= p2 else [(d2, f2, d1, f1)]
+    else:
+        dir_pairs = [(d1, f1, d2, f2), (d2, f2, d1, f1)]
 
     c1 = []
     meta1 = []
@@ -515,7 +518,7 @@ def _verify_route_onchain_quoter(
         amt_in_wei = int((l_usd / max(px_b, 1e-6)) * (10 ** dec_b))
         if amt_in_wei <= 0:
             continue
-        for leg1_d, leg1_f, leg2_d, leg2_f in [(d1, f1, d2, f2), (d2, f2, d1, f1)]:
+        for leg1_d, leg1_f, leg2_d, leg2_f in dir_pairs:
             to1, data1 = _encode_quoter_call(leg1_d, addr_b, addr_m, amt_in_wei, leg1_f)
             c1.append({"method": "eth_call", "params": [{"to": to1, "data": data1}, "latest"]})
             meta1.append((l_usd, amt_in_wei, leg1_d, leg1_f, leg2_d, leg2_f))
@@ -1007,9 +1010,9 @@ def scan_single_cycle(
                 "p2": p_wbtc_pcs_1,
                 "y1": 7.00,       # Real Camelot V3 WBTC/WETH active tick virtual WBTC depth ($585k)
                 "y2": 77.58,      # Real PancakeSwap V3 1bps WBTC/WETH active tick virtual WBTC depth ($6.49M)
-                "gamma1": 0.99991,
-                "gamma2": 0.99990,
-                "fee_floor_bps": 1.90,
+                "gamma1": 0.999893,
+                "gamma2": 0.999900,
+                "fee_floor_bps": 2.07,
                 "borrow_symbol": "WETH",
                 "bal_max_usd": max(bal_weth_usd, bal_wbtc_usd),
             },
@@ -1085,9 +1088,9 @@ def scan_single_cycle(
                 "p2": p_wbtc_uni_5,
                 "y1": 7.00,
                 "y2": 4481.68,    # Real UniV3 5bps WBTC/WETH active tick virtual WBTC depth ($375M)
-                "gamma1": 0.99991,
-                "gamma2": 0.99950,
-                "fee_floor_bps": 5.90,
+                "gamma1": 0.999893,
+                "gamma2": 0.999500,
+                "fee_floor_bps": 6.07,
                 "borrow_symbol": "WETH",
                 "bal_max_usd": max(bal_weth_usd, bal_wbtc_usd),
             },
@@ -1150,9 +1153,9 @@ def scan_single_cycle(
                 "p2": p_arb_uni_5,
                 "y1": 38160.0,
                 "y2": 3600000.0,
-                "gamma1": 0.999889,
+                "gamma1": 0.999874,
                 "gamma2": 0.999500,
-                "fee_floor_bps": 6.11,
+                "fee_floor_bps": 6.26,
                 "borrow_symbol": "WETH",
                 "bal_max_usd": bal_weth_usd,
             },
@@ -1270,10 +1273,11 @@ def scan_single_cycle(
             )
 
         # Mandatory On-Chain QuoterV2 / AlgebraQuoter Verification Gate:
-        # Check top assembly-ranked candidates where spot spread > fee floor (net_margin_bps > 0)
+        # Only call QuoterV2 on deep-pool candidates where the Hardware Assembly Kernel confirms asm_v3_gross_usd > 0.0
         positive_candidates = [
-            item for item in evaluated_routes if item["eval"]["profitable"] or item["net_margin_bps"] > 0.0
-        ][:3]
+            item for item in evaluated_routes
+            if item.get("asm_v3_gross_usd", -999.0) > 0.0 or item["eval"]["profitable"]
+        ][:2]
 
         best = evaluated_routes[0]
         quoter_trace_note = ""

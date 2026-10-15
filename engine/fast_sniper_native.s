@@ -9,13 +9,13 @@ _evaluate_v3_route_batch_asm:           ; @evaluate_v3_route_batch_asm
 	b.lt	LBB0_12
 ; %bb.1:
 	mov	x11, #0                         ; =0x0
+	mov	x9, #54933                      ; =0xd695
+	movk	x9, #59430, lsl #16
+	movk	x9, #11787, lsl #32
+	movk	x9, #15889, lsl #48
 	ldp	x12, x8, [sp, #24]
+	fmov	d1, x9
 	ldr	x9, [sp, #16]
-	mov	x10, #54933                     ; =0xd695
-	movk	x10, #59430, lsl #16
-	movk	x10, #11787, lsl #32
-	movk	x10, #15889, lsl #48
-	fmov	d1, x10
 	mov	x10, #149533581377536           ; =0x880000000000
 	movk	x10, #16579, lsl #48
 	fmov	d2, x10
@@ -37,79 +37,83 @@ _evaluate_v3_route_batch_asm:           ; @evaluate_v3_route_batch_asm
 	mov	x10, #116548232544256           ; =0x6a0000000000
 	movk	x10, #16600, lsl #48
 	fmov	d6, x10
+	mov	x10, #70368744177664            ; =0x400000000000
+	movk	x10, #49279, lsl #48
+	fmov	d7, x10
 	mov	x10, #61572651155456            ; =0x380000000000
 	movk	x10, #49295, lsl #48
-	fmov	d7, x10
+	fmov	d16, x10
 	ldp	x14, x13, [sp]
-	fmov	d16, #1.00000000
-	fmov	d17, #25.00000000
+	fmov	d17, #1.00000000
 	fmov	d18, #10.00000000
+	fmov	d19, #25.00000000
 	mov	w10, w0
 	b	LBB0_4
 LBB0_2:                                 ;   in Loop: Header=BB0_4 Depth=1
 	str	xzr, [x13, x11, lsl #3]
-	fadd	d19, d21, d7
+	fadd	d20, d22, d16
 LBB0_3:                                 ;   in Loop: Header=BB0_4 Depth=1
-	str	d19, [x9, x11, lsl #3]
-	fsub	d19, d19, d0
-	str	d19, [x12, x11, lsl #3]
+	str	d20, [x9, x11, lsl #3]
+	fsub	d20, d20, d0
+	str	d20, [x12, x11, lsl #3]
 	add	x11, x11, #1
 	cmp	x10, x11
 	b.eq	LBB0_11
 LBB0_4:                                 ; =>This Inner Loop Header: Depth=1
-	ldr	d19, [x1, x11, lsl #3]
-	ldr	d21, [x2, x11, lsl #3]
-	fcmp	d19, d21
-	fcsel	d20, d19, d21, ls
-	fcsel	d19, d21, d19, ls
+	ldr	d20, [x1, x11, lsl #3]
+	ldr	d22, [x2, x11, lsl #3]
+	fcmp	d20, d22
+	fcsel	d21, d20, d22, ls
+	fcsel	d20, d22, d20, ls
 	csel	x15, x3, x4, ls
 	csel	x16, x4, x3, ls
-	movi.2d	v21, #0000000000000000
-	fcmp	d20, d1
+	movi.2d	v22, #0000000000000000
+	fcmp	d21, d1
 	b.le	LBB0_6
 ; %bb.5:                                ;   in Loop: Header=BB0_4 Depth=1
-	fsub	d21, d19, d20
-	fdiv	d21, d21, d20
-	fmul	d21, d21, d2
+	fsub	d22, d20, d21
+	fdiv	d22, d22, d21
+	fmul	d22, d22, d2
 LBB0_6:                                 ;   in Loop: Header=BB0_4 Depth=1
-	ldr	d23, [x15, x11, lsl #3]
-	ldr	d22, [x16, x11, lsl #3]
-	ldr	d24, [x5, x11, lsl #3]
-	str	d21, [x7, x11, lsl #3]
-	fsub	d21, d21, d24
-	str	d21, [x14, x11, lsl #3]
+	ldr	d24, [x15, x11, lsl #3]
+	ldr	d23, [x16, x11, lsl #3]
+	ldr	d25, [x5, x11, lsl #3]
+	str	d22, [x7, x11, lsl #3]
+	fsub	d22, d22, d25
+	str	d22, [x14, x11, lsl #3]
 	str	w11, [x8, x11, lsl #2]
-	fcmp	d21, #0.0
+	fcmp	d22, #0.0
 	b.ls	LBB0_2
 ; %bb.7:                                ;   in Loop: Header=BB0_4 Depth=1
+	fmaxnm	d24, d24, d3
+	fmul	d21, d21, d24
 	fmaxnm	d23, d23, d3
 	fmul	d20, d20, d23
-	fmaxnm	d22, d22, d3
-	fmul	d19, d19, d22
-	fdiv	d20, d16, d20
-	fdiv	d19, d16, d19
-	fadd	d19, d20, d19
-	fmul	d20, d21, d4
-	fcmp	d19, d5
+	fdiv	d21, d17, d21
+	fdiv	d20, d17, d20
+	fadd	d20, d21, d20
+	movi.2d	v21, #0000000000000000
+	fcmp	d20, d5
 	b.le	LBB0_9
 ; %bb.8:                                ;   in Loop: Header=BB0_4 Depth=1
-	fadd	d21, d19, d19
-	fdiv	d21, d20, d21
-	b	LBB0_10
-LBB0_9:                                 ;   in Loop: Header=BB0_4 Depth=1
-	mov	x15, #4636737291354636288       ; =0x4059000000000000
-	fmov	d21, x15
-LBB0_10:                                ;   in Loop: Header=BB0_4 Depth=1
-	ldr	d22, [x6, x11, lsl #3]
-	fcmp	d22, d17
-	fcsel	d22, d6, d22, mi
+	fmul	d22, d22, d4
+	fadd	d21, d20, d20
+	fdiv	d21, d22, d21
 	fcmp	d21, d18
-	fcsel	d21, d18, d21, mi
-	fcmp	d21, d22
-	fcsel	d21, d22, d21, gt
-	fmul	d22, d21, d21
-	fnmul	d19, d19, d22
-	fmadd	d19, d21, d20, d19
+	b.pl	LBB0_10
+LBB0_9:                                 ;   in Loop: Header=BB0_4 Depth=1
+	str	xzr, [x13, x11, lsl #3]
+	fadd	d20, d21, d7
+	b	LBB0_3
+LBB0_10:                                ;   in Loop: Header=BB0_4 Depth=1
+	ldr	d23, [x6, x11, lsl #3]
+	fcmp	d23, d19
+	fcsel	d23, d6, d23, mi
+	fcmp	d21, d23
+	fcsel	d21, d23, d21, gt
+	fmul	d23, d21, d21
+	fnmul	d20, d20, d23
+	fmadd	d20, d21, d22, d20
 	str	d21, [x13, x11, lsl #3]
 	b	LBB0_3
 LBB0_11:
@@ -408,9 +412,7 @@ Lloh28:
 	bl	_printf
 	ldur	d0, [x29, #-208]
 	ldr	d1, [sp, #160]
-	ldr	d2, [sp, #128]
-	stp	d1, d2, [sp, #8]
-	str	d0, [sp]
+	stp	d0, d1, [sp]
 Lloh29:
 	adrp	x0, l_.str.6@PAGE
 Lloh30:
@@ -469,7 +471,7 @@ l___const.main.p1:
 
 	.p2align	3, 0x0                          ; @__const.main.p2
 l___const.main.p2:
-	.quad	0x40a28ad70a3d70a4              ; double 2373.4200000000001
+	.quad	0x40a28c947ae147ae              ; double 2374.29
 	.quad	0x40a28951eb851eb8              ; double 2372.6599999999999
 	.quad	0x40a288c28f5c28f6              ; double 2372.3800000000001
 	.quad	0x3ff0012599ed7c70              ; double 1.0002800000000001
@@ -483,7 +485,7 @@ l___const.main.y1:
 
 	.p2align	3, 0x0                          ; @__const.main.y2
 l___const.main.y2:
-	.quad	0x405c83d70a3d70a4              ; double 114.06
+	.quad	0x3fd6666666666666              ; double 0.34999999999999998
 	.quad	0x4069047ae147ae14              ; double 200.13999999999999
 	.quad	0x408235999999999a              ; double 582.70000000000005
 	.quad	0x40d7250000000000              ; double 23700
@@ -516,10 +518,10 @@ l_.str.5:                               ; @.str.5
 	.asciz	"Best Route Index         : #%d (Spread=%.2f bps | Optimal Loan=$%.2f | Gross=$%+.4f | Net=$%+.4f)\n"
 
 l_.str.6:                               ; @.str.6
-	.asciz	"Thin Pool Index (#0)     : Spread=%.2f bps | Optimal Loan=$%.2f | Gross=$%+.4f (Demoted Below Deep Pool!)\n"
+	.asciz	"Thin Pool Index (#0)     : Spread=%.2f bps | Optimal Loan=$%.2f | Hardware Rejected (d_star < $10)!\n"
 
 l_str.7:                                ; @str.7
-	.asciz	"ARBITRUM v8.0 HARDWARE ASSEMBLY V3 CONCENTRATED-LIQUIDITY KERNEL"
+	.asciz	"ARBITRUM v8.1 HARDWARE ASSEMBLY V3 CONCENTRATED-LIQUIDITY KERNEL"
 
 l_str.9:                                ; @str.9
 	.asciz	"======================================================================"
