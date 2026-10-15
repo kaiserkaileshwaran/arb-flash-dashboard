@@ -62,6 +62,12 @@ UNISWAP_V3_ARB_WETH_005      = "0xC6F780497A95e246EB9449f5e4770916DCd6396A"  # 0
 CAMELOT_V3_ARB_WETH          = "0xe51635ae8136aBAc44906A8f230C2D235E9c195f"  # 0.025% (2.50 bps) ARB/WETH
 UNISWAP_V3_WETH_USDCE_005    = "0xC31E54c7a869B9FcBEcc14363CF510d1c41fa443"  # 0.05% (5.00 bps) Bridged USDC.e
 SUSHISWAP_V2_WETH_USDCE      = "0x905dfCD5649217c42684f23958568e533C711Aa3"  # 0.30% (30.0 bps) SushiSwap V2
+CAMELOT_V3_USDC_USDCE        = "0xc86eb7b85807020b4548ee05b54bfc956eebbfcd"  # 0.0005% (0.05 bps) USDC/USDC.e ($1.22B depth)
+UNISWAP_V3_USDC_USDCE_001    = "0x8e295789c9465487074a65b1ae9ce0351172393f"  # 0.01%   (1.00 bps) USDC/USDC.e ($326M depth)
+CAMELOT_V3_USDC_USDT         = "0xa17afcab059f3c6751f5b64347b5a503c3291868"  # 0.0025% (0.25 bps) USDC/USDT   ($11.2M depth)
+UNISWAP_V3_USDC_USDT_001     = "0xbe3ad6a5669dc0b8b12febc03608860c31e2eef6"  # 0.01%   (1.00 bps) USDC/USDT   ($4.45B depth)
+CAMELOT_V3_WEETH_WETH        = "0x293dfd996d5cd72bed712b0eeab96dbe400c0416"  # 0.005%  (0.50 bps) weETH/WETH  ($38.7M depth)
+UNISWAP_V3_WEETH_WETH_001    = "0x14353445c8329df76e6f15e9ead18fa2d45a8bb6"  # 0.01%   (1.00 bps) weETH/WETH  ($46.0M depth)
 
 TOKEN_WETH   = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
 TOKEN_WBTC   = "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f"
@@ -424,6 +430,12 @@ def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
         {"method": "eth_call", "params": [{"to": TOKEN_USDC_E, "data": BALANCER_V2_VAULT_BALANCE_CALLDATA}, "latest"]},
         {"method": "eth_call", "params": [{"to": TOKEN_USDT,   "data": BALANCER_V2_VAULT_BALANCE_CALLDATA}, "latest"]},
         {"method": "eth_call", "params": [{"to": TOKEN_USDC,   "data": BALANCER_V2_VAULT_BALANCE_CALLDATA}, "latest"]},
+        {"method": "eth_call", "params": [{"to": CAMELOT_V3_USDC_USDCE,     "data": "0xe76c01e4"}, "latest"]},
+        {"method": "eth_call", "params": [{"to": UNISWAP_V3_USDC_USDCE_001, "data": "0x3850c7bd"}, "latest"]},
+        {"method": "eth_call", "params": [{"to": CAMELOT_V3_USDC_USDT,      "data": "0xe76c01e4"}, "latest"]},
+        {"method": "eth_call", "params": [{"to": UNISWAP_V3_USDC_USDT_001,  "data": "0x3850c7bd"}, "latest"]},
+        {"method": "eth_call", "params": [{"to": CAMELOT_V3_WEETH_WETH,     "data": "0xe76c01e4"}, "latest"]},
+        {"method": "eth_call", "params": [{"to": UNISWAP_V3_WEETH_WETH_001, "data": "0x3850c7bd"}, "latest"]},
     ]
     for b in LIVE_AAVE_TARGETS:
         calls.append({
@@ -461,6 +473,12 @@ def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
             "uni_weth_usdce_5bps": ETH_USD,
             "sushi_weth_usdce_30bps": ETH_USD,
             "sushi_reserve_weth": 34.0,
+            "cam_usdc_usdce_005bps": 1.0,
+            "uni_usdc_usdce_1bps": 1.0,
+            "cam_usdc_usdt_025bps": 1.0,
+            "uni_usdc_usdt_1bps": 1.0,
+            "cam_weeth_weth_05bps": 1.08,
+            "uni_weeth_weth_1bps": 1.08,
             "balancer_weth_usd": 256300.0,
             "balancer_wbtc_usd": 290000.0,
             "balancer_usdce_usd": 157436.0,
@@ -494,8 +512,14 @@ def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
         bal_usdce_hex,
         bal_usdt_hex,
         bal_usdc_hex,
-    ) = batch["results"][:24]
-    aave_hex_list = batch["results"][24:]
+        cam_usdc_usdce_hex,
+        uni_usdc_usdce_hex,
+        cam_usdc_usdt_hex,
+        uni_usdc_usdt_hex,
+        cam_weeth_hex,
+        uni_weeth_hex,
+    ) = batch["results"][:30]
+    aave_hex_list = batch["results"][30:]
 
     block_number = int(blk_hex, 16) if isinstance(blk_hex, str) else 0
     gas_wei = int(gas_hex, 16) if isinstance(gas_hex, str) else 20_000_000
@@ -519,6 +543,12 @@ def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
     uni_usdce = _decode_sqrt_price(uni_usdce_hex, 1e12, 100.0, 50000.0) or uni_005
     sushi_info = _decode_sushi_reserves(sushi_hex)
     sushi_price = sushi_info["price_usd"] or uni_usdce
+    uni_usdc_usdce = _decode_sqrt_price(uni_usdc_usdce_hex, 1.0, 0.98, 1.02) or 1.0
+    cam_usdc_usdce = _decode_sqrt_price(cam_usdc_usdce_hex, 1.0, 0.98, 1.02) or uni_usdc_usdce
+    uni_usdc_usdt = _decode_sqrt_price(uni_usdc_usdt_hex, 1.0, 0.98, 1.02) or 1.0
+    cam_usdc_usdt = _decode_sqrt_price(cam_usdc_usdt_hex, 1.0, 0.98, 1.02) or uni_usdc_usdt
+    uni_weeth = _decode_sqrt_price(uni_weeth_hex, 1.0, 0.95, 1.35) or 1.08
+    cam_weeth = _decode_sqrt_price(cam_weeth_hex, 1.0, 0.95, 1.35) or uni_weeth
 
     bal_weth_usd = 256300.0
     if isinstance(bal_weth_hex, str) and len(bal_weth_hex) >= 66:
@@ -585,6 +615,12 @@ def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
         "uni_weth_usdce_5bps": round(uni_usdce, 4),
         "sushi_weth_usdce_30bps": round(sushi_price, 4),
         "sushi_reserve_weth": sushi_info["reserve_weth"],
+        "cam_usdc_usdce_005bps": round(cam_usdc_usdce, 6),
+        "uni_usdc_usdce_1bps": round(uni_usdc_usdce, 6),
+        "cam_usdc_usdt_025bps": round(cam_usdc_usdt, 6),
+        "uni_usdc_usdt_1bps": round(uni_usdc_usdt, 6),
+        "cam_weeth_weth_05bps": round(cam_weeth, 6),
+        "uni_weeth_weth_1bps": round(uni_weeth, 6),
         "balancer_weth_usd": bal_weth_usd,
         "balancer_wbtc_usd": bal_wbtc_usd,
         "balancer_usdce_usd": bal_usdce_usd,
@@ -631,6 +667,12 @@ def scan_single_cycle(
     p_arb_cam_25 = p_uni_5 / max(telemetry["cam_arb_weth_25bps"], 1.0)
     p_uni_usdce = telemetry["uni_weth_usdce_5bps"]
     p_sushi_usdce = telemetry["sushi_weth_usdce_30bps"]
+    p_usdc_usdce_cam = telemetry["cam_usdc_usdce_005bps"]
+    p_usdc_usdce_uni = telemetry["uni_usdc_usdce_1bps"]
+    p_usdc_usdt_cam = telemetry["cam_usdc_usdt_025bps"]
+    p_usdc_usdt_uni = telemetry["uni_usdc_usdt_1bps"]
+    p_weeth_cam_05 = telemetry["cam_weeth_weth_05bps"] * p_uni_5
+    p_weeth_uni_1 = telemetry["uni_weeth_weth_1bps"] * p_uni_5
 
     bal_weth_usd = telemetry["balancer_weth_usd"]
     bal_wbtc_usd = telemetry["balancer_wbtc_usd"]
@@ -693,8 +735,47 @@ def scan_single_cycle(
             "whitelist_verified": True,
         }
     else:
-        # 2. Evaluate Ultra-Low Fee Floor (1.50 bps – 7.50 bps) & Cross-DEX Routes with Multi-Asset Balancer V2 0% Loans
+        # 2. Evaluate Ultra-Low Fee Floor (1.05 bps – 7.50 bps) & Cross-DEX Routes with Multi-Asset Balancer V2 0% Loans
         route_defs = [
+            {
+                "pair": "USDC/USDC.e (Camelot V3 0.05bps <-> UniV3 1.00bps)",
+                "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
+                "p1": p_usdc_usdce_cam,
+                "p2": p_usdc_usdce_uni,
+                "y1": 1223172092.0,  # Real Camelot V3 active tick virtual USDC depth ($1.22B)
+                "y2": 326083064.0,   # Real UniV3 1bps active tick virtual USDC depth ($326M)
+                "gamma1": 0.999995,
+                "gamma2": 0.999900,
+                "fee_floor_bps": 1.05,
+                "borrow_symbol": "USDC.e",
+                "bal_max_usd": bal_usdce_usd,
+            },
+            {
+                "pair": "USDC/USDT (Camelot V3 0.25bps <-> UniV3 1.00bps)",
+                "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
+                "p1": p_usdc_usdt_cam,
+                "p2": p_usdc_usdt_uni,
+                "y1": 11222452.0,    # Real Camelot V3 active tick virtual USDC depth ($11.22M)
+                "y2": 4457945969.0,  # Real UniV3 1bps active tick virtual USDC depth ($4.45B)
+                "gamma1": 0.999975,
+                "gamma2": 0.999900,
+                "fee_floor_bps": 1.25,
+                "borrow_symbol": "USDT",
+                "bal_max_usd": bal_usdt_usd,
+            },
+            {
+                "pair": "weETH/WETH (Camelot V3 0.50bps <-> UniV3 1.00bps)",
+                "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
+                "p1": p_weeth_cam_05,
+                "p2": p_weeth_uni_1,
+                "y1": 16137.40,      # Real Camelot V3 active tick virtual weETH depth ($38.73M)
+                "y2": 19191.50,      # Real UniV3 1bps active tick virtual weETH depth ($46.06M)
+                "gamma1": 0.99995,
+                "gamma2": 0.99990,
+                "fee_floor_bps": 1.50,
+                "borrow_symbol": "WETH",
+                "bal_max_usd": bal_weth_usd,
+            },
             {
                 "pair": "wstETH/WETH (Camelot V3 0.50bps <-> UniV3 1.00bps)",
                 "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
