@@ -213,6 +213,12 @@ class PersistentRpcPool:
                     if resp.status == 200:
                         body = json.loads(raw.decode("utf-8"))
                         if isinstance(body, list) and len(body) == len(calls):
+                            if any("error" in item or item.get("result") is None for item in body):
+                                self.http_429_count += 1
+                                self.rpc_error_count += 1
+                                self.last_error = f"Partial batch error/429 on {parsed.netloc}"
+                                break
+                            body.sort(key=lambda x: x.get("id", 0))
                             if ep_idx > 0:
                                 self.failover_count += 1
                             return {
@@ -442,10 +448,10 @@ def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
             "cam_weth_usdc_1bps": ETH_USD,
             "pcs_weth_usdc_1bps": ETH_USD,
             "uni_wsteth_weth_1bps": 1.2458,
-            "cam_wsteth_weth_05bps": 1.2456,
+            "cam_wsteth_weth_05bps": 1.2458,
             "uni_wbtc_weth_5bps": 33.165,
             "pcs_wbtc_weth_1bps": 33.165,
-            "cam_wbtc_weth_09bps": 33.175,
+            "cam_wbtc_weth_09bps": 33.165,
             "uni_weth_usdt_5bps": ETH_USD,
             "uni_weth_usdt_1bps": ETH_USD,
             "cam_weth_usdt_1bps": ETH_USD,
@@ -500,7 +506,7 @@ def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
     cam_weth = _decode_sqrt_price(cam_weth_hex, 1e12, 100.0, 50000.0) or uni_005
     pcs_001 = _decode_sqrt_price(pcs_001_hex, 1e12, 100.0, 50000.0) or uni_005
     uni_wst = _decode_sqrt_price(uni_wst_hex, 1.0, 0.8, 2.5) or 1.2458
-    cam_wst = _decode_sqrt_price(cam_wst_hex, 1.0, 0.8, 2.5) or 1.2456
+    cam_wst = _decode_sqrt_price(cam_wst_hex, 1.0, 0.8, 2.5) or uni_wst
     uni_wbtc = _decode_sqrt_price(uni_wbtc_hex, 1e-10, 5.0, 100.0) or 33.165
     pcs_wbtc = _decode_sqrt_price(pcs_wbtc_hex, 1e-10, 5.0, 100.0) or uni_wbtc
     cam_wbtc = _decode_sqrt_price(cam_wbtc_hex, 1e-10, 5.0, 100.0) or uni_wbtc
@@ -512,7 +518,7 @@ def fetch_live_arbitrum_telemetry() -> Dict[str, Any]:
     cam_arb = _decode_sqrt_price(cam_arb_hex, 1.0, 100.0, 100000.0) or uni_arb
     uni_usdce = _decode_sqrt_price(uni_usdce_hex, 1e12, 100.0, 50000.0) or uni_005
     sushi_info = _decode_sushi_reserves(sushi_hex)
-    sushi_price = sushi_info["price_usd"] or uni_005
+    sushi_price = sushi_info["price_usd"] or uni_usdce
 
     bal_weth_usd = 256300.0
     if isinstance(bal_weth_hex, str) and len(bal_weth_hex) >= 66:
