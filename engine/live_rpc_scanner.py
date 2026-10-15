@@ -451,36 +451,61 @@ def _verify_route_onchain_quoter(
     if not cfg:
         return None
     addr_b, dec_b, sym_b, px_b, addr_m, dec_m, sym_m, d1, f1, d2, f2 = cfg
-    amt_in_wei = int((loan_usd / max(px_b, 1e-6)) * (10 ** dec_b))
-    if amt_in_wei <= 0:
+    loan_candidates = [100.0, 300.0, 1000.0, 3000.0, 10000.0]
+    if loan_usd > 25.0:
+        loan_candidates.append(round(loan_usd, 2))
+
+    c1 = []
+    meta1 = []
+    for l_usd in loan_candidates:
+        amt_in_wei = int((l_usd / max(px_b, 1e-6)) * (10 ** dec_b))
+        if amt_in_wei <= 0:
+            continue
+        for leg1_d, leg1_f, leg2_d, leg2_f in [(d1, f1, d2, f2), (d2, f2, d1, f1)]:
+            to1, data1 = _encode_quoter_call(leg1_d, addr_b, addr_m, amt_in_wei, leg1_f)
+            c1.append({"method": "eth_call", "params": [{"to": to1, "data": data1}, "latest"]})
+            meta1.append((l_usd, amt_in_wei, leg1_d, leg1_f, leg2_d, leg2_f))
+
+    if not c1:
+        return None
+    b1 = GLOBAL_RPC_POOL.batch_call(c1)
+    if not b1["ok"]:
+        return None
+
+    c2 = []
+    meta2 = []
+    for m, r1_hex in zip(meta1, b1["results"]):
+        if isinstance(r1_hex, str) and len(r1_hex) >= 66:
+            amt_mid_wei = int(r1_hex[2:66], 16)
+            if amt_mid_wei > 0:
+                to2, data2 = _encode_quoter_call(m[4], addr_m, addr_b, amt_mid_wei, m[5])
+                c2.append({"method": "eth_call", "params": [{"to": to2, "data": data2}, "latest"]})
+                meta2.append((*m, amt_mid_wei))
+
+    if not c2:
+        return None
+    b2 = GLOBAL_RPC_POOL.batch_call(c2)
+    if not b2["ok"]:
         return None
 
     best_res = None
-    for leg1_d, leg1_f, leg2_d, leg2_f in [(d1, f1, d2, f2), (d2, f2, d1, f1)]:
-        to1, data1 = _encode_quoter_call(leg1_d, addr_b, addr_m, amt_in_wei, leg1_f)
-        r1 = GLOBAL_RPC_POOL.call("eth_call", [{"to": to1, "data": data1}, "latest"])
-        if not r1["ok"] or not r1["result"] or len(r1["result"]) < 66:
-            continue
-        amt_mid_wei = int(r1["result"][2:66], 16)
-        if amt_mid_wei <= 0:
-            continue
-        to2, data2 = _encode_quoter_call(leg2_d, addr_m, addr_b, amt_mid_wei, leg2_f)
-        r2 = GLOBAL_RPC_POOL.call("eth_call", [{"to": to2, "data": data2}, "latest"])
-        if not r2["ok"] or not r2["result"] or len(r2["result"]) < 66:
-            continue
-        amt_out_wei = int(r2["result"][2:66], 16)
-        in_h = amt_in_wei / (10 ** dec_b)
-        mid_h = amt_mid_wei / (10 ** dec_m)
-        out_h = amt_out_wei / (10 ** dec_b)
-        gross_usd = round((out_h - in_h) * px_b, 4)
-        net_usd = round(gross_usd - vault_fee_usd - gas_fee_usd, 4)
-        cand = {
-            "gross_usd": round(gross_usd, 2),
-            "net_usd": round(max(0.0, net_usd), 2) if net_usd > 0 else round(net_usd, 4),
-            "trace": f"{in_h:.4f} {sym_b} -> {mid_h:.4f} {sym_m} -> {out_h:.4f} {sym_b}",
-        }
-        if best_res is None or cand["gross_usd"] > best_res["gross_usd"]:
-            best_res = cand
+    for m, r2_hex in zip(meta2, b2["results"]):
+        if isinstance(r2_hex, str) and len(r2_hex) >= 66:
+            l_usd, amt_in_wei, leg1_d, leg1_f, leg2_d, leg2_f, amt_mid_wei = m
+            amt_out_wei = int(r2_hex[2:66], 16)
+            in_h = amt_in_wei / (10 ** dec_b)
+            mid_h = amt_mid_wei / (10 ** dec_m)
+            out_h = amt_out_wei / (10 ** dec_b)
+            gross_usd = round((out_h - in_h) * px_b, 4)
+            net_usd = round(gross_usd - vault_fee_usd - gas_fee_usd, 4)
+            cand = {
+                "loan_usd": l_usd,
+                "gross_usd": round(gross_usd, 2) if gross_usd > 0 else round(gross_usd, 4),
+                "net_usd": round(max(0.0, net_usd), 2) if net_usd > 0 else round(net_usd, 4),
+                "trace": f"{in_h:.4f} {sym_b} -> {mid_h:.4f} {sym_m} -> {out_h:.4f} {sym_b}",
+            }
+            if best_res is None or cand["net_usd"] > best_res["net_usd"]:
+                best_res = cand
     return best_res
 
 
@@ -1126,32 +1151,52 @@ def scan_single_cycle(
             key=lambda item: (item["eval"]["net_trade_profit_usd"], item["net_margin_bps"]),
             reverse=True,
         )
-        best = evaluated_routes[0]
-        ev = best["eval"]
-        live_spread_bps = best["spread_bps"]
-        fee_floor_bps = best["fee_floor_bps"]
 
         # Mandatory On-Chain QuoterV2 / AlgebraQuoter Verification Gate:
-        # Even if the analytical slot0 formula says profitable=True, verify the exact 2-leg swap
-        # via eth_call on UniswapV3QuoterV2 (0xc6a5026a), PancakeSwapV3QuoterV2 (0xc6a5026a),
-        # and CamelotV3 AlgebraQuoter (0x2d9ebd1d) before recording any profitable execution.
+        # Check all candidate routes where spot spread > fee floor (net_margin_bps > 0) so that:
+        # 1) The V2 constant-product pre-filter never blocks a real concentrated-liquidity trade, and
+        # 2) A thin-tick pool with high spot spread never masks a deeper pool that is actually profitable.
+        positive_candidates = [
+            item for item in evaluated_routes if item["eval"]["profitable"] or item["net_margin_bps"] > 0.0
+        ][:3]
+
+        best = evaluated_routes[0]
         quoter_trace_note = ""
-        if ev["profitable"]:
+        best_q_ver = None
+
+        for cand_item in positive_candidates:
+            ce = cand_item["eval"]
             q_ver = _verify_route_onchain_quoter(
-                pair_label=best["pair"],
-                loan_usd=ev["optimal_loan_usd"],
+                pair_label=cand_item["pair"],
+                loan_usd=ce["optimal_loan_usd"],
                 eth_usd=p_uni_5,
-                vault_fee_usd=ev["vault_fee_usd"],
-                gas_fee_usd=ev["gas_relayer_fee_usd"],
+                vault_fee_usd=ce["vault_fee_usd"],
+                gas_fee_usd=live_gas_fee_usd,
             )
             if q_ver is not None:
                 if q_ver["net_usd"] > 0.0:
-                    ev["gross_trade_profit_usd"] = q_ver["gross_usd"]
-                    ev["net_trade_profit_usd"] = q_ver["net_usd"]
-                    quoter_trace_note = f" | QuoterTrace: {q_ver['trace']}"
+                    ce["profitable"] = True
+                    ce["optimal_loan_usd"] = q_ver["loan_usd"]
+                    ce["gross_trade_profit_usd"] = q_ver["gross_usd"]
+                    ce["gas_relayer_fee_usd"] = live_gas_fee_usd
+                    ce["total_fees_deducted_from_profit_usd"] = round(ce["vault_fee_usd"] + live_gas_fee_usd, 2)
+                    ce["net_trade_profit_usd"] = q_ver["net_usd"]
                 else:
-                    ev["profitable"] = False
-                    quoter_trace_note = f" | QuoterVerifiedDeficit=${q_ver['gross_usd']:+.4f}"
+                    ce["profitable"] = False
+                    ce["net_trade_profit_usd"] = 0.0
+                if best_q_ver is None or q_ver["net_usd"] > best_q_ver["net_usd"]:
+                    best_q_ver = q_ver
+                    best = cand_item
+
+        if best_q_ver is not None:
+            if best_q_ver["net_usd"] > 0.0:
+                quoter_trace_note = f" | QuoterTrace: {best_q_ver['trace']}"
+            else:
+                quoter_trace_note = f" | QuoterVerifiedDeficit=${best_q_ver['gross_usd']:+.4f} [{best_q_ver['trace']}]"
+
+        ev = best["eval"]
+        live_spread_bps = best["spread_bps"]
+        fee_floor_bps = best["fee_floor_bps"]
 
         if ev["profitable"]:
             optimal_loan = ev["optimal_loan_usd"]
