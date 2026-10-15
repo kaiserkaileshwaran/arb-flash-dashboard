@@ -9,11 +9,11 @@ _evaluate_v3_route_batch_asm:           ; @evaluate_v3_route_batch_asm
 	b.lt	LBB0_12
 ; %bb.1:
 	mov	x11, #0                         ; =0x0
+	ldp	x12, x8, [sp, #24]
 	mov	x9, #54933                      ; =0xd695
 	movk	x9, #59430, lsl #16
 	movk	x9, #11787, lsl #32
 	movk	x9, #15889, lsl #48
-	ldp	x12, x8, [sp, #24]
 	fmov	d1, x9
 	ldr	x9, [sp, #16]
 	mov	x10, #149533581377536           ; =0x880000000000
@@ -44,77 +44,80 @@ _evaluate_v3_route_batch_asm:           ; @evaluate_v3_route_batch_asm
 	movk	x10, #49295, lsl #48
 	fmov	d16, x10
 	ldp	x14, x13, [sp]
-	fmov	d17, #1.00000000
-	fmov	d18, #10.00000000
-	fmov	d19, #25.00000000
+	fmov	d17, #8.00000000
+	fmov	d18, #1.00000000
+	fmov	d19, #10.00000000
+	fmov	d20, #25.00000000
 	mov	w10, w0
 	b	LBB0_4
 LBB0_2:                                 ;   in Loop: Header=BB0_4 Depth=1
 	str	xzr, [x13, x11, lsl #3]
-	fadd	d20, d22, d16
+	fadd	d21, d23, d16
 LBB0_3:                                 ;   in Loop: Header=BB0_4 Depth=1
-	str	d20, [x9, x11, lsl #3]
-	fsub	d20, d20, d0
-	str	d20, [x12, x11, lsl #3]
+	str	d21, [x9, x11, lsl #3]
+	fsub	d21, d21, d0
+	str	d21, [x12, x11, lsl #3]
 	add	x11, x11, #1
 	cmp	x10, x11
 	b.eq	LBB0_11
 LBB0_4:                                 ; =>This Inner Loop Header: Depth=1
-	ldr	d20, [x1, x11, lsl #3]
-	ldr	d22, [x2, x11, lsl #3]
-	fcmp	d20, d22
-	fcsel	d21, d20, d22, ls
-	fcsel	d20, d22, d20, ls
+	ldr	d21, [x1, x11, lsl #3]
+	ldr	d23, [x2, x11, lsl #3]
+	fcmp	d21, d23
+	fcsel	d22, d21, d23, ls
+	fcsel	d21, d23, d21, ls
 	csel	x15, x3, x4, ls
 	csel	x16, x4, x3, ls
-	movi.2d	v22, #0000000000000000
-	fcmp	d21, d1
+	movi.2d	v23, #0000000000000000
+	fcmp	d22, d1
 	b.le	LBB0_6
 ; %bb.5:                                ;   in Loop: Header=BB0_4 Depth=1
-	fsub	d22, d20, d21
-	fdiv	d22, d22, d21
-	fmul	d22, d22, d2
+	fsub	d23, d21, d22
+	fdiv	d23, d23, d22
+	fmul	d23, d23, d2
 LBB0_6:                                 ;   in Loop: Header=BB0_4 Depth=1
-	ldr	d24, [x15, x11, lsl #3]
-	ldr	d23, [x16, x11, lsl #3]
-	ldr	d25, [x5, x11, lsl #3]
-	str	d22, [x7, x11, lsl #3]
-	fsub	d22, d22, d25
-	str	d22, [x14, x11, lsl #3]
+	ldr	d25, [x15, x11, lsl #3]
+	ldr	d24, [x16, x11, lsl #3]
+	ldr	d26, [x5, x11, lsl #3]
+	str	d23, [x7, x11, lsl #3]
+	fsub	d23, d23, d26
+	str	d23, [x14, x11, lsl #3]
 	str	w11, [x8, x11, lsl #2]
-	fcmp	d22, #0.0
+	fcmp	d23, #0.0
 	b.ls	LBB0_2
 ; %bb.7:                                ;   in Loop: Header=BB0_4 Depth=1
+	fmul	d22, d22, d17
+	fmaxnm	d25, d25, d3
+	fmul	d22, d22, d25
+	fmul	d21, d21, d17
 	fmaxnm	d24, d24, d3
 	fmul	d21, d21, d24
-	fmaxnm	d23, d23, d3
-	fmul	d20, d20, d23
-	fdiv	d21, d17, d21
-	fdiv	d20, d17, d20
-	fadd	d20, d21, d20
-	movi.2d	v21, #0000000000000000
-	fcmp	d20, d5
+	fdiv	d22, d18, d22
+	fdiv	d21, d18, d21
+	fadd	d21, d22, d21
+	movi.2d	v22, #0000000000000000
+	fcmp	d21, d5
 	b.le	LBB0_9
 ; %bb.8:                                ;   in Loop: Header=BB0_4 Depth=1
-	fmul	d22, d22, d4
-	fadd	d21, d20, d20
-	fdiv	d21, d22, d21
-	fcmp	d21, d18
+	fmul	d23, d23, d4
+	fadd	d22, d21, d21
+	fdiv	d22, d23, d22
+	fcmp	d22, d19
 	b.pl	LBB0_10
 LBB0_9:                                 ;   in Loop: Header=BB0_4 Depth=1
 	str	xzr, [x13, x11, lsl #3]
-	fadd	d20, d21, d7
+	fadd	d21, d22, d7
 	b	LBB0_3
 LBB0_10:                                ;   in Loop: Header=BB0_4 Depth=1
-	ldr	d23, [x6, x11, lsl #3]
-	fcmp	d23, d19
-	fcsel	d23, d6, d23, mi
-	fcmp	d21, d23
-	fcsel	d21, d23, d21, gt
-	fmul	d23, d21, d21
-	fnmul	d20, d20, d23
-	fmadd	d20, d21, d22, d20
-	str	d21, [x13, x11, lsl #3]
+	ldr	d24, [x6, x11, lsl #3]
+	fcmp	d24, d20
+	fcsel	d24, d6, d24, mi
+	fcmp	d22, d24
+	fcsel	d22, d24, d22, gt
+	fmul	d24, d22, d22
+	fnmul	d21, d21, d24
+	fmadd	d21, d22, d23, d21
+	str	d22, [x13, x11, lsl #3]
 	b	LBB0_3
 LBB0_11:
 	cmp	w10, #1
@@ -279,9 +282,9 @@ Lloh6:
 	add	x1, sp, #64
 	mov	w0, #6                          ; =0x6
 	bl	_clock_gettime
-	mov	x8, #7864                       ; =0x1eb8
-	movk	x8, #60293, lsl #16
-	movk	x8, #35153, lsl #32
+	mov	x8, #36700                      ; =0x8f5c
+	movk	x8, #62914, lsl #16
+	movk	x8, #35112, lsl #32
 	movk	x8, #16546, lsl #48
 	fmov	d9, x8
 	movi.2d	v10, #0000000000000000
@@ -324,7 +327,7 @@ Lloh16:
 	add	x23, x23, l___const.main.bm@PAGEOFF
 LBB2_1:                                 ; =>This Inner Loop Header: Depth=1
 	fmadd	d0, d10, d11, d9
-	stur	d0, [x29, #-168]
+	stur	d0, [x29, #-160]
 	add	x8, sp, #80
 	stp	x26, x8, [sp, #24]
 	sub	x2, x29, #176
@@ -472,20 +475,20 @@ l___const.main.p1:
 	.p2align	3, 0x0                          ; @__const.main.p2
 l___const.main.p2:
 	.quad	0x40a28c947ae147ae              ; double 2374.29
-	.quad	0x40a28951eb851eb8              ; double 2372.6599999999999
-	.quad	0x40a288c28f5c28f6              ; double 2372.3800000000001
+	.quad	0x40a289947ae147ae              ; double 2372.79
+	.quad	0x40a28928f5c28f5c              ; double 2372.5799999999999
 	.quad	0x3ff0012599ed7c70              ; double 1.0002800000000001
 
 	.p2align	3, 0x0                          ; @__const.main.y1
 l___const.main.y1:
-	.quad	0x3fdccccccccccccd              ; double 0.45000000000000001
+	.quad	0x3fa999999999999a              ; double 0.050000000000000003
 	.quad	0x4088ac7ae147ae14              ; double 789.55999999999995
 	.quad	0x4088ac7ae147ae14              ; double 789.55999999999995
 	.quad	0x40df658000000000              ; double 32150
 
 	.p2align	3, 0x0                          ; @__const.main.y2
 l___const.main.y2:
-	.quad	0x3fd6666666666666              ; double 0.34999999999999998
+	.quad	0x3fa47ae147ae147b              ; double 0.040000000000000001
 	.quad	0x4069047ae147ae14              ; double 200.13999999999999
 	.quad	0x408235999999999a              ; double 582.70000000000005
 	.quad	0x40d7250000000000              ; double 23700
@@ -521,7 +524,7 @@ l_.str.6:                               ; @.str.6
 	.asciz	"Thin Pool Index (#0)     : Spread=%.2f bps | Optimal Loan=$%.2f | Hardware Rejected (d_star < $10)!\n"
 
 l_str.7:                                ; @str.7
-	.asciz	"ARBITRUM v8.1 HARDWARE ASSEMBLY V3 CONCENTRATED-LIQUIDITY KERNEL"
+	.asciz	"ARBITRUM v8.2 HARDWARE ASSEMBLY V3 CONCENTRATED-LIQUIDITY KERNEL"
 
 l_str.9:                                ; @str.9
 	.asciz	"======================================================================"

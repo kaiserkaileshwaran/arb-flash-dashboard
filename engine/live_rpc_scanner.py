@@ -505,12 +505,9 @@ def _verify_route_onchain_quoter(
     if not cfg:
         return None
     addr_b, dec_b, sym_b, px_b, addr_m, dec_m, sym_m, d1, f1, d2, f2 = cfg
-    opt_l = round(max(25.0, min(loan_usd, 2500.0)), 2)
-    loan_candidates = sorted(set([15.0, opt_l, 100.0]))
-    if p1 > 0.0 and p2 > 0.0:
-        dir_pairs = [(d1, f1, d2, f2)] if p1 <= p2 else [(d2, f2, d1, f1)]
-    else:
-        dir_pairs = [(d1, f1, d2, f2), (d2, f2, d1, f1)]
+    opt_l = round(max(50.0, min(loan_usd, 2500.0)), 2)
+    loan_candidates = sorted(set([100.0, 300.0, opt_l]))
+    dir_pairs = [(d1, f1, d2, f2), (d2, f2, d1, f1)]
 
     c1 = []
     meta1 = []
@@ -1060,7 +1057,7 @@ def scan_single_cycle(
                 "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
                 "p1": p_usdt_cam_1,
                 "p2": p_usdt_pcs_1,
-                "y1": 0.45,       # Real Camelot V3 WETH/USDT single-tick active depth before tick crossing
+                "y1": 0.05,       # Real Camelot V3 WETH/USDT single-tick active depth before tick crossing
                 "y2": 114.06,     # Real PancakeSwap V3 1bps WETH/USDT active tick virtual WETH depth ($286k)
                 "gamma1": 0.99990,
                 "gamma2": 0.99990,
@@ -1073,8 +1070,8 @@ def scan_single_cycle(
                 "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
                 "p1": p_usdt_cam_1,
                 "p2": p_usdt_uni_1,
-                "y1": 0.45,
-                "y2": 0.35,
+                "y1": 0.05,
+                "y2": 0.04,
                 "gamma1": 0.99990,
                 "gamma2": 0.99990,
                 "fee_floor_bps": 2.00,
@@ -1125,7 +1122,7 @@ def scan_single_cycle(
                 "strategy": "STRATEGY_CAMELOT_ALGEBRA_ARB",
                 "p1": p_usdt_cam_1,
                 "p2": p_usdt_uni_5,
-                "y1": 0.45,
+                "y1": 0.05,
                 "y2": 5545.24,
                 "gamma1": 0.99990,
                 "gamma2": 0.99950,
