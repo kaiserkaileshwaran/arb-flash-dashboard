@@ -46,10 +46,10 @@ POOL2_Y_WETH = 5000.00
 
 def to_inr_metrics(raw_net_usd: float) -> Tuple[float, float]:
     """Returns (pre_tax_inr, post_tax_inr) under India Sec 115BBH (31.2% tax on positive gains)."""
-    pre_tax_inr = round(raw_net_usd * USD_INR, 2)
+    pre_tax_inr = round(raw_net_usd * USD_INR, 4)
     if raw_net_usd <= 0:
         return pre_tax_inr, 0.00
-    post_tax_inr = round(raw_net_usd * USD_INR * (1.0 - INDIA_VDA_TAX_RATE), 2)
+    post_tax_inr = round(raw_net_usd * USD_INR * (1.0 - INDIA_VDA_TAX_RATE), 4)
     return pre_tax_inr, post_tax_inr
 
 

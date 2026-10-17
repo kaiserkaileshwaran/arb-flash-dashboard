@@ -1,54 +1,57 @@
 	.file	"fast_sniper_native.c"
-	.section	.rodata.cst16,"aM",@progbits,16
-	.p2align	4, 0x0                          # -- Begin function evaluate_v3_route_batch_asm
-.LCPI0_0:
-	.long	0                               # 0x0
-	.long	1                               # 0x1
-	.long	2                               # 0x2
-	.long	3                               # 0x3
-.LCPI0_14:
-	.quad	0x4020000000000000              # double 8
-	.quad	0x4020000000000000              # double 8
-.LCPI0_15:
-	.quad	0x3eb0c6f7a0b5ed8d              # double 9.9999999999999995E-7
-	.quad	0x3eb0c6f7a0b5ed8d              # double 9.9999999999999995E-7
-.LCPI0_16:
-	.quad	0x3ff0000000000000              # double 1
-	.quad	0x3ff0000000000000              # double 1
-.LCPI0_17:
-	.quad	0x40d86a0000000000              # double 25000
-	.quad	0x40d86a0000000000              # double 25000
 	.section	.rodata.cst8,"aM",@progbits,8
-	.p2align	3, 0x0
+	.p2align	3, 0x0                          # -- Begin function evaluate_v3_route_batch_asm
+.LCPI0_0:
+	.quad	0xc0c3878000000000              # double -9999
 .LCPI0_1:
-	.quad	0x3e112e0be826d695              # double 1.0000000000000001E-9
+	.quad	0xc6293e5939a08cea              # double -1.0E+30
 .LCPI0_2:
 	.quad	0x40c3880000000000              # double 1.0E+4
 .LCPI0_3:
-	.quad	0xc08f380000000000              # double -999
+	.quad	0x3e112e0be826d695              # double 1.0000000000000001E-9
 .LCPI0_4:
-	.quad	0x4020000000000000              # double 8
+	.quad	0xc08f380000000000              # double -999
 .LCPI0_5:
-	.quad	0x3eb0c6f7a0b5ed8d              # double 9.9999999999999995E-7
-.LCPI0_6:
 	.quad	0x3ff0000000000000              # double 1
+.LCPI0_6:
+	.quad	0x4002666666666666              # double 2.2999999999999998
 .LCPI0_7:
-	.quad	0x3f1a36e2eb1c432d              # double 1.0E-4
+	.quad	0x4064000000000000              # double 160
 .LCPI0_8:
-	.quad	0x3cd203af9ee75616              # double 1.0000000000000001E-15
+	.quad	0x4050000000000000              # double 64
 .LCPI0_9:
-	.quad	0x4024000000000000              # double 10
+	.quad	0x3fa1eb851eb851ec              # double 0.035000000000000003
 .LCPI0_10:
-	.quad	0x4039000000000000              # double 25
+	.quad	0x3fee51eb851eb852              # double 0.94750000000000001
 .LCPI0_11:
-	.quad	0x40d86a0000000000              # double 25000
+	.quad	0x3ff8000000000000              # double 1.5
 .LCPI0_12:
-	.quad	0xc07f400000000000              # double -500
-	.section	.rodata.cst4,"aM",@progbits,4
-	.p2align	2, 0x0
+	.quad	0x3cd203af9ee75616              # double 1.0000000000000001E-15
 .LCPI0_13:
-	.long	4                               # 0x4
-	.text
+	.quad	0x430c6bf526340000              # double 1.0E+15
+.LCPI0_14:
+	.quad	0x3f1a36e2eb1c432d              # double 1.0E-4
+.LCPI0_15:
+	.quad	0x3f0a36e2eb1c432d              # double 5.0000000000000002E-5
+.LCPI0_16:
+	.quad	0x4024000000000000              # double 10
+.LCPI0_17:
+	.quad	0x4059000000000000              # double 100
+.LCPI0_18:
+	.quad	0x4039000000000000              # double 25
+.LCPI0_19:
+	.quad	0x410e848000000000              # double 2.5E+5
+.LCPI0_20:
+	.quad	0x3fe0000000000000              # double 0.5
+.LCPI0_21:
+	.quad	0x4014000000000000              # double 5
+.LCPI0_22:
+	.quad	0xbf30624dd2f1a9fc              # double -2.5000000000000001E-4
+.LCPI0_23:
+	.quad	0x41ac695046000000              # double 238331939
+.LCPI0_24:
+	.quad	0xbf40624dd2f1a9fc              # double -5.0000000000000001E-4
+	.section	.text.hot.,"ax",@progbits
 	.globl	evaluate_v3_route_batch_asm
 	.p2align	4
 	.type	evaluate_v3_route_batch_asm,@function
@@ -60,804 +63,478 @@ evaluate_v3_route_batch_asm:            # @evaluate_v3_route_batch_asm
 	pushq	%r13
 	pushq	%r12
 	pushq	%rbx
-	subq	$152, %rsp
-	vmovapd	%xmm0, 128(%rsp)                # 16-byte Spill
-	movq	%r9, -24(%rsp)                  # 8-byte Spill
+                                        # kill: def $edi killed $edi def $rdi
+	movq	104(%rsp), %rax
+	leal	-1(%rdi), %r12d
 	testl	%edi, %edi
-	jle	.LBB0_68
-# %bb.1:
-	movq	%rsi, %r10
-	movq	256(%rsp), %rax
-	movq	248(%rsp), %r13
-	movq	240(%rsp), %rbx
-	movq	232(%rsp), %rsi
-	movq	224(%rsp), %r14
-	movq	216(%rsp), %r11
-	movq	208(%rsp), %r15
-	movl	%edi, %r9d
-	movl	%edi, 68(%rsp)                  # 4-byte Spill
-	cmpl	$28, %edi
-	movq	%r8, 56(%rsp)                   # 8-byte Spill
-	movq	%rcx, 24(%rsp)                  # 8-byte Spill
-	movq	%r9, 16(%rsp)                   # 8-byte Spill
-	jae	.LBB0_3
-# %bb.2:
-	movq	$0, -16(%rsp)                   # 8-byte Folded Spill
-.LBB0_58:
-	movq	-16(%rsp), %rbp                 # 8-byte Reload
-	leaq	(,%rbp,8), %rbx
-	movq	240(%rsp), %rcx
-	leaq	(%rcx,%rbp,8), %rdi
-	leaq	(,%rbp,8), %rcx
-	addq	%r13, %rcx
-	movq	%rcx, (%rsp)                    # 8-byte Spill
-	leaq	(%rsi,%rbp,8), %rsi
-	leaq	(%r15,%rbp,8), %rcx
-	movq	%rcx, -8(%rsp)                  # 8-byte Spill
-	leaq	(%rax,%rbp,4), %r15
-	leaq	(%r14,%rbp,8), %r12
-	leaq	(%r11,%rbp,8), %r13
-	movq	-24(%rsp), %rcx                 # 8-byte Reload
-	leaq	(%rcx,%rbp,8), %r11
-	leaq	(%rdx,%rbp,8), %r9
-	movq	%rdi, %rdx
-	leaq	(%r10,%rbp,8), %r14
-	subq	16(%rsp), %rbp                  # 8-byte Folded Reload
-	xorl	%r10d, %r10d
-	vmovsd	.LCPI0_2(%rip), %xmm1           # xmm1 = [1.0E+4,0.0E+0]
-	vmovsd	.LCPI0_1(%rip), %xmm2           # xmm2 = [1.0000000000000001E-9,0.0E+0]
-	vpxor	%xmm3, %xmm3, %xmm3
-	vmovddup	.LCPI0_4(%rip), %xmm4           # xmm4 = [8.0E+0,8.0E+0]
-                                        # xmm4 = mem[0,0]
-	vmovddup	.LCPI0_5(%rip), %xmm5           # xmm5 = [9.9999999999999995E-7,9.9999999999999995E-7]
-                                        # xmm5 = mem[0,0]
-	vmovddup	.LCPI0_6(%rip), %xmm6           # xmm6 = [1.0E+0,1.0E+0]
-                                        # xmm6 = mem[0,0]
-	vmovsd	.LCPI0_7(%rip), %xmm7           # xmm7 = [1.0E-4,0.0E+0]
-	vmovsd	.LCPI0_8(%rip), %xmm8           # xmm8 = [1.0000000000000001E-15,0.0E+0]
-	vmovsd	.LCPI0_9(%rip), %xmm9           # xmm9 = [1.0E+1,0.0E+0]
-	vmovddup	.LCPI0_11(%rip), %xmm12         # xmm12 = [2.5E+4,2.5E+4]
-                                        # xmm12 = mem[0,0]
-	vmovsd	.LCPI0_3(%rip), %xmm13          # xmm13 = [-9.99E+2,0.0E+0]
-	movq	56(%rsp), %rdi                  # 8-byte Reload
-	jmp	.LBB0_59
-	.p2align	4
-.LBB0_60:                               #   in Loop: Header=BB0_59 Depth=1
-	movq	$0, (%rsi,%r10,8)
-	vaddsd	%xmm13, %xmm15, %xmm10
-.LBB0_74:                               #   in Loop: Header=BB0_59 Depth=1
-	vmovsd	%xmm10, (%rdx,%r10,8)
-	vsubsd	128(%rsp), %xmm10, %xmm0        # 16-byte Folded Reload
-	movq	(%rsp), %rcx                    # 8-byte Reload
-	vmovsd	%xmm0, (%rcx,%r10,8)
-	incq	%r10
-	movq	%rbp, %rcx
-	addq	%r10, %rcx
-	je	.LBB0_61
-.LBB0_59:                               # =>This Inner Loop Header: Depth=1
-	vmovsd	(%r14,%r10,8), %xmm0            # xmm0 = mem[0],zero
-	vmovsd	(%r9,%r10,8), %xmm10            # xmm10 = mem[0],zero
-	vucomisd	%xmm0, %xmm10
-	setae	%r8b
-	vmovd	%r8d, %xmm11
-	vpbroadcastb	%xmm11, %xmm11
-	vpsllq	$63, %xmm11, %xmm11
-	vunpcklpd	%xmm10, %xmm0, %xmm14   # xmm14 = xmm0[0],xmm10[0]
-	vunpcklpd	%xmm0, %xmm10, %xmm0    # xmm0 = xmm10[0],xmm0[0]
-	vblendvpd	%xmm11, %xmm14, %xmm0, %xmm0
-	movq	%rdi, %r8
-	movq	24(%rsp), %rcx                  # 8-byte Reload
-	cmovaeq	%rcx, %r8
-	cmovaeq	%rdi, %rcx
-	addq	%rbx, %r8
-	vmovsd	(%r8,%r10,8), %xmm14            # xmm14 = mem[0],zero
-	addq	%rbx, %rcx
-	vmovsd	(%rcx,%r10,8), %xmm10           # xmm10 = mem[0],zero
-	vshufpd	$1, %xmm0, %xmm0, %xmm11        # xmm11 = xmm0[1,0]
-	vsubsd	%xmm0, %xmm11, %xmm15
-	vdivsd	%xmm0, %xmm15, %xmm15
-	vmulsd	%xmm1, %xmm15, %xmm15
-	vcmpltsd	%xmm0, %xmm2, %xmm0
-	vandpd	%xmm0, %xmm15, %xmm0
-	vsubsd	(%r11,%r10,8), %xmm0, %xmm15
-	vmovlpd	%xmm0, (%r13,%r10,8)
-	vmovsd	%xmm15, (%r12,%r10,8)
-	movq	-16(%rsp), %rcx                 # 8-byte Reload
-	addl	%r10d, %ecx
-	movl	%ecx, (%r15,%r10,4)
-	vucomisd	%xmm15, %xmm3
-	jae	.LBB0_60
-# %bb.69:                               #   in Loop: Header=BB0_59 Depth=1
-	vmulpd	%xmm4, %xmm11, %xmm0
-	vunpcklpd	%xmm14, %xmm10, %xmm10  # xmm10 = xmm10[0],xmm14[0]
-	vmaxpd	%xmm5, %xmm10, %xmm10
-	vmulpd	%xmm0, %xmm10, %xmm0
-	vdivpd	%xmm0, %xmm6, %xmm0
-	vshufpd	$1, %xmm0, %xmm0, %xmm10        # xmm10 = xmm0[1,0]
-	vaddsd	%xmm0, %xmm10, %xmm14
-	vmulsd	%xmm7, %xmm15, %xmm15
-	vucomisd	%xmm8, %xmm14
-	vxorpd	%xmm10, %xmm10, %xmm10
-	jbe	.LBB0_71
-# %bb.70:                               #   in Loop: Header=BB0_59 Depth=1
-	vaddsd	%xmm14, %xmm14, %xmm0
-	vdivsd	%xmm0, %xmm15, %xmm10
-.LBB0_71:                               #   in Loop: Header=BB0_59 Depth=1
-	vucomisd	%xmm10, %xmm9
-	jbe	.LBB0_73
-# %bb.72:                               #   in Loop: Header=BB0_59 Depth=1
-	movq	$0, (%rsi,%r10,8)
-	vaddsd	.LCPI0_12(%rip), %xmm10, %xmm10
-	jmp	.LBB0_74
-	.p2align	4
-.LBB0_73:                               #   in Loop: Header=BB0_59 Depth=1
-	movq	-8(%rsp), %rcx                  # 8-byte Reload
-	vmovsd	(%rcx,%r10,8), %xmm0            # xmm0 = mem[0],zero
-	vcmpltsd	.LCPI0_10(%rip), %xmm0, %xmm11
-	vblendvpd	%xmm11, %xmm12, %xmm0, %xmm0
-	vminsd	%xmm10, %xmm0, %xmm0
-	vmulsd	%xmm0, %xmm0, %xmm10
-	vmulsd	%xmm14, %xmm10, %xmm10
-	vmulsd	%xmm0, %xmm15, %xmm11
-	vsubsd	%xmm10, %xmm11, %xmm10
-	vmovsd	%xmm0, (%rsi,%r10,8)
-	jmp	.LBB0_74
-.LBB0_3:
-	movq	%r10, (%rsp)                    # 8-byte Spill
-	movq	%rdx, -8(%rsp)                  # 8-byte Spill
-	leaq	(%r11,%r9,8), %r10
-	movq	%r14, %rsi
-	leaq	(%r14,%r9,8), %r14
-	leaq	(%rax,%r9,4), %r12
-	movq	232(%rsp), %rdx
-	leaq	(%rdx,%r9,8), %r15
-	leaq	(%rbx,%r9,8), %rbp
-	leaq	(%r13,%r9,8), %rdi
-	movq	%rdi, 80(%rsp)                  # 8-byte Spill
-	movq	(%rsp), %rdx                    # 8-byte Reload
-	leaq	(%rdx,%r9,8), %rbx
-	movq	-8(%rsp), %rdx                  # 8-byte Reload
-	leaq	(%rdx,%r9,8), %rdx
-	movq	%rdx, -16(%rsp)                 # 8-byte Spill
-	cmpq	%r14, %r11
-	setb	-31(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, %rsi
-	setb	-34(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, %r11
-	setb	-25(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, %rax
-	setb	-35(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, %r11
-	setb	-26(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, 232(%rsp)
-	setb	-36(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rbp, %r11
-	setb	-27(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, 240(%rsp)
-	setb	-37(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rdi, %r11
-	setb	-28(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, %r13
-	setb	-38(%rsp)                       # 1-byte Folded Spill
-	movq	%rbx, %r13
-	movq	%rbx, 40(%rsp)                  # 8-byte Spill
-	cmpq	%rbx, %r11
-	setb	-29(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, (%rsp)                    # 8-byte Folded Reload
-	setb	-39(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rdx, %r11
-	setb	-30(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, -8(%rsp)                  # 8-byte Folded Reload
-	setb	-40(%rsp)                       # 1-byte Folded Spill
-	leaq	(%r8,%r9,8), %rdx
-	movq	%rdx, 8(%rsp)                   # 8-byte Spill
-	cmpq	%rdx, %r11
-	setb	-32(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, %r8
-	setb	-42(%rsp)                       # 1-byte Folded Spill
-	leaq	(%rcx,%r9,8), %rdi
-	movq	%rdi, 48(%rsp)                  # 8-byte Spill
-	cmpq	%rdi, %r11
-	setb	-33(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, %rcx
-	movq	240(%rsp), %r8
-	movq	-24(%rsp), %rcx                 # 8-byte Reload
-	leaq	(%rcx,%r9,8), %rdi
-	setb	-62(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rdi, %r11
-	movq	%rdi, 120(%rsp)                 # 8-byte Spill
-	setb	-41(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, -24(%rsp)                 # 8-byte Folded Reload
-	movq	208(%rsp), %rbx
-	leaq	(%rbx,%r9,8), %rcx
-	movq	%rcx, 72(%rsp)                  # 8-byte Spill
-	setb	-63(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rcx, %r11
-	setb	-43(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r10, 208(%rsp)
-	movq	-8(%rsp), %rdx                  # 8-byte Reload
-	movq	(%rsp), %r10                    # 8-byte Reload
-	setb	-64(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, %rsi
-	setb	-44(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, %rax
-	setb	-65(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, %rsi
-	setb	-45(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, 232(%rsp)
-	setb	-66(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rbp, %rsi
-	setb	-46(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, %r8
-	setb	-67(%rsp)                       # 1-byte Folded Spill
-	cmpq	80(%rsp), %rsi                  # 8-byte Folded Reload
-	setb	-47(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, 248(%rsp)
-	setb	-68(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r13, %rsi
-	setb	-48(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, %r10
-	setb	-69(%rsp)                       # 1-byte Folded Spill
-	movq	-16(%rsp), %r9                  # 8-byte Reload
-	cmpq	%r9, %rsi
-	setb	-49(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, %rdx
-	setb	-70(%rsp)                       # 1-byte Folded Spill
-	movq	8(%rsp), %rbx                   # 8-byte Reload
-	cmpq	%rbx, %rsi
-	setb	-50(%rsp)                       # 1-byte Folded Spill
-	movq	56(%rsp), %r11                  # 8-byte Reload
-	cmpq	%r14, %r11
-	setb	-71(%rsp)                       # 1-byte Folded Spill
-	movq	48(%rsp), %r13                  # 8-byte Reload
-	cmpq	%r13, %rsi
-	setb	-51(%rsp)                       # 1-byte Folded Spill
-	movq	24(%rsp), %rcx                  # 8-byte Reload
-	cmpq	%r14, %rcx
-	setb	-72(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rdi, %rsi
-	setb	-52(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, -24(%rsp)                 # 8-byte Folded Reload
-	setb	-73(%rsp)                       # 1-byte Folded Spill
-	cmpq	72(%rsp), %rsi                  # 8-byte Folded Reload
-	movq	232(%rsp), %rsi
-	setb	-53(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, 208(%rsp)
-	setb	-74(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, %rax
-	setb	-84(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, %rsi
-	setb	-75(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rbp, %rax
-	movq	%rbp, 32(%rsp)                  # 8-byte Spill
-	setb	-54(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, %r8
-	setb	-76(%rsp)                       # 1-byte Folded Spill
-	movq	80(%rsp), %rdi                  # 8-byte Reload
-	cmpq	%rdi, %rax
-	setb	-55(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, 248(%rsp)
-	setb	-77(%rsp)                       # 1-byte Folded Spill
-	movq	40(%rsp), %r8                   # 8-byte Reload
-	cmpq	%r8, %rax
-	setb	-56(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, %r10
-	setb	-78(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r9, %rax
-	setb	-57(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, %rdx
-	setb	-79(%rsp)                       # 1-byte Folded Spill
-	movq	%rbx, %r14
-	cmpq	%rbx, %rax
-	setb	-58(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, %r11
-	setb	-80(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r13, %rax
-	movq	%r13, %rbx
-	setb	-59(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, %rcx
-	setb	-81(%rsp)                       # 1-byte Folded Spill
-	movq	120(%rsp), %rcx                 # 8-byte Reload
-	cmpq	%rcx, %rax
-	setb	-60(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, -24(%rsp)                 # 8-byte Folded Reload
-	setb	-82(%rsp)                       # 1-byte Folded Spill
-	movq	72(%rsp), %r13                  # 8-byte Reload
-	cmpq	%r13, %rax
-	setb	-61(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r12, 208(%rsp)
-	setb	-83(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rbp, %rsi
-	setb	-88(%rsp)                       # 1-byte Folded Spill
-	movq	240(%rsp), %r9
-	cmpq	%r15, %r9
-	setb	-86(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rdi, %rsi
-	movq	%rdi, %rbp
-	setb	-85(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, 248(%rsp)
-	setb	-87(%rsp)                       # 1-byte Folded Spill
-	movq	%r8, %r12
-	cmpq	%r8, %rsi
-	setb	-89(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, %r10
-	setb	-90(%rsp)                       # 1-byte Folded Spill
-	movq	-16(%rsp), %r9                  # 8-byte Reload
-	cmpq	%r9, %rsi
-	setb	-91(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, %rdx
-	setb	-92(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r14, %rsi
-	setb	-93(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, %r11
-	setb	-94(%rsp)                       # 1-byte Folded Spill
-	cmpq	%rbx, %rsi
-	setb	-95(%rsp)                       # 1-byte Folded Spill
-	movq	24(%rsp), %rdi                  # 8-byte Reload
-	cmpq	%r15, %rdi
-	setb	-96(%rsp)                       # 1-byte Folded Spill
-	movq	%rcx, %r8
-	cmpq	%rcx, %rsi
-	setb	-97(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, -24(%rsp)                 # 8-byte Folded Reload
-	setb	-98(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r13, %rsi
-	setb	-99(%rsp)                       # 1-byte Folded Spill
-	cmpq	%r15, 208(%rsp)
-	movq	208(%rsp), %r15
-	setb	-100(%rsp)                      # 1-byte Folded Spill
-	movq	240(%rsp), %rcx
-	cmpq	%rbp, %rcx
-	setb	-101(%rsp)                      # 1-byte Folded Spill
-	movq	32(%rsp), %r14                  # 8-byte Reload
-	cmpq	%r14, 248(%rsp)
-	setb	-102(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r12, %rcx
-	setb	-103(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r14, %r10
-	setb	-104(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r9, %rcx
-	setb	-105(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r14, %rdx
-	setb	-106(%rsp)                      # 1-byte Folded Spill
-	movq	8(%rsp), %r9                    # 8-byte Reload
-	cmpq	%r9, %rcx
-	setb	-107(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r14, %r11
-	setb	-108(%rsp)                      # 1-byte Folded Spill
-	cmpq	%rbx, %rcx
-	movq	%rbx, %rbp
-	setb	-109(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r14, %rdi
-	setb	-110(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r8, %rcx
-	setb	-111(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r14, -24(%rsp)                 # 8-byte Folded Reload
-	setb	-112(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r13, %rcx
-	movq	%r13, %rbx
-	setb	-113(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r14, %r15
-	setb	32(%rsp)                        # 1-byte Folded Spill
-	cmpq	%r12, 248(%rsp)
-	setb	40(%rsp)                        # 1-byte Folded Spill
-	movq	80(%rsp), %rcx                  # 8-byte Reload
-	cmpq	%rcx, %r10
-	setb	-114(%rsp)                      # 1-byte Folded Spill
-	movq	-16(%rsp), %r14                 # 8-byte Reload
-	cmpq	%r14, 248(%rsp)
-	setb	-115(%rsp)                      # 1-byte Folded Spill
-	cmpq	%rcx, %rdx
-	setb	-116(%rsp)                      # 1-byte Folded Spill
-	cmpq	%r9, 248(%rsp)
-	setb	8(%rsp)                         # 1-byte Folded Spill
-	cmpq	%rcx, %r11
-	setb	-117(%rsp)                      # 1-byte Folded Spill
-	cmpq	%rbp, 248(%rsp)
-	setb	%r12b
-	cmpq	%rcx, %rdi
-	setb	%r11b
-	cmpq	%r8, 248(%rsp)
-	movq	248(%rsp), %r13
-	setb	%dil
-	cmpq	%rcx, -24(%rsp)                 # 8-byte Folded Reload
-	setb	48(%rsp)                        # 1-byte Folded Spill
-	cmpq	%rbx, %r13
-	setb	%bl
-	cmpq	%rcx, %r15
-	setb	80(%rsp)                        # 1-byte Folded Spill
-	movq	$0, -16(%rsp)                   # 8-byte Folded Spill
-	movzbl	-34(%rsp), %ecx                 # 1-byte Folded Reload
-	testb	%cl, -31(%rsp)                  # 1-byte Folded Reload
-	jne	.LBB0_4
-# %bb.5:
-	movl	%edi, %r9d
-	movzbl	-84(%rsp), %edi                 # 1-byte Folded Reload
-	movzbl	-35(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -25(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_4
-# %bb.6:
-	movl	%r11d, %ebp
-	movzbl	-36(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -26(%rsp)                  # 1-byte Folded Spill
-	movq	216(%rsp), %r11
-	movq	224(%rsp), %r14
-	jne	.LBB0_58
+	jle	.LBB0_1
 # %bb.7:
-	movzbl	-37(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -27(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.8:
-	movzbl	-38(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -28(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.9:
-	movzbl	-39(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -29(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.10:
-	movzbl	-40(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -30(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.11:
-	movzbl	-42(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -32(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.12:
-	movzbl	-62(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -33(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.13:
-	movzbl	-63(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -41(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.14:
-	movzbl	-64(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -43(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.15:
-	movzbl	-65(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -44(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.16:
-	movzbl	-66(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -45(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.17:
-	movzbl	-67(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -46(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.18:
-	movzbl	-68(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -47(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.19:
-	movzbl	-69(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -48(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.20:
-	movzbl	-70(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -49(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.21:
-	movzbl	-71(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -50(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.22:
-	movzbl	-72(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -51(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.23:
-	movzbl	-73(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -52(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.24:
-	movzbl	-74(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -53(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.25:
-	andb	-75(%rsp), %dil                 # 1-byte Folded Reload
-	jne	.LBB0_58
-# %bb.26:
-	movzbl	-76(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -54(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.27:
-	movzbl	-77(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -55(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.28:
-	movzbl	-78(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -56(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.29:
-	movzbl	-79(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -57(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.30:
-	movzbl	-80(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -58(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.31:
-	movzbl	-81(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -59(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.32:
-	movzbl	-82(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -60(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.33:
-	movzbl	-83(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -61(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.34:
-	movzbl	-88(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	-86(%rsp), %cl                  # 1-byte Folded Reload
-	jne	.LBB0_58
-# %bb.35:
-	movzbl	-87(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -85(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.36:
-	movzbl	-90(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -89(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.37:
-	movzbl	-92(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -91(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.38:
-	movzbl	-94(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -93(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.39:
-	movzbl	-96(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -95(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.40:
-	movzbl	-98(%rsp), %ecx                 # 1-byte Folded Reload
-	andb	%cl, -97(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.41:
-	movzbl	-100(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, -99(%rsp)                  # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.42:
-	movzbl	-102(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, -101(%rsp)                 # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.43:
-	movzbl	-104(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, -103(%rsp)                 # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.44:
-	movzbl	-106(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, -105(%rsp)                 # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.45:
-	movzbl	-108(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, -107(%rsp)                 # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.46:
-	movzbl	-110(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, -109(%rsp)                 # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.47:
-	movzbl	-112(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, -111(%rsp)                 # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.48:
-	movzbl	32(%rsp), %ecx                  # 1-byte Folded Reload
-	andb	%cl, -113(%rsp)                 # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.49:
-	movzbl	-114(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, 40(%rsp)                   # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.50:
-	movzbl	-116(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, -115(%rsp)                 # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.51:
-	movzbl	-117(%rsp), %ecx                # 1-byte Folded Reload
-	andb	%cl, 8(%rsp)                    # 1-byte Folded Spill
-	jne	.LBB0_58
-# %bb.52:
-	andb	%bpl, %r12b
-	jne	.LBB0_58
-# %bb.53:
-	andb	48(%rsp), %r9b                  # 1-byte Folded Reload
-	jne	.LBB0_58
-# %bb.54:
-	andb	80(%rsp), %bl                   # 1-byte Folded Reload
-	jne	.LBB0_58
-# %bb.55:
-	movq	16(%rsp), %rdi                  # 8-byte Reload
-	movl	%edi, %ecx
-	andl	$2147483644, %ecx               # imm = 0x7FFFFFFC
-	movq	%rcx, -16(%rsp)                 # 8-byte Spill
-	vbroadcastsd	128(%rsp), %ymm0        # 16-byte Folded Reload
-	vmovupd	%ymm0, 80(%rsp)                 # 32-byte Spill
-	movl	%edi, %r9d
-	shrl	$2, %r9d
-	andl	$536870911, %r9d                # imm = 0x1FFFFFFF
-	shlq	$4, %r9
-	vmovdqa	.LCPI0_0(%rip), %xmm2           # xmm2 = [0,1,2,3]
-	xorl	%edi, %edi
-	vxorpd	%xmm5, %xmm5, %xmm5
-	vbroadcastsd	.LCPI0_4(%rip), %ymm7   # ymm7 = [8.0E+0,8.0E+0,8.0E+0,8.0E+0]
-	vbroadcastsd	.LCPI0_5(%rip), %ymm8   # ymm8 = [9.9999999999999995E-7,9.9999999999999995E-7,9.9999999999999995E-7,9.9999999999999995E-7]
-	vbroadcastsd	.LCPI0_6(%rip), %ymm9   # ymm9 = [1.0E+0,1.0E+0,1.0E+0,1.0E+0]
-	vpbroadcastd	.LCPI0_13(%rip), %xmm3  # xmm3 = [4,4,4,4]
-	movq	240(%rsp), %rcx
-	movq	56(%rsp), %r8                   # 8-byte Reload
-	movq	24(%rsp), %r12                  # 8-byte Reload
-	.p2align	4
-.LBB0_56:                               # =>This Inner Loop Header: Depth=1
-	vmovupd	(%r10,%rdi,2), %ymm4
-	vmovupd	(%rdx,%rdi,2), %ymm6
-	vcmplepd	%ymm6, %ymm4, %ymm10
-	vmovd	%xmm10, %esi
-	testb	$1, %sil
-	movq	%r8, %r13
-	cmovneq	%r12, %r13
-	vpextrb	$8, %xmm10, %r10d
-	movq	%r12, %r14
-	cmovneq	%r8, %r14
-	testb	$1, %r10b
+	movq	80(%rsp), %rbx
+	movq	72(%rsp), %r14
+	movq	64(%rsp), %r15
+	vmovsd	.LCPI0_0(%rip), %xmm1           # xmm1 = [-9.999E+3,0.0E+0]
+	vsubsd	%xmm0, %xmm1, %xmm2
+	movl	%edi, %edi
+	vmovsd	.LCPI0_1(%rip), %xmm3           # xmm3 = [-1.0E+30,0.0E+0]
+	xorl	%r13d, %r13d
+	vmovsd	.LCPI0_2(%rip), %xmm4           # xmm4 = [1.0E+4,0.0E+0]
+	vmovsd	.LCPI0_3(%rip), %xmm5           # xmm5 = [1.0000000000000001E-9,0.0E+0]
+	vxorpd	%xmm6, %xmm6, %xmm6
+	vmovsd	.LCPI0_5(%rip), %xmm8           # xmm8 = [1.0E+0,0.0E+0]
+	xorl	%r11d, %r11d
+	movl	%r12d, %ebp
+	vmovsd	.LCPI0_4(%rip), %xmm15          # xmm15 = [-9.99E+2,0.0E+0]
+.LBB0_8:                                # =>This Loop Header: Depth=1
+                                        #     Child Loop BB0_30 Depth 2
+	vmovapd	%xmm8, %xmm9
+	leaq	4(%r13), %r10
+	cmpq	%rdi, %r10
+	jae	.LBB0_10
+# %bb.9:                                #   in Loop: Header=BB0_8 Depth=1
+	prefetcht0	(%rsi,%r10,8)
+	prefetcht0	(%rdx,%r10,8)
+	prefetcht0	(%rcx,%r10,8)
+	prefetcht0	(%r8,%r10,8)
+.LBB0_10:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovsd	(%rsi,%r13,8), %xmm7            # xmm7 = mem[0],zero
+	vmovsd	(%rdx,%r13,8), %xmm11           # xmm11 = mem[0],zero
+	vucomisd	%xmm11, %xmm7
 	movq	%r8, %r10
-	cmovneq	%r12, %r10
-	vextracti128	$1, %ymm10, %xmm11
-	vpextrb	$0, %xmm11, %r11d
-	movq	%r12, %rbx
-	cmovneq	%r8, %rbx
-	testb	$1, %r11b
-	movq	%r8, %r11
-	cmovneq	%r12, %r11
-	vpextrb	$8, %xmm11, %ebp
-	movq	%r12, %r15
-	cmovneq	%r8, %r15
-	testb	$1, %bpl
-	vmovsd	16(%r11,%rdi,2), %xmm11         # xmm11 = mem[0],zero
-	movq	%r8, %r11
-	cmovneq	%r12, %r11
-	vmovhpd	24(%r11,%rdi,2), %xmm11, %xmm11 # xmm11 = xmm11[0],mem[0]
-	movq	216(%rsp), %r11
-	vmovsd	(%r13,%rdi,2), %xmm12           # xmm12 = mem[0],zero
-	movq	248(%rsp), %r13
-	vmovhpd	8(%r10,%rdi,2), %xmm12, %xmm12  # xmm12 = xmm12[0],mem[0]
-	movq	%r12, %r10
-	cmovneq	%r8, %r10
-	vmovsd	16(%r15,%rdi,2), %xmm13         # xmm13 = mem[0],zero
-	movq	208(%rsp), %r15
-	vmovhpd	24(%r10,%rdi,2), %xmm13, %xmm13 # xmm13 = xmm13[0],mem[0]
-	movq	-8(%rsp), %rdx                  # 8-byte Reload
-	movq	(%rsp), %r10                    # 8-byte Reload
-	vmovsd	(%r14,%rdi,2), %xmm14           # xmm14 = mem[0],zero
-	movq	224(%rsp), %r14
-	vmovhpd	8(%rbx,%rdi,2), %xmm14, %xmm14  # xmm14 = xmm14[0],mem[0]
-	vblendvpd	%ymm10, %ymm4, %ymm6, %ymm15
-	vblendvpd	%ymm10, %ymm6, %ymm4, %ymm6
-	vbroadcastsd	.LCPI0_1(%rip), %ymm1   # ymm1 = [1.0000000000000001E-9,1.0000000000000001E-9,1.0000000000000001E-9,1.0000000000000001E-9]
-	vcmpltpd	%ymm15, %ymm1, %ymm4
-	vsubpd	%ymm15, %ymm6, %ymm10
-	vdivpd	%ymm15, %ymm10, %ymm10
-	vbroadcastsd	.LCPI0_2(%rip), %ymm1   # ymm1 = [1.0E+4,1.0E+4,1.0E+4,1.0E+4]
-	vmulpd	%ymm1, %ymm10, %ymm10
-	vandpd	%ymm4, %ymm10, %ymm4
-	movq	-24(%rsp), %rsi                 # 8-byte Reload
-	vsubpd	(%rsi,%rdi,2), %ymm4, %ymm10
-	movq	232(%rsp), %rsi
-	vmovupd	%ymm4, (%r11,%rdi,2)
-	vmovupd	%ymm10, (%r14,%rdi,2)
-	vmovdqu	%xmm2, (%rax,%rdi)
-	vcmplepd	%ymm5, %ymm10, %ymm1
-	vmaskmovpd	%ymm5, %ymm1, (%rsi,%rdi,2)
-	vinsertf128	$1, %xmm11, %ymm12, %ymm11
-	vinsertf128	$1, %xmm13, %ymm14, %ymm12
-	vbroadcastsd	.LCPI0_3(%rip), %ymm4   # ymm4 = [-9.99E+2,-9.99E+2,-9.99E+2,-9.99E+2]
-	vaddpd	%ymm4, %ymm10, %ymm4
-	vmaskmovpd	%ymm4, %ymm1, (%rcx,%rdi,2)
-	vmulpd	%ymm7, %ymm15, %ymm1
-	vmaxpd	%ymm8, %ymm11, %ymm11
-	vmulpd	%ymm1, %ymm11, %ymm1
-	vmulpd	%ymm7, %ymm6, %ymm6
-	vmaxpd	%ymm8, %ymm12, %ymm11
-	vdivpd	%ymm1, %ymm9, %ymm1
-	vmulpd	%ymm6, %ymm11, %ymm6
-	vdivpd	%ymm6, %ymm9, %ymm6
-	vaddpd	%ymm6, %ymm1, %ymm1
-	vbroadcastsd	.LCPI0_7(%rip), %ymm6   # ymm6 = [1.0E-4,1.0E-4,1.0E-4,1.0E-4]
-	vmulpd	%ymm6, %ymm10, %ymm6
-	vaddpd	%ymm1, %ymm1, %ymm11
-	vdivpd	%ymm11, %ymm6, %ymm11
-	vcmpnlepd	%ymm5, %ymm10, %ymm10
-	vbroadcastsd	.LCPI0_8(%rip), %ymm12  # ymm12 = [1.0000000000000001E-15,1.0000000000000001E-15,1.0000000000000001E-15,1.0000000000000001E-15]
-	vcmpltpd	%ymm1, %ymm12, %ymm12
-	vandpd	%ymm11, %ymm12, %ymm11
-	vbroadcastsd	.LCPI0_9(%rip), %ymm12  # ymm12 = [1.0E+1,1.0E+1,1.0E+1,1.0E+1]
-	vcmpltpd	%ymm12, %ymm11, %ymm12
-	vandnpd	%ymm10, %ymm12, %ymm13
-	vmaskmovpd	(%r15,%rdi,2), %ymm13, %ymm14
-	vbroadcastsd	.LCPI0_10(%rip), %ymm15 # ymm15 = [2.5E+1,2.5E+1,2.5E+1,2.5E+1]
-	vcmpltpd	%ymm15, %ymm14, %ymm15
-	vbroadcastsd	.LCPI0_11(%rip), %ymm0  # ymm0 = [2.5E+4,2.5E+4,2.5E+4,2.5E+4]
-	vblendvpd	%ymm15, %ymm0, %ymm14, %ymm14
-	vminpd	%ymm11, %ymm14, %ymm14
-	vmulpd	%ymm14, %ymm14, %ymm15
-	vmulpd	%ymm1, %ymm15, %ymm1
-	vmulpd	%ymm6, %ymm14, %ymm6
-	vsubpd	%ymm1, %ymm6, %ymm1
-	vmaskmovpd	%ymm14, %ymm13, (%rsi,%rdi,2)
-	vmaskmovpd	%ymm1, %ymm13, (%rcx,%rdi,2)
-	vandpd	%ymm12, %ymm10, %ymm6
-	vmaskmovpd	%ymm5, %ymm6, (%rsi,%rdi,2)
-	vbroadcastsd	.LCPI0_12(%rip), %ymm0  # ymm0 = [-5.0E+2,-5.0E+2,-5.0E+2,-5.0E+2]
-	vaddpd	%ymm0, %ymm11, %ymm11
-	vmaskmovpd	%ymm11, %ymm6, (%rcx,%rdi,2)
-	vblendvpd	%ymm13, %ymm1, %ymm11, %ymm1
-	vblendvpd	%ymm10, %ymm1, %ymm4, %ymm1
-	vsubpd	80(%rsp), %ymm1, %ymm1          # 32-byte Folded Reload
-	vmovupd	%ymm1, (%r13,%rdi,2)
-	vpaddd	%xmm3, %xmm2, %xmm2
-	addq	$16, %rdi
-	cmpq	%rdi, %r9
-	jne	.LBB0_56
-# %bb.57:
-	movq	-16(%rsp), %rcx                 # 8-byte Reload
-	cmpl	16(%rsp), %ecx                  # 4-byte Folded Reload
-	jne	.LBB0_58
-.LBB0_61:
-	cmpl	$1, 68(%rsp)                    # 4-byte Folded Reload
-	movq	240(%rsp), %r8
-	movq	16(%rsp), %r9                   # 8-byte Reload
-	jne	.LBB0_62
-.LBB0_68:
-	addq	$152, %rsp
+	cmovbeq	%rcx, %r10
+	vminsd	%xmm7, %xmm11, %xmm10
+	vmaxsd	%xmm7, %xmm11, %xmm12
+	vmovsd	(%r10,%r13,8), %xmm11           # xmm11 = mem[0],zero
+	movq	%rcx, %r10
+	cmovbeq	%r8, %r10
+	vmovsd	(%r10,%r13,8), %xmm7            # xmm7 = mem[0],zero
+	vsubsd	%xmm10, %xmm12, %xmm13
+	vmulsd	%xmm4, %xmm13, %xmm13
+	vdivsd	%xmm10, %xmm13, %xmm13
+	vcmpltsd	%xmm10, %xmm5, %xmm14
+	vandpd	%xmm13, %xmm14, %xmm8
+	vmovsd	(%r9,%r13,8), %xmm13            # xmm13 = mem[0],zero
+	vsubsd	%xmm13, %xmm8, %xmm14
+	vmovlpd	%xmm8, (%r15,%r13,8)
+	vmovsd	%xmm14, (%r14,%r13,8)
+	vucomisd	%xmm6, %xmm14
+	movslq	%r12d, %r10
+	ja	.LBB0_13
+# %bb.11:                               #   in Loop: Header=BB0_8 Depth=1
+	andq	$0, (%rbx,%r13,8)
+	vaddsd	%xmm15, %xmm14, %xmm7
+.LBB0_12:                               #   in Loop: Header=BB0_8 Depth=1
+	vsubsd	%xmm0, %xmm7, %xmm8
+	vucomisd	%xmm3, %xmm8
+	movq	88(%rsp), %r12
+	vmovsd	%xmm7, (%r12,%r13,8)
+	cmoval	%r10d, %ebp
+	movq	96(%rsp), %r12
+	vmovsd	%xmm8, (%r12,%r13,8)
+	vmaxsd	%xmm3, %xmm8, %xmm3
+	leal	-1(%r10), %r12d
+	movl	%r13d, (%rax,%r10,4)
+	vmovapd	%xmm9, %xmm8
+.LBB0_36:                               #   in Loop: Header=BB0_8 Depth=1
+	incq	%r13
+	cmpq	%rdi, %r13
+	je	.LBB0_2
+	jmp	.LBB0_8
+.LBB0_13:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovapd	%xmm9, %xmm8
+	vucomisd	%xmm9, %xmm11
+	jb	.LBB0_15
+# %bb.14:                               #   in Loop: Header=BB0_8 Depth=1
+	vucomisd	%xmm8, %xmm7
+	jb	.LBB0_15
+# %bb.16:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovsd	.LCPI0_6(%rip), %xmm8           # xmm8 = [2.2999999999999998E+0,0.0E+0]
+	vucomisd	%xmm8, %xmm13
+	vcmplesd	%xmm8, %xmm13, %xmm8
+	vmovapd	%xmm8, -88(%rsp)                # 16-byte Spill
+	vmovddup	.LCPI0_7(%rip), %xmm8           # xmm8 = [1.6E+2,1.6E+2]
+                                        # xmm8 = mem[0,0]
+	vmovaps	%xmm8, -72(%rsp)                # 16-byte Spill
+	vmovddup	.LCPI0_8(%rip), %xmm8           # xmm8 = [6.4E+1,6.4E+1]
+                                        # xmm8 = mem[0,0]
+	vmovapd	-88(%rsp), %xmm13               # 16-byte Reload
+	vblendvpd	%xmm13, -72(%rsp), %xmm8, %xmm8 # 16-byte Folded Reload
+	vmovapd	%xmm8, -88(%rsp)                # 16-byte Spill
+	vmulsd	.LCPI0_9(%rip), %xmm14, %xmm13
+	vaddsd	.LCPI0_10(%rip), %xmm13, %xmm8
+	vmovapd	%xmm8, -72(%rsp)                # 16-byte Spill
+	vmovsd	.LCPI0_11(%rip), %xmm8          # xmm8 = [1.5E+0,0.0E+0]
+	vcmpltsd	%xmm14, %xmm8, %xmm8
+	vmovddup	.LCPI0_5(%rip), %xmm13          # xmm13 = [1.0E+0,1.0E+0]
+                                        # xmm13 = mem[0,0]
+	vblendvpd	%xmm8, -72(%rsp), %xmm13, %xmm8 # 16-byte Folded Reload
+	vmovapd	-88(%rsp), %xmm13               # 16-byte Reload
+	vdivsd	%xmm8, %xmm13, %xmm8
+	vmulsd	%xmm10, %xmm11, %xmm10
+	vmulsd	%xmm8, %xmm10, %xmm10
+	vmulsd	%xmm7, %xmm12, %xmm7
+	vmulsd	%xmm7, %xmm8, %xmm7
+	vmulsd	%xmm7, %xmm10, %xmm11
+	vaddsd	%xmm7, %xmm10, %xmm13
+	vmulsd	.LCPI0_14(%rip), %xmm14, %xmm7
+	vmovsd	%xmm7, -88(%rsp)                # 8-byte Spill
+	vmulsd	.LCPI0_15(%rip), %xmm14, %xmm12
+	vmulsd	%xmm12, %xmm11, %xmm7
+	vdivsd	%xmm13, %xmm7, %xmm7
+	vmovsd	.LCPI0_12(%rip), %xmm8          # xmm8 = [1.0000000000000001E-15,0.0E+0]
+	vcmpltsd	%xmm13, %xmm8, %xmm8
+	vandpd	%xmm7, %xmm8, %xmm10
+	jbe	.LBB0_19
+# %bb.17:                               #   in Loop: Header=BB0_8 Depth=1
+	vucomisd	.LCPI0_16(%rip), %xmm10
+	jae	.LBB0_19
+# %bb.18:                               #   in Loop: Header=BB0_8 Depth=1
+	andq	$0, (%rbx,%r13,8)
+	vaddsd	%xmm1, %xmm10, %xmm7
+	jmp	.LBB0_12
+.LBB0_19:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovsd	%xmm12, -48(%rsp)               # 8-byte Spill
+	vmovsd	%xmm13, -40(%rsp)               # 8-byte Spill
+	vdivsd	%xmm11, %xmm13, %xmm7
+	vmovsd	.LCPI0_12(%rip), %xmm8          # xmm8 = [1.0000000000000001E-15,0.0E+0]
+	vmovsd	%xmm11, -32(%rsp)               # 8-byte Spill
+	vcmpltsd	%xmm11, %xmm8, %xmm8
+	vmovddup	.LCPI0_13(%rip), %xmm11         # xmm11 = [1.0E+15,1.0E+15]
+                                        # xmm11 = mem[0,0]
+	vblendvpd	%xmm8, %xmm7, %xmm11, %xmm12
+	vmaxsd	.LCPI0_17(%rip), %xmm10, %xmm8
+	movq	56(%rsp), %r10
+	vmovsd	(%r10,%r13,8), %xmm10           # xmm10 = mem[0],zero
+	vcmpltsd	.LCPI0_18(%rip), %xmm10, %xmm11
+	vmovddup	.LCPI0_19(%rip), %xmm13         # xmm13 = [2.5E+5,2.5E+5]
+                                        # xmm13 = mem[0,0]
+	vblendvpd	%xmm11, %xmm13, %xmm10, %xmm10
+	vminsd	%xmm10, %xmm8, %xmm7
+	vmulsd	-88(%rsp), %xmm7, %xmm11        # 8-byte Folded Reload
+	vmovapd	%xmm7, -72(%rsp)                # 16-byte Spill
+	vmulsd	%xmm7, %xmm7, %xmm13
+	vmovapd	%xmm12, -24(%rsp)               # 16-byte Spill
+	vmulsd	%xmm12, %xmm13, %xmm13
+	vsubsd	%xmm13, %xmm11, %xmm13
+	vmulsd	.LCPI0_20(%rip), %xmm11, %xmm11
+	vcmpltsd	%xmm13, %xmm6, %xmm7
+	vblendvpd	%xmm7, %xmm13, %xmm11, %xmm7
+	vsubsd	%xmm0, %xmm7, %xmm13
+	vucomisd	%xmm10, %xmm8
+	jbe	.LBB0_20
+# %bb.21:                               #   in Loop: Header=BB0_8 Depth=1
+	vucomisd	.LCPI0_21(%rip), %xmm14
+	vmovapd	%xmm9, %xmm8
+	jbe	.LBB0_22
+# %bb.23:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovapd	%xmm7, %xmm14
+	vmovsd	-48(%rsp), %xmm7                # 8-byte Reload
+                                        # xmm7 = mem[0],zero
+	vaddsd	.LCPI0_22(%rip), %xmm7, %xmm7
+	vmulsd	-32(%rsp), %xmm7, %xmm7         # 8-byte Folded Reload
+	vdivsd	-40(%rsp), %xmm7, %xmm7         # 8-byte Folded Reload
+	vminsd	.LCPI0_23(%rip), %xmm7, %xmm11
+	vucomisd	%xmm10, %xmm11
+	jbe	.LBB0_24
+# %bb.25:                               #   in Loop: Header=BB0_8 Depth=1
+	vsubsd	%xmm10, %xmm11, %xmm8
+	vmulsd	-88(%rsp), %xmm11, %xmm7        # 8-byte Folded Reload
+	vmulsd	%xmm11, %xmm11, %xmm10
+	vmulsd	-24(%rsp), %xmm10, %xmm10       # 16-byte Folded Reload
+	vsubsd	%xmm10, %xmm7, %xmm7
+	vmulsd	.LCPI0_24(%rip), %xmm8, %xmm8
+	vsubsd	%xmm0, %xmm7, %xmm10
+	vaddsd	%xmm8, %xmm10, %xmm10
+	vucomisd	%xmm13, %xmm10
+	ja	.LBB0_27
+# %bb.26:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovapd	%xmm14, %xmm7
+.LBB0_27:                               #   in Loop: Header=BB0_8 Depth=1
+	vcmpltsd	%xmm10, %xmm13, %xmm8
+	vmovapd	-72(%rsp), %xmm12               # 16-byte Reload
+	vblendvpd	%xmm8, %xmm11, %xmm12, %xmm11
+	vmaxsd	%xmm13, %xmm10, %xmm13
+	vmovapd	%xmm9, %xmm8
+	jmp	.LBB0_28
+.LBB0_20:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovapd	%xmm9, %xmm8
+.LBB0_22:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovapd	-72(%rsp), %xmm11               # 16-byte Reload
+	jmp	.LBB0_28
+.LBB0_24:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovapd	-72(%rsp), %xmm11               # 16-byte Reload
+	vmovapd	%xmm14, %xmm7
+.LBB0_28:                               #   in Loop: Header=BB0_8 Depth=1
+	vmovsd	%xmm11, (%rbx,%r13,8)
+	movq	88(%rsp), %r10
+	vmovsd	%xmm7, (%r10,%r13,8)
+	movq	96(%rsp), %r10
+	vmovsd	%xmm13, (%r10,%r13,8)
+	movl	%r11d, -92(%rsp)                # 4-byte Spill
+	movl	-92(%rsp), %r10d                # 4-byte Reload
+                                        # kill: def $r10d killed $r10d def $r10
+	movq	%r10, -88(%rsp)                 # 8-byte Spill
+	cmpl	$0, -92(%rsp)                   # 4-byte Folded Reload
+	movq	-88(%rsp), %r10                 # 8-byte Reload
+	jle	.LBB0_35
+# %bb.29:                               #   in Loop: Header=BB0_8 Depth=1
+	movl	-92(%rsp), %r10d                # 4-byte Reload
+.LBB0_30:                               #   Parent Loop BB0_8 Depth=1
+                                        # =>  This Inner Loop Header: Depth=2
+	movq	%r10, -88(%rsp)                 # 8-byte Spill
+	movslq	-4(%rax,%r10,4), %r10
+	movq	%r10, -72(%rsp)                 # 8-byte Spill
+	movq	96(%rsp), %r10
+	movq	-72(%rsp), %r15                 # 8-byte Reload
+	vucomisd	(%r10,%r15,8), %xmm13
+	jbe	.LBB0_33
+# %bb.31:                               #   in Loop: Header=BB0_30 Depth=2
+	movq	-88(%rsp), %r10                 # 8-byte Reload
+	movq	-72(%rsp), %r14                 # 8-byte Reload
+	movl	%r14d, (%rax,%r10,4)
+	movq	72(%rsp), %r14
+	decq	-88(%rsp)                       # 8-byte Folded Spill
+	movq	-88(%rsp), %r10                 # 8-byte Reload
+	incq	%r10
+	cmpq	$1, %r10
+	movq	-88(%rsp), %r10                 # 8-byte Reload
+	ja	.LBB0_30
+# %bb.32:                               #   in Loop: Header=BB0_8 Depth=1
+	xorl	%r10d, %r10d
+	jmp	.LBB0_34
+.LBB0_33:                               #   in Loop: Header=BB0_8 Depth=1
+	movq	-88(%rsp), %r10                 # 8-byte Reload
+.LBB0_34:                               #   in Loop: Header=BB0_8 Depth=1
+	movq	64(%rsp), %r15
+.LBB0_35:                               #   in Loop: Header=BB0_8 Depth=1
+	movslq	%r10d, %r10
+	movl	%r13d, (%rax,%r10,4)
+	movl	-92(%rsp), %r11d                # 4-byte Reload
+	incl	%r11d
+	jmp	.LBB0_36
+.LBB0_15:                               #   in Loop: Header=BB0_8 Depth=1
+	andq	$0, (%rbx,%r13,8)
+	vucomisd	%xmm3, %xmm2
+	movabsq	$-4556649414143246336, %r12     # imm = 0xC0C3878000000000
+	movq	88(%rsp), %rbx
+	movq	%r12, (%rbx,%r13,8)
+	movq	80(%rsp), %rbx
+	cmoval	%r10d, %ebp
+	movq	96(%rsp), %r12
+	vmovsd	%xmm2, (%r12,%r13,8)
+	vmaxsd	%xmm3, %xmm2, %xmm3
+	leal	-1(%r10), %r12d
+	movl	%r13d, (%rax,%r10,4)
+	jmp	.LBB0_36
+.LBB0_2:
+	testl	%r11d, %r11d
+	sete	%cl
+	movl	%ebp, %r12d
+	jmp	.LBB0_3
+.LBB0_1:
+	movb	$1, %cl
+.LBB0_3:
+	testb	%cl, %cl
+	je	.LBB0_6
+# %bb.4:
+	testl	%r12d, %r12d
+	je	.LBB0_6
+# %bb.5:
+	movl	(%rax), %ecx
+	movslq	%r12d, %rdx
+	movl	(%rax,%rdx,4), %esi
+	movl	%esi, (%rax)
+	movl	%ecx, (%rax,%rdx,4)
+.LBB0_6:
 	popq	%rbx
 	popq	%r12
 	popq	%r13
 	popq	%r14
 	popq	%r15
 	popq	%rbp
-	vzeroupper
 	retq
-.LBB0_62:
-	movl	$1, %ecx
-	jmp	.LBB0_63
-	.p2align	4
-.LBB0_66:                               #   in Loop: Header=BB0_63 Depth=1
-	xorl	%esi, %esi
-.LBB0_67:                               #   in Loop: Header=BB0_63 Depth=1
-	movslq	%esi, %rsi
-	movl	%edx, (%rax,%rsi,4)
-	incq	%rcx
-	cmpq	%r9, %rcx
-	je	.LBB0_68
-.LBB0_63:                               # =>This Loop Header: Depth=1
-                                        #     Child Loop BB0_64 Depth 2
-	movslq	(%rax,%rcx,4), %rdx
-	vmovsd	(%r8,%rdx,8), %xmm0             # xmm0 = mem[0],zero
-	movq	%rcx, %rsi
-	.p2align	4
-.LBB0_64:                               #   Parent Loop BB0_63 Depth=1
-                                        # =>  This Inner Loop Header: Depth=2
-	movslq	-4(%rax,%rsi,4), %rdi
-	vucomisd	(%r8,%rdi,8), %xmm0
-	jbe	.LBB0_67
-# %bb.65:                               #   in Loop: Header=BB0_64 Depth=2
-	movl	%edi, (%rax,%rsi,4)
-	decq	%rsi
-	leaq	1(%rsi), %rdi
-	cmpq	$1, %rdi
-	jg	.LBB0_64
-	jmp	.LBB0_66
-.LBB0_4:
-	movq	216(%rsp), %r11
-	movq	224(%rsp), %r14
-	jmp	.LBB0_58
 .Lfunc_end0:
 	.size	evaluate_v3_route_batch_asm, .Lfunc_end0-evaluate_v3_route_batch_asm
+                                        # -- End function
+	.section	.rodata.cst8,"aM",@progbits,8
+	.p2align	3, 0x0                          # -- Begin function evaluate_parallel_bundle_asm
+.LCPI1_0:
+	.quad	0x3ff0000000000000              # double 1
+	.section	.text.hot.,"ax",@progbits
+	.globl	evaluate_parallel_bundle_asm
+	.p2align	4
+	.type	evaluate_parallel_bundle_asm,@function
+evaluate_parallel_bundle_asm:           # @evaluate_parallel_bundle_asm
+# %bb.0:
+	pushq	%rbp
+	pushq	%r14
+	pushq	%rbx
+	movq	56(%rsp), %r8
+	movq	48(%rsp), %r9
+	movq	40(%rsp), %r10
+	testl	%edi, %edi
+	jle	.LBB1_1
+# %bb.2:
+	movq	32(%rsp), %r11
+	movl	%edi, %edi
+	vxorpd	%xmm3, %xmm3, %xmm3
+	xorl	%eax, %eax
+	movl	$1, %ebx
+	vxorpd	%xmm1, %xmm1, %xmm1
+	vxorpd	%xmm2, %xmm2, %xmm2
+.LBB1_3:                                # =>This Inner Loop Header: Depth=1
+	movl	-4(%rsi,%rbx,4), %ebp
+	movslq	%ebp, %r14
+	vmovsd	(%rdx,%r14,8), %xmm4            # xmm4 = mem[0],zero
+	vucomisd	%xmm4, %xmm3
+	jae	.LBB1_8
+# %bb.4:                                #   in Loop: Header=BB1_3 Depth=1
+	vmovsd	(%rcx,%r14,8), %xmm5            # xmm5 = mem[0],zero
+	vucomisd	%xmm5, %xmm0
+	jae	.LBB1_6
+# %bb.5:                                #   in Loop: Header=BB1_3 Depth=1
+	cltq
+	movl	%ebp, (%r11,%rax,4)
+	vaddsd	%xmm1, %xmm4, %xmm1
+	vaddsd	%xmm2, %xmm5, %xmm2
+	incl	%eax
+.LBB1_6:                                #   in Loop: Header=BB1_3 Depth=1
+	cmpq	%rdi, %rbx
+	jae	.LBB1_8
+# %bb.7:                                #   in Loop: Header=BB1_3 Depth=1
+	incq	%rbx
+	cmpl	$12, %eax
+	jl	.LBB1_3
+.LBB1_8:
+	testl	%eax, %eax
+	jg	.LBB1_9
+# %bb.10:
+	vmovsd	.LCPI1_0(%rip), %xmm3           # xmm3 = [1.0E+0,0.0E+0]
+	jmp	.LBB1_11
+.LBB1_1:
+	vmovsd	.LCPI1_0(%rip), %xmm3           # xmm3 = [1.0E+0,0.0E+0]
+	vxorpd	%xmm1, %xmm1, %xmm1
+	xorl	%eax, %eax
+	vxorpd	%xmm2, %xmm2, %xmm2
+	jmp	.LBB1_11
+.LBB1_9:
+	vcvtsi2sd	%eax, %xmm15, %xmm3
+.LBB1_11:
+	vmulsd	%xmm0, %xmm3, %xmm0
+	vmovsd	%xmm1, (%r10)
+	vmovsd	%xmm2, (%r9)
+	vsubsd	%xmm0, %xmm2, %xmm0
+	vmovsd	%xmm0, (%r8)
+                                        # kill: def $eax killed $eax killed $rax
+	popq	%rbx
+	popq	%r14
+	popq	%rbp
+	retq
+.Lfunc_end1:
+	.size	evaluate_parallel_bundle_asm, .Lfunc_end1-evaluate_parallel_bundle_asm
+                                        # -- End function
+	.section	.rodata.cst8,"aM",@progbits,8
+	.p2align	3, 0x0                          # -- Begin function evaluate_aave_liquidations_asm
+.LCPI2_0:
+	.quad	0x3ff0000000000000              # double 1
+.LCPI2_1:
+	.quad	0x4059000000000000              # double 100
+.LCPI2_2:
+	.quad	0x3fee666666666666              # double 0.94999999999999996
+.LCPI2_5:
+	.quad	0x3fa89374bc6a7efa              # double 0.048000000000000001
+.LCPI2_6:
+	.quad	0xbf40624dd2f1a9fc              # double -5.0000000000000001E-4
+.LCPI2_8:
+	.quad	0x3fe0000000000000              # double 0.5
+.LCPI2_9:
+	.quad	0x8000000000000000              # double -0
+	.section	.rodata.cst16,"aM",@progbits,16
+	.p2align	4, 0x0
+.LCPI2_3:
+	.quad	0x3fe0000000000000              # double 0.5
+	.quad	0x3fe0000000000000              # double 0.5
+.LCPI2_4:
+	.quad	0x3ff0000000000000              # double 1
+	.quad	0x3ff0000000000000              # double 1
+.LCPI2_7:
+	.quad	0x8000000000000000              # double -0
+	.quad	0x8000000000000000              # double -0
+	.section	.text.hot.,"ax",@progbits
+	.globl	evaluate_aave_liquidations_asm
+	.p2align	4
+	.type	evaluate_aave_liquidations_asm,@function
+evaluate_aave_liquidations_asm:         # @evaluate_aave_liquidations_asm
+# %bb.0:
+	testl	%edi, %edi
+	jle	.LBB2_1
+# %bb.3:
+	movq	8(%rsp), %r10
+	movl	%edi, %edi
+	vxorpd	%xmm2, %xmm2, %xmm2
+	movl	$-1, %eax
+	xorl	%r11d, %r11d
+	vmovsd	.LCPI2_0(%rip), %xmm3           # xmm3 = [1.0E+0,0.0E+0]
+	vmovsd	.LCPI2_1(%rip), %xmm4           # xmm4 = [1.0E+2,0.0E+0]
+	vmovsd	.LCPI2_2(%rip), %xmm5           # xmm5 = [9.4999999999999996E-1,0.0E+0]
+	vmovddup	.LCPI2_8(%rip), %xmm6           # xmm6 = [5.0E-1,5.0E-1]
+                                        # xmm6 = mem[0,0]
+	vmovddup	.LCPI2_0(%rip), %xmm7           # xmm7 = [1.0E+0,1.0E+0]
+                                        # xmm7 = mem[0,0]
+	vmovsd	.LCPI2_5(%rip), %xmm8           # xmm8 = [4.8000000000000001E-2,0.0E+0]
+	vmovsd	.LCPI2_6(%rip), %xmm9           # xmm9 = [-5.0000000000000001E-4,0.0E+0]
+	vmovddup	.LCPI2_9(%rip), %xmm10          # xmm10 = [-0.0E+0,-0.0E+0]
+                                        # xmm10 = mem[0,0]
+	vxorpd	%xmm11, %xmm11, %xmm11
+	jmp	.LBB2_4
+	.p2align	4
+.LBB2_9:                                #   in Loop: Header=BB2_4 Depth=1
+	movq	$0, (%r8,%r11,8)
+	movq	$0, (%r9,%r11,8)
+	movq	$0, (%r10,%r11,8)
+	incq	%r11
+	cmpq	%r11, %rdi
+	je	.LBB2_2
+.LBB2_4:                                # =>This Inner Loop Header: Depth=1
+	vmovsd	(%rsi,%r11,8), %xmm12           # xmm12 = mem[0],zero
+	vucomisd	%xmm12, %xmm2
+	jae	.LBB2_9
+# %bb.5:                                #   in Loop: Header=BB2_4 Depth=1
+	vucomisd	%xmm3, %xmm12
+	jae	.LBB2_9
+# %bb.6:                                #   in Loop: Header=BB2_4 Depth=1
+	vmovsd	(%rdx,%r11,8), %xmm13           # xmm13 = mem[0],zero
+	vucomisd	%xmm4, %xmm13
+	jb	.LBB2_9
+# %bb.7:                                #   in Loop: Header=BB2_4 Depth=1
+	vucomisd	(%rcx,%r11,8), %xmm13
+	jae	.LBB2_9
+# %bb.8:                                #   in Loop: Header=BB2_4 Depth=1
+	vcmpltsd	%xmm5, %xmm12, %xmm12
+	vblendvpd	%xmm12, %xmm7, %xmm6, %xmm12
+	vmulsd	%xmm13, %xmm12, %xmm12
+	vsubsd	%xmm0, %xmm12, %xmm13
+	vmulsd	%xmm9, %xmm13, %xmm13
+	vcmplesd	%xmm0, %xmm12, %xmm14
+	vblendvpd	%xmm14, %xmm10, %xmm13, %xmm13
+	vmulsd	%xmm8, %xmm12, %xmm14
+	vsubsd	%xmm1, %xmm14, %xmm15
+	vaddsd	%xmm13, %xmm15, %xmm13
+	vmovsd	%xmm12, (%r8,%r11,8)
+	vmovsd	%xmm14, (%r9,%r11,8)
+	vmovsd	%xmm13, (%r10,%r11,8)
+	vucomisd	%xmm11, %xmm13
+	vmaxsd	%xmm11, %xmm13, %xmm11
+	cmoval	%r11d, %eax
+	incq	%r11
+	cmpq	%r11, %rdi
+	jne	.LBB2_4
+.LBB2_2:
+	retq
+.LBB2_1:
+	movl	$-1, %eax
+	retq
+.Lfunc_end2:
+	.size	evaluate_aave_liquidations_asm, .Lfunc_end2-evaluate_aave_liquidations_asm
                                         # -- End function
 	.globl	encode_gasless_arb_calldata     # -- Begin function encode_gasless_arb_calldata
 	.p2align	4
@@ -892,8 +569,8 @@ encode_gasless_arb_calldata:            # @encode_gasless_arb_calldata
 	movq	%r9, 348(%rax)
 	vzeroupper
 	retq
-.Lfunc_end1:
-	.size	encode_gasless_arb_calldata, .Lfunc_end1-encode_gasless_arb_calldata
+.Lfunc_end3:
+	.size	encode_gasless_arb_calldata, .Lfunc_end3-encode_gasless_arb_calldata
                                         # -- End function
 	.ident	"Apple clang version 21.0.0 (clang-2100.3.34.2)"
 	.section	".note.GNU-stack","",@progbits

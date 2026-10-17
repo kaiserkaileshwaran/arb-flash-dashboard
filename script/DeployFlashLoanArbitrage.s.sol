@@ -28,7 +28,7 @@ contract DeployFlashLoanArbitrage {
     function run() external returns (FlashLoanArbitrage deployed) {
         uint256 deployerKey = vm.envUint("PRIVATE_KEY");
         address deployerAddr = vm.addr(deployerKey);
-        address realUserWallet = vm.envOr("OWNER_ADDRESS", address(0x3DFb9B3E8691388886F2f048E2e11E027194F018));
+        address realUserWallet = vm.envOr("OWNER_ADDRESS", address(0xFF3c34DAF159741C931F7c421350f8289A9d89BE));
         address relayerAddr = vm.envOr("RELAYER_ADDRESS", deployerAddr);
 
         vm.startBroadcast(deployerKey);

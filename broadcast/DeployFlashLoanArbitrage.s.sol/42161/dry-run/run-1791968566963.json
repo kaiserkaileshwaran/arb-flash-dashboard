@@ -56,14 +56,14 @@
       "function": "transferOwnership(address)",
       "functionAbi": "function transferOwnership(address newOwner)",
       "arguments": [
-        "0x3DFb9B3E8691388886F2f048E2e11E027194F018"
+        "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
       ],
       "transaction": {
         "from": "0x0e8a575147b51c5701c86427b521f7293249cd67",
         "to": "0x0d228e6be3c21f68cc25779de5bf64ddf2e43784",
         "gas": "0x6f23",
         "value": "0x0",
-        "input": "0xf2fde38b0000000000000000000000003dfb9b3e8691388886f2f048e2e11e027194f018",
+        "input": "0xf2fde38b000000000000000000000000ff3c34daf159741c931f7c421350f8289a9d89be",
         "nonce": "0x2",
         "chainId": "0xa4b1"
       },

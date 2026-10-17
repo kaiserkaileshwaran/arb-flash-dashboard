@@ -2,16 +2,16 @@
 # ==============================================================================
 # Live Arbitrum One Mainnet Fork Dual-Mode Execution & Verification (v7.2)
 # Target RPC: http://127.0.0.1:8545 (Chain ID: 42161 — Arbitrum One Fork)
-# Bound Owner Wallet (MetaMask): 0x3DFb9B3E8691388886F2f048E2e11E027194F018
+# Bound Owner Wallet (MetaMask): 0xFF3c34DAF159741C931F7c421350f8289A9d89BE
 #
 # Executes and verifies on-chain:
 #   1. Credits exact MetaMask UPI Quote (0.000166 ETH ~ ₹39.33 INR) to user wallet.
 #   2. Deploys FlashLoanArbitrage (3,825,847 gas = 0.0000784 ETH ~ ₹18.60 INR)
-#      bound to owner = 0x3DFb9B3E8691388886F2f048E2e11E027194F018.
+#      bound to owner = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE.
 #   3. Mode A (Gasless Relayed Flash Loans — Trade #1 & Trade #2):
 #      - User wallet spends 0.00 ETH gas.
 #      - Gas fee ($0.10 USDC.e) deducted strictly from each trade's own profit.
-#      - 100% of net profit transferred directly into 0x3DFb9B3E8691388886F2f048E2e11E027194F018.
+#      - 100% of net profit transferred directly into 0xFF3c34DAF159741C931F7c421350f8289A9d89BE.
 #   4. Mode B (Gassed Flash Loan — Trade #3 Paid Strictly From Trade #3 Profit):
 #      - User wallet executes Trade #3 using ~0.00000943 ETH from its 0.000166 ETH quote.
 #      - Gas fee ($0.10 USDC.e) + Net Profit generated strictly from Trade #3's output
@@ -24,7 +24,7 @@ set -euo pipefail
 
 RPC_URL="http://127.0.0.1:8545"
 ALCHEMY_URL="https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX"
-USER_WALLET="0x3DFb9B3E8691388886F2f048E2e11E027194F018"
+USER_WALLET="0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
 RELAYER_WALLET="0x0E8A575147b51C5701C86427b521F7293249cd67"
 RELAYER_PK="0x38201373008765716bfc5b8568bf7914baecc1549cd7050edc70f11a8aa61fb3"
 

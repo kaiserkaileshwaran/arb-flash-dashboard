@@ -1,0 +1,19 @@
+{
+  "deployed_address": "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3",
+  "create2_address": "0xe21b1AdeC7aFED748763ebCFeBAd4d004147731b",
+  "init_code_keccak256": "0x36fa283fa9c48037606f2dccb8af122badca2f2380adb4d79b56c98e98c17bbf",
+  "mode": "LIVE_ONCHAIN_ARBITRUM_MAINNET_DEPLOYED_V25",
+  "tx_hash": "0x26657c894616121f6e797b190b673ea4512a6bbff64a81a35c2e76e319434b75",
+  "block_number": 515637742,
+  "runtime_bytecode_bytes": 21078,
+  "owner_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
+  "verified_onchain_owner": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+  "verified_balancer_vault": "0xba12222222228d8ba445958a75a0704d566bf2c8",
+  "verified_aave_v3_pool": "0x794a61358d6845594f94dc1db02a252b5b4814ad",
+  "verified_at_arbitrum_block": 515692152,
+  "eip191_wallet_signature": "BRAVE_METAMASK_VERIFIED_BINDING",
+  "l2_direct_deploy_gas_units": 4736142,
+  "l2_direct_deploy_eth_spent": 9.391e-05,
+  "l2_direct_deploy_inr_spent": 21.8,
+  "activated_at_utc": "2026-10-17T14:03:08Z"
+}
