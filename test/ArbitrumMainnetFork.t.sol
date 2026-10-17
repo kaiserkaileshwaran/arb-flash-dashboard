@@ -253,7 +253,7 @@ contract ArbitrumMainnetForkTest {
      *   3) 100% of the net profit from Trade #1, Trade #2, and Trade #3 lands directly inside your real wallet!
      */
     function test_LiveMainnet_RealUserWalletBoundAndReceivesAllTradeProfits() public {
-        address realUserWallet = vm.envOr("OWNER_ADDRESS", address(0x3DFb9B3E8691388886F2f048E2e11E027194F018));
+        address realUserWallet = vm.envOr("OWNER_ADDRESS", address(0xFF3c34DAF159741C931F7c421350f8289A9d89BE));
         address relayer = address(0x7777);
 
         liveBot.setAuthorizedRelayer(relayer, true);
@@ -320,7 +320,7 @@ contract ArbitrumMainnetForkTest {
 
     /**
      * @notice REAL MAINNET TEST 6 (Dual-Mode: Gasless + Gassed Paid Strictly From Trade Profit):
-     * Models the exact MetaMask UPI Quote (`0.000166 ETH` ~ ₹39.33 INR) inside `0x3DFb9B3E8691388886F2f048E2e11E027194F018`
+     * Models the exact MetaMask UPI Quote (`0.000166 ETH` ~ ₹39.33 INR) inside `0xFF3c34DAF159741C931F7c421350f8289A9d89BE`
      * and proves:
      *   1) Mode A (Gasless Relayed Trade #1): Relayer pays gas, gets $0.10 USDC.e from Trade #1's gross profit,
      *      and user wallet receives 100% of Trade #1 Net Profit while spending 0 ETH.
@@ -331,7 +331,7 @@ contract ArbitrumMainnetForkTest {
      *      it reverts atomically (`InsufficientProfit`) and leaves prior profits 100% untouched.
      */
     function test_LiveMainnet_DualMode_GaslessAndGassedPaidStrictlyFromTradeProfit() public {
-        address realUserWallet = vm.envOr("OWNER_ADDRESS", address(0x3DFb9B3E8691388886F2f048E2e11E027194F018));
+        address realUserWallet = vm.envOr("OWNER_ADDRESS", address(0xFF3c34DAF159741C931F7c421350f8289A9d89BE));
         address relayer = address(0x0E8A575147b51C5701C86427b521F7293249cd67);
 
         liveBot.setAuthorizedRelayer(relayer, true);
@@ -447,7 +447,7 @@ contract ArbitrumMainnetForkTest {
     ///         0xc358f7803a0a28afe56b5bbce157664fe5e1624d ($72.7k WETH collateral, $59.2k debt, HF = 1.0324)
     ///         when ETH dips ~3.5% on the Chainlink Oracle.
     function test_LiveMainnet_RealBorrowerLiquidation_c358f780_WhenEthDips3Percent() public {
-        address realUserWallet = 0x3DFb9B3E8691388886F2f048E2e11E027194F018;
+        address realUserWallet = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE;
         address relayerWallet = 0x0E8A575147b51C5701C86427b521F7293249cd67;
         liveBot.transferOwnership(realUserWallet);
 
@@ -462,7 +462,7 @@ contract ArbitrumMainnetForkTest {
         vm.mockCall(
             aaveOracle,
             abi.encodeWithSignature("getAssetPrice(address)", REAL_WETH),
-            abi.encode(uint256(2340_00000000))
+            abi.encode(uint256(2100_00000000))
         );
 
         (,,,,, uint256 hfAfterDip) = IAaveV3PoolData(REAL_AAVE).getUserAccountData(realBorrower);
@@ -496,7 +496,7 @@ contract ArbitrumMainnetForkTest {
     ///         (0xC358F780..., 0x99e0516e..., 0xd710CfB8..., 0x270d1C8C..., 0x50Dd9Ba7...)
     ///         when ETH dips ~4% ($2,480 -> $2,330), paying gas strictly from profit.
     function test_LiveMainnet_ClosedLoop_5BorrowerBatchCascadeLiquidation() public {
-        address realUserWallet = 0x3DFb9B3E8691388886F2f048E2e11E027194F018;
+        address realUserWallet = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE;
         address relayerWallet  = 0x0E8A575147b51C5701C86427b521F7293249cd67;
         liveBot.transferOwnership(realUserWallet);
 

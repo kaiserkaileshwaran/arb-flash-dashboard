@@ -153,49 +153,25 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
 
 def _sync_real_onchain_ledger(s: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Preserves all verified on-chain settled trades AND all live profitable trades captured by
-    scan_single_cycle(), computing Total Amount (100%), Amount Transferred (75%), and Amount Saved (25%).
+    Strictly keeps ONLY 100% real on-chain confirmed Arbitrum One transactions (Status: 1)
+    in the profit ledger and KPI cards so simulated dry-run scanner rows never inflate
+    Total Amount (100%), Amount Transferred (75%), or Amount Saved (25%).
     """
-    by_key: Dict[str, Dict[str, Any]] = {}
-    for base_t in VERIFIED_ONCHAIN_SETTLED_LEDGER:
-        k = f"{base_t['tx_hash'].lower()}:{base_t['block_number']}"
-        by_key[k] = dict(base_t)
-
+    merged = [dict(item) for item in VERIFIED_ONCHAIN_SETTLED_LEDGER]
     for t in s.get("per_trade_profit_ledger", []):
-        net_u = float(t.get("current_trade_net_profit_usd", 0.0))
-        if net_u <= 0.0:
-            continue
-        tx_h = str(t.get("tx_hash", "")).lower()
-        blk_n = int(t.get("block_number", 0))
-        pair_s = str(t.get("pair", ""))
-        if tx_h in (
-            "0x166411c3176e41b942189833ff233d4fbdd2e99f9bf29d913194d440125d00d3",
-            "0x1894e32d00b22c6b37e48136ee805d30b7f98f667e9847b9bed9880fcdf35cce",
-            "0x13bc1e879acf89c7f4c70feea1ea79a458aedba33efd7fe83497d5010ececf11",
-        ) and blk_n in (515650141, 515653777, 515665489):
-            continue
-        k = f"{tx_h}:{pair_s}:{blk_n}"
-        entry = dict(t)
-        entry["onchain_confirmed"] = True
-        if float(entry.get("optimal_loan_usd", 0.0)) < 15000.0:
-            entry["optimal_loan_usd"] = 28500.00
-        net_inr = round(net_u * 94.92, 2)
-        entry["current_trade_post_tax_inr"] = net_inr
-        entry["binance_75_usd"] = round(net_u * 0.75, 6)
-        entry["binance_75_inr"] = round(float(entry["binance_75_usd"]) * 94.92, 2)
-        entry["reserve_25_usd"] = round(net_u - float(entry["binance_75_usd"]), 6)
-        entry["reserve_25_inr"] = round(net_inr - float(entry["binance_75_inr"]), 2)
-        by_key[k] = entry
+        if t.get("real_onchain_settled") is True:
+            tx_h = str(t.get("tx_hash", "")).lower()
+            if not any(str(m.get("tx_hash", "")).lower() == tx_h for m in merged):
+                merged.append(dict(t))
 
-    merged = sorted(by_key.values(), key=lambda x: (int(x.get("block_number", 0)), int(x.get("trade_number", 0))))
     for idx, item in enumerate(merged, start=1):
         item["trade_number"] = idx
 
-    tot_100_usd = round(sum(float(x.get("current_trade_net_profit_usd", 0.0)) for x in merged), 6)
+    tot_100_usd = round(sum(float(x.get("current_trade_net_profit_usd", 0.0)) for x in merged), 4)
     tot_100_inr = round(tot_100_usd * 94.92, 2)
-    trans_75_usd = round(sum(float(x.get("binance_75_usd", float(x.get("current_trade_net_profit_usd", 0.0)) * 0.75)) for x in merged), 6)
+    trans_75_usd = round(sum(float(x.get("binance_75_usd", 0.0)) for x in merged), 4)
     trans_75_inr = round(trans_75_usd * 94.92, 2)
-    saved_25_usd = round(max(0.0, tot_100_usd - trans_75_usd), 6)
+    saved_25_usd = round(max(0.0, tot_100_usd - trans_75_usd), 4)
     saved_25_inr = round(max(0.0, tot_100_inr - trans_75_inr), 2)
 
     s["per_trade_profit_ledger"] = merged
@@ -210,6 +186,7 @@ def _sync_real_onchain_ledger(s: Dict[str, Any]) -> Dict[str, Any]:
     s["amount_saved_25_usd"] = saved_25_usd
     s["amount_saved_25_inr"] = saved_25_inr
     return s
+
 
 
 def _load_summary() -> Dict[str, Any]:
@@ -1323,23 +1300,22 @@ function renderDashboard(payload) {
     document.getElementById('mmWalletBadge').innerText = `Active Contract: ${dep.deployed_address.slice(0,6)}...${dep.deployed_address.slice(-4)}`;
   }
 
-  const walletReserveUsdc = Number(wb.usdc_balance || 0.1623);
+  const mmUsdc = Number(wb.usdc_balance || 0.1623);
   const mmEth = Number(wb.eth_balance || 0.00047467);
-  _LATEST_RESERVE_USDC = walletReserveUsdc;
+  const binUsdc = Number(wb.binance_usdc_balance || 0.4992);
+  _LATEST_RESERVE_USDC = mmUsdc;
   _LATEST_RESERVE_ETH = mmEth;
 
-  const totUsdc = Number(s.total_amount_100_usd || s.cumulative_flash_net_profit_usd || (walletReserveUsdc + Number(wb.binance_usdc_balance || 0.4992)));
-  const binUsdc = Number(s.amount_transferred_75_usd || (totUsdc * 0.75));
-  const mmUsdc = Number(s.amount_saved_25_usd || (totUsdc * 0.25));
-  const binPct = totUsdc > 0 ? (binUsdc / totUsdc) * 100 : 75.00;
-  const mmPct = totUsdc > 0 ? (mmUsdc / totUsdc) * 100 : 25.00;
+  const totUsdc = binUsdc + mmUsdc;
+  const binPct = totUsdc > 0 ? (binUsdc / totUsdc) * 100 : 75.47;
+  const mmPct = totUsdc > 0 ? (mmUsdc / totUsdc) * 100 : 24.53;
 
-  const totInrOnChain = Number(s.total_amount_100_inr || (totUsdc * INR_PER_USD));
-  const binInrOnChain = Number(s.amount_transferred_75_inr || (binUsdc * INR_PER_USD));
-  const mmInrOnChain = Number(s.amount_saved_25_inr || (mmUsdc * INR_PER_USD));
+  const totInrOnChain = totUsdc * INR_PER_USD;
+  const binInrOnChain = binUsdc * INR_PER_USD;
+  const mmInrOnChain = mmUsdc * INR_PER_USD;
   const mmEthInr = mmEth * ETH_USD_EST * INR_PER_USD;
 
-  const trades = Number(s.profitable_flash_blocks_count || (s.per_trade_profit_ledger || []).length || 3);
+  const trades = Number(s.profitable_flash_blocks_count || 3);
   const cycles = Number(s.total_cycles_completed || 0);
 
   // Update Live Progress Bar & Legends (100% / 75% / 25% Exact Format)

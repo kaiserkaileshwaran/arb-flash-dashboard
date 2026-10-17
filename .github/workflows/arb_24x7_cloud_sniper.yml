@@ -1,0 +1,38 @@
+name: Arbitrum One 24x7 Cloud Flash Loan Sniper & US-East Keep-Alive
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  cloud-sniper-24x7:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11 & C/Assembly Compiler
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compile Hardware C/Assembly Flash Kernel
+        run: |
+          gcc -O3 -shared -fPIC engine/asm/verify_flash_routes_x86_64.c -o engine/asm/libflash_kernel.so || true
+
+      - name: Run 24/7 Cloud Arbitrum One Scanner & Auto-Settler Window
+        env:
+          ARBITRUM_RPC_URL: https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX
+          OWNER_PROFIT_WALLET: 0xFF3c34DAF159741C931F7c421350f8289A9d89BE
+          BINANCE_DEPOSIT_WALLET: 0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099
+          DEPLOYED_CONTRACT_ADDRESS: 0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3
+        run: |
+          python3 -m engine.live_rpc_scanner --duration-seconds 840 --mode live || true
