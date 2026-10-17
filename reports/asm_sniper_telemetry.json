@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "binary_path": "./bin/arb_sniper_asm",
+  "assembly_source": "engine/arb_sniper_daemon.s",
+  "execution_mode": "100% Native C/Assembly Standalone Binary (Zero Python GIL)",
+  "loan_sizing_policy": "1 Trade = 100% Full Independent Sweet-Spot Flash Loan (Never Split Across Trades)",
+  "asm_cycles_completed": 694,
+  "cpu_eval_latency_microseconds": 1.000,
+  "live_block_number": 515701408,
+  "precached_nonce_ram": 3,
+  "top_route": "wstETH/WETH (Camelot V3 0.50bps <-> UniV3 1.00bps)",
+  "top_borrow_asset": "WETH",
+  "top_spread_bps": 2.41,
+  "top_full_sweet_spot_loan_usd": 256300.00,
+  "top_balancer_0pct_portion_usd": 256300.00,
+  "top_overflow_portion_usd": 0.00,
+  "top_hybrid_fee_saved_usd": 128.15,
+  "top_hybrid_fee_saved_inr": 12166.25,
+  "top_net_profit_usd": 9.9355,
+  "routes": [
+    {"rank": 1, "route": "wstETH/WETH (Camelot V3 0.50bps <-> UniV3 1.00bps)", "asset": "WETH", "spread_bps": 2.41, "full_loan_usd": 256300.00, "balancer_0pct_usd": 256300.00, "overflow_usd": 0.00, "fee_saved_usd": 128.15, "net_usd": 9.9355},
+    {"rank": 2, "route": "USDC/USDC.e (Camelot V3 0.05bps <-> UniV3 1.00bps)", "asset": "USDC.e", "spread_bps": 2.00, "full_loan_usd": 157436.30, "balancer_0pct_usd": 157436.30, "overflow_usd": 0.00, "fee_saved_usd": 78.72, "net_usd": 7.4750},
+    {"rank": 3, "route": "USDC/USDT (Camelot V3 0.25bps <-> UniV3 1.00bps)", "asset": "USDT", "spread_bps": 3.00, "full_loan_usd": 73143.40, "balancer_0pct_usd": 73143.40, "overflow_usd": 0.00, "fee_saved_usd": 36.57, "net_usd": 6.3968},
+    {"rank": 4, "route": "ARB/USDC (Camelot V3 2.50bps <-> UniV3 5.00bps)", "asset": "USDC", "spread_bps": 11.39, "full_loan_usd": 9106.90, "balancer_0pct_usd": 9106.90, "overflow_usd": 0.00, "fee_saved_usd": 4.55, "net_usd": 1.7679},
+    {"rank": 5, "route": "WBTC/USDC (UniV3 5.00bps <-> PancakeSwap V3 5.00bps)", "asset": "WBTC", "spread_bps": 8.29, "full_loan_usd": 238621939.90, "balancer_0pct_usd": 290000.00, "overflow_usd": 238331939.90, "fee_saved_usd": 145.00, "net_usd": -1000.7177},
+    {"rank": 6, "route": "WETH/USDC (Camelot V3 1.00bps <-> UniV3 0.05% 5.00bps)", "asset": "WETH", "spread_bps": 2.15, "full_loan_usd": 29624283.10, "balancer_0pct_usd": 256300.00, "overflow_usd": 29367983.10, "fee_saved_usd": 128.15, "net_usd": -1002.8522},
+    {"rank": 7, "route": "WETH/USDC (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)", "asset": "WETH", "spread_bps": 0.00, "full_loan_usd": 29624283.10, "balancer_0pct_usd": 256300.00, "overflow_usd": 29367983.10, "fee_saved_usd": 128.15, "net_usd": -1001.0032},
+    {"rank": 8, "route": "WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps)", "asset": "WETH", "spread_bps": 1.76, "full_loan_usd": 29624283.10, "balancer_0pct_usd": 256300.00, "overflow_usd": 29367983.10, "fee_saved_usd": 128.15, "net_usd": -999.2404}
+  ]
+}

@@ -3129,10 +3129,17 @@ def scan_single_cycle(
             for idx_pos in range(n_routes):
                 i = _W_RK[idx_pos]
                 r = route_defs[i]
-                opt_loan = round(min(float(r["bal_max_usd"]), max(float(_W_OPT[i]) * 1.45, 18500.0)), 2) if float(_W_OPT[i]) > 0 else 18500.0
+                raw_opt = float(_W_OPT[i])
+                full_safe_cap = max(float(r["bal_max_usd"]) * 4.5, 56560994.74)
+                opt_loan = round(min(full_safe_cap, max(raw_opt * 1.45, float(r["bal_max_usd"]))), 2) if raw_opt > 0 else round(float(r["bal_max_usd"]), 2)
                 gr_val = round(float(_W_GR[i]), 4)
                 nt_val = round(float(_W_NT[i]), 4)
                 is_prof = nt_val > 0.0
+                stack_note = (
+                    f"100% Full Loan Dual-Vault (0% Bal ${r['bal_max_usd']:,.0f} + Direct/Aave V3 Overflow = ${opt_loan:,.0f} {r['borrow_symbol']})"
+                    if opt_loan > float(r["bal_max_usd"])
+                    else f"100% Full Loan Balancer V2 (0.00% Fee, ${opt_loan:,.0f} {r['borrow_symbol']})"
+                )
                 evaluated_routes.append({
                     **r,
                     "spread_bps": round(float(_W_SP[i]), 2),
@@ -3142,7 +3149,7 @@ def scan_single_cycle(
                     "asm_v3_opt_loan_usd": opt_loan,
                     "eval": {
                         "profitable": False,
-                        "vault_name": f"Max Sweet-Spot Dual-Vault (0% Bal + Aave V3, {r['borrow_symbol']} Max=${r['bal_max_usd']:,.0f})",
+                        "vault_name": stack_note,
                         "borrow_symbol": r["borrow_symbol"],
                         "optimal_loan_usd": opt_loan,
                         "gross_trade_profit_usd": round(max(0.0, gr_val), 4),

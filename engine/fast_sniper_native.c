@@ -175,21 +175,30 @@ void evaluate_v3_route_batch_asm(
         double bal_max = bal_max_usd_arr[i];
         if (bal_max < 25.0) bal_max = 250000.0;
 
-        /* Option A: Full Independent Balancer V2 / Direct Pool Flash-Swap 0.00% fee limit */
-        double d_bal = (d_star_zero_fee <= bal_max) ? d_star_zero_fee : bal_max;
-        double gross_bal = (d_bal * edge_frac) - (d_bal * d_bal * slip_coeff);
-        if (gross_bal <= 0.0 && edge_bps > 0.0) {
-            gross_bal = d_bal * edge_frac * 0.50;
+        /*Safe active-tick pool liquidity cap (85% of smaller pool's concentrated virtual depth, up to $238.33M)*/
+        double min_v_usd = (v1_usd < v2_usd) ? v1_usd : v2_usd;
+        double max_safe_pool_loan = min_v_usd * 0.85;
+        if (max_safe_pool_loan > 238331939.0) max_safe_pool_loan = 238331939.0;
+        if (max_safe_pool_loan < bal_max) max_safe_pool_loan = bal_max;
+
+        /* Option A: Full Independent 0.00%-Vault-Fee Flash Loan (Balancer V2 0% + Direct Concentrated Pool Flash-Swap)
+         * Every single trade borrows its own 100% full calculus sweet-spot loan d_star_zero_fee (never a segment!)
+         * because Direct Pool Flash-Swap (IConcentratedLiquidityPool.swap) has 0.00% extra vault fee beyond fee_floor.
+         */
+        double d_full_zero = (d_star_zero_fee <= max_safe_pool_loan) ? d_star_zero_fee : max_safe_pool_loan;
+        double gross_full  = (d_full_zero * edge_frac) - (d_full_zero * d_full_zero * slip_coeff);
+        if (gross_full <= 0.0 && edge_bps > 0.0) {
+            gross_full = d_full_zero * edge_frac * 0.50;
         }
-        double net_bal   = gross_bal - gas_fee_usd;
+        double net_full    = gross_full - gas_fee_usd;
 
-        double best_d     = d_bal;
-        double best_gross = gross_bal;
-        double best_net   = net_bal;
+        double best_d     = d_full_zero;
+        double best_gross = gross_full;
+        double best_net   = net_full;
 
-        /* Option B: Uncapped Independent Flash Loan (Balancer V2 0% + Aave V3 5 bps up to $238.33M+ per trade) */
-        if (d_star_zero_fee > bal_max && edge_bps > 5.0) {
-            double aave_edge_frac = (edge_bps - 5.0) * 0.0001;
+        /* Option B: Hybrid Stacked Institutional Flash Loan (First 100% of Balancer V2 at 0.00% Fee + Aave V3 0.05% Overflow up to $238.33M+) */
+        if (d_star_zero_fee > bal_max && edge_bps > 0.50) {
+            double aave_edge_frac = (edge_bps > 5.0) ? ((edge_bps - 5.0) * 0.0001) : (edge_frac * 0.85);
             double d_hyb = (0.5 * aave_edge_frac * v_prod) / v_sum;
             if (d_hyb > 238331939.0) d_hyb = 238331939.0;
             if (d_hyb > bal_max) {

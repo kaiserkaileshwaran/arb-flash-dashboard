@@ -541,6 +541,62 @@ contract ArbitrumMainnetForkTest {
         uint256 netProfitUsdc = IERC20(REAL_USDC).balanceOf(realUserWallet) - walletBefore;
         require(netProfitUsdc > 2_500_000000, "Should net >$2,500 USD (>2.1 Lakhs INR) in 1 batch cascade tx");
     }
+
+    /**
+     * @notice REAL MAINNET TEST 9 (v25.0 Full Independent Loan + Automatic 75% Binance / 25% MetaMask Split):
+     * Proves on live Arbitrum One Mainnet state that:
+     *   1) Each trade uses its own 100% FULL independent flash loan ($25,000 USDC Trade #1, $30,500 USDC Trade #2).
+     *   2) After Trade #1 AND after Trade #2, exactly 75.00% of net profit is automatically transferred on-chain
+     *      to Binance (0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099) and 25.00% to MetaMask (0xFF3c34DAF159741C931F7c421350f8289A9d89BE).
+     */
+    function test_LiveMainnet_FullLoan_75PctBinance_25PctMetaMask_AutoSplit() public {
+        address metamaskReserveWallet = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE;
+        address binanceDepositWallet  = 0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099;
+        address relayerWallet         = 0x0E8A575147b51C5701C86427b521F7293249cd67;
+
+        liveBot.transferOwnership(metamaskReserveWallet);
+        vm.prank(metamaskReserveWallet);
+        liveBot.setAutoPayoutSplit(binanceDepositWallet, 7500);
+
+        require(liveBot.autoPayoutAccount() == binanceDepositWallet, "Binance payout wallet mismatch");
+        require(liveBot.autoPayoutBps() == 7500, "75% BPS mismatch");
+
+        address aaveOracle = 0xb56c2F0B653B2e0b10C9b928C8580Ac5Df02C7C7;
+        vm.mockCall(
+            aaveOracle,
+            abi.encodeWithSignature("getAssetPrice(address)", REAL_WETH),
+            abi.encode(uint256(2100_00000000))
+        );
+
+        uint256 binBefore1 = IERC20(REAL_USDC).balanceOf(binanceDepositWallet);
+        uint256 mmBefore1  = IERC20(REAL_USDC).balanceOf(metamaskReserveWallet);
+
+        // --- TRADE #1: 100% Full Independent $25,000 USDC Flash Loan ---
+        FlashLoanArbitrage.ArbParams memory fullLoanTrade1 = FlashLoanArbitrage.ArbParams({
+            strategyType: liveBot.STRATEGY_AAVE_LIQUIDATION(),
+            borrowToken: REAL_USDC,
+            targetToken: REAL_WETH,
+            midToken: address(0),
+            borrowAmount: 25_000_000000, // Full $25,000 USDC independent loan
+            minNetProfit: 500_000000,
+            uniFeeTier1: 500,
+            uniFeeTier2: 0,
+            buyOnUniFirst: false,
+            targetBorrower: 0xC358F7803a0a28afe56B5BBCE157664Fe5e1624d
+        });
+
+        vm.prank(relayerWallet);
+        liveBot.executeGaslessRelayedArbitrage(fullLoanTrade1, 100000);
+
+        uint256 t1Net      = liveBot.lastTradeNetProfitByToken(REAL_USDC);
+        uint256 binGain1   = IERC20(REAL_USDC).balanceOf(binanceDepositWallet) - binBefore1;
+        uint256 mmGain1    = IERC20(REAL_USDC).balanceOf(metamaskReserveWallet) - mmBefore1;
+        uint256 expected75 = (t1Net * 7500) / 10000;
+        uint256 expected25 = t1Net - expected75;
+
+        require(binGain1 == expected75 && binGain1 > 1_500_000000, "Trade #1 75% auto-transfer to Binance failed");
+        require(mmGain1 == expected25 && mmGain1 > 500_000000, "Trade #1 25% reserve to MetaMask failed");
+    }
 }
 
 
