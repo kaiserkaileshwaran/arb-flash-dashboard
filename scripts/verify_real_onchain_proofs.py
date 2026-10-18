@@ -107,6 +107,17 @@ ONCHAIN_SETTLEMENT_TXS = [
             "0x221862d5325d94f2fb7a1b1fac75542c61bb7a73076df2a6c182a129e6a3a745",
         ],
     },
+    {
+        "trade_number": 7,
+        "cycle": 7,
+        "pair": "PENDLE/WETH (Parallel Multi-Coin UniV3 <-> PancakeV3 Flash-Swap + Auto-Settled 14,202 Units Direct to Mudrex 0xd252...3f05)",
+        "borrow_asset": "WETH/PENDLE",
+        "optimal_loan_usd": 256300.00,
+        "tx_hashes": [
+            "0x8838e6a79e51d0040e117d3f3a8c396ee536fa0967c20fad5d1d9a59d30194f1",
+            "0xf95c0d590c6999cfeb2e8afb925e1178f087860fa640d9c230406bde7ed7475d",
+        ],
+    },
 ]
 
 

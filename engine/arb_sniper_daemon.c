@@ -743,7 +743,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     int relayer_funded = (g_relayer_eth_wei >= 3500000000000ULL) ? 1 : 0;
     const char *exec_hook_status = "SCANNING_LIVE_ARBITRUM_SPREADS";
     if (nt[best_i] > 0.0) {
-        if (relayer_funded && !self_test_only && g_live_block_number > g_last_dispatched_block) {
+        if (relayer_funded && !self_test_only && g_live_block_number >= g_last_dispatched_block + 20) {
             g_last_dispatched_block = g_live_block_number;
             int rc = system("python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &");
             (void)rc;

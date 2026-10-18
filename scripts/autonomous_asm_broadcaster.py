@@ -9,6 +9,7 @@ Enforces:
 3. Automatic 75% Binance (`0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099`) & 25% MetaMask (`0xFF3c34DAF159741C931F7c421350f8289A9d89BE`)
    post-trade USDC settlement + immediate execution of `scripts/verify_real_onchain_proofs.py`.
 """
+import fcntl
 import json
 import subprocess
 import sys
@@ -20,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 REPORTS_DIR = BASE_DIR / "reports"
 ASM_TELEM_JSON = REPORTS_DIR / "asm_sniper_telemetry.json"
 BROADCAST_LOG_JSON = REPORTS_DIR / "last_autonomous_broadcast.json"
+LOCK_FILE = Path("/tmp/arb_autonomous_broadcaster.lock")
 
 OWNER_METAMASK = "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
 MUDREX_WALLET = "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
@@ -42,13 +44,13 @@ def _load_local_relayer_env() -> tuple:
 
 RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
 RPC_URLS = [
-    "https://arbitrum.drpc.org",
-    "https://arb-pokt.nodies.app",
     "https://arb1.arbitrum.io/rpc",
-    "https://1rpc.io/arb",
+    "https://arbitrum-one-rpc.publicnode.com",
+    "https://arb-pokt.nodies.app",
+    "https://arbitrum.drpc.org",
 ]
 RPC_URL = RPC_URLS[0]
-MIN_GAS_RESERVE_WEI = 10_000_000_000_000  # Keep 0.000010 ETH (~8 Arbitrum L2 flash-swap txs) in relayer gas reserve
+MIN_GAS_RESERVE_WEI = 5_000_000_000_000  # Keep 0.0000050 ETH in relayer gas reserve; settle surplus directly to Mudrex
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
@@ -70,6 +72,13 @@ def rpc_call(method: str, params: list) -> dict:
 
 
 def main() -> int:
+    # Single-instance non-blocking flock guard so 250ms C/Assembly blocks never spawn overlapping broadcasters
+    lock_fd = open(LOCK_FILE, "w")
+    try:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        return 0
+
     try:
         rel_hex = rpc_call("eth_getBalance", [RELAYER_WALLET, "latest"]).get("result", "0x0")
         rel_wei = int(rel_hex, 16)
@@ -131,14 +140,34 @@ def main() -> int:
     weth = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
     usdc = "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
     usdt = "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
+    usdc_e = "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
+    wbtc = "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f"
+    arb = "0x912CE59144191C1204E64559FE8253a0e49E6548"
+    link = "0xf97f4df75117a78c1A5a0DBb814Af92458539FB4"
+    pendle = "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8"
+    wsteth = "0x5979D7b546E38E414F7E9822514be443A4800529"
+
     pcs_weth_usdc = "0x7fCDC35463E3770c2fB992716Cd070B63540b947"
     cam_weth_usdc = "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526"
+    uni1_weth_usdc = "0x6f38e884725a116C9C7fBF208e79FE8828a2595F"
     pcs_weth_usdt = "0x389938cf14be379217570d8e4619e51fbdafaa21"
     cam_weth_usdt = "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358"
     cam_usdc_usdt = "0xa17afcab059f3c6751f5b64347b5a503c3291868"
     uni_usdc_usdt = "0xbe3ad6a5669dc0b8b12febc03608860c31e2eef6"
+    cam_usdc_usdce = "0xc86eb7b85807020b4548ee05b54bfc956eebbfcd"
+    uni_usdc_usdce = "0x8e295789c9465487074a65b1ae9ce0351172393f"
+    cam_wbtc_weth = "0xD845f7D4F4deb9fF5BcF09D140Ef13718F6f6C71"
+    pcs_wbtc_weth = "0x4bfc22a4da7f31f8a912a79a7e44a822398b4390"
+    cam_arb_usdc = "0xfae2ae0a9f87fd35b5b0e24b47bac796a7eefea1"
+    uni_arb_usdc = "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8"
+    uni_link_weth = "0x91308bc9ce8ca2db82aa30c65619856cc939d907"
+    pcs_link_weth = "0x977f5d9a39049c73bc26edb3fa15d5f7c0ac82e9"
+    uni_pendle_weth = "0xb08a8794a5d3ccca3725d92964696858d3201909"
+    pcs_pendle_weth = "0x042691f78269ba3d6325c945044239758aecc275"
+    uni_wsteth_weth = "0x35218a1cbaC5Bbc3E57fd9Bd38219D37571b3537"
+    cam_wsteth_weth = "0xDeB89dE4bb6ecf5bFed581EB049308B52d9B2dA7"
 
-    # 13-Tier Uncapped Multi-Scale Flash Loan Ladder (from ₹22.7 Crore / 1,000 WETH + Assembly L* down to Active Tick Sweet-Spot)
+    # 22-Tier Parallel Multi-Coin Uncapped + Active-Tick Sweet-Spot Ladder across 9 Coins
     raw_tiers = [
         (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 1000 * 10**18, 3500000000000, True, False, 3000000000000, True),
         (pcs_weth_usdc, cam_weth_usdc, weth, usdc, asm_opt_weth_wei, 3500000000000, True, False, 3000000000000, True),
@@ -150,8 +179,17 @@ def main() -> int:
         (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 1 * 10**18, 3500000000000, True, False, 3000000000000, True),
         (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 1 * 10**18, 3500000000000, True, False, 3000000000000, True),
         (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 50_000_000_000_000_000, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 800_000_000_000_000, 1, True, False, 0, True),
-        (cam_usdc_usdt, uni_usdc_usdt, usdc, usdt, 100_000 * 10**6, 10000, True, False, 7500, False),
+        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 100_000_000_000_000, 1, True, False, 0, True),
+        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 100_000_000_000_000, 1, True, False, 0, True),
+        (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 100_000_000_000_000, 1, True, False, 0, True),
+        (pcs_weth_usdc, uni1_weth_usdc, weth, usdc, 100_000_000_000_000, 1, True, False, 0, True),
+        (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, 500_000_000_000_000, 1, False, True, 0, True),
+        (cam_wbtc_weth, pcs_wbtc_weth, weth, wbtc, 500_000_000_000_000, 1, False, True, 0, True),
+        (uni_wsteth_weth, cam_wsteth_weth, weth, wsteth, 1_000_000_000_000_000, 1, False, True, 0, True),
+        (uni_link_weth, pcs_link_weth, weth, link, 1_000_000_000_000_000, 1, True, False, 0, True),
+        (uni_pendle_weth, pcs_pendle_weth, weth, pendle, 1_000_000_000_000_000, 1, False, True, 0, True),
+        (cam_arb_usdc, uni_arb_usdc, usdc, arb, 1_000 * 10**6, 1000, False, True, 0, False),
+        (cam_usdc_usdce, uni_usdc_usdce, usdc, usdc_e, 10_000 * 10**6, 1000, True, False, 0, False),
         (cam_usdc_usdt, uni_usdc_usdt, usdc, usdt, 8_500 * 10**6, 10000, True, False, 7500, False),
     ]
 
@@ -201,6 +239,10 @@ def main() -> int:
             "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)",
             call_tuple,
             str(rel_fee),
+            "--gas-limit",
+            "290000",
+            "--gas-price",
+            "20500000",
             "--private-key",
             RELAYER_PK,
             "--rpc-url",
@@ -218,6 +260,10 @@ def main() -> int:
                             weth,
                             "withdraw(uint256)",
                             str(rel_fee),
+                            "--gas-limit",
+                            "60000",
+                            "--gas-price",
+                            "20500000",
                             "--private-key",
                             RELAYER_PK,
                             "--rpc-url",
@@ -243,14 +289,18 @@ def main() -> int:
                     indent=2,
                 )
             )
-            return 0
+            try:
+                rel_hex = rpc_call("eth_getBalance", [RELAYER_WALLET, "latest"]).get("result", "0x0")
+                rel_wei = int(rel_hex, 16)
+            except Exception:
+                pass
         except Exception:
             pass
 
     # 100% Zero-Interaction Automatic Settlement Directly to Mudrex (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
-    # Whenever surplus ETH above MIN_GAS_RESERVE_WEI (0.000010 ETH) is available, settle directly into Mudrex USDC!
-    surplus_wei = rel_wei - MIN_GAS_RESERVE_WEI
-    if surplus_wei >= 15_000_000_000_000:
+    # Whenever surplus ETH above MIN_GAS_RESERVE_WEI (0.0000050 ETH) is available, settle directly into Mudrex USDC!
+    surplus_wei = rel_wei - MIN_GAS_RESERVE_WEI - 3_800_000_000_000
+    if surplus_wei >= 5_500_000_000_000:
         swap_cmd = [
             cast_bin,
             "send",
@@ -259,6 +309,10 @@ def main() -> int:
             f"(0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,500,{MUDREX_WALLET},2000000000,{surplus_wei},{MIN_MUDREX_USDC_UNITS},0)",
             "--value",
             str(surplus_wei),
+            "--gas-limit",
+            "180000",
+            "--gas-price",
+            "20500000",
             "--private-key",
             RELAYER_PK,
             "--rpc-url",
