@@ -24,12 +24,14 @@ SUMMARY_JSON = REPORTS_DIR / "two_hour_test_summary.json"
 PROOFS_JSON = REPORTS_DIR / "verified_onchain_proofs.json"
 
 RPC_ENDPOINTS = [
-    "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX",
+    "https://arbitrum.drpc.org",
     "https://arbitrum-one-rpc.publicnode.com",
-    "https://1rpc.io/arb",
+    "https://arb-pokt.nodies.app",
+    "https://arb1.arbitrum.io/rpc",
 ]
 
 OWNER_METAMASK = "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
+MUDREX_WALLET = "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
 BINANCE_WALLET = "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099"
 RELAYER_WALLET = "0x0E8A575147b51C5701C86427b521F7293249cd67"
 USDC_TOKEN = "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"

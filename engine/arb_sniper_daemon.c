@@ -297,10 +297,10 @@ static double   g_session_mudrex_75_inr     = 0.0;
 static double   g_session_saved_25_inr      = 0.0;
 
 static const char *RPC_URLS[4] = {
-    "https://arb1.arbitrum.io/rpc",
-    "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX",
     "https://arbitrum-one-rpc.publicnode.com",
-    "https://arb1.arbitrum.io/rpc"
+    "https://arb-pokt.nodies.app",
+    "https://arb1.arbitrum.io/rpc",
+    "https://1rpc.io/arb"
 };
 
 struct CurlBuffer {
@@ -408,6 +408,8 @@ static void *lockfree_block_ticker_thread(void *arg) {
             uint64_t blk = asm_parse_hex_u64(h_blk);
             if (blk > g_live_block_number) {
                 g_live_block_number = blk;
+            } else if (blk == 0) {
+                ep_idx++;
             }
             uint64_t gas = asm_parse_hex_u64(h_gas);
             if (gas > 0) g_live_gas_wei = gas;
@@ -459,11 +461,13 @@ static void *lockfree_block_ticker_thread(void *arg) {
                     "  \"latest_nonce\": %llu,\n"
                     "  \"latest_nonce_hex\": \"0x%llx\",\n"
                     "  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n"
-                    "  \"mudrex_usdc_balance\": \"%.4f\",\n"
+                    "  \"mudrex_usdc_raw\": %llu,\n"
+                    "  \"metamask_usdc_raw\": %llu,\n"
+                    "  \"mudrex_usdc_balance\": \"%.6f\",\n"
                     "  \"mudrex_inr\": \"%.2f\",\n"
-                    "  \"binance_usdc_balance\": \"%.4f\",\n"
-                    "  \"metamask_usdc_balance\": \"%.4f\",\n"
-                    "  \"total_onchain_usdc\": \"%.4f\",\n"
+                    "  \"binance_usdc_balance\": \"%.6f\",\n"
+                    "  \"metamask_usdc_balance\": \"%.6f\",\n"
+                    "  \"total_onchain_usdc\": \"%.6f\",\n"
                     "  \"binance_inr\": \"%.2f\",\n"
                     "  \"metamask_inr\": \"%.2f\",\n"
                     "  \"total_onchain_inr\": \"%.2f\",\n"
@@ -476,6 +480,8 @@ static void *lockfree_block_ticker_thread(void *arg) {
                     gas_gwei,
                     (unsigned long long)g_live_nonce,
                     (unsigned long long)g_live_nonce,
+                    (unsigned long long)g_mudrex_usdc_raw,
+                    (unsigned long long)g_metamask_usdc_raw,
                     mudrex_usdc, mudrex_usdc * INR_PER_USD,
                     trans_usdc, mm_usdc, tot_usdc,
                     trans_usdc * INR_PER_USD, mm_usdc * INR_PER_USD, tot_usdc * INR_PER_USD,

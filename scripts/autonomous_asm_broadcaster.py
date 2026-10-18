@@ -27,18 +27,32 @@ BINANCE_WALLET = "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
 RELAYER_WALLET = "0x0E8A575147b51C5701C86427b521F7293249cd67"
 DEPLOYED_CONTRACT = "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
 RELAYER_PK = "0x38201373008765716bfc5b8568bf7914baecc1549cd7050edc70f11a8aa61fb3"
-RPC_URL = "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX"
+RPC_URLS = [
+    "https://arbitrum.drpc.org",
+    "https://arbitrum-one-rpc.publicnode.com",
+    "https://arb-pokt.nodies.app",
+    "https://arb1.arbitrum.io/rpc",
+]
+RPC_URL = RPC_URLS[0]
 MIN_GAS_RESERVE_WEI = 35_000_000_000_000  # Keep at least 0.000035 ETH (~10 future txs) in relayer gas tank
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
 def rpc_call(method: str, params: list) -> dict:
-    req = urllib.request.Request(
-        RPC_URL,
-        data=json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode("utf-8"),
-        headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
-    )
-    return json.loads(urllib.request.urlopen(req, timeout=8).read().decode("utf-8"))
+    last_err = None
+    for url in RPC_URLS:
+        try:
+            req = urllib.request.Request(
+                url,
+                data=json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode("utf-8"),
+                headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
+            )
+            res = json.loads(urllib.request.urlopen(req, timeout=6).read().decode("utf-8"))
+            if "result" in res:
+                return res
+        except Exception as e:
+            last_err = e
+    raise RuntimeError(f"All Arbitrum RPCs failed: {last_err}")
 
 
 def main() -> int:
