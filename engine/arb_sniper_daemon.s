@@ -6,20 +6,19 @@ _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	.cfi_startproc
 ; %bb.0:
 	cmp	w0, #1
-	b.lt	LBB0_22
+	b.lt	LBB0_20
 ; %bb.1:
-	sub	sp, sp, #176
-	stp	d15, d14, [sp, #16]             ; 16-byte Folded Spill
-	stp	d13, d12, [sp, #32]             ; 16-byte Folded Spill
-	stp	d11, d10, [sp, #48]             ; 16-byte Folded Spill
-	stp	d9, d8, [sp, #64]               ; 16-byte Folded Spill
-	stp	x28, x27, [sp, #80]             ; 16-byte Folded Spill
-	stp	x26, x25, [sp, #96]             ; 16-byte Folded Spill
-	stp	x24, x23, [sp, #112]            ; 16-byte Folded Spill
-	stp	x22, x21, [sp, #128]            ; 16-byte Folded Spill
-	stp	x20, x19, [sp, #144]            ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #160]            ; 16-byte Folded Spill
-	.cfi_def_cfa_offset 176
+	stp	d15, d14, [sp, #-160]!          ; 16-byte Folded Spill
+	stp	d13, d12, [sp, #16]             ; 16-byte Folded Spill
+	stp	d11, d10, [sp, #32]             ; 16-byte Folded Spill
+	stp	d9, d8, [sp, #48]               ; 16-byte Folded Spill
+	stp	x28, x27, [sp, #64]             ; 16-byte Folded Spill
+	stp	x26, x25, [sp, #80]             ; 16-byte Folded Spill
+	stp	x24, x23, [sp, #96]             ; 16-byte Folded Spill
+	stp	x22, x21, [sp, #112]            ; 16-byte Folded Spill
+	stp	x20, x19, [sp, #128]            ; 16-byte Folded Spill
+	stp	x29, x30, [sp, #144]            ; 16-byte Folded Spill
+	.cfi_def_cfa_offset 160
 	.cfi_offset w30, -8
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
@@ -42,7 +41,7 @@ _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	.cfi_offset b15, -160
 	mov	x8, #0                          ; =0x0
 	mov	w9, #1                          ; =0x1
-	ldp	x11, x23, [sp, #248]
+	ldp	x11, x23, [sp, #232]
 	mov	x10, #59921                     ; =0xea11
 	movk	x10, #33069, lsl #16
 	movk	x10, #38809, lsl #32
@@ -50,14 +49,14 @@ _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	fmov	d1, x10
 	mov	x10, #149533581377536           ; =0x880000000000
 	movk	x10, #16579, lsl #48
-	str	x10, [sp, #8]                   ; 8-byte Folded Spill
-	ldp	x13, x12, [sp, #232]
+	fmov	d2, x10
+	ldp	x13, x12, [sp, #216]
 	mov	x10, #7378697629483820646       ; =0x6666666666666666
 	movk	x10, #16386, lsl #48
 	fmov	d3, x10
 	mov	x10, #4634204016564240384       ; =0x4050000000000000
 	fmov	d4, x10
-	ldp	x15, x14, [sp, #216]
+	ldp	x15, x14, [sp, #200]
 	mov	x10, #4639833516098453504       ; =0x4064000000000000
 	fmov	d5, x10
 	mov	x10, #20972                     ; =0x51ec
@@ -65,72 +64,66 @@ _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	movk	x10, #60293, lsl #32
 	movk	x10, #16289, lsl #48
 	fmov	d6, x10
-	ldp	x17, x16, [sp, #200]
-	mov	x10, #3689348814741910323       ; =0x3333333333333333
-	movk	x10, #16363, lsl #48
-	fmov	d7, x10
+	ldp	x17, x16, [sp, #184]
 	mov	x10, #26865                     ; =0x68f1
 	movk	x10, #35043, lsl #16
 	movk	x10, #63669, lsl #32
 	movk	x10, #48868, lsl #48
-	fmov	d16, x10
-	ldp	x20, x19, [sp, #184]
+	fmov	d7, x10
 	mov	x10, #26865                     ; =0x68f1
 	movk	x10, #35043, lsl #16
 	movk	x10, #63669, lsl #32
 	movk	x10, #16100, lsl #48
-	fmov	d17, x10
+	fmov	d16, x10
+	ldp	x20, x19, [sp, #168]
 	mov	x10, #7864                      ; =0x1eb8
 	movk	x10, #60293, lsl #16
 	movk	x10, #47185, lsl #32
 	movk	x10, #16270, lsl #48
-	fmov	d18, x10
-	ldr	x21, [sp, #176]
+	fmov	d17, x10
 	mov	x10, #17197                     ; =0x432d
 	movk	x10, #60188, lsl #16
 	movk	x10, #14050, lsl #32
 	movk	x10, #16154, lsl #48
-	fmov	d19, x10
+	fmov	d18, x10
+	ldr	x21, [sp, #160]
 	mov	x10, #22038                     ; =0x5616
 	movk	x10, #40679, lsl #16
 	movk	x10, #943, lsl #32
 	movk	x10, #15570, lsl #48
-	fmov	d21, x10
-	fmov	d22, #1.00000000
-	mov	x10, #-3689348814741910324      ; =0xcccccccccccccccc
-	movk	x10, #52429
-	movk	x10, #16356, lsl #48
-	fmov	d23, x10
+	fmov	d19, #-1.50000000
+	fmov	d20, x10
 	mov	x10, #43516                     ; =0xa9fc
 	movk	x10, #54001, lsl #16
 	movk	x10, #25165, lsl #32
 	movk	x10, #16192, lsl #48
-	fmov	d25, x10
-	fmov	d26, #0.50000000
+	fmov	d21, x10
+	fmov	d22, #1.00000000
 	mov	x10, #640942080                 ; =0x26340000
 	movk	x10, #27637, lsl #32
 	movk	x10, #49932, lsl #48
-	fmov	d27, x10
-	fmov	d28, #15.00000000
+	fmov	d23, #1.50000000
+	fmov	d24, x10
 	mov	x10, #-7378697629483820647      ; =0x9999999999999999
 	movk	x10, #39322
 	movk	x10, #16353, lsl #48
-	fmov	d29, x10
-	movi.2d	v30, #0000000000000000
+	fmov	d25, x10
 	mov	x10, #57147                     ; =0xdf3b
 	movk	x10, #36175, lsl #16
 	movk	x10, #28311, lsl #32
 	movk	x10, #16290, lsl #48
-	fmov	d31, x10
+	fmov	d27, #15.00000000
+	fmov	d28, x10
 	mov	x10, #-3689348814741910324      ; =0xcccccccccccccccc
 	movk	x10, #52429
 	movk	x10, #16348, lsl #48
-	fmov	d8, x10
+	fmov	d29, x10
+	movi.2d	v30, #0000000000000000
 	mov	x22, #35184372088832            ; =0x200000000000
 	movk	x22, #16475, lsl #48
 	mov	x25, #3689348814741910323       ; =0x3333333333333333
 	movk	x25, #16474, lsl #48
-	fmov	d9, #0.75000000
+	fmov	d31, #0.75000000
 	mov	x26, #48234                     ; =0xbc6a
 	movk	x26, #37748, lsl #16
 	movk	x26, #1048, lsl #32
@@ -149,9 +142,9 @@ LBB0_2:                                 ;   in Loop: Header=BB0_3 Depth=1
 	add	x9, x9, #1
 	add	x10, x10, #4
 	cmp	x8, x0
-	b.eq	LBB0_21
+	b.eq	LBB0_19
 LBB0_3:                                 ; =>This Loop Header: Depth=1
-                                        ;     Child Loop BB0_16 Depth 2
+                                        ;     Child Loop BB0_14 Depth 2
 	add	x28, x8, #4
 	cmp	x28, x0
 	b.hs	LBB0_5
@@ -161,158 +154,145 @@ LBB0_3:                                 ; =>This Loop Header: Depth=1
 	prfm	pldl1keep, [x3, x28, lsl #3]
 	prfm	pldl1keep, [x4, x28, lsl #3]
 LBB0_5:                                 ;   in Loop: Header=BB0_3 Depth=1
-	ldr	d20, [x1, x8, lsl #3]
-	ldr	d24, [x2, x8, lsl #3]
-	fcmp	d20, d24
-	fcsel	d2, d20, d24, ls
+	ldr	d8, [x1, x8, lsl #3]
+	ldr	d9, [x2, x8, lsl #3]
+	fcmp	d8, d9
+	fcsel	d10, d8, d9, ls
 	csel	x24, x3, x4, ls
 	ldr	d12, [x24, x8, lsl #3]
-	fcsel	d20, d24, d20, ls
+	fcsel	d11, d9, d8, ls
 	csel	x24, x4, x3, ls
 	ldr	d13, [x24, x8, lsl #3]
-	movi.2d	v10, #0000000000000000
-	fcmp	d2, d1
+	movi.2d	v8, #0000000000000000
+	fcmp	d10, d1
 	b.le	LBB0_7
 ; %bb.6:                                ;   in Loop: Header=BB0_3 Depth=1
-	fsub	d24, d20, d2
-	fdiv	d24, d24, d2
-	ldr	d10, [sp, #8]                   ; 8-byte Folded Reload
-	fmul	d10, d24, d10
+	fsub	d8, d11, d10
+	fdiv	d8, d8, d10
+	fmul	d8, d8, d2
 LBB0_7:                                 ;   in Loop: Header=BB0_3 Depth=1
-	ldr	d24, [x5, x8, lsl #3]
-	fsub	d11, d10, d24
-	fcmp	d24, d3
-	fcsel	d24, d5, d4, ls
-	fmov	d14, #-1.50000000
-	fadd	d14, d11, d14
-	fmadd	d14, d14, d6, d22
-	fmov	d15, #1.50000000
-	fcmp	d11, d15
-	fcsel	d14, d14, d22, gt
-	fdiv	d24, d24, d14
-	fmul	d2, d2, d24
-	fmul	d14, d12, d2
-	fmul	d2, d20, d24
-	fmul	d20, d13, d2
-	fmul	d15, d14, d20
-	fadd	d2, d14, d20
-	ldr	d13, [x6, x8, lsl #3]
-	ldr	d24, [x7, x8, lsl #3]
-	fadd	d12, d13, d24
+	ldr	d14, [x5, x8, lsl #3]
+	fsub	d9, d8, d14
+	fcmp	d14, d3
+	fcsel	d14, d5, d4, ls
+	fadd	d15, d9, d19
+	fmadd	d15, d15, d6, d22
+	fcmp	d9, d23
+	fcsel	d15, d15, d22, gt
+	fdiv	d14, d14, d15
+	fmul	d10, d10, d14
+	fmul	d10, d12, d10
+	fmul	d11, d11, d14
+	fmul	d11, d13, d11
+	fmul	d13, d10, d11
+	fadd	d14, d10, d11
+	ldr	d11, [x6, x8, lsl #3]
+	ldr	d10, [x7, x8, lsl #3]
+	fadd	d10, d11, d10
+	fadd	d12, d8, d7
+	fcmp	d8, d16
+	fcsel	d12, d12, d17, gt
+	fcmp	d9, #0.0
+	str	d8, [x21, x8, lsl #3]
+	fcsel	d12, d12, d9, ls
+	str	d12, [x20, x8, lsl #3]
+	fmul	d15, d12, d18
 	fcmp	d14, d20
-	fcsel	d20, d14, d20, mi
-	fmul	d20, d20, d7
-	fcmp	d20, d12
-	fcsel	d20, d12, d20, gt
-	fcmp	d20, d13
-	fcsel	d14, d13, d20, mi
-	fadd	d20, d10, d16
-	fcmp	d10, d17
-	fcsel	d20, d20, d18, gt
-	fcmp	d11, #0.0
-	fcsel	d20, d20, d11, ls
-	str	d10, [x21, x8, lsl #3]
-	str	d20, [x20, x8, lsl #3]
-	fmul	d20, d20, d19
-	fcmp	d2, d21
-	fmul	d24, d20, d26
-	fmul	d24, d24, d15
-	fdiv	d24, d24, d2
-	fcsel	d24, d14, d24, le
-	fcmp	d11, d28
+	mov.16b	v12, v10
 	b.le	LBB0_9
 ; %bb.8:                                ;   in Loop: Header=BB0_3 Depth=1
-	fmul	d12, d12, d23
-	b	LBB0_11
+	fmov	d26, #0.50000000
+	fmul	d12, d15, d26
+	fmul	d12, d12, d13
+	fdiv	d12, d12, d14
 LBB0_9:                                 ;   in Loop: Header=BB0_3 Depth=1
-	fcmp	d24, d13
-	fcsel	d12, d13, d24, mi
-	fcmp	d12, d14
-	b.le	LBB0_11
+	fcmp	d12, d11
+	fcsel	d12, d11, d12, mi
+	fcmp	d12, d10
+	fcsel	d12, d12, d10, le
+	fcmp	d9, d27
+	fcsel	d10, d10, d12, gt
+	fcmp	d10, d11
+	fcsel	d12, d10, d11, ls
+	fsub	d11, d10, d11
+	fcsel	d11, d11, d30, gt
+	fmul	d26, d10, d10
+	fneg	d14, d14
+	fdiv	d14, d14, d13
+	fcmp	d13, d20
+	fcsel	d13, d14, d24, gt
+	fmul	d26, d13, d26
+	fmadd	d26, d10, d15, d26
+	fmul	d13, d15, d10
+	fmul	d13, d13, d25
+	fcmp	d26, d0
+	fcsel	d26, d26, d13, hi
+	fmadd	d13, d8, d29, d28
+	fcmp	d26, d28
+	fcsel	d13, d13, d26, mi
+	fcmp	d9, #0.0
+	b.hi	LBB0_12
 ; %bb.10:                               ;   in Loop: Header=BB0_3 Depth=1
-	mov.16b	v12, v14
-LBB0_11:                                ;   in Loop: Header=BB0_3 Depth=1
-	fcmp	d12, d13
-	fcsel	d14, d12, d13, ls
-	fsub	d24, d12, d13
-	fcsel	d13, d24, d30, gt
-	fmul	d24, d12, d12
-	fneg	d2, d2
-	fdiv	d2, d2, d15
-	fcmp	d15, d21
-	fcsel	d2, d2, d27, gt
-	fmul	d2, d2, d24
-	fmadd	d2, d12, d20, d2
-	fmul	d20, d20, d12
-	fmul	d20, d20, d29
-	fcmp	d2, d0
-	fcsel	d2, d2, d20, hi
-	fmadd	d20, d10, d8, d31
-	fcmp	d2, d31
-	fcsel	d2, d20, d2, mi
-	fcmp	d11, #0.0
-	b.hi	LBB0_14
-; %bb.12:                               ;   in Loop: Header=BB0_3 Depth=1
-	fmov	d20, x22
-	fcmp	d2, d20
-	b.le	LBB0_14
-; %bb.13:                               ;   in Loop: Header=BB0_3 Depth=1
+	fmov	d26, x22
+	fcmp	d13, d26
+	b.le	LBB0_12
+; %bb.11:                               ;   in Loop: Header=BB0_3 Depth=1
 	mov	x24, #140737488355328           ; =0x800000000000
 	movk	x24, #16434, lsl #48
-	fmov	d2, x24
+	fmov	d26, x24
 	mov	x24, #7378697629483820646       ; =0x6666666666666666
 	movk	x24, #16428, lsl #48
-	fmov	d20, x24
-	fmadd	d2, d10, d20, d2
-	fmov	d20, x25
-	fcmp	d2, d20
-	fcsel	d2, d2, d20, le
-LBB0_14:                                ;   in Loop: Header=BB0_3 Depth=1
-	fmul	d24, d12, d25
-	fsub	d20, d2, d0
-	fmov	d10, x26
-	fmul	d10, d20, d10
-	fcmp	d20, #0.0
-	fcsel	d20, d10, d30, gt
-	fmul	d10, d20, d9
-	fcmp	d20, #0.0
-	fcsel	d11, d10, d30, gt
-	fsub	d10, d20, d10
-	fcsel	d10, d10, d30, gt
+	fmov	d9, x24
+	fmadd	d26, d8, d9, d26
+	fmov	d8, x25
+	fcmp	d26, d8
+	fcsel	d13, d26, d8, le
+LBB0_12:                                ;   in Loop: Header=BB0_3 Depth=1
+	fmul	d26, d10, d21
+	fsub	d8, d13, d0
+	fmov	d9, x26
+	fmul	d9, d8, d9
+	fcmp	d8, #0.0
+	fcsel	d8, d9, d30, gt
+	fmul	d9, d8, d31
+	fcmp	d8, #0.0
+	fcsel	d14, d9, d30, gt
+	fsub	d9, d8, d9
+	fcsel	d9, d9, d30, gt
 	fmov	d15, x27
-	str	d12, [x19, x8, lsl #3]
-	str	d14, [x17, x8, lsl #3]
-	fcmp	d11, d15
-	fcsel	d20, d30, d20, mi
-	str	d13, [x16, x8, lsl #3]
-	str	d24, [x15, x8, lsl #3]
-	str	d2, [x14, x8, lsl #3]
-	str	d20, [x13, x8, lsl #3]
-	fcsel	d2, d30, d11, mi
-	fcsel	d24, d30, d10, mi
-	str	d2, [x12, x8, lsl #3]
-	str	d24, [x11, x8, lsl #3]
+	str	d10, [x19, x8, lsl #3]
+	str	d12, [x17, x8, lsl #3]
+	fcmp	d14, d15
+	fcsel	d8, d30, d8, mi
+	str	d11, [x16, x8, lsl #3]
+	str	d26, [x15, x8, lsl #3]
+	str	d13, [x14, x8, lsl #3]
+	str	d8, [x13, x8, lsl #3]
+	fcsel	d26, d30, d14, mi
+	fcsel	d9, d30, d9, mi
+	str	d26, [x12, x8, lsl #3]
+	str	d9, [x11, x8, lsl #3]
 	cbz	w8, LBB0_2
-; %bb.15:                               ;   in Loop: Header=BB0_3 Depth=1
+; %bb.13:                               ;   in Loop: Header=BB0_3 Depth=1
 	mov	x28, x10
 	mov	x30, x9
-LBB0_16:                                ;   Parent Loop BB0_3 Depth=1
+LBB0_14:                                ;   Parent Loop BB0_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldursw	x24, [x28, #-4]
-	ldr	d2, [x13, x24, lsl #3]
-	fcmp	d2, d20
-	b.pl	LBB0_19
-; %bb.17:                               ;   in Loop: Header=BB0_16 Depth=2
+	ldr	d26, [x13, x24, lsl #3]
+	fcmp	d26, d8
+	b.pl	LBB0_17
+; %bb.15:                               ;   in Loop: Header=BB0_14 Depth=2
 	str	w24, [x28], #-4
 	sub	x30, x30, #1
 	cmp	x30, #1
-	b.gt	LBB0_16
-; %bb.18:                               ;   in Loop: Header=BB0_3 Depth=1
+	b.gt	LBB0_14
+; %bb.16:                               ;   in Loop: Header=BB0_3 Depth=1
 	mov	x24, #0                         ; =0x0
-	b	LBB0_20
-LBB0_19:                                ;   in Loop: Header=BB0_3 Depth=1
+	b	LBB0_18
+LBB0_17:                                ;   in Loop: Header=BB0_3 Depth=1
 	sub	x24, x30, #1
-LBB0_20:                                ;   in Loop: Header=BB0_3 Depth=1
+LBB0_18:                                ;   in Loop: Header=BB0_3 Depth=1
 	sxtw	x24, w24
 	str	w8, [x23, x24, lsl #2]
 	add	x8, x8, #1
@@ -320,19 +300,18 @@ LBB0_20:                                ;   in Loop: Header=BB0_3 Depth=1
 	add	x10, x10, #4
 	cmp	x8, x0
 	b.ne	LBB0_3
-LBB0_21:
-	ldp	x29, x30, [sp, #160]            ; 16-byte Folded Reload
-	ldp	x20, x19, [sp, #144]            ; 16-byte Folded Reload
-	ldp	x22, x21, [sp, #128]            ; 16-byte Folded Reload
-	ldp	x24, x23, [sp, #112]            ; 16-byte Folded Reload
-	ldp	x26, x25, [sp, #96]             ; 16-byte Folded Reload
-	ldp	x28, x27, [sp, #80]             ; 16-byte Folded Reload
-	ldp	d9, d8, [sp, #64]               ; 16-byte Folded Reload
-	ldp	d11, d10, [sp, #48]             ; 16-byte Folded Reload
-	ldp	d13, d12, [sp, #32]             ; 16-byte Folded Reload
-	ldp	d15, d14, [sp, #16]             ; 16-byte Folded Reload
-	add	sp, sp, #176
-LBB0_22:
+LBB0_19:
+	ldp	x29, x30, [sp, #144]            ; 16-byte Folded Reload
+	ldp	x20, x19, [sp, #128]            ; 16-byte Folded Reload
+	ldp	x22, x21, [sp, #112]            ; 16-byte Folded Reload
+	ldp	x24, x23, [sp, #96]             ; 16-byte Folded Reload
+	ldp	x26, x25, [sp, #80]             ; 16-byte Folded Reload
+	ldp	x28, x27, [sp, #64]             ; 16-byte Folded Reload
+	ldp	d9, d8, [sp, #48]               ; 16-byte Folded Reload
+	ldp	d11, d10, [sp, #32]             ; 16-byte Folded Reload
+	ldp	d13, d12, [sp, #16]             ; 16-byte Folded Reload
+	ldp	d15, d14, [sp], #160            ; 16-byte Folded Reload
+LBB0_20:
 	ret
 	.cfi_endproc
                                         ; -- End function

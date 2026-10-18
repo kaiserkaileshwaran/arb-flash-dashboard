@@ -168,22 +168,15 @@ void evaluate_full_loan_routes_asm(
         double aave_max = aave_max_usd_arr[i];
         double total_vault_cap = bal_max + aave_max;
         double min_v_usd = (v1_usd < v2_usd) ? v1_usd : v2_usd;
-        double safe_pool_cap = min_v_usd * 0.85;
+        double safe_pool_cap = min_v_usd;
         if (safe_pool_cap > total_vault_cap) safe_pool_cap = total_vault_cap;
         if (safe_pool_cap < bal_max) safe_pool_cap = bal_max;
 
         /*
-         * 3-TIER PER-BLOCK MAX FLASH LOAN ENGINE (MICRO 1-10+ INR FLOOR -> ACTIVE THOUSANDS -> WHALE LAKHS/CRORES):
-         * - Tier 1 (Quiet Block Micro-Tick Backrun, spread <= 0.05 bps down to 0.000000001):
-         *   Deploys 0% Balancer V2 Max Flash Loan across the active tick's unlocked liquidity to guarantee
-         *   ₹2.10 INR to ₹14.80 INR net profit per Arbitrum block (75% Mudrex share = 0.0166 - 0.1169 USDC,
-         *   strictly > 0.005 USDC Mudrex minimum deposit!). Across 5,00,000 blocks/day, >= ₹2 INR/block = ₹10,00,000+ INR/day.
-         * - Tier 2 (Active Intra-Block Dislocation, 0.05 bps - 15 bps):
-         *   Deploys Full ₹2.43 Crore - ₹2.75 Crore INR Balancer 0% Flash Loan for ₹16.75 INR to ₹9,480 INR per trade.
-         * - Tier 3 (Huge Market Shift / Whale Swap / Liquidation, > 15 bps):
-         *   Scales up to Uncapped Dual-Vault Capacity (₹3,731.68 Crore INR / $393.14M) to capture
-         *   Thousands (₹25,000+ INR), Lakhs (₹1,00,000+ INR), or Crores (₹1,00,00,000+ INR) in a single transaction!
-         * - Strict Profitability & Mudrex Min-Deposit Guard: Only processes if net_full > 0.0 and split75 >= 0.0055 USDC!
+         * UNCAPPED FULL-VAULT MAX FLASH LOAN ENGINE (ZERO ARTIFICIAL LIMITS):
+         * - Uses 100% of mathematical closed-form optimal flash loan dx* = (0.5 * edge_frac * v_prod) / v_sum
+         *   scaling all the way up to 100% of total_vault_cap (Balancer V2 0% Vault + Aave V3 + UniV3 Flash Swap
+         *   = up to ₹3,731.68 Crore INR / $393.14M USD) with ZERO artificial percentage cap!
          */
         double active_edge_bps = edge_bps;
         if (active_edge_bps <= 0.0) {
@@ -195,14 +188,14 @@ void evaluate_full_loan_routes_asm(
         out_net_margin_bps[i] = active_edge_bps;
 
         double edge_frac = active_edge_bps * 0.0001;
-        /* Closed-form calculus sweet-spot loan dx* scaled up to maximum safe flash loan capacity */
-        double d_star_full = (v_sum > 1e-15) ? ((0.5 * edge_frac * v_prod) / v_sum) : safe_pool_cap;
+        /* Uncapped closed-form calculus sweet-spot loan dx* scaled up to 100% of full vault capacity */
+        double d_star_full = (v_sum > 1e-15) ? ((0.5 * edge_frac * v_prod) / v_sum) : total_vault_cap;
         if (d_star_full < bal_max) d_star_full = bal_max;
         if (edge_bps > 15.0) {
-            /* Huge Market Shift / Whale Dislocation: Scale up to full Dual-Vault capacity (Lakhs / Crores INR) */
-            d_star_full = total_vault_cap * 0.65;
-        } else if (d_star_full > safe_pool_cap) {
-            d_star_full = safe_pool_cap;
+            /* Huge Market Shift / Whale Dislocation: Deploy 100% Uncapped Dual-Vault Capacity (₹3,731.68 Crore INR) */
+            d_star_full = total_vault_cap;
+        } else if (d_star_full > total_vault_cap) {
+            d_star_full = total_vault_cap;
         }
 
         double bal_part = (d_star_full <= bal_max) ? d_star_full : bal_max;
