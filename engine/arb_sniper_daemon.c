@@ -262,12 +262,12 @@ void evaluate_full_loan_routes_asm(
 /* Global Shared Lock-Free State (Updated by Thread 1 every 350ms, read by Thread 2) */
 static volatile uint64_t g_live_block_number = 515923076ULL;
 static volatile uint64_t g_live_gas_wei      = 20000000ULL;
-static volatile uint64_t g_live_nonce        = 3ULL;
-static volatile uint64_t g_mudrex_usdc_raw   = 0ULL;
+static volatile uint64_t g_live_nonce        = 5ULL;
+static volatile uint64_t g_mudrex_usdc_raw   = 162263ULL;
 static volatile uint64_t g_binance_usdc_raw  = 499198ULL;
-static volatile uint64_t g_metamask_usdc_raw = 162263ULL;
-static volatile uint64_t g_metamask_eth_wei  = 474670000000000ULL;
-static volatile uint64_t g_relayer_eth_wei   = 61154031950ULL;
+static volatile uint64_t g_metamask_usdc_raw = 0ULL;
+static volatile uint64_t g_metamask_eth_wei  = 272900000000000ULL;
+static volatile uint64_t g_relayer_eth_wei   = 0ULL;
 static volatile uint64_t g_total_asm_cycles  = 0ULL;
 static volatile int      g_keep_running      = 1;
 
@@ -370,7 +370,7 @@ static void *lockfree_block_ticker_thread(void *arg) {
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000FF3c34DAF159741C931F7c421350f8289A9d89BE\"},\"latest\"],\"id\":4},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xFF3c34DAF159741C931F7c421350f8289A9d89BE\",\"latest\"],\"id\":5},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\":[\"0xFF3c34DAF159741C931F7c421350f8289A9d89BE\",\"latest\"],\"id\":6},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x0E8A575147b51C5701C86427b521F7293249cd67\",\"latest\"],\"id\":7},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x9dD041dbd964DE086Da8f907518f6E25c45aea70\",\"latest\"],\"id\":7},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000d2529585059e3e5c09c912f0f9570000c2a53f05\"},\"latest\"],\"id\":8}"
         "]";
 
@@ -417,9 +417,8 @@ static void *lockfree_block_ticker_thread(void *arg) {
                 uint64_t v = asm_parse_hex_u64(h_bin);
                 if (v > g_binance_usdc_raw) g_binance_usdc_raw = v;
             }
-            if (h_mm) {
-                uint64_t v = asm_parse_hex_u64(h_mm);
-                if (v > 0) g_metamask_usdc_raw = v;
+            if (h_mm && strlen(h_mm) >= 66) {
+                g_metamask_usdc_raw = asm_parse_hex_u64(h_mm);
             }
             if (h_eth) {
                 uint64_t v = asm_parse_hex_u64(h_eth);

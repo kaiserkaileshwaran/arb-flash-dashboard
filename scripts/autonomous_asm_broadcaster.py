@@ -24,14 +24,28 @@ BROADCAST_LOG_JSON = REPORTS_DIR / "last_autonomous_broadcast.json"
 OWNER_METAMASK = "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
 MUDREX_WALLET = "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
 BINANCE_WALLET = "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
-RELAYER_WALLET = "0x0E8A575147b51C5701C86427b521F7293249cd67"
 DEPLOYED_CONTRACT = "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
-RELAYER_PK = "0x38201373008765716bfc5b8568bf7914baecc1549cd7050edc70f11a8aa61fb3"
+
+
+def _load_local_relayer_env() -> tuple:
+    env_path = Path.home() / ".arb_flash_local_relayer.env"
+    addr = "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
+    pk = ""
+    if env_path.exists():
+        for line in env_path.read_text(encoding="utf-8").splitlines():
+            if line.startswith("LOCAL_RELAYER_ADDRESS="):
+                addr = line.split("=", 1)[1].strip()
+            elif line.startswith("LOCAL_RELAYER_PRIVATE_KEY="):
+                pk = line.split("=", 1)[1].strip()
+    return addr, pk
+
+
+RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
 RPC_URLS = [
     "https://arbitrum.drpc.org",
-    "https://arbitrum-one-rpc.publicnode.com",
     "https://arb-pokt.nodies.app",
     "https://arb1.arbitrum.io/rpc",
+    "https://1rpc.io/arb",
 ]
 RPC_URL = RPC_URLS[0]
 MIN_GAS_RESERVE_WEI = 35_000_000_000_000  # Keep at least 0.000035 ETH (~10 future txs) in relayer gas tank

@@ -425,16 +425,16 @@ const DIRECT_ARB_RPCS = [
   'https://arb1.arbitrum.io/rpc',
 ];
 let _directRpcIdx = 0;
-let _highestBlockSeen = 515965000;
-let _highestEthBal = 0.00047467;
-let _highestUsdcBal = 0.162263;
-let _highestUsdcRaw = 162263;
+let _highestBlockSeen = 515977500;
+let _highestEthBal = 0.00027290;
+let _highestUsdcBal = 0.0;
+let _highestUsdcRaw = 0;
 let _highestUsdtBal = 0.0;
 let _highestWethBal = 0.0;
 let _highestBinOnlyUsdcBal = 0.499198;
-let _highestMudUsdcBal = 0.0;
-let _highestMudUsdcRaw = 0;
-let _highestNonceHex = '0x3';
+let _highestMudUsdcBal = 0.162263;
+let _highestMudUsdcRaw = 162263;
+let _highestNonceHex = '0x5';
 
 const DEFAULT_MUDREX_WALLET = '0xd2529585059e3e5c09c912f0f9570000c2a53f05';
 const DEFAULT_BINANCE_WALLET = '0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099';
@@ -601,7 +601,7 @@ async function waitForRealArbitrumReceipt(txHash, provider) {
 
 async function fundAuthorizedRelayerGas() {
   const statusEl = document.getElementById('bankTransferStatusBar');
-  const relayerAddr = '0x0E8A575147b51C5701C86427b521F7293249cd67';
+  const relayerAddr = '0x9dD041dbd964DE086Da8f907518f6E25c45aea70';
   const contractAddr = '0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3';
   try {
     const artResp = await fetch(`${API_BASE}/api/contract_artifact`);
@@ -625,7 +625,7 @@ async function fundAuthorizedRelayerGas() {
         await provider.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0xa4b1' }] });
       }
     } catch (_) {}
-    statusEl.innerHTML = `⏳ Please click <b>Confirm</b> in your MetaMask popup to send <b>0.0002 ETH (~₹46 INR)</b> L2 gas fuel to your 24/7 Auto-Relayer (<b>${relayerAddr}</b>)...`;
+    statusEl.innerHTML = `⏳ Please click <b>Confirm</b> in your MetaMask popup to send <b>0.0002 ETH (~₹46 INR)</b> L2 gas fuel to your Private Local Auto-Relayer (<b>${relayerAddr}</b>)...`;
     // Let MetaMask estimate gas & nonce natively so it never fails!
     const txHash = await provider.request({
       method: 'eth_sendTransaction',
@@ -638,7 +638,7 @@ async function fundAuthorizedRelayerGas() {
     statusEl.innerHTML = `⏳ Transaction submitted (<a href="https://arbiscan.io/tx/${txHash}" target="_blank"><b>${txHash.slice(0,18)}...</b></a>) — waiting for real Arbitrum One block confirmation...`;
     const rcpt = await waitForRealArbitrumReceipt(txHash, provider);
     if (rcpt.confirmed && rcpt.status === 1) {
-      statusEl.innerHTML = `<span class="pos">✅ 24/7 Auto-Relayer Funded &amp; Confirmed On-Chain (Block #${rcpt.blockNumber} • Status: 1)!</span><br>` +
+      statusEl.innerHTML = `<span class="pos">✅ Private Local Auto-Relayer Funded &amp; Confirmed On-Chain (Block #${rcpt.blockNumber} • Status: 1)!</span><br>` +
         `• <b>Arbiscan Tx:</b> <a href="https://arbiscan.io/tx/${txHash}" target="_blank"><b>${txHash}</b></a><br>` +
         `• Every profitable trade now automatically sends <b>75% to Mudrex (<code>${DEFAULT_MUDREX_WALLET}</code>)</b> and <b>25% to MetaMask (<code>${DEFAULT_OWNER_WALLET}</code>)</b> on that instant!`;
       fetchState();
@@ -650,8 +650,8 @@ async function fundAuthorizedRelayerGas() {
   }
 }
 
-let _LATEST_RESERVE_USDC = 0.162263;
-let _LATEST_RESERVE_ETH = 0.00047467;
+let _LATEST_RESERVE_USDC = 0.0;
+let _LATEST_RESERVE_ETH = 0.00027290;
 let _latestRealAsmNs = 323;
 let _latestRealAsmUs = 0.323;
 let _latestGasGwei = 0.02;
