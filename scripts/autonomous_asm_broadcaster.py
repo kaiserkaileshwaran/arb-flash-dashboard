@@ -65,60 +65,71 @@ def main() -> int:
         return 0
 
     cast_bin = "/Users/kailesh/.foundry/bin/cast"
-    # Pre-flight simulate executeDirectPoolFlashSwap on 0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3
-    # Pool 1: Camelot V3 WETH/USDT (0x7cCCba38e2D959FE135e79aEBB57ccB27b128358)
-    # Pool 2: PancakeSwap V3 WETH/USDT (0x389938cf14be379217570d8e4619e51fbdafaa21)
-    call_cmd = [
-        cast_bin,
-        "call",
-        DEPLOYED_CONTRACT,
-        "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)",
-        "(0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x389938cf14be379217570d8e4619e51fbdafaa21,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,1,true,false)",
-        "0",
-        "--from",
-        RELAYER_WALLET,
-        "--rpc-url",
-        RPC_URL,
-    ]
-    preflight_ok = False
-    try:
-        subprocess.check_output(call_cmd, stderr=subprocess.DEVNULL, timeout=8)
-        preflight_ok = True
-    except Exception:
-        preflight_ok = False
+    if not Path(cast_bin).exists():
+        cast_bin = "cast"
 
-    if preflight_ok:
-        send_cmd = [
+    # Candidate execution tiers ordered from Big-Whale Sweet-Spot down to High-Frequency Micro-Profit (₹1 - ₹15 INR)
+    candidate_calls = [
+        # Tier 1: WETH/USDT Camelot V3 <-> PancakeSwap V3 (Full Sweet-Spot)
+        "(0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x389938cf14be379217570d8e4619e51fbdafaa21,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,1,true,false)",
+        # Tier 2: WETH/USDC Camelot V3 <-> PancakeSwap V3 (Micro-Scalp ₹2 - ₹15 INR)
+        "(0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526,0x7fCDC35463E3770c2fB992716Cd070B63540b947,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,250000000000000000,1,true,false)",
+        # Tier 3: USDC/USDT Camelot V3 <-> UniV3 1bp (Stable Micro-Scalp ₹1 - ₹10 INR)
+        "(0x2f5e87C9312fa29aed5c179E456625D79015299c,0xbE3aD6a5669Dc0B8b12FeBC03608860C31E2eef6,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,8500000000,1,true,false)",
+    ]
+
+    for call_tuple in candidate_calls:
+        call_cmd = [
             cast_bin,
-            "send",
+            "call",
             DEPLOYED_CONTRACT,
             "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)",
-            "(0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x389938cf14be379217570d8e4619e51fbdafaa21,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,1,true,false)",
+            call_tuple,
             "0",
-            "--private-key",
-            RELAYER_PK,
+            "--from",
+            RELAYER_WALLET,
             "--rpc-url",
             RPC_URL,
-            "--json",
         ]
+        preflight_ok = False
         try:
-            out = json.loads(subprocess.check_output(send_cmd, timeout=20).decode("utf-8"))
-            subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
-            BROADCAST_LOG_JSON.write_text(
-                json.dumps(
-                    {
-                        "ok": True,
-                        "mode": "DIRECT_POOL_FLASH_SWAP_75_25_SPLIT",
-                        "tx_hash": out.get("transactionHash"),
-                        "block_number": out.get("blockNumber"),
-                        "ts": time.time(),
-                    },
-                    indent=2,
-                )
-            )
-            return 0
+            subprocess.check_output(call_cmd, stderr=subprocess.DEVNULL, timeout=6)
+            preflight_ok = True
         except Exception:
-            pass
+            preflight_ok = False
+
+        if preflight_ok:
+            send_cmd = [
+                cast_bin,
+                "send",
+                DEPLOYED_CONTRACT,
+                "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)",
+                call_tuple,
+                "0",
+                "--private-key",
+                RELAYER_PK,
+                "--rpc-url",
+                RPC_URL,
+                "--json",
+            ]
+            try:
+                out = json.loads(subprocess.check_output(send_cmd, timeout=20).decode("utf-8"))
+                subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
+                BROADCAST_LOG_JSON.write_text(
+                    json.dumps(
+                        {
+                            "ok": True,
+                            "mode": "DUAL_TIER_WHALE_AND_MICRO_PROFIT_75_25_SPLIT",
+                            "tx_hash": out.get("transactionHash"),
+                            "block_number": out.get("blockNumber"),
+                            "ts": time.time(),
+                        },
+                        indent=2,
+                    )
+                )
+                return 0
+            except Exception:
+                pass
 
     # If surplus ETH above MIN_GAS_RESERVE_WEI is present in relayer, settle 75% to Binance and 25% to MetaMask in USDC
     surplus_wei = rel_wei - MIN_GAS_RESERVE_WEI

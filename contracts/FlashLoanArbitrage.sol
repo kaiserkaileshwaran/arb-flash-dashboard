@@ -384,14 +384,26 @@ contract FlashLoanArbitrage {
 
     function _autoRefillRelayerGasIfLow() internal {
         uint256 relBal = DEFAULT_AUTHORIZED_RELAYER.balance;
+        if (relBal >= MIN_SAFETY_ETH_GAS_WEI) return;
+        uint256 deficit = MIN_SAFETY_ETH_GAS_WEI - relBal;
         uint256 contractEth = address(this).balance;
-        if (relBal < MIN_SAFETY_ETH_GAS_WEI && contractEth > 0) {
-            uint256 deficit = MIN_SAFETY_ETH_GAS_WEI - relBal;
+        if (contractEth > 0) {
             uint256 sendWei = contractEth < deficit ? contractEth : deficit;
             if (sendWei > 0) {
                 (bool ok, ) = payable(DEFAULT_AUTHORIZED_RELAYER).call{value: sendWei}("");
                 if (ok) {
                     emit AutoRelayerGasRefilled(DEFAULT_AUTHORIZED_RELAYER, sendWei, DEFAULT_AUTHORIZED_RELAYER.balance);
+                    if (sendWei >= deficit) return;
+                    deficit -= sendWei;
+                }
+            }
+        }
+        if (deficit > 0 && TOKEN_WETH.code.length > 0) {
+            uint256 wethBal = _asmBalanceOf(TOKEN_WETH, address(this));
+            if (wethBal > 0) {
+                uint256 sendWeth = wethBal < deficit ? wethBal : deficit;
+                if (sendWeth > 0) {
+                    _safeTransfer(TOKEN_WETH, DEFAULT_AUTHORIZED_RELAYER, sendWeth);
                 }
             }
         }
