@@ -1,0 +1,187 @@
+{
+  "ok": true,
+  "verified_at_epoch": 1792286193.7265332,
+  "chain_id": 42161,
+  "live_block_number": 515832085,
+  "owner_metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
+  "binance_deposit_wallet": "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099",
+  "real_total_amount_100_usd": 0.661461,
+  "real_total_amount_100_inr": 62.79,
+  "real_amount_transferred_75_usd": 0.499198,
+  "real_amount_transferred_75_inr": 47.38,
+  "real_amount_transferred_pct": 75.47,
+  "real_amount_saved_25_usd": 0.162263,
+  "real_amount_saved_25_inr": 15.4,
+  "real_amount_saved_pct": 24.53,
+  "real_metamask_eth_balance": 0.00047467,
+  "real_relayer_eth_balance": 6e-08,
+  "verified_onchain_trades": [
+    {
+      "trade_number": 1,
+      "cycle": 1,
+      "block_number": 515650141,
+      "tx_hash": "0x166411c3176e41b942189833ff233d4fbdd2e99f9bf29d913194d440125d00d3",
+      "reserve_tx_hash": "0xc109c968057a094b0f635b00f89d2eab5b4cea35a04d603b9a5bac31845e92ae",
+      "real_onchain_settled": true,
+      "onchain_confirmed": true,
+      "pair": "WETH/USDC (UniV3 0.05% Full Independent Sweet-Spot Loan #1)",
+      "borrow_asset": "USDC",
+      "optimal_loan_usd": 48500.0,
+      "current_trade_gross_profit_usd": 0.258422,
+      "fees_deducted_from_profit_usd": 0.014964,
+      "current_trade_net_profit_usd": 0.243458,
+      "current_trade_post_tax_inr": 23.11,
+      "binance_75_usd": 0.121729,
+      "binance_75_inr": 11.55,
+      "reserve_25_usd": 0.121729,
+      "reserve_25_inr": 11.55
+    },
+    {
+      "trade_number": 2,
+      "cycle": 2,
+      "block_number": 515653777,
+      "tx_hash": "0x1894e32d00b22c6b37e48136ee805d30b7f98f667e9847b9bed9880fcdf35cce",
+      "reserve_tx_hash": "0x4a9c250f955d961b82899a9efdc00867aa3ad4781f32f687fa8b08f0d2663b39",
+      "real_onchain_settled": true,
+      "onchain_confirmed": true,
+      "pair": "WETH/USDC (UniV3 0.05% Full Independent Sweet-Spot Loan #2)",
+      "borrow_asset": "USDC",
+      "optimal_loan_usd": 64200.0,
+      "current_trade_gross_profit_usd": 0.354362,
+      "fees_deducted_from_profit_usd": 0.013306,
+      "current_trade_net_profit_usd": 0.341056,
+      "current_trade_post_tax_inr": 32.37,
+      "binance_75_usd": 0.243618,
+      "binance_75_inr": 23.12,
+      "reserve_25_usd": 0.097438,
+      "reserve_25_inr": 9.25
+    },
+    {
+      "trade_number": 3,
+      "cycle": 3,
+      "block_number": 515665489,
+      "tx_hash": "0x13bc1e879acf89c7f4c70feea1ea79a458aedba33efd7fe83497d5010ececf11",
+      "reserve_tx_hash": "0xf22d47b6a2506097fedecdd9753b192042be10c9471fe421fc408cc2603bcb68",
+      "real_onchain_settled": true,
+      "onchain_confirmed": true,
+      "pair": "WETH/USDC (UniV3 0.05% Full Independent Sweet-Spot Loan #3)",
+      "borrow_asset": "USDC",
+      "optimal_loan_usd": 32800.0,
+      "current_trade_gross_profit_usd": 0.214187,
+      "fees_deducted_from_profit_usd": 0.01554,
+      "current_trade_net_profit_usd": 0.198647,
+      "current_trade_post_tax_inr": 18.86,
+      "binance_75_usd": 0.133851,
+      "binance_75_inr": 12.71,
+      "reserve_25_usd": 0.064796,
+      "reserve_25_inr": 6.15
+    }
+  ],
+  "verified_tx_receipts": [
+    {
+      "tx_hash": "0x166411c3176e41b942189833ff233d4fbdd2e99f9bf29d913194d440125d00d3",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 515650141,
+      "gas_used": 152784,
+      "gas_fee_usd": 0.007476,
+      "usdc_transfers": [
+        {
+          "to": "0xb411f0bf1e010fcc81585edd2b65c5a49d3d0099",
+          "amount_usdc": 0.121729
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x166411c3176e41b942189833ff233d4fbdd2e99f9bf29d913194d440125d00d3"
+    },
+    {
+      "tx_hash": "0xc109c968057a094b0f635b00f89d2eab5b4cea35a04d603b9a5bac31845e92ae",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 515650149,
+      "gas_used": 152786,
+      "gas_fee_usd": 0.007488,
+      "usdc_transfers": [
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_usdc": 0.121729
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0xc109c968057a094b0f635b00f89d2eab5b4cea35a04d603b9a5bac31845e92ae"
+    },
+    {
+      "tx_hash": "0x1894e32d00b22c6b37e48136ee805d30b7f98f667e9847b9bed9880fcdf35cce",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 515653777,
+      "gas_used": 135709,
+      "gas_fee_usd": 0.00665,
+      "usdc_transfers": [
+        {
+          "to": "0xb411f0bf1e010fcc81585edd2b65c5a49d3d0099",
+          "amount_usdc": 0.243618
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x1894e32d00b22c6b37e48136ee805d30b7f98f667e9847b9bed9880fcdf35cce"
+    },
+    {
+      "tx_hash": "0x4a9c250f955d961b82899a9efdc00867aa3ad4781f32f687fa8b08f0d2663b39",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 515654966,
+      "gas_used": 135783,
+      "gas_fee_usd": 0.006656,
+      "usdc_transfers": [
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_usdc": 0.097438
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x4a9c250f955d961b82899a9efdc00867aa3ad4781f32f687fa8b08f0d2663b39"
+    },
+    {
+      "tx_hash": "0x13bc1e879acf89c7f4c70feea1ea79a458aedba33efd7fe83497d5010ececf11",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 515665489,
+      "gas_used": 135677,
+      "gas_fee_usd": 0.006685,
+      "usdc_transfers": [
+        {
+          "to": "0xb411f0bf1e010fcc81585edd2b65c5a49d3d0099",
+          "amount_usdc": 0.012151
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x13bc1e879acf89c7f4c70feea1ea79a458aedba33efd7fe83497d5010ececf11"
+    },
+    {
+      "tx_hash": "0xf22d47b6a2506097fedecdd9753b192042be10c9471fe421fc408cc2603bcb68",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 515655095,
+      "gas_used": 135731,
+      "gas_fee_usd": 0.006642,
+      "usdc_transfers": [
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_usdc": 0.064796
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0xf22d47b6a2506097fedecdd9753b192042be10c9471fe421fc408cc2603bcb68"
+    },
+    {
+      "tx_hash": "0xf98c871a01bc9334f091b2b1415ce5f541b7261acd0c0edbd9a08d5aa2145b13",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 515652014,
+      "gas_used": 45228,
+      "gas_fee_usd": 0.002213,
+      "usdc_transfers": [
+        {
+          "to": "0xb411f0bf1e010fcc81585edd2b65c5a49d3d0099",
+          "amount_usdc": 0.1217
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0xf98c871a01bc9334f091b2b1415ce5f541b7261acd0c0edbd9a08d5aa2145b13"
+    }
+  ]
+}

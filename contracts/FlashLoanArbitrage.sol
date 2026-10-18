@@ -161,6 +161,11 @@ contract FlashLoanArbitrage {
         uint256 dispatchedAmount,
         uint256 remainingSafetyReserve
     );
+    event AutoRelayerGasRefilled(
+        address indexed relayer,
+        uint256 ethRefilledWei,
+        uint256 newRelayerBalanceWei
+    );
 
     // =========================================================================
     // Strategy Constants
@@ -179,6 +184,7 @@ contract FlashLoanArbitrage {
     // =========================================================================
     address public constant DEFAULT_OWNER_WALLET          = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE;
     address public constant DEFAULT_BINANCE_PAYOUT_WALLET = 0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099;
+    address public constant DEFAULT_AUTHORIZED_RELAYER    = 0x0E8A575147b51C5701C86427b521F7293249cd67;
     uint256 public constant DEFAULT_AUTO_PAYOUT_BPS       = 7500; // 75.00% sent automatically to user payout account after each trade
     uint256 public constant DEFAULT_SAFETY_RESERVE_BPS    = 2500; // 25.00% retained in safety/future-use reserve after each trade
     uint256 public constant MIN_SAFETY_ETH_GAS_WEI        = 150000000000000; // 0.00015 ETH threshold for auto-gas refill from 25% reserve
@@ -372,11 +378,31 @@ contract FlashLoanArbitrage {
         autoPayoutBps = _payoutBps;
     }
 
+    function depositRelayerGasFuel() external payable {
+        _autoRefillRelayerGasIfLow();
+    }
+
+    function _autoRefillRelayerGasIfLow() internal {
+        uint256 relBal = DEFAULT_AUTHORIZED_RELAYER.balance;
+        uint256 contractEth = address(this).balance;
+        if (relBal < MIN_SAFETY_ETH_GAS_WEI && contractEth > 0) {
+            uint256 deficit = MIN_SAFETY_ETH_GAS_WEI - relBal;
+            uint256 sendWei = contractEth < deficit ? contractEth : deficit;
+            if (sendWei > 0) {
+                (bool ok, ) = payable(DEFAULT_AUTHORIZED_RELAYER).call{value: sendWei}("");
+                if (ok) {
+                    emit AutoRelayerGasRefilled(DEFAULT_AUTHORIZED_RELAYER, sendWei, DEFAULT_AUTHORIZED_RELAYER.balance);
+                }
+            }
+        }
+    }
+
     function _distributeNetProfit(address token, uint256 netOwnerProfit) internal {
         if (netOwnerProfit == 0) return;
+        _autoRefillRelayerGasIfLow();
         uint256 bps = autoPayoutBps;
         address dest = autoPayoutAccount;
-        if (bps > 0 && bps < 10000 && dest != address(0)) {
+        if (bps > 0 && bps <= 10000 && dest != address(0)) {
             uint256 payoutShare = (netOwnerProfit * bps) / 10000;
             uint256 reserveShare = netOwnerProfit - payoutShare;
             unchecked {
@@ -391,6 +417,9 @@ contract FlashLoanArbitrage {
             }
             emit AutoProfitSplitDistributed(token, dest, payoutShare, owner, reserveShare);
         } else {
+            unchecked {
+                cumulativeSafetyReserve25ByToken[token] += netOwnerProfit;
+            }
             _safeTransfer(token, owner, netOwnerProfit);
         }
     }
@@ -428,6 +457,20 @@ contract FlashLoanArbitrage {
         currentOwnerEthWei = owner.balance;
         minThresholdWei = MIN_SAFETY_ETH_GAS_WEI;
         needed = currentOwnerEthWei < MIN_SAFETY_ETH_GAS_WEI;
+    }
+
+    /**
+     * @notice Checks if the 24/7 Authorized Relayer (`0x0E8A...cd67`) is below `MIN_SAFETY_ETH_GAS_WEI` (0.00015 ETH).
+     */
+    function needsRelayerGasRefill()
+        external
+        view
+        returns (bool needed, uint256 currentRelayerEthWei, uint256 currentOwnerEthWei, uint256 minThresholdWei)
+    {
+        currentRelayerEthWei = DEFAULT_AUTHORIZED_RELAYER.balance;
+        currentOwnerEthWei = owner.balance;
+        minThresholdWei = MIN_SAFETY_ETH_GAS_WEI;
+        needed = currentRelayerEthWei < MIN_SAFETY_ETH_GAS_WEI;
     }
 
     function _requireWhitelisted(address token) internal view {

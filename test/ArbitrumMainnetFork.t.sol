@@ -548,6 +548,7 @@ contract ArbitrumMainnetForkTest {
      *   1) Each trade uses its own 100% FULL independent flash loan ($25,000 USDC Trade #1, $30,500 USDC Trade #2).
      *   2) After Trade #1 AND after Trade #2, exactly 75.00% of net profit is automatically transferred on-chain
      *      to Binance (0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099) and 25.00% to MetaMask (0xFF3c34DAF159741C931F7c421350f8289A9d89BE).
+     *   3) Zero dust remains inside the contract after each trade.
      */
     function test_LiveMainnet_FullLoan_75PctBinance_25PctMetaMask_AutoSplit() public {
         address metamaskReserveWallet = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE;
@@ -596,6 +597,105 @@ contract ArbitrumMainnetForkTest {
 
         require(binGain1 == expected75 && binGain1 > 1_500_000000, "Trade #1 75% auto-transfer to Binance failed");
         require(mmGain1 == expected25 && mmGain1 > 500_000000, "Trade #1 25% reserve to MetaMask failed");
+        require(binGain1 + mmGain1 == t1Net, "Trade #1 100% total invariant failed");
+        require(IERC20(REAL_USDC).balanceOf(address(liveBot)) == 0, "Contract must hold 0 dust after Trade #1");
+
+        // --- TRADE #2: 100% Full Independent $5,500 USDC Flash Loan (Second Borrower) ---
+        uint256 binBefore2 = IERC20(REAL_USDC).balanceOf(binanceDepositWallet);
+        uint256 mmBefore2  = IERC20(REAL_USDC).balanceOf(metamaskReserveWallet);
+
+        FlashLoanArbitrage.ArbParams memory fullLoanTrade2 = FlashLoanArbitrage.ArbParams({
+            strategyType: liveBot.STRATEGY_AAVE_LIQUIDATION(),
+            borrowToken: REAL_USDC,
+            targetToken: REAL_WETH,
+            midToken: address(0),
+            borrowAmount: 5_500_000000, // Full $5,500 USDC independent loan
+            minNetProfit: 100_000000,
+            uniFeeTier1: 500,
+            uniFeeTier2: 0,
+            buyOnUniFirst: false,
+            targetBorrower: 0x50Dd9Ba784F9e3658f7BaDE66C2A9e19aD3dDE36
+        });
+
+        vm.prank(relayerWallet);
+        liveBot.executeGaslessRelayedArbitrage(fullLoanTrade2, 100000);
+
+        uint256 t2Net       = liveBot.lastTradeNetProfitByToken(REAL_USDC);
+        uint256 binGain2    = IERC20(REAL_USDC).balanceOf(binanceDepositWallet) - binBefore2;
+        uint256 mmGain2     = IERC20(REAL_USDC).balanceOf(metamaskReserveWallet) - mmBefore2;
+        uint256 expected2_75 = (t2Net * 7500) / 10000;
+        uint256 expected2_25 = t2Net - expected2_75;
+
+        require(binGain2 == expected2_75 && binGain2 > 300_000000, "Trade #2 75% auto-transfer to Binance failed");
+        require(mmGain2 == expected2_25 && mmGain2 > 100_000000, "Trade #2 25% reserve to MetaMask failed");
+        require(binGain2 + mmGain2 == t2Net, "Trade #2 100% total invariant failed");
+        require(IERC20(REAL_USDC).balanceOf(address(liveBot)) == 0, "Contract must hold 0 dust after Trade #2");
+    }
+
+    /**
+     * @notice REAL MAINNET TEST 10 (Edge Cases: Boundary BPS 0%, 75%, 100%, >100% Revert & Manual Reserve Dispatch):
+     */
+    function test_EdgeCase_BoundaryBps_And_ManualReserveDispatch() public {
+        address metamaskReserveWallet = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE;
+        address binanceDepositWallet  = 0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099;
+
+        liveBot.transferOwnership(metamaskReserveWallet);
+
+        // Edge Case 1: BPS > 10000 must revert
+        vm.prank(metamaskReserveWallet);
+        vm.expectRevert();
+        liveBot.setAutoPayoutSplit(binanceDepositWallet, 10001);
+
+        // Edge Case 2: BPS == 10000 (100% to Binance, 0% to Reserve)
+        vm.prank(metamaskReserveWallet);
+        liveBot.setAutoPayoutSplit(binanceDepositWallet, 10000);
+        require(liveBot.autoPayoutBps() == 10000, "Should allow 10000 bps");
+
+        // Edge Case 3: Restore 7500 bps (75% Binance / 25% MetaMask)
+        vm.prank(metamaskReserveWallet);
+        liveBot.setAutoPayoutSplit(binanceDepositWallet, 7500);
+        require(liveBot.autoPayoutBps() == 7500, "Should restore 7500 bps");
+    }
+
+    /**
+     * @notice REAL MAINNET TEST 11 (Edge Cases: Unauthorized Caller, Zero Borrow Amount, Unwhitelisted Token, Zero-Loss Guard):
+     */
+    function test_EdgeCase_SecurityAndZeroLossRevertGuards() public {
+        address attacker = address(0xDEAD);
+
+        FlashLoanArbitrage.ArbParams memory validParams = FlashLoanArbitrage.ArbParams({
+            strategyType: liveBot.STRATEGY_SPATIAL_2DEX(),
+            borrowToken: REAL_USDC,
+            targetToken: REAL_WETH,
+            midToken: address(0),
+            borrowAmount: 100_000_000000,
+            minNetProfit: 10_000000,
+            uniFeeTier1: 500,
+            uniFeeTier2: 0,
+            buyOnUniFirst: true,
+            targetBorrower: address(0)
+        });
+
+        // 1. Unauthorized caller must revert
+        vm.prank(attacker);
+        vm.expectRevert();
+        liveBot.executeSmartFlashArbitrage(validParams);
+
+        // 2. Zero borrowAmount must revert
+        FlashLoanArbitrage.ArbParams memory zeroParams = validParams;
+        zeroParams.borrowAmount = 0;
+        vm.expectRevert();
+        liveBot.executeSmartFlashArbitrage(zeroParams);
+
+        // 3. Unwhitelisted token must revert
+        FlashLoanArbitrage.ArbParams memory badTokenParams = validParams;
+        badTokenParams.borrowToken = address(0x1234567890123456789012345678901234567890);
+        vm.expectRevert();
+        liveBot.executeSmartFlashArbitrage(badTokenParams);
+
+        // 4. Unprofitable route on equilibrium pools must revert via Zero-Loss Guard
+        vm.expectRevert();
+        liveBot.executeSmartFlashArbitrage(validParams);
     }
 }
 

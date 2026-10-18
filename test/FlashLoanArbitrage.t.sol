@@ -1005,10 +1005,19 @@ contract FlashLoanArbitrageTest {
         }
         require(zeroReverted, "Zero customAmount must revert");
 
-        // Edge Case 3 (P1): Auto-gas refill threshold check
+        // Edge Case 3 (P1): Auto-gas refill threshold check + Self-Refueling Relayer Gas Skimmer
         (bool needed, uint256 ownerEth, uint256 minThresh) = arbBot.needsAutoGasRefill();
         require(minThresh == 150000000000000, "Threshold must be 0.00015 ETH");
         require(needed == (ownerEth < minThresh), "Auto-gas refill flag must match balance comparison");
+
+        (bool relNeededBefore, uint256 relEthBefore, , uint256 relMinThresh) = arbBot.needsRelayerGasRefill();
+        require(relNeededBefore && relEthBefore == 0 && relMinThresh == 150000000000000, "Relayer starts below gas threshold");
+
+        // Deposit 0.0002 ETH into arbBot and execute a trade — verify relayer 0x0E8A...cd67 is auto-refilled to 0.00015 ETH
+        arbBot.depositRelayerGasFuel{value: 200000000000000}();
+        arbBot.executeDirectPoolFlashSwap(dParams, 0);
+        (bool relNeededAfter, uint256 relEthAfter, , ) = arbBot.needsRelayerGasRefill();
+        require(!relNeededAfter && relEthAfter == 150000000000000, "Relayer must be auto-refilled to 0.00015 ETH on trade settlement");
     }
 }
 
