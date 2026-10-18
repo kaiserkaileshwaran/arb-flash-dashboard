@@ -185,7 +185,7 @@ contract FlashLoanArbitrage {
     address public constant DEFAULT_OWNER_WALLET          = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE;
     address public constant DEFAULT_MUDREX_PAYOUT_WALLET  = 0xd2529585059e3e5c09c912F0F9570000c2a53F05;
     address public constant DEFAULT_BINANCE_PAYOUT_WALLET = 0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099;
-    address public constant DEFAULT_AUTHORIZED_RELAYER    = 0x0E8A575147b51C5701C86427b521F7293249cd67;
+    address public constant DEFAULT_AUTHORIZED_RELAYER    = 0x9dD041dbd964DE086Da8f907518f6E25c45aea70;
     uint256 public constant DEFAULT_AUTO_PAYOUT_BPS       = 7500; // 75.00% sent automatically to user Mudrex/Mediator account after each trade
     uint256 public constant DEFAULT_SAFETY_RESERVE_BPS    = 2500; // 25.00% retained in safety/future-use reserve after each trade
     uint256 public constant MIN_MUDREX_USDC_DEPOSIT       = 5000; // 0.005 USDC minimum deposit threshold on Mudrex Arbitrum One
@@ -445,15 +445,10 @@ contract FlashLoanArbitrage {
      */
     function dispatchCustomFromSafetyReserve(address token, uint256 customAmount) external nonReentrant onlyOwnerOrRelayer {
         if (customAmount == 0) revert ZeroAmount();
-        address dest = autoPayoutAccount == address(0) ? DEFAULT_BINANCE_PAYOUT_WALLET : autoPayoutAccount;
+        address dest = autoPayoutAccount == address(0) ? DEFAULT_MUDREX_PAYOUT_WALLET : autoPayoutAccount;
         uint256 contractBal = IERC20(token).balanceOf(address(this));
-        if (contractBal >= customAmount) {
-            _safeTransfer(token, dest, customAmount);
-        } else {
-            // Pull customAmount from owner's 25% Safety Reserve wallet if approved
-            bool ok = IERC20(token).transferFrom(owner, dest, customAmount);
-            require(ok, "RESERVE_TRANSFER_FAILED");
-        }
+        require(contractBal >= customAmount, "PROFIT_ONLY_NO_METAMASK_PULL");
+        _safeTransfer(token, dest, customAmount);
         uint256 prevRes = cumulativeSafetyReserve25ByToken[token];
         uint256 newRes = prevRes >= customAmount ? prevRes - customAmount : 0;
         cumulativeSafetyReserve25ByToken[token] = newRes;
