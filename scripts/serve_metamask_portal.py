@@ -753,6 +753,20 @@ HTML_PAGE = """<!DOCTYPE html>
     </div>
   </div>
 
+  <!-- PROMINENT 1-CLICK METAMASK ACTION BANNER WHEN RELAYER IS NOT YET AUTHORIZED/FUNDED -->
+  <div id="relayerActionRequiredBox" class="section-box" style="padding:16px 22px;margin-bottom:18px;border:2px solid #f59e0b;background:linear-gradient(135deg,#78350f66 0%,#111827 100%);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+    <div style="flex:1;min-width:300px;">
+      <div style="font-size:15px;font-weight:800;color:#fbbf24;margin-bottom:6px;" id="relayerActionTitle">⚠️ ACTION REQUIRED FROM YOUR SIDE (1-Time MetaMask Click Needed to Start On-Chain Trading!)</div>
+      <div style="font-size:12.5px;color:#e2e8f0;line-height:1.55;" id="relayerActionSub">
+        • <b>Why the 4 Cards Are Still at ₹62.79 INR:</b> Because your MetaMask private key stays safely inside your browser, I cannot sign transactions without your click. Right now on Arbitrum One, your 24/7 Relayer (<code>0x9dD041dbd964DE086Da8f907518f6E25c45aea70</code>) is <b>NOT YET AUTHORIZED (<code>false</code>)</b> and has <b><code>0.000000 ETH</code></b> gas float.<br>
+        • <b>What You Need to Do Once:</b> Click the big button on the right and click <b>Confirm</b> in your MetaMask popup (1st popup authorizes the relayer on contract <code>0xeFA5...07Bd3</code>; 2nd popup seeds the tiny <b>0.00005 ETH ≈ ₹11.50 INR</b> revolving gas float). Once confirmed, real on-chain trades will execute automatically!
+      </div>
+    </div>
+    <div>
+      <button id="btnTopRelayerActivate" class="btn-scan" style="font-size:14px;padding:14px 22px;background:#f59e0b;color:#0f172a;font-weight:900;box-shadow:0 0 18px rgba(245,158,11,0.5);" onclick="fundAuthorizedRelayerGas()">👉 CLICK HERE TO AUTHORIZE &amp; START 24/7 TRADING IN METAMASK</button>
+    </div>
+  </div>
+
   <!-- 4 CRYSTAL-CLEAR REAL ON-CHAIN KPI CARDS (ZERO SIMULATED LAKHS/CRORES CLUTTER) -->
   <div class="grid-4">
     <div class="card">
@@ -1810,35 +1824,73 @@ function renderDashboard(payload) {
       `;
     }).join('');
 
-    const rawStream = Array.isArray(asmTel.per_block_profit_stream) ? asmTel.per_block_profit_stream.slice(-15).reverse() : [];
-    const liveStreamRows = rawStream.map(b => {
-      const bNum = Number(b.block_number || blk);
-      const bCyc = Number(b.cycle || 0);
-      const bTier = b.tier || 'TIER_2_DAILY_CONSISTENT';
-      const bRoute = b.route || 'WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)';
-      const bLoanInr = Number(b.full_loan_inr || 226992);
-      const bGrossInr = Number(b.gross_profit_inr || (Number(b.net_profit_inr || 10.67) + 4.98));
-      const bFeesInr = Number(b.fees_inr || 4.98);
-      const bNetInr = Number(b.net_profit_inr || 10.67);
-      const b75Inr = Number(b.mudrex_75_inr || (bNetInr * 0.75));
-      const b25Inr = Number(b.metamask_25_inr || (bNetInr * 0.25));
-      return `
-        <tr>
-          <td><span style="color:#38bdf8;font-weight:700;">⚡ LIVE BLK</span></td>
-          <td>#${bCyc.toLocaleString()}</td>
-          <td><a href="https://arbiscan.io/block/${bNum}" target="_blank">Blk #${bNum.toLocaleString()}</a> • <span class="muted">Pre-Flight Eval (${Math.round(asmNs)} ns)</span></td>
-          <td><b>[${bTier}] ${bRoute}</b></td>
-          <td><b>₹${bLoanInr.toLocaleString('en-IN', {maximumFractionDigits:0})} INR</b></td>
-          <td class="pos">+₹${bGrossInr.toFixed(2)} INR</td>
-          <td class="warn">-₹${bFeesInr.toFixed(2)} INR</td>
-          <td class="pos"><b>+₹${bNetInr.toFixed(2)} INR</b></td>
-          <td class="pos"><b>+₹${b75Inr.toFixed(2)} INR</b></td>
-          <td style="color:#60a5fa;font-weight:700;"><b>+₹${b25Inr.toFixed(2)} INR</b></td>
-        </tr>
-      `;
-    }).join('');
+    const relFunded = Boolean(asmTel.relayer_gas_funded) || (_latestRelayerEth >= 0.000035 && _latestRelayerAuth);
+    const liveStatusRow = relFunded
+      ? `<tr style="background:#064e3b33;">
+           <td><span class="pos"><b>🟢 24/7 ACTIVE</b></span></td>
+           <td>#${Number(asmTel.asm_cycles_completed || s.total_cycles_completed || 0).toLocaleString()}</td>
+           <td><a href="https://arbiscan.io/block/${blk}" target="_blank">Blk #${blk.toLocaleString()}</a> • <span class="pos">Relayer Funded (${_latestRelayerEth.toFixed(6)} ETH)</span></td>
+           <td colspan="7"><b>24/7 Relayer Authorized &amp; Funded:</b> Pre-Flight <code>eth_call</code> Guard actively scanning every 250ms block (${Math.round(asmNs)} ns) — broadcasts the instant <code>grossProfit &gt; L2 Gas + Fees</code>!</td>
+         </tr>`
+      : `<tr style="background:#78350f33;">
+           <td><span class="warn"><b>⚠️ ACTION NEEDED</b></span></td>
+           <td>#${Number(asmTel.asm_cycles_completed || s.total_cycles_completed || 0).toLocaleString()}</td>
+           <td><a href="https://arbiscan.io/block/${blk}" target="_blank">Blk #${blk.toLocaleString()}</a> • <span class="warn">Relayer: 0.000000 ETH (Unfunded)</span></td>
+           <td colspan="7"><span class="warn"><b>Awaiting Your 1-Time MetaMask Click:</b></span> Click the orange <b>"👉 CLICK HERE TO AUTHORIZE &amp; START 24/7 TRADING IN METAMASK"</b> button at the top of the page (or Button #2) and click <b>Confirm</b> in MetaMask so the relayer can execute real on-chain trades!</td>
+         </tr>`;
 
-    lBody.innerHTML = verifiedOnChainSplitRow + realRows + liveStreamRows;
+    lBody.innerHTML = verifiedOnChainSplitRow + realRows + liveStatusRow;
+  }
+}
+
+let _latestRelayerAuth = false;
+let _latestRelayerEth = 0.0;
+
+async function refreshRelayerAuthBanner() {
+  const authData = '0x29e295c5' + LOCAL_RELAYER_WALLET.slice(2).toLowerCase().padStart(64, '0');
+  for (let i = 0; i < DIRECT_ARB_RPCS.length; i++) {
+    try {
+      const resp = await fetch(DIRECT_ARB_RPCS[i], {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([
+          { jsonrpc: '2.0', id: 1, method: 'eth_call', params: [{ to: DEPLOYED_CONTRACT_ADDR, data: authData }, 'latest'] },
+          { jsonrpc: '2.0', id: 2, method: 'eth_getBalance', params: [LOCAL_RELAYER_WALLET, 'latest'] }
+        ]),
+      });
+      const arr = await resp.json();
+      if (Array.isArray(arr)) {
+        const r1 = arr.find(x => x && x.id === 1);
+        const r2 = arr.find(x => x && x.id === 2);
+        if (r1 && r1.result) _latestRelayerAuth = BigInt(r1.result) === 1n;
+        if (r2 && r2.result) _latestRelayerEth = Number(BigInt(r2.result)) / 1e18;
+        break;
+      }
+    } catch (_) {}
+  }
+  const boxEl = document.getElementById('relayerActionRequiredBox');
+  const titleEl = document.getElementById('relayerActionTitle');
+  const subEl = document.getElementById('relayerActionSub');
+  const btnEl = document.getElementById('btnTopRelayerActivate');
+  if (!boxEl || !titleEl || !subEl || !btnEl) return;
+  if (_latestRelayerAuth && _latestRelayerEth >= 0.000035) {
+    boxEl.style.borderColor = '#10b981';
+    boxEl.style.background = 'linear-gradient(135deg,#064e3b66 0%,#111827 100%)';
+    titleEl.style.color = '#34d399';
+    titleEl.innerText = `✅ 24/7 ON-CHAIN RELAYER AUTHORIZED & FUNDED (${_latestRelayerEth.toFixed(6)} ETH Revolving Gas Float Active!)`;
+    subEl.innerHTML = `• <b>Relayer (<code>${LOCAL_RELAYER_WALLET}</code>):</b> Authorized on Contract <code>${DEPLOYED_CONTRACT_ADDR}</code> with <b>${_latestRelayerEth.toFixed(6)} ETH</b> Revolving Gas Float.<br>` +
+      `• <b>Strict Net-Positive Guard:</b> Watching every Arbitrum block (250ms) and automatically executing whenever <code>grossProfit &gt; L2 Gas + All Fees</code>!`;
+    btnEl.style.background = '#10b981';
+    btnEl.innerText = '✅ 24/7 RELAYER ACTIVE ON-CHAIN';
+  } else {
+    boxEl.style.borderColor = '#f59e0b';
+    boxEl.style.background = 'linear-gradient(135deg,#78350f66 0%,#111827 100%)';
+    titleEl.style.color = '#fbbf24';
+    titleEl.innerText = `⚠️ ACTION REQUIRED FROM YOUR SIDE (1-Time MetaMask Click Needed to Start On-Chain Trading!)`;
+    subEl.innerHTML = `• <b>Why the 4 Cards Are Still at ₹62.79 INR:</b> Because your MetaMask private key stays safely inside your browser, I cannot sign transactions without your click. Right now on Arbitrum One, your 24/7 Relayer (<code>${LOCAL_RELAYER_WALLET}</code>) is <b>Authorized: <code>${_latestRelayerAuth}</code></b> and has <b><code>${_latestRelayerEth.toFixed(6)} ETH</code></b> gas float.<br>` +
+      `• <b>What You Need to Do Once:</b> Click the orange button on the right and click <b>Confirm</b> in your MetaMask popup (1st popup authorizes the relayer on contract <code>0xeFA5...07Bd3</code>; 2nd popup seeds the tiny <b>0.00005 ETH ≈ ₹11.50 INR</b> revolving gas float).`;
+    btnEl.style.background = '#f59e0b';
+    btnEl.innerText = '👉 CLICK HERE TO AUTHORIZE & START 24/7 TRADING IN METAMASK';
   }
 }
 
@@ -1963,6 +2015,7 @@ function startZeroRefreshStream() {
 
 fetchState();
 tickLiveBlockEverySecond();
+refreshRelayerAuthBanner();
 connectMetaMaskWallet(true);
 startZeroRefreshStream();
 if (window.location.search.includes('auto_relayer=1')) {
@@ -1970,6 +2023,7 @@ if (window.location.search.includes('auto_relayer=1')) {
 }
 setInterval(tickLiveBlockEverySecond, 600);
 setInterval(fetchState, 2000);
+setInterval(refreshRelayerAuthBanner, 3000);
 </script>
 </body>
 </html>
