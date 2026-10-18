@@ -1,0 +1,11 @@
+{
+  "ok": false,
+  "status": "AWAITING_RELAYER_GAS_FLOAT_OR_AUTH",
+  "relayer_wallet": "0x9dD041dbd964DE086Da8f907518f6E25c45aea70",
+  "relayer_authorized_on_contract": false,
+  "relayer_eth_wei": 0,
+  "relayer_eth": 0.0,
+  "required_min_eth": 3.5e-06,
+  "recommended_revolving_float_eth": 5e-05,
+  "ts": 1792334410.748147
+}

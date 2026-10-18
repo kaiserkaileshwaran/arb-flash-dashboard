@@ -48,7 +48,7 @@ RPC_URLS = [
     "https://1rpc.io/arb",
 ]
 RPC_URL = RPC_URLS[0]
-MIN_GAS_RESERVE_WEI = 35_000_000_000_000  # Keep at least 0.000035 ETH (~10 future txs) in relayer gas tank
+MIN_GAS_RESERVE_WEI = 80_000_000_000_000  # Protect 0.00008 ETH revolving gas float (never swap initial 0.00005 ETH float into USDC)
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
@@ -73,20 +73,25 @@ def main() -> int:
     try:
         rel_hex = rpc_call("eth_getBalance", [RELAYER_WALLET, "latest"]).get("result", "0x0")
         rel_wei = int(rel_hex, 16)
+        auth_call = "0x29e295c5" + RELAYER_WALLET.lower().replace("0x", "").rjust(64, "0")
+        auth_hex = rpc_call("eth_call", [{"to": DEPLOYED_CONTRACT, "data": auth_call}, "latest"]).get("result", "0x0")
+        is_authorized = int(auth_hex or "0x0", 16) == 1
     except Exception as e:
         BROADCAST_LOG_JSON.write_text(json.dumps({"ok": False, "error": str(e), "ts": time.time()}, indent=2))
         return 1
 
-    if rel_wei < 3_500_000_000_000:
+    if rel_wei < 3_500_000_000_000 or not is_authorized:
         BROADCAST_LOG_JSON.write_text(
             json.dumps(
                 {
                     "ok": False,
-                    "status": "AWAITING_RELAYER_GAS_TOPUP",
+                    "status": "AWAITING_RELAYER_GAS_FLOAT_OR_AUTH" if not is_authorized else "AWAITING_RELAYER_GAS_TOPUP",
                     "relayer_wallet": RELAYER_WALLET,
+                    "relayer_authorized_on_contract": is_authorized,
                     "relayer_eth_wei": rel_wei,
                     "relayer_eth": round(rel_wei / 1e18, 8),
                     "required_min_eth": 0.0000035,
+                    "recommended_revolving_float_eth": 0.00005,
                     "ts": time.time(),
                 },
                 indent=2,
@@ -99,27 +104,28 @@ def main() -> int:
         cast_bin = "cast"
 
     # Candidate execution tiers ordered from Big-Whale Sweet-Spot down to Verified On-Chain Tick Sweet-Spot
+    # Each entry: (call_tuple_str, min_gross_profit_raw, relayer_fee_raw, borrow_is_weth)
     candidate_calls = [
         # Tier 1: Big-Whale WETH/USDC PancakeSwap V3 <-> Camelot V3 (10 WETH = ₹22.7 Lakh Flash Loan)
-        "(0x7fCDC35463E3770c2fB992716Cd070B63540b947,0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,10000000000000000000,1,true,false)",
-        "(0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526,0x7fCDC35463E3770c2fB992716Cd070B63540b947,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,10000000000000000000,1,true,false)",
-        # Tier 2: Mid-Whale WETH/USDC & WETH/USDT (1 WETH = ₹2.27 Lakh Flash Loan)
-        "(0x389938cf14be379217570d8e4619e51fbdafaa21,0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,1,true,false)",
-        "(0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x389938cf14be379217570d8e4619e51fbdafaa21,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,1,true,false)",
-        # Tier 3: Verified Active Tick Sweet-Spot PancakeSwap V3 -> Camelot V3 WETH/USDT (800000000000000 wei, verified rc=0 on-chain)
-        "(0x389938cf14be379217570d8e4619e51fbdafaa21,0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,800000000000000,1,true,false)",
-        # Tier 4: USDC/USDT Camelot V3 <-> UniV3 1bp
-        "(0xa17afcab059f3c6751f5b64347b5a503c3291868,0xbe3ad6a5669dc0b8b12febc03608860c31e2eef6,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,8500000000,1,true,false)",
+        ("(0x7fCDC35463E3770c2fB992716Cd070B63540b947,0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,10000000000000000000,3500000000000,true,false)", 3500000000000, 3000000000000, True),
+        ("(0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526,0x7fCDC35463E3770c2fB992716Cd070B63540b947,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,10000000000000000000,3500000000000,true,false)", 3500000000000, 3000000000000, True),
+        # Tier 2: Mid-Whale WETH/USDT & WETH/USDC (1 WETH = ₹2.27 Lakh Flash Loan)
+        ("(0x389938cf14be379217570d8e4619e51fbdafaa21,0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,3500000000000,true,false)", 3500000000000, 3000000000000, True),
+        ("(0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x389938cf14be379217570d8e4619e51fbdafaa21,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,3500000000000,true,false)", 3500000000000, 3000000000000, True),
+        # Tier 3: Fast Tick Sweet-Spot WETH/USDT (0.05 WETH = ₹11,350 INR Flash Loan, strictly net-positive after gas)
+        ("(0x389938cf14be379217570d8e4619e51fbdafaa21,0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,50000000000000000,3500000000000,true,false)", 3500000000000, 3000000000000, True),
+        # Tier 4: USDC/USDT Camelot V3 <-> UniV3 1bp (Strictly > 10,000 raw USDC = $0.01 > $0.007 gas)
+        ("(0xa17afcab059f3c6751f5b64347b5a503c3291868,0xbe3ad6a5669dc0b8b12febc03608860c31e2eef6,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,8500000000,10000,true,false)", 10000, 7500, False),
     ]
 
-    for call_tuple in candidate_calls:
+    for call_tuple, min_gross, rel_fee, is_weth in candidate_calls:
         call_cmd = [
             cast_bin,
             "call",
             DEPLOYED_CONTRACT,
             "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)",
             call_tuple,
-            "0",
+            str(rel_fee),
             "--from",
             RELAYER_WALLET,
             "--rpc-url",
@@ -127,8 +133,10 @@ def main() -> int:
         ]
         preflight_ok = False
         try:
-            subprocess.check_output(call_cmd, stderr=subprocess.DEVNULL, timeout=6)
-            preflight_ok = True
+            raw_out = subprocess.check_output(call_cmd, stderr=subprocess.DEVNULL, timeout=6).decode("utf-8").strip()
+            net_owner_raw = int(raw_out.split()[0])
+            if net_owner_raw > 0:
+                preflight_ok = True
         except Exception:
             preflight_ok = False
 
@@ -139,7 +147,7 @@ def main() -> int:
                 DEPLOYED_CONTRACT,
                 "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)",
                 call_tuple,
-                "0",
+                str(rel_fee),
                 "--private-key",
                 RELAYER_PK,
                 "--rpc-url",
@@ -148,14 +156,35 @@ def main() -> int:
             ]
             try:
                 out = json.loads(subprocess.check_output(send_cmd, timeout=20).decode("utf-8"))
+                # If relayer received WETH gas reimbursement, unwrap back into native ETH to replenish revolving gas float
+                if is_weth and rel_fee > 0:
+                    try:
+                        subprocess.check_output(
+                            [
+                                cast_bin,
+                                "send",
+                                "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+                                "withdraw(uint256)",
+                                str(rel_fee),
+                                "--private-key",
+                                RELAYER_PK,
+                                "--rpc-url",
+                                RPC_URL,
+                            ],
+                            stderr=subprocess.DEVNULL,
+                            timeout=15,
+                        )
+                    except Exception:
+                        pass
                 subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
                 BROADCAST_LOG_JSON.write_text(
                     json.dumps(
                         {
                             "ok": True,
-                            "mode": "DUAL_TIER_WHALE_AND_MICRO_PROFIT_75_25_SPLIT",
+                            "mode": "REVOLVING_GAS_FLOAT_NET_PROFIT_VERIFIED",
                             "tx_hash": out.get("transactionHash"),
                             "block_number": out.get("blockNumber"),
+                            "relayer_gas_reimbursed_raw": rel_fee,
                             "ts": time.time(),
                         },
                         indent=2,
@@ -165,52 +194,6 @@ def main() -> int:
             except Exception:
                 pass
 
-    # If surplus ETH above MIN_GAS_RESERVE_WEI is present in relayer, settle 75% to Binance and 25% to MetaMask in USDC
-    surplus_wei = rel_wei - MIN_GAS_RESERVE_WEI
-    if surplus_wei >= 20_000_000_000_000:
-        # 75% to Binance (0xb411...0099) and 25% to MetaMask (0xFF3c...89BE), retaining MIN_GAS_RESERVE_WEI for future gas
-        bin_75_wei = int(surplus_wei * 0.75)
-        mm_25_wei = surplus_wei - bin_75_wei
-        tx_hashes = []
-        for dest, w_amt in ((BINANCE_WALLET, bin_75_wei), (OWNER_METAMASK, mm_25_wei)):
-            if w_amt < 5_000_000_000_000:
-                continue
-            min_out_units = MIN_MUDREX_USDC_UNITS if dest == MUDREX_WALLET else 1
-            swap_cmd = [
-                cast_bin,
-                "send",
-                "0xE592427A0AEce92De3Edee1F18E0157C05861564",
-                "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))(uint256)",
-                f"(0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,500,{dest},2000000000,{w_amt},{min_out_units},0)",
-                "--value",
-                str(w_amt),
-                "--private-key",
-                RELAYER_PK,
-                "--rpc-url",
-                RPC_URL,
-                "--json",
-            ]
-            try:
-                out = json.loads(subprocess.check_output(swap_cmd, timeout=20).decode("utf-8"))
-                if out.get("transactionHash"):
-                    tx_hashes.append(out["transactionHash"])
-            except Exception:
-                pass
-        if tx_hashes:
-            subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
-            BROADCAST_LOG_JSON.write_text(
-                json.dumps(
-                    {
-                        "ok": True,
-                        "mode": "AUTO_75_MUDREX_25_METAMASK_SETTLEMENT",
-                        "mudrex_wallet": MUDREX_WALLET,
-                        "tx_hashes": tx_hashes,
-                        "retained_gas_reserve_wei": MIN_GAS_RESERVE_WEI,
-                        "ts": time.time(),
-                    },
-                    indent=2,
-                )
-            )
     return 0
 
 
