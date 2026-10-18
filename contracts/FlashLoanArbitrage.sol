@@ -183,10 +183,12 @@ contract FlashLoanArbitrage {
     // Official Arbitrum One (Chain ID 42161) Protocol & Token Constants (v24.0)
     // =========================================================================
     address public constant DEFAULT_OWNER_WALLET          = 0xFF3c34DAF159741C931F7c421350f8289A9d89BE;
+    address public constant DEFAULT_MUDREX_PAYOUT_WALLET  = 0xd2529585059e3e5c09c912F0F9570000c2a53F05;
     address public constant DEFAULT_BINANCE_PAYOUT_WALLET = 0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099;
     address public constant DEFAULT_AUTHORIZED_RELAYER    = 0x0E8A575147b51C5701C86427b521F7293249cd67;
-    uint256 public constant DEFAULT_AUTO_PAYOUT_BPS       = 7500; // 75.00% sent automatically to user payout account after each trade
+    uint256 public constant DEFAULT_AUTO_PAYOUT_BPS       = 7500; // 75.00% sent automatically to user Mudrex/Mediator account after each trade
     uint256 public constant DEFAULT_SAFETY_RESERVE_BPS    = 2500; // 25.00% retained in safety/future-use reserve after each trade
+    uint256 public constant MIN_MUDREX_USDC_DEPOSIT       = 5000; // 0.005 USDC minimum deposit threshold on Mudrex Arbitrum One
     uint256 public constant MIN_SAFETY_ETH_GAS_WEI        = 150000000000000; // 0.00015 ETH threshold for auto-gas refill from 25% reserve
     address public constant ARBITRUM_BALANCER_VAULT = 0xBA12222222228d8Ba445958a75a0704d566BF2C8;
     address public constant ARBITRUM_AAVE_V3_POOL   = 0x794a61358D6845594F94dc1DB02A252b5b4814aD;
@@ -301,7 +303,7 @@ contract FlashLoanArbitrage {
     ) {
         owner = msg.sender;
         if (msg.sender == DEFAULT_OWNER_WALLET) {
-            autoPayoutAccount = DEFAULT_BINANCE_PAYOUT_WALLET;
+            autoPayoutAccount = DEFAULT_MUDREX_PAYOUT_WALLET;
             autoPayoutBps = DEFAULT_AUTO_PAYOUT_BPS;
         }
         balancerVault = _balancerVault == address(0) ? ARBITRUM_BALANCER_VAULT : _balancerVault;

@@ -22,12 +22,14 @@ ASM_TELEM_JSON = REPORTS_DIR / "asm_sniper_telemetry.json"
 BROADCAST_LOG_JSON = REPORTS_DIR / "last_autonomous_broadcast.json"
 
 OWNER_METAMASK = "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
-BINANCE_WALLET = "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099"
+MUDREX_WALLET = "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
+BINANCE_WALLET = "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
 RELAYER_WALLET = "0x0E8A575147b51C5701C86427b521F7293249cd67"
 DEPLOYED_CONTRACT = "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
 RELAYER_PK = "0x38201373008765716bfc5b8568bf7914baecc1549cd7050edc70f11a8aa61fb3"
 RPC_URL = "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX"
 MIN_GAS_RESERVE_WEI = 35_000_000_000_000  # Keep at least 0.000035 ETH (~10 future txs) in relayer gas tank
+MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
 def rpc_call(method: str, params: list) -> dict:
@@ -141,12 +143,13 @@ def main() -> int:
         for dest, w_amt in ((BINANCE_WALLET, bin_75_wei), (OWNER_METAMASK, mm_25_wei)):
             if w_amt < 5_000_000_000_000:
                 continue
+            min_out_units = MIN_MUDREX_USDC_UNITS if dest == MUDREX_WALLET else 1
             swap_cmd = [
                 cast_bin,
                 "send",
                 "0xE592427A0AEce92De3Edee1F18E0157C05861564",
                 "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))(uint256)",
-                f"(0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,500,{dest},2000000000,{w_amt},1,0)",
+                f"(0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,500,{dest},2000000000,{w_amt},{min_out_units},0)",
                 "--value",
                 str(w_amt),
                 "--private-key",
@@ -167,7 +170,8 @@ def main() -> int:
                 json.dumps(
                     {
                         "ok": True,
-                        "mode": "AUTO_75_BINANCE_25_METAMASK_SETTLEMENT",
+                        "mode": "AUTO_75_MUDREX_25_METAMASK_SETTLEMENT",
+                        "mudrex_wallet": MUDREX_WALLET,
                         "tx_hashes": tx_hashes,
                         "retained_gas_reserve_wei": MIN_GAS_RESERVE_WEI,
                         "ts": time.time(),
