@@ -98,14 +98,18 @@ def main() -> int:
     if not Path(cast_bin).exists():
         cast_bin = "cast"
 
-    # Candidate execution tiers ordered from Big-Whale Sweet-Spot down to High-Frequency Micro-Profit (₹1 - ₹15 INR)
+    # Candidate execution tiers ordered from Big-Whale Sweet-Spot down to Verified On-Chain Tick Sweet-Spot
     candidate_calls = [
-        # Tier 1: WETH/USDT Camelot V3 <-> PancakeSwap V3 (Full Sweet-Spot)
+        # Tier 1: Big-Whale WETH/USDC PancakeSwap V3 <-> Camelot V3 (10 WETH = ₹22.7 Lakh Flash Loan)
+        "(0x7fCDC35463E3770c2fB992716Cd070B63540b947,0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,10000000000000000000,1,true,false)",
+        "(0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526,0x7fCDC35463E3770c2fB992716Cd070B63540b947,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,10000000000000000000,1,true,false)",
+        # Tier 2: Mid-Whale WETH/USDC & WETH/USDT (1 WETH = ₹2.27 Lakh Flash Loan)
+        "(0x389938cf14be379217570d8e4619e51fbdafaa21,0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,1,true,false)",
         "(0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x389938cf14be379217570d8e4619e51fbdafaa21,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,1000000000000000000,1,true,false)",
-        # Tier 2: WETH/USDC Camelot V3 <-> PancakeSwap V3 (Micro-Scalp ₹2 - ₹15 INR)
-        "(0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526,0x7fCDC35463E3770c2fB992716Cd070B63540b947,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,250000000000000000,1,true,false)",
-        # Tier 3: USDC/USDT Camelot V3 <-> UniV3 1bp (Stable Micro-Scalp ₹1 - ₹10 INR)
-        "(0x2f5e87C9312fa29aed5c179E456625D79015299c,0xbE3aD6a5669Dc0B8b12FeBC03608860C31E2eef6,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,8500000000,1,true,false)",
+        # Tier 3: Verified Active Tick Sweet-Spot PancakeSwap V3 -> Camelot V3 WETH/USDT (800000000000000 wei, verified rc=0 on-chain)
+        "(0x389938cf14be379217570d8e4619e51fbdafaa21,0x7cCCba38e2D959FE135e79aEBB57ccB27b128358,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,800000000000000,1,true,false)",
+        # Tier 4: USDC/USDT Camelot V3 <-> UniV3 1bp
+        "(0xa17afcab059f3c6751f5b64347b5a503c3291868,0xbe3ad6a5669dc0b8b12febc03608860c31e2eef6,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,8500000000,1,true,false)",
     ]
 
     for call_tuple in candidate_calls:
