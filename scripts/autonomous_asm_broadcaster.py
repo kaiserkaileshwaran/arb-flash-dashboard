@@ -48,7 +48,7 @@ RPC_URLS = [
     "https://1rpc.io/arb",
 ]
 RPC_URL = RPC_URLS[0]
-MIN_GAS_RESERVE_WEI = 22_000_000_000_000  # Keep 0.000022 ETH (~8-10 future Arbitrum L2 flash-swap txs) in relayer gas reserve
+MIN_GAS_RESERVE_WEI = 10_000_000_000_000  # Keep 0.000010 ETH (~8 Arbitrum L2 flash-swap txs) in relayer gas reserve
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
@@ -104,7 +104,7 @@ def main() -> int:
         cast_bin = "cast"
 
     # Read dynamic uncapped L* optimal flash loan from Assembly telemetry (reports/asm_sniper_telemetry.json)
-    asm_opt_weth_wei = 105_000_000_000_000_000_000  # default ~105 WETH (₹2.38 Crore INR)
+    asm_opt_weth_wei = 105_000_000_000_000_000_000  # default ~105 WETH (₹2.43 Crore INR)
     if ASM_TELEM_JSON.exists():
         try:
             tel = json.loads(ASM_TELEM_JSON.read_text(encoding="utf-8"))
@@ -138,7 +138,7 @@ def main() -> int:
     cam_usdc_usdt = "0xa17afcab059f3c6751f5b64347b5a503c3291868"
     uni_usdc_usdt = "0xbe3ad6a5669dc0b8b12febc03608860c31e2eef6"
 
-    # 12-Tier Uncapped Multi-Scale Flash Loan Ladder (from ₹22.7 Crore / 1,000 WETH + Assembly L* down to Active Tick Sweet-Spot)
+    # 13-Tier Uncapped Multi-Scale Flash Loan Ladder (from ₹22.7 Crore / 1,000 WETH + Assembly L* down to Active Tick Sweet-Spot)
     raw_tiers = [
         (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 1000 * 10**18, 3500000000000, True, False, 3000000000000, True),
         (pcs_weth_usdc, cam_weth_usdc, weth, usdc, asm_opt_weth_wei, 3500000000000, True, False, 3000000000000, True),
@@ -184,7 +184,6 @@ def main() -> int:
                         raw_prof = int(item["result"], 16)
                         if raw_prof > 0:
                             meta = candidate_meta[int(item["id"]) - 1]
-                            # Normalize profit score to USD micro-units so we pick the absolute highest profit tier
                             score = int((raw_prof / 1e18) * 2446.60 * 1e6) if meta[3] else raw_prof
                             if score > best_profit_score:
                                 best_profit_score = score
@@ -234,7 +233,7 @@ def main() -> int:
                 json.dumps(
                     {
                         "ok": True,
-                        "mode": "UNCAPPED_MAX_FLASH_SWAP_100_PCT_TO_METAMASK_FOR_1CLICK_MUDREX",
+                        "mode": "UNCAPPED_MAX_FLASH_SWAP_AUTO_MUDREX_SETTLEMENT",
                         "tx_hash": out.get("transactionHash"),
                         "block_number": out.get("blockNumber"),
                         "flash_loan_raw_amount": winning_loan_amt,
@@ -248,16 +247,16 @@ def main() -> int:
         except Exception:
             pass
 
-    # If surplus ETH above MIN_GAS_RESERVE_WEI (0.000022 ETH) is present, settle 100% into MetaMask USDC
-    # so the user immediately sees real USDC in MetaMask and can click the 1-Click Mudrex button whenever they want!
+    # 100% Zero-Interaction Automatic Settlement Directly to Mudrex (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
+    # Whenever surplus ETH above MIN_GAS_RESERVE_WEI (0.000010 ETH) is available, settle directly into Mudrex USDC!
     surplus_wei = rel_wei - MIN_GAS_RESERVE_WEI
-    if surplus_wei >= 20_000_000_000_000:
+    if surplus_wei >= 15_000_000_000_000:
         swap_cmd = [
             cast_bin,
             "send",
             "0xE592427A0AEce92De3Edee1F18E0157C05861564",
             "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))(uint256)",
-            f"(0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,500,{OWNER_METAMASK},2000000000,{surplus_wei},{MIN_MUDREX_USDC_UNITS},0)",
+            f"(0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,500,{MUDREX_WALLET},2000000000,{surplus_wei},{MIN_MUDREX_USDC_UNITS},0)",
             "--value",
             str(surplus_wei),
             "--private-key",
@@ -274,8 +273,8 @@ def main() -> int:
                     json.dumps(
                         {
                             "ok": True,
-                            "mode": "ACCUMULATE_IN_METAMASK_FOR_1CLICK_MUDREX_SWEEP",
-                            "owner_metamask": OWNER_METAMASK,
+                            "mode": "ZERO_CLICK_AUTO_SETTLEMENT_DIRECT_TO_MUDREX",
+                            "mudrex_wallet": MUDREX_WALLET,
                             "tx_hash": out["transactionHash"],
                             "block_number": out.get("blockNumber"),
                             "retained_gas_reserve_wei": MIN_GAS_RESERVE_WEI,
@@ -292,3 +291,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

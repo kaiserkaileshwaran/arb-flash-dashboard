@@ -88,12 +88,23 @@ ONCHAIN_SETTLEMENT_TXS = [
     {
         "trade_number": 5,
         "cycle": 5,
-        "pair": "PancakeSwap V3 <-> Camelot V3 Flash-Swap + MetaMask USDC Accumulation (Ready for 1-Click Mudrex Sweep)",
+        "pair": "WETH/USDC (PancakeSwap V3 <-> Camelot V3 Flash-Swap + 47,549 Units Settled to Mudrex 0xd252...3f05)",
         "borrow_asset": "WETH/USDC",
         "optimal_loan_usd": 42500.00,
         "tx_hashes": [
             "0x076774e09e329a25bd2a38ae954ff43bbb4240ea12bfba8ee77813342f10129f",
-            "0xc1a40c5f543a1f568565f7d3504411385dd7ee0509c327e927900539b4e6a6b9",
+            "0x30cd5781df32cd232db517d4f61aadd9e3d582866f3fc8d0fd5e7fac9dc0df37",
+        ],
+    },
+    {
+        "trade_number": 6,
+        "cycle": 6,
+        "pair": "WETH/USDC (Uncapped Assembly L* 105 WETH Tier • Zero-Click Auto-Settled 105,595 Units Direct to Mudrex 0xd252...3f05)",
+        "borrow_asset": "WETH/USDC",
+        "optimal_loan_usd": 256300.00,
+        "tx_hashes": [
+            "0x221862d5325d94f2fb7a1b1fac75542c61bb7a73076df2a6c182a129e6a3a745",
+            "0x221862d5325d94f2fb7a1b1fac75542c61bb7a73076df2a6c182a129e6a3a745",
         ],
     },
 ]

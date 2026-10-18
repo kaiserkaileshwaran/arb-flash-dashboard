@@ -8,13 +8,17 @@ on:
     branches:
       - main
 
+concurrency:
+  group: arb-sniper-24x7-cloud
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
 jobs:
   cloud-sniper-24x7:
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 20
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -24,15 +28,19 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Compile Hardware C/Assembly Flash Kernel
+      - name: Compile Native C/Assembly Uncapped Flash Sniper Daemon
         run: |
-          gcc -O3 -shared -fPIC engine/asm/verify_flash_routes_x86_64.c -o engine/asm/libflash_kernel.so || true
+          sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev
+          mkdir -p bin reports
+          gcc -O3 -ffast-math engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
 
-      - name: Run 24/7 Cloud Arbitrum One Scanner & Auto-Settler Window
+      - name: Run 24/7 Cloud Arbitrum One Uncapped Assembly Sniper & Auto-Mudrex Verifier
         env:
-          ARBITRUM_RPC_URL: https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX
           OWNER_PROFIT_WALLET: 0xFF3c34DAF159741C931F7c421350f8289A9d89BE
-          BINANCE_DEPOSIT_WALLET: 0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099
+          MUDREX_DEPOSIT_WALLET: 0xd2529585059e3e5c09c912f0f9570000c2a53f05
           DEPLOYED_CONTRACT_ADDRESS: 0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3
         run: |
-          python3 -m engine.live_rpc_scanner --duration-seconds 840 --mode live || true
+          python3 scripts/verify_real_onchain_proofs.py || true
+          timeout 810 ./bin/arb_sniper_asm || true
+          python3 scripts/verify_real_onchain_proofs.py || true
+
