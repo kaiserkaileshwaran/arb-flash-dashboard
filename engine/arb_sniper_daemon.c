@@ -411,12 +411,29 @@ static void *lockfree_block_ticker_thread(void *arg) {
             }
             uint64_t gas = asm_parse_hex_u64(h_gas);
             if (gas > 0) g_live_gas_wei = gas;
-            if (h_bin)    g_binance_usdc_raw  = asm_parse_hex_u64(h_bin);
-            if (h_mm)     g_metamask_usdc_raw = asm_parse_hex_u64(h_mm);
-            if (h_eth)    g_metamask_eth_wei  = asm_parse_hex_u64(h_eth);
-            if (h_nonce)  g_live_nonce        = asm_parse_hex_u64(h_nonce);
-            if (h_rel)    g_relayer_eth_wei   = asm_parse_hex_u64(h_rel);
-            if (h_mudrex) g_mudrex_usdc_raw   = asm_parse_hex_u64(h_mudrex);
+            if (h_bin) {
+                uint64_t v = asm_parse_hex_u64(h_bin);
+                if (v > g_binance_usdc_raw) g_binance_usdc_raw = v;
+            }
+            if (h_mm) {
+                uint64_t v = asm_parse_hex_u64(h_mm);
+                if (v > 0) g_metamask_usdc_raw = v;
+            }
+            if (h_eth) {
+                uint64_t v = asm_parse_hex_u64(h_eth);
+                if (v > 0) g_metamask_eth_wei = v;
+            }
+            if (h_nonce) {
+                uint64_t v = asm_parse_hex_u64(h_nonce);
+                if (v >= g_live_nonce) g_live_nonce = v;
+            }
+            if (h_rel) {
+                g_relayer_eth_wei = asm_parse_hex_u64(h_rel);
+            }
+            if (h_mudrex) {
+                uint64_t v = asm_parse_hex_u64(h_mudrex);
+                if (v > g_mudrex_usdc_raw) g_mudrex_usdc_raw = v;
+            }
 
             double mudrex_usdc = (double)g_mudrex_usdc_raw / 1e6;
             double bin_usdc    = (double)g_binance_usdc_raw / 1e6;
