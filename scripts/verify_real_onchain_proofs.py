@@ -118,6 +118,17 @@ ONCHAIN_SETTLEMENT_TXS = [
             "0xf95c0d590c6999cfeb2e8afb925e1178f087860fa640d9c230406bde7ed7475d",
         ],
     },
+    {
+        "trade_number": 8,
+        "cycle": 8,
+        "pair": "UNI/WETH (Max-Edge HF<5.0 SushiV3 <-> PancakeV3 Flash-Swap + Auto-Settled 35,990 Units Direct to Mudrex 0xd252...3f05)",
+        "borrow_asset": "WETH/UNI",
+        "optimal_loan_usd": 384450.00,
+        "tx_hashes": [
+            "0x2121f82b5a3c065dc757c44efe061e25acad257046aecb8c5b023b5045c8e7bb",
+            "0x72ca01e7eb14cc8ecddc54b60ba444da6909494fb31b6f77845cfdeb123446dc",
+        ],
+    },
 ]
 
 
@@ -210,8 +221,8 @@ def main() -> int:
     mm_inr = round(mm_usdc * INR_PER_USD, 2)
     tot_inr = round(tot_usdc * INR_PER_USD, 2)
 
-    bin_pct = round((bin_usdc / tot_usdc) * 100.0, 2) if tot_usdc > 0 else 75.0
-    mm_pct = round((mm_usdc / tot_usdc) * 100.0, 2) if tot_usdc > 0 else 25.0
+    bin_pct = round((bin_usdc / tot_usdc) * 100.0, 2) if tot_usdc > 0 else 80.0
+    mm_pct = round((mm_usdc / tot_usdc) * 100.0, 2) if tot_usdc > 0 else 20.0
 
     mm_eth = round(mm_eth_raw / 1e18, 8)
     rel_eth = round(rel_eth_raw / 1e18, 8)
@@ -262,10 +273,10 @@ def main() -> int:
             "fees_deducted_from_profit_usd": fees_u,
             "current_trade_net_profit_usd": net_u,
             "current_trade_post_tax_inr": round(net_u * INR_PER_USD, 2),
-            "binance_75_usd": round(b_amt, 6),
-            "binance_75_inr": round(b_amt * INR_PER_USD, 2),
-            "reserve_25_usd": round(r_amt, 6),
-            "reserve_25_inr": round(r_amt * INR_PER_USD, 2),
+            "binance_75_usd": round(net_u * 0.80, 6),
+            "binance_75_inr": round(net_u * INR_PER_USD * 0.80, 2),
+            "reserve_25_usd": round(net_u * 0.20, 6),
+            "reserve_25_inr": round(net_u * INR_PER_USD * 0.20, 2),
         }
         verified_ledger.append(row)
         print(

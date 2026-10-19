@@ -104,10 +104,10 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "fees_deducted_from_profit_usd": 0.000100,
         "current_trade_net_profit_usd": 0.243458,
         "current_trade_post_tax_inr": round(0.243458 * 94.92, 2),
-        "binance_75_usd": 0.243429,
-        "binance_75_inr": round(0.243429 * 94.92, 2),
-        "reserve_25_usd": 0.000029,
-        "reserve_25_inr": round(0.000029 * 94.92, 2),
+        "binance_75_usd": round(0.243458 * 0.80, 6),
+        "binance_75_inr": round(0.243458 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.243458 * 0.20, 6),
+        "reserve_25_inr": round(0.243458 * 94.92 * 0.20, 2),
         "onchain_confirmed": True,
     },
     {
@@ -116,17 +116,17 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "block_number": 515653777,
         "tx_hash": "0x1894e32d00b22c6b37e48136ee805d30b7f98f667e9847b9bed9880fcdf35cce",
         "reserve_tx_hash": "0x4a9c250f955d961b82899a9efdc00867aa3ad4781f32f687fa8b08f0d2663b39",
-        "pair": "WETH/USDC (UniV3 0.05% Max Sweet-Spot Auto 75% Settled / 25% MetaMask)",
+        "pair": "WETH/USDC (UniV3 0.05% Max Sweet-Spot Auto 80% Settled / 20% Safety)",
         "borrow_asset": "USDC",
         "optimal_loan_usd": 64200.00,
         "current_trade_gross_profit_usd": 0.341156,
         "fees_deducted_from_profit_usd": 0.000100,
         "current_trade_net_profit_usd": 0.341056,
         "current_trade_post_tax_inr": round(0.341056 * 94.92, 2),
-        "binance_75_usd": 0.243618,
-        "binance_75_inr": round(0.243618 * 94.92, 2),
-        "reserve_25_usd": 0.097438,
-        "reserve_25_inr": round(0.097438 * 94.92, 2),
+        "binance_75_usd": round(0.341056 * 0.80, 6),
+        "binance_75_inr": round(0.341056 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.341056 * 0.20, 6),
+        "reserve_25_inr": round(0.341056 * 94.92 * 0.20, 2),
         "onchain_confirmed": True,
     },
     {
@@ -142,10 +142,10 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "fees_deducted_from_profit_usd": 0.000100,
         "current_trade_net_profit_usd": 0.076947,
         "current_trade_post_tax_inr": round(0.076947 * 94.92, 2),
-        "binance_75_usd": 0.012151,
-        "binance_75_inr": round(0.012151 * 94.92, 2),
-        "reserve_25_usd": 0.064796,
-        "reserve_25_inr": round(0.064796 * 94.92, 2),
+        "binance_75_usd": round(0.076947 * 0.80, 6),
+        "binance_75_inr": round(0.076947 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.076947 * 0.20, 6),
+        "reserve_25_inr": round(0.076947 * 94.92 * 0.20, 2),
         "onchain_confirmed": True,
     },
     {
@@ -161,10 +161,10 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "fees_deducted_from_profit_usd": 0.000000,
         "current_trade_net_profit_usd": 0.162263,
         "current_trade_post_tax_inr": round(0.162263 * 94.92, 2),
-        "binance_75_usd": 0.162263,
-        "binance_75_inr": round(0.162263 * 94.92, 2),
-        "reserve_25_usd": 0.000000,
-        "reserve_25_inr": 0.00,
+        "binance_75_usd": round(0.162263 * 0.80, 6),
+        "binance_75_inr": round(0.162263 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.162263 * 0.20, 6),
+        "reserve_25_inr": round(0.162263 * 94.92 * 0.20, 2),
         "onchain_confirmed": True,
         "is_mudrex_direct_payout": True,
     },
@@ -181,10 +181,10 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "fees_deducted_from_profit_usd": 0.000100,
         "current_trade_net_profit_usd": 0.047549,
         "current_trade_post_tax_inr": round(0.047549 * 94.92, 2),
-        "binance_75_usd": 0.047549,
-        "binance_75_inr": round(0.047549 * 94.92, 2),
-        "reserve_25_usd": 0.000000,
-        "reserve_25_inr": 0.00,
+        "binance_75_usd": round(0.047549 * 0.80, 6),
+        "binance_75_inr": round(0.047549 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.047549 * 0.20, 6),
+        "reserve_25_inr": round(0.047549 * 94.92 * 0.20, 2),
         "onchain_confirmed": True,
         "is_mudrex_direct_payout": True,
     },
@@ -201,10 +201,10 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "fees_deducted_from_profit_usd": 0.000100,
         "current_trade_net_profit_usd": 0.105595,
         "current_trade_post_tax_inr": round(0.105595 * 94.92, 2),
-        "binance_75_usd": 0.105595,
-        "binance_75_inr": round(0.105595 * 94.92, 2),
-        "reserve_25_usd": 0.000000,
-        "reserve_25_inr": 0.00,
+        "binance_75_usd": round(0.105595 * 0.80, 6),
+        "binance_75_inr": round(0.105595 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.105595 * 0.20, 6),
+        "reserve_25_inr": round(0.105595 * 94.92 * 0.20, 2),
         "onchain_confirmed": True,
         "is_mudrex_direct_payout": True,
     },
@@ -221,10 +221,30 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "fees_deducted_from_profit_usd": 0.000100,
         "current_trade_net_profit_usd": 0.014202,
         "current_trade_post_tax_inr": round(0.014202 * 94.92, 2),
-        "binance_75_usd": 0.014202,
-        "binance_75_inr": round(0.014202 * 94.92, 2),
-        "reserve_25_usd": 0.000000,
-        "reserve_25_inr": 0.00,
+        "binance_75_usd": round(0.014202 * 0.80, 6),
+        "binance_75_inr": round(0.014202 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.014202 * 0.20, 6),
+        "reserve_25_inr": round(0.014202 * 94.92 * 0.20, 2),
+        "onchain_confirmed": True,
+        "is_mudrex_direct_payout": True,
+    },
+    {
+        "trade_number": 8,
+        "cycle": 8,
+        "block_number": 516343677,
+        "tx_hash": "0x2121f82b5a3c065dc757c44efe061e25acad257046aecb8c5b023b5045c8e7bb",
+        "reserve_tx_hash": "0x72ca01e7eb14cc8ecddc54b60ba444da6909494fb31b6f77845cfdeb123446dc",
+        "pair": "UNI/WETH (Max-Edge HF<5.0 SushiV3 <-> PancakeV3 Flash-Swap + Auto-Settled 0.035990 USDC Direct to Mudrex 0xd252...3f05)",
+        "borrow_asset": "WETH/UNI",
+        "optimal_loan_usd": 384450.00,
+        "current_trade_gross_profit_usd": 0.036090,
+        "fees_deducted_from_profit_usd": 0.000100,
+        "current_trade_net_profit_usd": 0.035990,
+        "current_trade_post_tax_inr": round(0.035990 * 94.92, 2),
+        "binance_75_usd": round(0.035990 * 0.80, 6),
+        "binance_75_inr": round(0.035990 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.035990 * 0.20, 6),
+        "reserve_25_inr": round(0.035990 * 94.92 * 0.20, 2),
         "onchain_confirmed": True,
         "is_mudrex_direct_payout": True,
     },
@@ -248,15 +268,15 @@ def _sync_real_onchain_ledger(s: Dict[str, Any]) -> Dict[str, Any]:
 
     # Check live on-chain balances from reports/live_block_ticker.json (updated every 250ms by ./bin/arb_sniper_asm)
     real_bin_only_u = 0.499198
-    real_mud_u = 0.329609
+    real_mud_u = 0.365599
     real_mm_u = 0.000000
     ticker_path = REPORTS_DIR / "live_block_ticker.json"
     if ticker_path.exists():
         try:
             tk = json.loads(ticker_path.read_text(encoding="utf-8"))
-            mud_u = float(tk.get("mudrex_usdc_balance", 0.315407) or 0.315407)
+            mud_u = float(tk.get("mudrex_usdc_balance", 0.365599) or 0.365599)
             mm_raw = tk.get("metamask_usdc_raw")
-            if mud_u >= 0.315407:
+            if mud_u >= 0.365599:
                 real_mud_u = mud_u
             if mm_raw is not None:
                 real_mm_u = round(int(mm_raw) / 1e6, 6)

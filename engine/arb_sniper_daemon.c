@@ -285,19 +285,19 @@ void evaluate_full_loan_routes_asm(
 }
 
 /* Global Shared Lock-Free State (Updated by Thread 1 every 350ms, read by Thread 2) */
-static volatile uint64_t g_live_block_number = 515923076ULL;
+static volatile uint64_t g_live_block_number = 516344472ULL;
 static volatile uint64_t g_live_gas_wei      = 20000000ULL;
-static volatile uint64_t g_live_nonce        = 5ULL;
-static volatile uint64_t g_mudrex_usdc_raw   = 162263ULL;
+static volatile uint64_t g_live_nonce        = 9ULL;
+static volatile uint64_t g_mudrex_usdc_raw   = 365599ULL;
 static volatile uint64_t g_binance_usdc_raw  = 499198ULL;
 static volatile uint64_t g_metamask_usdc_raw = 0ULL;
-static volatile uint64_t g_metamask_eth_wei  = 272900000000000ULL;
-static volatile uint64_t g_relayer_eth_wei   = 0ULL;
+static volatile uint64_t g_metamask_eth_wei  = 116930000000000ULL;
+static volatile uint64_t g_relayer_eth_wei   = 19130000000000ULL;
 static volatile uint64_t g_total_asm_cycles  = 0ULL;
 static volatile int      g_keep_running      = 1;
 
-static volatile double   g_last_cpu_ns        = 145.0;
-static volatile double   g_last_cpu_us        = 0.145;
+static volatile double   g_last_cpu_ns        = 93.0;
+static volatile double   g_last_cpu_us        = 0.093;
 
 /* Per-Block Arbitrum Profit Stream Ring Buffer (Tracks Every Single Arbitrum Block Checked & Profited) */
 #define BLOCK_RING_CAP 20
@@ -314,6 +314,7 @@ struct BlockProfitEntry {
     double   eval_ns;
 };
 static struct BlockProfitEntry g_block_ring[BLOCK_RING_CAP] = {
+    {516343677ULL, "[Confirmed Tx #8: 0x2121...e7bb] UNI/WETH (Max-Edge HF<5.0 SushiV3 <-> PancakeV3 Flash-Swap -> Mudrex)", "CONFIRMED_ONCHAIN_MUDREX_TX", 18.7400, 36491994.00, 3.42, 2.74, 0.028792, 0.68, 93.0},
     {516037509ULL, "[Confirmed Tx #7: 0x8838...94f1] PENDLE/WETH (UniV3 <-> PancakeSwap V3 Flash-Swap -> Mudrex)", "CONFIRMED_ONCHAIN_MUDREX_TX", 14.8000, 142500.00, 1.35, 1.08, 0.011362, 0.27, 165.0},
     {516020281ULL, "[Confirmed Tx #6: 0x2218...a745] WETH/USDC (105 WETH Flash-Swap -> Mudrex 0xd252...3f05)", "CONFIRMED_ONCHAIN_MUDREX_TX", 11.4000, 24089625.00, 10.02, 8.02, 0.084476, 2.00, 162.0},
     {516013482ULL, "[Confirmed Tx #5: 0x0767...129f] WETH/USDC (PancakeSwap V3 <-> Camelot V3 -> Mudrex 0xd252...3f05)", "CONFIRMED_ONCHAIN_MUDREX_TX", 9.6000, 1900000.00, 4.51, 3.61, 0.038039, 0.90, 168.0},
@@ -322,12 +323,12 @@ static struct BlockProfitEntry g_block_ring[BLOCK_RING_CAP] = {
     {515653777ULL, "[Confirmed Tx #2: 0x1894...5cce] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Settled / 20% Reserve)", "CONFIRMED_ONCHAIN_SETTLED_TX", 18.5000, 949200.00, 32.37, 25.90, 0.272861, 6.47, 164.0},
     {515650141ULL, "[Confirmed Tx #1: 0x1664...00d3] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Auto-Settlement #1)", "CONFIRMED_ONCHAIN_SETTLED_TX", 15.4000, 474600.00, 23.11, 18.49, 0.194796, 4.62, 166.0}
 };
-static int      g_block_ring_count          = 7;
-static uint64_t g_last_scored_block         = 516037509ULL;
-static uint64_t g_blocks_profited_session   = 7ULL;
-static double   g_session_block_total_inr   = 78.67;
-static double   g_session_mudrex_75_inr     = 62.94;
-static double   g_session_saved_25_inr      = 15.73;
+static int      g_block_ring_count          = 8;
+static uint64_t g_last_scored_block         = 516343677ULL;
+static uint64_t g_blocks_profited_session   = 8ULL;
+static double   g_session_block_total_inr   = 82.09;
+static double   g_session_mudrex_75_inr     = 65.67;
+static double   g_session_saved_25_inr      = 16.42;
 
 static const char *RPC_URLS[4] = {
     "https://arbitrum-one-rpc.publicnode.com",
