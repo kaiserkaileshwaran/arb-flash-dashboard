@@ -45,8 +45,8 @@ def _load_local_relayer_env() -> tuple:
 
 RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
 RPC_URLS = [
-    "https://arb1.arbitrum.io/rpc",
     "https://arbitrum-one-rpc.publicnode.com",
+    "https://arb1.arbitrum.io/rpc",
     "https://arbitrum.drpc.org",
     "https://arb-pokt.nodies.app",
     "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX",
@@ -162,6 +162,32 @@ def main() -> int:
         ]
         return "0x1034ef63" + "".join(words)
 
+    def _encode_multi_flash_swaps_calldata(loans: list, relayer_fees: list) -> str:
+        # selector for executeMultiMaxDirectPoolFlashSwaps((address,address,address,address,uint256,uint256,bool,bool)[],uint256[]) = 0xd34ac4bb
+        n = len(loans)
+        offset_loans = 64
+        offset_fees = 64 + 32 + n * 8 * 32
+        words = [
+            hex(offset_loans)[2:].rjust(64, "0"),
+            hex(offset_fees)[2:].rjust(64, "0"),
+            hex(n)[2:].rjust(64, "0"),
+        ]
+        for pb, ps, tb, tq, amt, mg, z0, z1 in loans:
+            words.extend([
+                pb.lower().replace("0x", "").rjust(64, "0"),
+                ps.lower().replace("0x", "").rjust(64, "0"),
+                tb.lower().replace("0x", "").rjust(64, "0"),
+                tq.lower().replace("0x", "").rjust(64, "0"),
+                hex(int(amt))[2:].rjust(64, "0"),
+                hex(int(mg))[2:].rjust(64, "0"),
+                ("1" if z0 else "0").rjust(64, "0"),
+                ("1" if z1 else "0").rjust(64, "0"),
+            ])
+        words.append(hex(len(relayer_fees))[2:].rjust(64, "0"))
+        for rf in relayer_fees:
+            words.append(hex(int(rf))[2:].rjust(64, "0"))
+        return "0xd34ac4bb" + "".join(words)
+
     zero_addr = "0x0000000000000000000000000000000000000000"
     aave_v3_pool = "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
     weth = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
@@ -173,6 +199,7 @@ def main() -> int:
     link = "0xf97f4df75117a78c1A5a0DBb814Af92458539FB4"
     pendle = "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8"
     wsteth = "0x5979D7b546E38E414F7E9822514be443A4800529"
+    weeth = "0x35751007a407ca6FEFfE80b3cB397736D2cf4dbe"
     gmx = "0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a"
     magic = "0x539bdE0d7Dbd336b79148AA742883198BBF60342"
     rdnt = "0x3082CC23568eA640225c2467653dB90e9250AaA0"
@@ -197,7 +224,10 @@ def main() -> int:
     uni_pendle_weth = "0xb08a8794a5d3ccca3725d92964696858d3201909"
     pcs_pendle_weth = "0x042691f78269ba3d6325c945044239758aecc275"
     uni_wsteth_weth = "0x35218a1cbaC5Bbc3E57fd9Bd38219D37571b3537"
+    uni5_wsteth_weth = "0xb93f8a075509e71325c1c2fc8fa6a75f2d536a13"
     cam_wsteth_weth = "0xDeB89dE4bb6ecf5bFed581EB049308B52d9B2dA7"
+    uni1_weeth_weth = "0x14353445c8329df76e6f15e9ead18fa2d45a8bb6"
+    uni5_weeth_weth = "0xd90660a0b8ad757e7c1d660ce633776a0862b087"
     # High-Spread Mid-Cap Pools (GMX, MAGIC, RDNT, PEPE across Camelot V3, UniV3, PancakeSwap V3, SushiSwap V3)
     cam_gmx_weth = "0xc99be44383bc8d82357f5a1d9ae9976ee9d75bee"
     uni30_gmx_weth = "0x1aeedd3727a6431b8f070c0afaa81cc74f273882"
@@ -364,17 +394,30 @@ def main() -> int:
         })
     aave_hf_end_id = len(batch_rpc)
 
-    # 5. Add Pre-Gas Diagnostic Probes (min_gross=1 wei at 0.0005 WETH = $1.21) to measure exact sub-gas spread in wei
+    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at sweet-spot sizes)
+    probe_defs = [
+        ("ARB_PCS5_UNI5",    pcs5_weth_arb,    uni5_weth_arb,   weth, arb,     500_000_000_000_000, True,  False),
+        ("ARB_PCS5_UNI5_10", pcs5_weth_arb,    uni5_weth_arb,   weth, arb,   1_000_000_000_000_000, True,  False),
+        ("ARB_PCS1_UNI5",    pcs1_weth_arb,    uni5_weth_arb,   weth, arb,     600_000_000_000_000, True,  False),
+        ("ARB_PCS1_UNI5_12", pcs1_weth_arb,    uni5_weth_arb,   weth, arb,   1_200_000_000_000_000, True,  False),
+        ("ARB_UNI1_UNI5",    uni1_weth_arb,    uni5_weth_arb,   weth, arb,     200_000_000_000_000, True,  False),
+        ("ARB_UNI1_UNI5_4",  uni1_weth_arb,    uni5_weth_arb,   weth, arb,     400_000_000_000_000, True,  False),
+        ("USDCE_UNI5_PCS1",  uni5_weth_usdce,  pcs1_weth_usdce, weth, usdc_e, 1_000_000_000_000_000, True, False),
+        ("USDCE_PCS1_UNI5",  pcs1_weth_usdce,  uni5_weth_usdce, weth, usdc_e,  500_000_000_000_000, True,  False),
+        ("USDCE_UNI5_UNI1",  uni5_weth_usdce,  uni1_weth_usdce, weth, usdc_e,   50_000_000_000_000, True,  False),
+        ("USDCE_UNI1_UNI5",  uni1_weth_usdce,  uni5_weth_usdce, weth, usdc_e,   50_000_000_000_000, True,  False),
+        ("USDT_CAM_UNI1",    cam_weth_usdt,    uni1_weth_usdt,  weth, usdt,    500_000_000_000_000, True,  False),
+        ("USDT_CAM_PCS1",    cam_weth_usdt,    pcs_weth_usdt,   weth, usdt,  2_000_000_000_000_000, True,  False),
+        ("USDT_PCS1_CAM",    pcs_weth_usdt,    cam_weth_usdt,   weth, usdt,    500_000_000_000_000, True,  False),
+        ("WSTETH_UNI5_UNI1", uni5_wsteth_weth, uni_wsteth_weth, weth, wsteth,  100_000_000_000_000, False, True),
+        ("WEETH_UNI1_UNI5",  uni1_weeth_weth,  uni5_weeth_weth, weth, weeth,    20_000_000_000_000, False, True),
+        ("WBTC_PCS_CAM",     pcs_wbtc_weth,    cam_wbtc_weth,   weth, wbtc,    200_000_000_000_000, False, True),
+        ("GMX_CAM_UNI30",    cam_gmx_weth,     uni30_gmx_weth,  weth, gmx,     500_000_000_000_000, True,  False),
+        ("MAGIC_SUSHI_UNI",  sushi30_magic_weth,uni30_magic_weth,weth, magic,  500_000_000_000_000, False, True),
+    ]
     probe_start_id = len(batch_rpc) + 1
-    for p_idx, (pb, ps, tb, tq, z0, z1) in enumerate([
-        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, True, False),
-        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, True, False),
-        (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, False, True),
-        (cam_gmx_weth, uni30_gmx_weth, weth, gmx, True, False),
-        (sushi30_magic_weth, uni30_magic_weth, weth, magic, False, True),
-        (uni30_magic_weth, sushi30_magic_weth, weth, magic, False, True),
-    ]):
-        cd_probe = _encode_flash_swap_calldata(pb, ps, tb, tq, 500_000_000_000_000, 1, z0, z1, 0)
+    for p_idx, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in enumerate(probe_defs):
+        cd_probe = _encode_flash_swap_calldata(pb, ps, tb, tq, p_amt, 1, z0, z1, 0)
         batch_rpc.append({
             "jsonrpc": "2.0",
             "id": probe_start_id + p_idx,
@@ -386,7 +429,11 @@ def main() -> int:
     import socket
     from urllib.parse import urlparse
 
-    batch_payload_bytes = json.dumps(batch_rpc, separators=(",", ":")).encode("utf-8")
+    # Split into <= 19-item chunks so public Arbitrum RPCs never reject JSON-RPC batch size limits (20 max)
+    batch_chunks_bytes = [
+        json.dumps(batch_rpc[i : i + 19], separators=(",", ":")).encode("utf-8")
+        for i in range(0, len(batch_rpc), 19)
+    ]
     persistent_conns = {}
 
     def _fast_keepalive_post(url: str, payload: bytes):
@@ -424,9 +471,21 @@ def main() -> int:
             persistent_conns.pop(host, None)
             raise
 
+    def _fast_keepalive_batch_chunks(url: str):
+        merged = []
+        for chunk_bytes in batch_chunks_bytes:
+            part = _fast_keepalive_post(url, chunk_bytes)
+            if not isinstance(part, list):
+                raise RuntimeError("Non-list batch response")
+            merged.extend(part)
+        return merged
+
     winning_meta = None
     best_profit_score = 0
     best_pre_gas_wei = 0
+    bundled_multi_route_wei = 0
+    bundled_routes_count = 0
+    bundled_route_labels = []
     lowest_aave_hf = 999.0
     closest_aave_borrower = ""
     closest_aave_debt_usd = 0.0
@@ -443,11 +502,12 @@ def main() -> int:
         for url in ordered_urls:
             try:
                 t_rpc0 = time.time()
-                arr = _fast_keepalive_post(url, batch_payload_bytes)
+                arr = _fast_keepalive_batch_chunks(url)
                 lat_ms = (time.time() - t_rpc0) * 1000.0
                 latencies_ms.append(lat_ms)
                 active_rpc_url = url
                 if isinstance(arr, list):
+                    cycle_positive_probes = []
                     for item in arr:
                         if not isinstance(item, dict) or "id" not in item:
                             continue
@@ -498,6 +558,60 @@ def main() -> int:
                                 raw_prof = int(res_str, 16)
                                 if raw_prof > best_pre_gas_wei:
                                     best_pre_gas_wei = raw_prof
+                                p_idx = item_id - probe_start_id
+                                if 0 <= p_idx < len(probe_defs) and raw_prof > 0:
+                                    cycle_positive_probes.append((raw_prof, probe_defs[p_idx]))
+
+                    # Method A: Verify Multi-Route Atomic Bundle (executeMultiMaxDirectPoolFlashSwaps = 0xd34ac4bb)
+                    if cycle_positive_probes:
+                        cycle_positive_probes.sort(key=lambda x: -x[0])
+                        used_borrow_pools = set()
+                        bundle_loans = []
+                        bundle_lbls = []
+                        sum_probe_wei = 0
+                        for prof_w, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in cycle_positive_probes:
+                            if pb.lower() in used_borrow_pools:
+                                continue
+                            used_borrow_pools.add(pb.lower())
+                            bundle_loans.append((pb, ps, tb, tq, p_amt, 1, z0, z1))
+                            bundle_lbls.append(f"{p_lbl}({prof_w}wei)")
+                            sum_probe_wei += prof_w
+                        if sum_probe_wei > bundled_multi_route_wei:
+                            bundled_multi_route_wei = sum_probe_wei
+                            bundled_routes_count = len(bundle_loans)
+                            bundled_route_labels = bundle_lbls
+                        if len(bundle_loans) >= 2:
+                            try:
+                                cd_multi = _encode_multi_flash_swaps_calldata(bundle_loans, [0] * len(bundle_loans))
+                                m_req = json.dumps([{
+                                    "jsonrpc": "2.0",
+                                    "id": 999,
+                                    "method": "eth_call",
+                                    "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_multi}, "latest"],
+                                }], separators=(",", ":")).encode("utf-8")
+                                m_arr = _fast_keepalive_post(url, m_req)
+                                if isinstance(m_arr, list) and m_arr and isinstance(m_arr[0].get("result"), str) and len(m_arr[0]["result"]) >= 66:
+                                    onchain_bundle_wei = int(m_arr[0]["result"], 16)
+                                    if onchain_bundle_wei > bundled_multi_route_wei:
+                                        bundled_multi_route_wei = onchain_bundle_wei
+                                    if onchain_bundle_wei >= MIN_GROSS_WETH_WEI:
+                                        # Promote Atomic Bundle to winning_meta when combined gross >= L2 gas!
+                                        fees_list = [RELAYER_REIMB_WEI] + [0] * (len(bundle_loans) - 1)
+                                        cd_exec_multi = _encode_multi_flash_swaps_calldata(bundle_loans, fees_list)
+                                        b_score = int((onchain_bundle_wei / 1e18) * 2415.0 * 1e6)
+                                        if b_score > best_profit_score:
+                                            best_profit_score = b_score
+                                            winning_meta = (
+                                                "MULTI_ROUTE_ATOMIC_BUNDLE",
+                                                cd_exec_multi,
+                                                onchain_bundle_wei,
+                                                RELAYER_REIMB_WEI,
+                                                True,
+                                                sum(x[4] for x in bundle_loans),
+                                                "RAW_CALLDATA",
+                                            )
+                            except Exception:
+                                pass
                     break
             except Exception:
                 continue
@@ -515,17 +629,19 @@ def main() -> int:
     min_lat_ms = round(min(latencies_ms), 2) if latencies_ms else 0.0
     avg_lat_ms = round(sum(latencies_ms) / len(latencies_ms), 2) if latencies_ms else 0.0
     pre_gas_inr = round((best_pre_gas_wei / 1e18) * 2415.0 * 94.92, 4)
+    bundled_pre_gas_inr = round((bundled_multi_route_wei / 1e18) * 2415.0 * 94.92, 4)
     l2_gas_inr = round(0.0119 * 94.92, 4)
 
     if winning_meta is None:
         summary = {
             "ok": True,
             "status": "SCAN_COMPLETE_NO_SPREAD_ABOVE_L2_GAS_THRESHOLD",
-            "engine_mode": "HYBRID_CHOICE_2_AAVE_LIQ_AND_CHOICE_3_LONG_TAIL_SUSHIV2_V3",
-            "coins_monitored": 13,
+            "engine_mode": "HYBRID_CHOICE_2_AAVE_LIQ_CHOICE_3_CROSS_TIER_AND_METHOD_A_ATOMIC_BUNDLE",
+            "coins_monitored": 19,
             "direct_flash_swap_tiers": len(raw_tiers),
             "sushiv2_spatial_tiers": len(sushiv2_spatial_tiers),
             "aave_v3_borrowers_monitored": len(aave_high_risk_watchlist),
+            "multi_route_bundle_probes": len(probe_defs),
             "total_rpc_checks_per_cycle": len(batch_rpc),
             "cycles_scanned": cycles_scanned,
             "scan_duration_sec": round(time.time() - start_ts, 2),
@@ -536,10 +652,15 @@ def main() -> int:
             "aave_closest_borrower_debt_usd": closest_aave_debt_usd,
             "aave_closest_5pct_liq_bonus_inr": closest_aave_bonus_inr,
             "aave_liquidatable_positions_now": aave_liquidatable_count,
-            "best_pre_gas_gross_wei": best_pre_gas_wei,
-            "best_pre_gas_gross_inr": pre_gas_inr,
+            "best_single_route_pre_gas_wei": best_pre_gas_wei,
+            "best_single_route_pre_gas_inr": pre_gas_inr,
+            "bundled_routes_count": bundled_routes_count,
+            "bundled_route_labels": bundled_route_labels,
+            "bundled_multi_route_gross_wei": bundled_multi_route_wei,
+            "bundled_multi_route_gross_inr": bundled_pre_gas_inr,
             "l2_gas_cost_inr": l2_gas_inr,
-            "net_if_forced_inr": round(pre_gas_inr - l2_gas_inr, 4) if best_pre_gas_wei > 0 else 0.0,
+            "single_net_if_forced_inr": round(pre_gas_inr - l2_gas_inr, 4) if best_pre_gas_wei > 0 else 0.0,
+            "bundled_net_if_forced_inr": round(bundled_pre_gas_inr - l2_gas_inr, 4) if bundled_multi_route_wei > 0 else 0.0,
             "real_net_profit_executed_inr": 0.0,
             "relayer_wallet": RELAYER_WALLET,
             "relayer_eth_wei": rel_wei,
@@ -565,23 +686,40 @@ def main() -> int:
 
     if winning_meta is not None:
         mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = winning_meta
-        send_cmd = [
-            cast_bin,
-            "send",
-            DEPLOYED_CONTRACT,
-            fn_sig,
-            call_tuple,
-            str(rel_fee),
-            "--gas-limit",
-            "450000" if mode_name != "DIRECT_FLASH_SWAP" else "290000",
-            "--gas-price",
-            "20500000",
-            "--private-key",
-            RELAYER_PK,
-            "--rpc-url",
-            RPC_URL,
-            "--json",
-        ]
+        if fn_sig == "RAW_CALLDATA":
+            send_cmd = [
+                cast_bin,
+                "send",
+                DEPLOYED_CONTRACT,
+                call_tuple,
+                "--gas-limit",
+                "1800000",
+                "--gas-price",
+                "20500000",
+                "--private-key",
+                RELAYER_PK,
+                "--rpc-url",
+                RPC_URL,
+                "--json",
+            ]
+        else:
+            send_cmd = [
+                cast_bin,
+                "send",
+                DEPLOYED_CONTRACT,
+                fn_sig,
+                call_tuple,
+                str(rel_fee),
+                "--gas-limit",
+                "450000" if mode_name != "DIRECT_FLASH_SWAP" else "290000",
+                "--gas-price",
+                "20500000",
+                "--private-key",
+                RELAYER_PK,
+                "--rpc-url",
+                RPC_URL,
+                "--json",
+            ]
         try:
             out = json.loads(subprocess.check_output(send_cmd, timeout=20).decode("utf-8"))
             if is_weth and rel_fee > 0:
