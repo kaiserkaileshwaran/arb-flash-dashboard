@@ -49,7 +49,7 @@
   "real_amount_transferred_75_usd": 0.828807,
   "real_amount_saved_25_inr": 0.00,
   "real_amount_saved_25_usd": 0.000000,
-  "top_route": "[Choice 3 Cross-Tier] WETH/USDC.e (UniV3 1bp <-> SushiSwap V3 5bps)",
+  "top_route": "[Cross-DEX Spatial] AAVE/WETH (PancakeSwap V3 5bps <-> UniV3 100bps)",
   "top_borrow_asset": "WETH",
   "top_spread_bps": 84.9895,
   "top_full_sweet_spot_loan_inr": 119.12,
