@@ -2,9 +2,9 @@
   "ok": true,
   "engine_binary": "./bin/arb_sniper_asm (Native C/Assembly Pthreads + HTTP/2 TCP_NODELAY)",
   "rpc_endpoint": "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX",
-  "asm_eval_ns": 109.0,
-  "asm_eval_us": 0.109,
-  "rpc_rtt_ms": 135.43,
+  "asm_eval_ns": 147.0,
+  "asm_eval_us": 0.147,
+  "rpc_rtt_ms": 145.38,
   "block_number": 516318281,
   "gas_price_gwei": 0.0200,
   "latest_nonce": 11,
@@ -22,5 +22,5 @@
   "total_onchain_inr": "78.67",
   "metamask_eth_balance": "0.00016736",
   "relayer_eth_balance": "0.00000030",
-  "updated_epoch": 1792421927
+  "updated_epoch": 1792421953
 }
