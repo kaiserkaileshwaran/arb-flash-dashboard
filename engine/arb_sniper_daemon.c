@@ -210,7 +210,9 @@ void evaluate_full_loan_routes_asm(
             double v2_usd     = p_high * y_high;
             double v_prod     = v1_usd * v2_usd;
             double v_sum      = v1_usd + v2_usd;
-            double slip_coeff = (v_prod > 1e-15) ? (v_sum / v_prod) : 1e15;
+            double inv_v_prod = (v_prod > 1e-15) ? (1.0 / v_prod) : 0.0;
+            double inv_v_sum  = (v_sum  > 1e-15) ? (1.0 / v_sum)  : 0.0;
+            double slip_coeff = (v_prod > 1e-15) ? (v_sum * inv_v_prod) : 1e15;
 
             double bal_max  = bal_max_usd_arr[i];
             double aave_max = aave_max_usd_arr[i];
@@ -220,11 +222,11 @@ void evaluate_full_loan_routes_asm(
 
             double edge_frac = edge_bps * 0.0001;
             if (i == 15) {
-                /* Choice 2 Aave V3 HF < 1.0000 / <2.00% Pre-Liq Fast Trigger: Full Safe Pool Cap Flash Loan */
+                /* Choice 2 Aave V3 HF < 1.0000 Ultimate Limit: Full ₹4.85 Crore ($511,000 USD) Multi-Whale Batch Flash Loan */
                 d_star_full = safe_pool_cap;
             } else {
                 /* Exact Closed-Form Profit-Maximizing Sweet-Spot Loan Size (d* = 0.50 * edge * V1 * V2 / (V1 + V2)) */
-                d_star_full = (v_sum > 1e-15) ? ((0.50 * edge_frac * v_prod) / v_sum) : 0.0;
+                d_star_full = 0.50 * edge_frac * v_prod * inv_v_sum;
                 if (d_star_full > safe_pool_cap) {
                     d_star_full = safe_pool_cap;
                 }
@@ -688,7 +690,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "[Cross-DEX Spatial] WETH/ARB (UniV3 5bps <-> SushiSwap V3 5bps)",
         "[Cross-DEX Spatial] WBTC/WETH (PancakeSwap V3 25bps <-> UniV3 1bp)",
         "[Cross-DEX Spatial] WBTC/USDT (PancakeSwap V3 1bp <-> UniV3 5bps)",
-        "[Choice 2 Aave V3 Liq] 0x270d..e6b2 (HF<1.0000 Trigger • 5%-10% Bonus -> 80% Mudrex / 20% Safety)"
+        "[Choice 2 Aave V3 Liq] Multi-Whale Batch Pool (HF<1.0000 Trigger • ₹4.85 Cr Ultimate Loan • 5%-10% Bonus -> 100% Direct to Mudrex)"
     };
     const char *borrow_syms[16] = {
         "WETH", "WETH", "WETH", "USDT", "WETH", "WETH", "USDT", "WETH",
@@ -741,7 +743,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     /* Exact On-Chain Virtual Liquidity Reserves y0_virt = (L / sqrtPriceX96) verified via 0x1a686502 & 0x3260f1cc */
     double y1[16] __attribute__((aligned(64))) = {
         6.31,  5.44,  0.000011193, 198.04, 633.97, 239.7, 0.00078, 20.50,
-        0.008856, 0.0026, 1843.7, 0.2520, 311400.0, 0.000011193, 0.329553, 25.9569
+        0.008856, 0.0026, 1843.7, 0.2520, 311400.0, 0.000011193, 0.329553, 210.75
     };
     double y2[16] __attribute__((aligned(64))) = {
         1300.0, 31.43, 3807.44, 97768.0, 31.43, 0.2057, 14.9706, 31.43,
@@ -753,7 +755,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     };
     double bm[16] __attribute__((aligned(64))) = {
         256300.0, 256300.0, 256300.0, 157436.3, 256300.0, 157436.3, 157436.3, 256300.0,
-        256300.0, 256300.0, 256300.0, 157436.3, 256300.0, 256300.0, 256300.0, 62373.3
+        256300.0, 256300.0, 256300.0, 157436.3, 256300.0, 256300.0, 256300.0, 511000.0
     };
     double am[16] __attribute__((aligned(64))) = {
         29367983.1, 29367983.1, 29367983.1, 56560994.7, 29367983.1, 56560994.7, 56560994.7, 29367983.1,

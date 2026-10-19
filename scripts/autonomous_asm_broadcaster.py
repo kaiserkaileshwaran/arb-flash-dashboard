@@ -291,20 +291,20 @@ def main() -> int:
     SCALED_RPC_THREADS = max(8, DETECTED_CPU_CORES * 2)
 
     # =========================================================================
-    # PRIORITY #1 (OPTION 2): Top 10 Bidirectional Aave V3 High-Risk Borrowers (37 Tracked)
+    # PRIORITY #1 (OPTION 2): Top 10 Bidirectional Aave V3 High-Risk Borrowers (Ultimate Crore-Scale Flash Loans • 100% Net Profit Direct to Mudrex)
     # =========================================================================
     aave_high_risk_watchlist = [
-        # (borrower_addr, debt_token, collateral_token, debt_to_cover_raw, min_net_20pct_raw, rel_fee_80pct_plus_gas_raw, is_weth, label)
-        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12978000000000000000, int(12978000000000000000 * 0.008), RELAYER_REIMB_WEI + int(12978000000000000000 * 0.032), True, "WETH_debt/USDC_col (50% Close = ₹29.86L Loan • ₹1.49L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
-        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 25956000000000000000, int(25956000000000000000 * 0.008), RELAYER_REIMB_WEI + int(25956000000000000000 * 0.032), True, "WETH_debt/USDC_col (100% Close HF<0.95 = ₹59.72L Loan • ₹2.98L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
-        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, wbtc, 3500000000000000000, int(3500000000000000000 * 0.012), RELAYER_REIMB_WEI + int(3500000000000000000 * 0.048), True, "WETH_debt/WBTC_col (7.0% Bonus = 700 bps • ₹9.01L WBTC Collateral • 80% Mudrex / 20% Safety)"),
-        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, wbtc, 115000 * 10**6, int(115000 * 10**6 * 0.012), RELAYER_REIMB_USDC + int(115000 * 10**6 * 0.048), False, "USDC_debt/WBTC_col (7.0% Bonus = 700 bps • ₹1.09Cr Flash Loan • ₹7.64L Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, arb, 1200 * 10**6, int(1200 * 10**6 * 0.018), RELAYER_REIMB_USDC + int(1200 * 10**6 * 0.072), False, "USDC_debt/ARB_col (10.0% Bonus = 1,000 bps • 1,653 ARB Collateral • 80% Mudrex / 20% Safety)"),
-        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", usdc, arb, 150 * 10**6, int(150 * 10**6 * 0.018), RELAYER_REIMB_USDC + int(150 * 10**6 * 0.072), False, "USDC_debt/ARB_col (10.0% Bonus = 1,000 bps • 229.25 ARB Collateral • 80% Mudrex / 20% Safety)"),
-        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, wbtc, 10000 * 10**6, int(10000 * 10**6 * 0.012), RELAYER_REIMB_USDC + int(10000 * 10**6 * 0.048), False, "USDC_debt/WBTC_col (7.0% Bonus = 700 bps • ₹9.49L Loan • ₹66.4k Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, int(25 * 10**18 * 0.008), RELAYER_REIMB_WEI + int(25 * 10**18 * 0.032), True, "WETH_debt/WETH_col (₹57.53L Loan • ₹2.96L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
-        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, int(17000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(17000 * 10**6 * 0.032), False, "USDC_debt/WETH_col (₹16.13L Loan • ₹1.35L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
-        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 250000 * 10**6, int(250000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(250000 * 10**6 * 0.032), False, "USDC_debt/WETH_col (₹2.37Cr Loan • ₹13.77L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
+        # (borrower_addr, debt_token, collateral_token, debt_to_cover_raw, min_net_1wei_raw, rel_fee_100pct_bonus_plus_gas_raw, is_weth, label)
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 25956900000000000000, 1, RELAYER_REIMB_WEI + int(25956900000000000000 * 0.045), True, "WETH_debt/USDC_col (100% Ultimate Limit = ₹59.72L Flash Loan • ₹2.98L Bonus @ 5% • 100% Direct to Mudrex)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, wbtc, 115000 * 10**6, 1, RELAYER_REIMB_USDC + int(115000 * 10**6 * 0.065), False, "USDC_debt/WBTC_col (7.0% Bonus = 700 bps • ₹1.09 Crore Ultimate Flash Loan • ₹7.64L Bonus • 100% Direct to Mudrex)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 250000 * 10**6, 1, RELAYER_REIMB_USDC + int(250000 * 10**6 * 0.045), False, "USDC_debt/WETH_col (5.0% Bonus = 500 bps • ₹2.37 Crore Ultimate Flash Loan • ₹13.77L Bonus • 100% Direct to Mudrex)"),
+        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, wbtc, 3500000000000000000, 1, RELAYER_REIMB_WEI + int(3500000000000000000 * 0.065), True, "WETH_debt/WBTC_col (7.0% Bonus = 700 bps • ₹9.01L Ultimate Flash Loan • ₹56.9k Bonus • 100% Direct to Mudrex)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, arb, 1200 * 10**6, 1, RELAYER_REIMB_USDC + int(1200 * 10**6 * 0.095), False, "USDC_debt/ARB_col (10.0% Bonus = 1,000 bps • 1,653 ARB Collateral • 100% Direct to Mudrex)"),
+        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", usdc, arb, 150 * 10**6, 1, RELAYER_REIMB_USDC + int(150 * 10**6 * 0.095), False, "USDC_debt/ARB_col (10.0% Bonus = 1,000 bps • 229.25 ARB Collateral • 100% Direct to Mudrex)"),
+        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, wbtc, 10000 * 10**6, 1, RELAYER_REIMB_USDC + int(10000 * 10**6 * 0.065), False, "USDC_debt/WBTC_col (7.0% Bonus = 700 bps • ₹9.49L Ultimate Flash Loan • ₹66.4k Bonus • 100% Direct to Mudrex)"),
+        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, 1, RELAYER_REIMB_WEI + int(25 * 10**18 * 0.045), True, "WETH_debt/WETH_col (₹57.53L Ultimate Flash Loan • ₹2.96L Bonus @ 5% • 100% Direct to Mudrex)"),
+        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, 1, RELAYER_REIMB_USDC + int(17000 * 10**6 * 0.045), False, "USDC_debt/WETH_col (₹16.13L Ultimate Flash Loan • ₹1.35L Bonus @ 5% • 100% Direct to Mudrex)"),
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12978000000000000000, 1, RELAYER_REIMB_WEI + int(12978000000000000000 * 0.045), True, "WETH_debt/USDC_col (50% Close = ₹29.86L Flash Loan • ₹1.49L Bonus @ 5% • 100% Direct to Mudrex)"),
     ]
 
     # =========================================================================
@@ -907,7 +907,7 @@ def main() -> int:
             mudrex_settlement_tx = None
             if is_weth and rel_fee > 0:
                 reimb_eth_wei = min(rel_fee, RELAYER_REIMB_WEI)
-                mudrex_80_weth_wei = max(0, rel_fee - reimb_eth_wei)
+                mudrex_100_weth_wei = max(0, rel_fee - reimb_eth_wei)
                 try:
                     # 1. Unwrap exact gas reimbursement to native ETH so the relayer gas float never runs dry
                     subprocess.check_output(
@@ -931,9 +931,9 @@ def main() -> int:
                     )
                 except Exception:
                     pass
-                # 2. Swap 80% WETH net profit share to USDC into RELAYER_WALLET first, then execute a direct top-level EOA USDC.transfer(MUDREX_WALLET)
-                #    so Mudrex's exchange indexer always credits it as a standard EOA deposit (never an internal DEX pool transfer)!
-                if mudrex_80_weth_wei > 2_500_000_000_000:
+                # 2. Swap 100% WETH net profit to USDC into RELAYER_WALLET first, then execute a direct top-level EOA USDC.transfer(MUDREX_WALLET)
+                #    so Mudrex's exchange indexer always credits 100% of Net Profit as a standard EOA deposit!
+                if mudrex_100_weth_wei > 1_500_000_000_000:
                     try:
                         uni_router = "0xE592427A0AEce92De3Edee1F18E0157C05861564"
                         subprocess.check_output(
@@ -943,7 +943,7 @@ def main() -> int:
                                 weth,
                                 "approve(address,uint256)",
                                 uni_router,
-                                str(mudrex_80_weth_wei),
+                                str(mudrex_100_weth_wei),
                                 "--gas-limit",
                                 "70000",
                                 "--gas-price",
@@ -956,7 +956,7 @@ def main() -> int:
                             stderr=subprocess.DEVNULL,
                             timeout=15,
                         )
-                        swap_tuple = f"({weth},{usdc},500,{RELAYER_WALLET},{int(time.time()) + 300},{mudrex_80_weth_wei},0,0)"
+                        swap_tuple = f"({weth},{usdc},500,{RELAYER_WALLET},{int(time.time()) + 300},{mudrex_100_weth_wei},0,0)"
                         subprocess.check_output(
                             [
                                 cast_bin,
@@ -1010,9 +1010,9 @@ def main() -> int:
                     except Exception:
                         pass
             elif not is_weth and rel_fee > RELAYER_REIMB_USDC:
-                # Direct USDC 80% transfer to Mudrex (0xd252...3f05)
-                mudrex_80_usdc = rel_fee - RELAYER_REIMB_USDC
-                if mudrex_80_usdc >= MIN_MUDREX_USDC_UNITS:
+                # Direct USDC 100% Net Profit transfer to Mudrex (0xd252...3f05)
+                mudrex_100_usdc = rel_fee - RELAYER_REIMB_USDC
+                if mudrex_100_usdc >= MIN_MUDREX_USDC_UNITS:
                     try:
                         t_out = json.loads(
                             subprocess.check_output(
@@ -1022,7 +1022,7 @@ def main() -> int:
                                     usdc,
                                     "transfer(address,uint256)(bool)",
                                     MUDREX_WALLET,
-                                    str(mudrex_80_usdc),
+                                    str(mudrex_100_usdc),
                                     "--gas-limit",
                                     "75000",
                                     "--gas-price",
@@ -1047,11 +1047,11 @@ def main() -> int:
                         "ok": True,
                         "mode": mode_name,
                         "tx_hash": out.get("transactionHash"),
-                        "mudrex_80pct_auto_settlement_tx": mudrex_settlement_tx,
+                        "mudrex_100pct_auto_settlement_tx": mudrex_settlement_tx,
                         "block_number": out.get("blockNumber"),
                         "flash_loan_raw_amount": winning_loan_amt,
                         "relayer_gas_reimbursed_raw": rel_fee,
-                        "profit_split_policy": "80% Mudrex (0xd252...3f05) / 20% MetaMask Safety Reserve (0xFF3c...89BE)",
+                        "profit_split_policy": "100% Net Profit Direct to Mudrex (0xd252...3f05) + 0.00 MetaMask Balance Needed",
                         "ts": time.time(),
                     },
                     indent=2,
@@ -1066,8 +1066,7 @@ def main() -> int:
             pass
 
     # 100% of Relayer ETH is strictly preserved as permanent revolving gas float.
-    # 80% of Net Profit is automatically swapped/settled directly to Mudrex (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
-    # and 20% is sent atomically by 0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3 to MetaMask Safety Reserve (0xFF3c34DAF159741C931F7c421350f8289A9d89BE).
+    # 100% of Net Profit is automatically swapped/settled directly to Mudrex (0xd2529585059e3e5c09c912f0f9570000c2a53f05).
     return 0
 
 
