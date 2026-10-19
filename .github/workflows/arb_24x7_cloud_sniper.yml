@@ -4,9 +4,6 @@ on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 concurrency:
   group: arb-sniper-24x7-cloud
@@ -66,7 +63,7 @@ jobs:
           git config user.email "arb-sniper-bot@users.noreply.github.com"
           git add index.html docs/index.html reports/two_hour_test_summary.json reports/verified_onchain_proofs.json reports/asm_sniper_telemetry.json reports/last_autonomous_broadcast.json docs/reports/ || true
           if ! git diff --cached --quiet; then
-            git commit -m "chore(cloud-sniper): auto-sync verified Arbitrum One on-chain proofs [skip ci]"
+            git commit -m "chore(cloud-sniper): auto-sync verified Arbitrum One on-chain proofs"
             git pull --rebase origin main || true
             git push origin main || true
           fi
