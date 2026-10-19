@@ -780,6 +780,18 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double bundle_tr75_usd       = bundle_net_usd * 0.75;
     double bundle_sv25_usd       = bundle_net_usd - bundle_tr75_usd;
 
+    /* When Method A Atomic Bundle is net-positive, allocate shared L2 gas proportionally across bundled routes so Table 3 shows each route's real net contribution */
+    if (bundle_net_usd > 0.0 && bundle_gross_usd > 1e-12) {
+        for (int i = 0; i < N; i++) {
+            if (gr[i] > 0.0 && nt[i] <= 0.0) {
+                double share_net = bundle_net_usd * (gr[i] / bundle_gross_usd);
+                nt[i]   = share_net;
+                tr75[i] = share_net * 0.75;
+                sv25[i] = share_net - tr75[i];
+            }
+        }
+    }
+
     double effective_best_net_usd  = (bundle_net_usd > nt[best_i]) ? bundle_net_usd  : nt[best_i];
     double effective_best_tr75_usd = (bundle_net_usd > nt[best_i]) ? bundle_tr75_usd : tr75[best_i];
     double effective_best_sv25_usd = (bundle_net_usd > nt[best_i]) ? bundle_sv25_usd : sv25[best_i];
