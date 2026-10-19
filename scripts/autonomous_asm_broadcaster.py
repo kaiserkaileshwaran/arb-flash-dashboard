@@ -259,27 +259,29 @@ def main() -> int:
     MIN_NET_USDC_RAW   = 3_000
 
     # =========================================================================
-    # PRIORITY #1 (CHOICE 2): Aave V3 500 bps (5.00% Bonus) High-Risk Borrowers
+    # PRIORITY #1 (OPTION 2): Top 10 Bidirectional Aave V3 High-Risk Borrowers (37 Tracked)
     # =========================================================================
     aave_high_risk_watchlist = [
         # (borrower_addr, debt_token, collateral_token, debt_to_cover_raw, min_net_raw, rel_fee_raw, is_weth, label)
-        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12 * 10**18, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/USDC_col ($62.9k)"),
-        ("0x408dcf31e16b438a86fe01e258cd357651aa7b3f", usdc, weth, 900 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($1.94k)"),
-        ("0xdb6787d107b4738eb4d11194fc25e5a160b073a0", usdc, weth, 2500 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($5.17k)"),
-        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 10000 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($20.99k)"),
-        ("0xf6305f5cfdf557de218743bdd24441526453f9dc", usdc, weth, 1900 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($3.88k)"),
-        ("0x66bb6c2949b20503adf3621db9903ee52f92ffb5", usdc, weth, 1300 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($2.71k)"),
-        ("0x22f4dc9e6a136379291a400a20a90383b2cb5de2", usdc, weth, 250 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($518)"),
-        ("0xbbcf3985eb53c30a8eea01d9357314d61fe0e727", usdc, weth, 850 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($1.72k)"),
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12 * 10**18, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/USDC_col ($63.4k • ₹1.50L Bonus)"),
+        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, usdt, 2900000000000000000, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/USDT_col ($34.7k • ₹82.3k Bonus)"),
+        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/WETH_col ($124.7k • ₹2.96L Bonus)"),
+        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($57.0k • ₹1.35L Bonus)"),
+        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", weth, weth, 2200000000000000000, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/WETH_col ($17.0k • ₹40.4k Bonus)"),
+        ("0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", usdc, weth, 5300 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($10.8k • ₹25.5k Bonus)"),
+        ("0x7d7937bac6af9975bbacbcd53d53e5c61968cd36", usdc, weth, 14500 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($29.9k • ₹71.0k Bonus)"),
+        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 10000 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($21.8k • ₹51.8k Bonus)"),
+        ("0x408dcf31e16b438a86fe01e258cd357651aa7b3f", usdc, weth, 900 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($1.94k • ₹4.6k Bonus)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 250000 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($580.2k • ₹13.77L Bonus)"),
     ]
 
     # =========================================================================
-    # PRIORITY #2 (CHOICE 3): Long-Tail SushiSwap V2 (x*y=k) <-> UniV3 via Balancer 0%
+    # PRIORITY #2 (OPTION 3): Triangular 3-Hop & SushiSwap V2 <-> UniV3 via Balancer 0%
     # =========================================================================
     sushiv2_spatial_tiers = [
-        # (borrow_tok, target_tok, borrow_amt, min_net, fee1, buy_uni_first, rel_fee, is_weth, label)
-        (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDC.e (BuySushi)"),
-        (weth, usdt,   150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDT (BuySushi)"),
+        # (strategy_type, borrow_tok, target_tok, mid_tok, borrow_amt, min_net, fee1, fee2, buy_uni_first, rel_fee, is_weth, label)
+        (1, weth, usdc_e, zero_addr, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 100, 0, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDC.e (BuySushi)"),
+        (2, weth, usdt,   usdc_e,    250_000_000_000_000_000, MIN_NET_WETH_WEI, 100, 100, True, RELAYER_REIMB_WEI, True, "Triangular 3-Hop WETH->USDT->USDC.e->WETH"),
     ]
 
     # =========================================================================
@@ -316,21 +318,21 @@ def main() -> int:
         })
         candidate_meta.append(("DIRECT_FLASH_SWAP", call_tuple, mg, rf, is_w, amt, "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)"))
 
-    # 2. Add Choice 3 Long-Tail SushiSwap V2 <-> UniV3 Tiers (Selector 0x1034ef63, Strategy 1)
+    # 2. Add Option 3 Triangular 3-Hop & SushiSwap V2 <-> UniV3 Tiers (Selector 0x1034ef63, Strategy 1 & 2)
     sushiv2_start_id = len(batch_rpc) + 1
-    for b_tok, t_tok, b_amt, min_n, fee1, buy_uni, rf, is_w, label in sushiv2_spatial_tiers:
+    for st_type, b_tok, t_tok, m_tok, b_amt, min_n, fee1, fee2, buy_uni, rf, is_w, label in sushiv2_spatial_tiers:
         req_id = len(batch_rpc) + 1
-        cd_hex = _encode_gasless_arb_calldata(1, b_tok, t_tok, zero_addr, b_amt, min_n, fee1, 0, buy_uni, zero_addr, rf)
-        call_tuple = f"(1,{b_tok},{t_tok},{zero_addr},{b_amt},{min_n},{fee1},0,{'true' if buy_uni else 'false'},{zero_addr})"
+        cd_hex = _encode_gasless_arb_calldata(st_type, b_tok, t_tok, m_tok, b_amt, min_n, fee1, fee2, buy_uni, zero_addr, rf)
+        call_tuple = f"({st_type},{b_tok},{t_tok},{m_tok},{b_amt},{min_n},{fee1},{fee2},{'true' if buy_uni else 'false'},{zero_addr})"
         batch_rpc.append({
             "jsonrpc": "2.0",
             "id": req_id,
             "method": "eth_call",
             "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_hex}, "latest"],
         })
-        candidate_meta.append(("SUSHIV2_SPATIAL_ARB", call_tuple, min_n + rf, rf, is_w, b_amt, "executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256)"))
+        candidate_meta.append(("TRIANGULAR_OR_SUSHIV2_ARB", call_tuple, min_n + rf, rf, is_w, b_amt, "executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256)"))
 
-    # 3. Add Choice 2 Aave V3 Liquidation Execution Tiers for Top 2 Closest Borrowers (Selector 0x1034ef63, Strategy 3)
+    # 3. Add Option 2 Aave V3 Liquidation Execution Tiers for Top 2 Closest Borrowers (Selector 0x1034ef63, Strategy 3)
     aave_exec_start_id = len(batch_rpc) + 1
     for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist[:2]:
         req_id = len(batch_rpc) + 1
@@ -389,10 +391,10 @@ def main() -> int:
     import socket
     from urllib.parse import urlparse
 
-    # Split into <= 19-item chunks so public Arbitrum RPCs never reject JSON-RPC batch size limits (20 max)
+    # Split into <= 20-item chunks so 40 checks execute in exactly 2 HTTP keep-alive round-trips
     batch_chunks_bytes = [
-        json.dumps(batch_rpc[i : i + 19], separators=(",", ":")).encode("utf-8")
-        for i in range(0, len(batch_rpc), 19)
+        json.dumps(batch_rpc[i : i + 20], separators=(",", ":")).encode("utf-8")
+        for i in range(0, len(batch_rpc), 20)
     ]
     persistent_conns = {}
 

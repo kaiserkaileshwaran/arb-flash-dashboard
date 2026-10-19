@@ -314,11 +314,11 @@ static struct BlockProfitEntry g_block_ring[BLOCK_RING_CAP] = {
     {516211671ULL, "[Method A Bundle: 5 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1495.10, 0.07, 0.05, 0.0005, 0.02, 185.0}
 };
 static int      g_block_ring_count          = 8;
-static uint64_t g_last_scored_block         = 516211827ULL;
-static uint64_t g_blocks_profited_session   = 8ULL;
-static double   g_session_block_total_inr   = 1.34;
-static double   g_session_mudrex_75_inr     = 1.01;
-static double   g_session_saved_25_inr      = 0.34;
+static uint64_t g_last_scored_block         = 516249879ULL;
+static uint64_t g_blocks_profited_session   = 107ULL;
+static double   g_session_block_total_inr   = 48.29;
+static double   g_session_mudrex_75_inr     = 36.22;
+static double   g_session_saved_25_inr      = 12.08;
 
 static const char *RPC_URLS[4] = {
     "https://arbitrum-one-rpc.publicnode.com",
@@ -563,7 +563,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x0d7c4b40018969f81750d0a164c3839a77353efb\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":31},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x905dfcd5649217c42684f23958568e533c711aa3\",\"data\":\"0x0902f1ac\"},\"latest\"],\"id\":32},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x389938cf14be379217570d8e4619e51fbdafaa21\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":33},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\"},\"latest\"],\"id\":36}"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\"},\"latest\"],\"id\":36},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb\"},\"latest\"],\"id\":37}"
         "]";
 
     static double p_uni_5          = 2398.50;
@@ -591,6 +592,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     static double p_uni5_wsteth    = 1.245960;
     static double p_sushi_weth_u   = 2397.10;
     static double hf_aave_top1     = 1.0198;
+    static double hf_aave_top2     = 1.0344;
 
     if (curl) {
         for (int attempt = 0; attempt < 4; attempt++) {
@@ -631,6 +633,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
                     p_sushi_weth_u  = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 32), 1e18, 1e6,  500.0, 20000.0, p_sushi_weth_u);
                     p_pcs1_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 33), 1e12,  500.0, 20000.0, p_pcs1_weth_t);
                     hf_aave_top1    = decode_aave_hf(find_batch_result_for_id(buf->data, 36), hf_aave_top1);
+                    hf_aave_top2    = decode_aave_hf(find_batch_result_for_id(buf->data, 37), hf_aave_top2);
+                    if (hf_aave_top2 < hf_aave_top1) hf_aave_top1 = hf_aave_top2;
                     break;
                 }
             }
@@ -649,12 +653,12 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "ARB/USDC (Camelot V3 2.50bps <-> UniV3 5.00bps)",
         "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps)",
         "WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)",
-        "[Choice 3 Cross-Tier] WETH/ARB (PancakeSwap V3 5bps <-> UniV3 5bps)",
+        "[Option 3 Triangular 3-Hop] WETH -> USDT (Cam1) -> USDC (Uni1) -> WETH (Uni1)",
         "[Choice 3 Cross-Tier] WETH/ARB (UniV3 1bp <-> UniV3 5bps)",
         "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
-        "[Choice 3 SushiV2] WETH/USDC.e (SushiSwap V2 30bps <-> UniV3 1bp)",
+        "[Option 3 Triangular 3-Hop] WETH -> ARB (PCS1) -> USDC (Cam2.5) -> WETH (Uni1)",
         "[Choice 3 Cross-Tier] wstETH/WETH (UniV3 1bp <-> UniV3 5bps)",
-        "[Choice 2 Aave V3 Liq] 0x270d..e6b2 ($62.9k WETH Debt • 500bps Bonus when HF<1.0)"
+        "[Option 2 Aave V3 37-Whale Liq] 0x270d..e6b2 & 0x954b..44bb (₹4.46L Bonus when HF<1.0)"
     };
     const char *borrow_syms[16] = {
         "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "USDT", "USDC",
@@ -664,6 +668,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double aave_liq_p1  = p_uni_1;
     double aave_liq_p2  = (hf_aave_top1 < 1.0) ? (p_uni_1 * 1.0500) : (p_uni_1 / hf_aave_top1);
     double aave_liq_fee = (hf_aave_top1 < 1.0) ? 1.00 : 500.00;
+    double tri_weth_usdt_usdc = p_cam_weth_t * p_uni_usdc_t;
+    double tri_weth_arb_usdc  = (p_pcs1_weth_arb > 1.0) ? (p_pcs1_weth_arb * p_cam_arb_u) : p_uni_1;
 
     double p1[16] __attribute__((aligned(64))) = {
         p_cam_1,
@@ -676,10 +682,10 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_cam_arb_u,
         p_cam_wbtc_e * p_uni_5,
         p_cam_weth_t,
-        (p_pcs5_weth_arb > 1.0) ? (p_uni_5 / p_pcs5_weth_arb) : 0.1908,
+        tri_weth_usdt_usdc,
         (p_uni1_weth_arb > 1.0) ? (p_uni_5 / p_uni1_weth_arb) : 0.1908,
         p_cam_weth_t,
-        p_sushi_weth_u,
+        tri_weth_arb_usdc,
         p_uni_wsteth * p_uni_5,
         aave_liq_p1
     };
@@ -694,7 +700,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_uni_arb_u,
         p_pcs_wbtc_e * p_uni_5,
         p_uni1_weth_t,
-        (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1908,
+        p_uni_1,
         (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1908,
         p_pcs1_weth_t,
         p_uni_1,
@@ -703,23 +709,23 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     };
     double y1[16] __attribute__((aligned(64))) = {
         400.0, 400.0, 0.140, 180.0, 1.171, 4925.0, 41760.0, 95000.0,
-        0.117, 10.60, 36150.0, 1775.0, 10.60, 34.76, 420.0, 12.95
+        0.117, 10.60, 10.60, 1775.0, 10.60, 0.85, 420.0, 12.95
     };
     double y2[16] __attribute__((aligned(64))) = {
         2860.0, 6950.0, 464.39, 420.0, 464.39, 42800000.0, 120000.0, 180000.0,
-        0.222, 65.87, 42800000.0, 42800000.0, 22.40, 2860.0, 0.305, 2860.0
+        0.222, 65.87, 2860.0, 42800000.0, 22.40, 2860.0, 0.305, 2860.0
     };
     double fl[16] __attribute__((aligned(64))) = {
         2.00, 2.00, 6.00, 1.50, 6.00, 6.00, 1.25, 7.50,
-        1.90, 2.00, 10.00, 6.00, 2.00, 31.00, 6.00, aave_liq_fee
+        1.90, 2.00, 3.00, 6.00, 2.00, 4.50, 6.00, aave_liq_fee
     };
     double bm[16] __attribute__((aligned(64))) = {
         256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 157436.3, 73143.4, 9106.9,
-        256300.0, 256300.0, 157436.3, 157436.3, 256300.0, 256300.0, 256300.0, 31451.7
+        256300.0, 256300.0, 256300.0, 157436.3, 256300.0, 256300.0, 256300.0, 62373.3
     };
     double am[16] __attribute__((aligned(64))) = {
         29367983.1, 29367983.1, 29367983.1, 55924610.5, 29367983.1, 56560994.7, 8568960.8, 56560994.7,
-        29367983.1, 29367983.1, 56560994.7, 56560994.7, 29367983.1, 29367983.1, 55924610.5, 29367983.1
+        29367983.1, 29367983.1, 29367983.1, 56560994.7, 29367983.1, 29367983.1, 55924610.5, 29367983.1
     };
 
     double sp[16]    __attribute__((aligned(64)));
