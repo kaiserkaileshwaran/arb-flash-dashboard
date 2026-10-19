@@ -360,21 +360,21 @@ def main() -> int:
         })
     aave_hf_end_id = len(batch_rpc)
 
-    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at sweet-spot sizes; exact 38 total RPC calls = 2x19 chunks)
+    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at sweet-spot sizes; exact 40 total RPC calls = 2x20 chunks)
     probe_defs = [
-        ("ARB_PCS5_UNI5",    pcs5_weth_arb,    uni5_weth_arb,   weth, arb,     500_000_000_000_000, True,  False),
+        ("USDT_UNI1_PCS1",   uni1_weth_usdt,   pcs_weth_usdt,   weth, usdt,  1_500_000_000_000_000, True,  False),
+        ("ARB_PCS1_UNI1",    pcs1_weth_arb,    uni1_weth_arb,   weth, arb,     150_000_000_000_000, True,  False),
+        ("ARB_PCS5_UNI1",    pcs5_weth_arb,    uni1_weth_arb,   weth, arb,     150_000_000_000_000, True,  False),
+        ("ARB_UNI5_UNI1",    uni5_weth_arb,    uni1_weth_arb,   weth, arb,     150_000_000_000_000, True,  False),
         ("ARB_PCS1_UNI5",    pcs1_weth_arb,    uni5_weth_arb,   weth, arb,     600_000_000_000_000, True,  False),
-        ("ARB_PCS1_UNI5_12", pcs1_weth_arb,    uni5_weth_arb,   weth, arb,   1_200_000_000_000_000, True,  False),
-        ("ARB_UNI1_UNI5",    uni1_weth_arb,    uni5_weth_arb,   weth, arb,     200_000_000_000_000, True,  False),
-        ("ARB_UNI1_UNI5_4",  uni1_weth_arb,    uni5_weth_arb,   weth, arb,     400_000_000_000_000, True,  False),
-        ("USDCE_UNI5_PCS1",  uni5_weth_usdce,  pcs1_weth_usdce, weth, usdc_e, 1_000_000_000_000_000, True, False),
+        ("ARB_PCS5_UNI5",    pcs5_weth_arb,    uni5_weth_arb,   weth, arb,     500_000_000_000_000, True,  False),
+        ("USDCE_UNI1_PCS1",  uni1_weth_usdce,  pcs1_weth_usdce, weth, usdc_e,   50_000_000_000_000, True,  False),
         ("USDCE_PCS1_UNI5",  pcs1_weth_usdce,  uni5_weth_usdce, weth, usdc_e,  500_000_000_000_000, True,  False),
         ("USDCE_UNI5_UNI1",  uni5_weth_usdce,  uni1_weth_usdce, weth, usdc_e,   50_000_000_000_000, True,  False),
         ("USDCE_UNI1_UNI5",  uni1_weth_usdce,  uni5_weth_usdce, weth, usdc_e,   50_000_000_000_000, True,  False),
+        ("USDT_CAM_PCS1",    cam_weth_usdt,    pcs_weth_usdt,   weth, usdt,  1_500_000_000_000_000, True,  False),
         ("USDT_CAM_UNI1",    cam_weth_usdt,    uni1_weth_usdt,  weth, usdt,    500_000_000_000_000, True,  False),
-        ("USDT_CAM_PCS1",    cam_weth_usdt,    pcs_weth_usdt,   weth, usdt,  2_000_000_000_000_000, True,  False),
-        ("USDT_PCS1_CAM",    pcs_weth_usdt,    cam_weth_usdt,   weth, usdt,    500_000_000_000_000, True,  False),
-        ("WSTETH_UNI5_UNI1", uni5_wsteth_weth, uni_wsteth_weth, weth, wsteth,  100_000_000_000_000, False, True),
+        ("WSTETH_UNI5_UNI1", uni5_wsteth_weth, uni_wsteth_weth, weth, wsteth,  150_000_000_000_000, False, True),
         ("WEETH_UNI1_UNI5",  uni1_weeth_weth,  uni5_weeth_weth, weth, weeth,    20_000_000_000_000, False, True),
     ]
     probe_start_id = len(batch_rpc) + 1

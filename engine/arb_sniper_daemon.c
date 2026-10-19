@@ -314,11 +314,11 @@ static struct BlockProfitEntry g_block_ring[BLOCK_RING_CAP] = {
     {516211671ULL, "[Method A Bundle: 5 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1495.10, 0.07, 0.05, 0.0005, 0.02, 185.0}
 };
 static int      g_block_ring_count          = 8;
-static uint64_t g_last_scored_block         = 516249879ULL;
-static uint64_t g_blocks_profited_session   = 107ULL;
-static double   g_session_block_total_inr   = 48.29;
-static double   g_session_mudrex_75_inr     = 36.22;
-static double   g_session_saved_25_inr      = 12.08;
+static uint64_t g_last_scored_block         = 516211827ULL;
+static uint64_t g_blocks_profited_session   = 8ULL;
+static double   g_session_block_total_inr   = 1.34;
+static double   g_session_mudrex_75_inr     = 1.00;
+static double   g_session_saved_25_inr      = 0.34;
 
 static const char *RPC_URLS[4] = {
     "https://arbitrum-one-rpc.publicnode.com",
@@ -668,7 +668,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double aave_liq_p1  = p_uni_1;
     double aave_liq_p2  = (hf_aave_top1 < 1.0) ? (p_uni_1 * 1.0500) : (p_uni_1 / hf_aave_top1);
     double aave_liq_fee = (hf_aave_top1 < 1.0) ? 1.00 : 500.00;
-    double tri_weth_usdt_usdc = p_cam_weth_t * p_uni_usdc_t;
+    double tri_weth_usdt_usdc = (p_uni_usdc_t > 0.5) ? (p_cam_weth_t / p_uni_usdc_t) : p_cam_weth_t;
     double tri_weth_arb_usdc  = (p_pcs1_weth_arb > 1.0) ? (p_pcs1_weth_arb * p_cam_arb_u) : p_uni_1;
 
     double p1[16] __attribute__((aligned(64))) = {
@@ -708,12 +708,12 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         aave_liq_p2
     };
     double y1[16] __attribute__((aligned(64))) = {
-        400.0, 400.0, 0.140, 180.0, 1.171, 4925.0, 41760.0, 95000.0,
-        0.117, 10.60, 10.60, 1775.0, 10.60, 0.85, 420.0, 12.95
+        400.0, 400.0, 0.095, 180.0, 0.650, 2400.0, 41760.0, 95000.0,
+        0.117, 1.60, 0.85, 965.0, 1.60, 0.140, 420.0, 12.95
     };
     double y2[16] __attribute__((aligned(64))) = {
         2860.0, 6950.0, 464.39, 420.0, 464.39, 42800000.0, 120000.0, 180000.0,
-        0.222, 65.87, 2860.0, 42800000.0, 22.40, 2860.0, 0.305, 2860.0
+        0.222, 1.40, 2860.0, 42800000.0, 2.40, 2860.0, 0.145, 2860.0
     };
     double fl[16] __attribute__((aligned(64))) = {
         2.00, 2.00, 6.00, 1.50, 6.00, 6.00, 1.25, 7.50,
