@@ -45,10 +45,11 @@ def _load_local_relayer_env() -> tuple:
 
 RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
 RPC_URLS = [
-    "https://arb1.arbitrum.io/rpc",
-    "https://arbitrum-one-rpc.publicnode.com",
+    "https://arbitrum.drpc.org",
+    "https://arbitrum-one.public.blastapi.io",
     "https://arb-pokt.nodies.app",
-    "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX",
+    "https://arbitrum-one-rpc.publicnode.com",
+    "https://arb1.arbitrum.io/rpc",
 ]
 RPC_URL = RPC_URLS[0]
 MIN_GAS_RESERVE_WEI = 25_000_000_000_000  # Keep 0.000025 ETH (~5 full Flash-Swap txs) permanently in relayer gas reserve
@@ -431,10 +432,86 @@ def main() -> int:
     import socket
     from urllib.parse import urlparse
 
-    # Split into <= 10-item chunks so all 45 checks execute in parallel in ~200ms across all Arbitrum RPCs
+    # Single-Request Multicall3.aggregate3 + EVM stateOverride (O(1) HTTP request for all 45 parallel worker checks!)
+    mc3_addr = "0xcA11bde05977b3631167028862bE2a173976CA11"
+    auth_relayer_override = "0x0E8A575147b51C5701C86427b521F7293249cd67"
+    mc3_code_hex = None
+    try:
+        mc3_code_hex = rpc_call("eth_getCode", [mc3_addr, "latest"]).get("result")
+    except Exception:
+        mc3_code_hex = None
+
+    def _encode_aggregate3_batch(rpc_items: list) -> str:
+        n = len(rpc_items)
+        head_words = [
+            hex(32)[2:].rjust(64, "0"),
+            hex(n)[2:].rjust(64, "0"),
+        ]
+        tuple_offsets = []
+        tuple_bodies = []
+        cur_offset = n * 32
+        for it in rpc_items:
+            call_obj = it["params"][0]
+            target = call_obj["to"]
+            cd_hex = call_obj["data"]
+            cd_clean = cd_hex[2:] if cd_hex.startswith("0x") else cd_hex
+            cd_bytes_len = len(cd_clean) // 2
+            padded_cd = cd_clean + ("0" * ((64 - (len(cd_clean) % 64)) % 64))
+            body = (
+                target.lower().replace("0x", "").rjust(64, "0")
+                + ("1").rjust(64, "0")
+                + hex(96)[2:].rjust(64, "0")
+                + hex(cd_bytes_len)[2:].rjust(64, "0")
+                + padded_cd
+            )
+            tuple_offsets.append(hex(cur_offset)[2:].rjust(64, "0"))
+            tuple_bodies.append(body)
+            cur_offset += len(body) // 2
+        return "0x82ad56cb" + "".join(head_words + tuple_offsets + tuple_bodies)
+
+    def _decode_aggregate3_to_rpc_items(ret_hex: str, rpc_items: list) -> list:
+        raw = bytes.fromhex(ret_hex[2:] if ret_hex.startswith("0x") else ret_hex)
+        if len(raw) < 64:
+            return []
+        arr_off = int.from_bytes(raw[0:32], "big")
+        n = int.from_bytes(raw[arr_off : arr_off + 32], "big")
+        base = arr_off + 32
+        out_items = []
+        for i in range(min(n, len(rpc_items))):
+            elem_off = base + int.from_bytes(raw[base + i * 32 : base + (i + 1) * 32], "big")
+            success = int.from_bytes(raw[elem_off : elem_off + 32], "big") == 1
+            data_off = elem_off + int.from_bytes(raw[elem_off + 32 : elem_off + 64], "big")
+            data_len = int.from_bytes(raw[data_off : data_off + 32], "big")
+            data_bytes = raw[data_off + 32 : data_off + 32 + data_len]
+            req_id = rpc_items[i]["id"]
+            if success:
+                out_items.append({"jsonrpc": "2.0", "id": req_id, "result": "0x" + data_bytes.hex()})
+            else:
+                out_items.append({"jsonrpc": "2.0", "id": req_id, "error": {"code": -32000, "message": "revert"}})
+        return out_items
+
+    agg3_calldata_hex = _encode_aggregate3_batch(batch_rpc)
+    agg3_single_req_bytes = (
+        json.dumps(
+            {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "eth_call",
+                "params": [
+                    {"to": auth_relayer_override, "data": agg3_calldata_hex},
+                    "latest",
+                    {auth_relayer_override: {"code": mc3_code_hex}},
+                ],
+            },
+            separators=(",", ":"),
+        ).encode("utf-8")
+        if mc3_code_hex and len(mc3_code_hex) > 10
+        else None
+    )
+
     batch_chunks_bytes = [
-        json.dumps(batch_rpc[i : i + 10], separators=(",", ":")).encode("utf-8")
-        for i in range(0, len(batch_rpc), 10)
+        json.dumps(batch_rpc[i : i + 9], separators=(",", ":")).encode("utf-8")
+        for i in range(0, len(batch_rpc), 9)
     ]
     persistent_conns = {}
 
@@ -444,7 +521,7 @@ def main() -> int:
         path = parsed.path or "/"
         conn = persistent_conns.get(host)
         if conn is None:
-            conn = http.client.HTTPSConnection(host, timeout=3.5)
+            conn = http.client.HTTPSConnection(host, timeout=4.0)
             conn.connect()
             if conn.sock is not None:
                 conn.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -509,14 +586,28 @@ def main() -> int:
                     conn.close()
                 except Exception:
                     pass
-        raise RuntimeError("All RPCs failed for chunk")
+        return []
 
-    def _fast_keepalive_batch_chunks(_url: str):
+    def _fast_keepalive_batch_chunks(url: str):
+        if agg3_single_req_bytes is not None:
+            try:
+                res_obj = _fast_keepalive_post(url, agg3_single_req_bytes)
+                if isinstance(res_obj, dict) and isinstance(res_obj.get("result"), str) and len(res_obj["result"]) > 66:
+                    decoded_items = _decode_aggregate3_to_rpc_items(res_obj["result"], batch_rpc)
+                    if decoded_items:
+                        return decoded_items
+            except Exception:
+                pass
         merged = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=min(SCALED_RPC_THREADS, max(1, len(batch_chunks_bytes)))) as pool:
             futures = [pool.submit(_post_single_chunk_parallel, (idx, cb)) for idx, cb in enumerate(batch_chunks_bytes)]
             for fut in futures:
-                merged.extend(fut.result(timeout=6.0))
+                try:
+                    merged.extend(fut.result(timeout=6.0))
+                except Exception:
+                    pass
+        if not merged:
+            raise RuntimeError("All RPCs failed")
         return merged
 
     winning_meta = None
@@ -906,10 +997,11 @@ def main() -> int:
             out = json.loads(subprocess.check_output(send_cmd, timeout=20).decode("utf-8"))
             mudrex_settlement_tx = None
             if is_weth and rel_fee > 0:
-                reimb_eth_wei = min(rel_fee, RELAYER_REIMB_WEI)
+                gas_deficit_wei = max(RELAYER_REIMB_WEI, MIN_GAS_RESERVE_WEI - rel_wei)
+                reimb_eth_wei = min(rel_fee, gas_deficit_wei)
                 mudrex_100_weth_wei = max(0, rel_fee - reimb_eth_wei)
                 try:
-                    # 1. Unwrap exact gas reimbursement to native ETH so the relayer gas float never runs dry
+                    # 1. Unwrap gas reimbursement + any reserve deficit to native ETH first so the relayer gas float never runs dry
                     subprocess.check_output(
                         [
                             cast_bin,
@@ -933,7 +1025,7 @@ def main() -> int:
                     pass
                 # 2. Swap 100% WETH net profit to USDC into RELAYER_WALLET first, then execute a direct top-level EOA USDC.transfer(MUDREX_WALLET)
                 #    so Mudrex's exchange indexer always credits 100% of Net Profit as a standard EOA deposit!
-                if mudrex_100_weth_wei > 1_500_000_000_000:
+                if mudrex_100_weth_wei > 5_000_000_000_000:
                     try:
                         uni_router = "0xE592427A0AEce92De3Edee1F18E0157C05861564"
                         subprocess.check_output(
