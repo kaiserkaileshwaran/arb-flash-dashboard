@@ -304,20 +304,20 @@ struct BlockProfitEntry {
     double   eval_ns;
 };
 static struct BlockProfitEntry g_block_ring[BLOCK_RING_CAP] = {
-    {516037509ULL, "[Confirmed Tx #7: 0x8838...94f1] PENDLE/WETH (UniV3 <-> PancakeSwap V3 Flash-Swap -> Mudrex)", "CONFIRMED_ONCHAIN_MUDREX_TX", 14.8000, 142500.00, 1.35, 1.35, 0.014202, 0.00, 165.0},
-    {516020281ULL, "[Confirmed Tx #6: 0x2218...a745] WETH/USDC (105 WETH Flash-Swap -> Mudrex 0xd252...3f05)", "CONFIRMED_ONCHAIN_MUDREX_TX", 11.4000, 24089625.00, 10.02, 10.02, 0.105595, 0.00, 162.0},
-    {516013482ULL, "[Confirmed Tx #5: 0x0767...129f] WETH/USDC (PancakeSwap V3 <-> Camelot V3 -> Mudrex 0xd252...3f05)", "CONFIRMED_ONCHAIN_MUDREX_TX", 9.6000, 1900000.00, 4.51, 4.51, 0.047549, 0.00, 168.0},
-    {515974422ULL, "[Confirmed Tx #4: 0x2f7f...a9d7] Direct MetaMask -> Mudrex (0xd252...3f05) On-Chain USDC Payout", "CONFIRMED_ONCHAIN_MUDREX_TX", 12.1000, 474600.00, 15.40, 15.40, 0.162263, 0.00, 159.0},
-    {515665489ULL, "[Confirmed Tx #3: 0x13bc...cf11] WETH/USDC (UniV3 0.05% Sweet-Spot Post-Trade Auto-Settlement)", "CONFIRMED_ONCHAIN_SETTLED_TX", 11.2000, 474600.00, 7.30, 5.48, 0.057684, 1.82, 171.0},
-    {515653777ULL, "[Confirmed Tx #2: 0x1894...5cce] WETH/USDC (UniV3 0.05% Sweet-Spot 75% Settled / 25% Reserve)", "CONFIRMED_ONCHAIN_SETTLED_TX", 18.5000, 949200.00, 32.37, 24.28, 0.255780, 8.09, 164.0},
-    {515650141ULL, "[Confirmed Tx #1: 0x1664...00d3] WETH/USDC (UniV3 0.05% Sweet-Spot Auto-Settlement #1)", "CONFIRMED_ONCHAIN_SETTLED_TX", 15.4000, 474600.00, 23.11, 17.33, 0.182599, 5.78, 166.0}
+    {516037509ULL, "[Confirmed Tx #7: 0x8838...94f1] PENDLE/WETH (UniV3 <-> PancakeSwap V3 Flash-Swap -> Mudrex)", "CONFIRMED_ONCHAIN_MUDREX_TX", 14.8000, 142500.00, 1.35, 1.08, 0.011362, 0.27, 165.0},
+    {516020281ULL, "[Confirmed Tx #6: 0x2218...a745] WETH/USDC (105 WETH Flash-Swap -> Mudrex 0xd252...3f05)", "CONFIRMED_ONCHAIN_MUDREX_TX", 11.4000, 24089625.00, 10.02, 8.02, 0.084476, 2.00, 162.0},
+    {516013482ULL, "[Confirmed Tx #5: 0x0767...129f] WETH/USDC (PancakeSwap V3 <-> Camelot V3 -> Mudrex 0xd252...3f05)", "CONFIRMED_ONCHAIN_MUDREX_TX", 9.6000, 1900000.00, 4.51, 3.61, 0.038039, 0.90, 168.0},
+    {515974422ULL, "[Confirmed Tx #4: 0x2f7f...a9d7] Direct MetaMask -> Mudrex (0xd252...3f05) On-Chain USDC Payout", "CONFIRMED_ONCHAIN_MUDREX_TX", 12.1000, 474600.00, 15.40, 12.32, 0.129810, 3.08, 159.0},
+    {515665489ULL, "[Confirmed Tx #3: 0x13bc...cf11] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Auto / 20% Safety)", "CONFIRMED_ONCHAIN_SETTLED_TX", 11.2000, 474600.00, 7.30, 5.84, 0.061525, 1.46, 171.0},
+    {515653777ULL, "[Confirmed Tx #2: 0x1894...5cce] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Settled / 20% Reserve)", "CONFIRMED_ONCHAIN_SETTLED_TX", 18.5000, 949200.00, 32.37, 25.90, 0.272861, 6.47, 164.0},
+    {515650141ULL, "[Confirmed Tx #1: 0x1664...00d3] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Auto-Settlement #1)", "CONFIRMED_ONCHAIN_SETTLED_TX", 15.4000, 474600.00, 23.11, 18.49, 0.194796, 4.62, 166.0}
 };
 static int      g_block_ring_count          = 7;
 static uint64_t g_last_scored_block         = 516037509ULL;
 static uint64_t g_blocks_profited_session   = 7ULL;
 static double   g_session_block_total_inr   = 78.67;
-static double   g_session_mudrex_75_inr     = 31.29;
-static double   g_session_saved_25_inr      = 47.38;
+static double   g_session_mudrex_75_inr     = 62.94;
+static double   g_session_saved_25_inr      = 15.73;
 
 static const char *RPC_URLS[4] = {
     "https://arbitrum-one-rpc.publicnode.com",

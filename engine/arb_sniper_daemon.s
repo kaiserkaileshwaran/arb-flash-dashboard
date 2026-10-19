@@ -6890,9 +6890,9 @@ _g_block_ring:
 	.quad	0x402d99999999999a              ; double 14.800000000000001
 	.quad	0x4101652000000000              ; double 142500
 	.quad	0x3ff599999999999a              ; double 1.3500000000000001
-	.quad	0x3ff599999999999a              ; double 1.3500000000000001
-	.quad	0x3f8d15f02c4d65e4              ; double 0.014201999999999999
-	.quad	0x0000000000000000              ; double 0
+	.quad	0x3ff147ae147ae148              ; double 1.0800000000000001
+	.quad	0x3f8744f5d35653ca              ; double 0.011362000000000001
+	.quad	0x3fd147ae147ae148              ; double 0.27000000000000002
 	.quad	0x4064a00000000000              ; double 165
 	.quad	516020281                       ; 0x1ec1d839
 	.asciz	"[Confirmed Tx #6: 0x2218...a745] WETH/USDC (105 WETH Flash-Swap -> Mudrex 0xd252...3f05)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
@@ -6900,9 +6900,9 @@ _g_block_ring:
 	.quad	0x4026cccccccccccd              ; double 11.4
 	.quad	0x4176f94190000000              ; double 24089625
 	.quad	0x40240a3d70a3d70a              ; double 10.02
-	.quad	0x40240a3d70a3d70a              ; double 10.02
-	.quad	0x3fbb08461f9f01b8              ; double 0.10559499999999999
-	.quad	0x0000000000000000              ; double 0
+	.quad	0x40200a3d70a3d70a              ; double 8.0199999999999996
+	.quad	0x3fb5a038194c0160              ; double 0.084475999999999996
+	.quad	0x4000000000000000              ; double 2
 	.quad	0x4064400000000000              ; double 162
 	.quad	516013482                       ; 0x1ec1bdaa
 	.asciz	"[Confirmed Tx #5: 0x0767...129f] WETH/USDC (PancakeSwap V3 <-> Camelot V3 -> Mudrex 0xd252...3f05)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
@@ -6910,9 +6910,9 @@ _g_block_ring:
 	.quad	0x4023333333333333              ; double 9.5999999999999996
 	.quad	0x413cfde000000000              ; double 1.9E+6
 	.quad	0x40120a3d70a3d70a              ; double 4.5099999999999998
-	.quad	0x40120a3d70a3d70a              ; double 4.5099999999999998
-	.quad	0x3fa85857afea3df7              ; double 0.047549000000000001
-	.quad	0x0000000000000000              ; double 0
+	.quad	0x400ce147ae147ae1              ; double 3.6099999999999999
+	.quad	0x3fa379d909f1f14a              ; double 0.038039000000000003
+	.quad	0x3feccccccccccccd              ; double 0.90000000000000002
 	.quad	0x4065000000000000              ; double 168
 	.quad	515974422                       ; 0x1ec12516
 	.asciz	"[Confirmed Tx #4: 0x2f7f...a9d7] Direct MetaMask -> Mudrex (0xd252...3f05) On-Chain USDC Payout\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
@@ -6920,39 +6920,39 @@ _g_block_ring:
 	.quad	0x4028333333333333              ; double 12.1
 	.quad	0x411cf7a000000000              ; double 474600
 	.quad	0x402ecccccccccccd              ; double 15.4
-	.quad	0x402ecccccccccccd              ; double 15.4
-	.quad	0x3fc4c508b32ce896              ; double 0.16226299999999999
-	.quad	0x0000000000000000              ; double 0
+	.quad	0x4028a3d70a3d70a4              ; double 12.32
+	.quad	0x3fc09d9d3458cd21              ; double 0.12981000000000001
+	.quad	0x4008a3d70a3d70a4              ; double 3.0800000000000001
 	.quad	0x4063e00000000000              ; double 159
 	.quad	515665489                       ; 0x1ebc6e51
-	.asciz	"[Confirmed Tx #3: 0x13bc...cf11] WETH/USDC (UniV3 0.05% Sweet-Spot Post-Trade Auto-Settlement)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #3: 0x13bc...cf11] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Auto / 20% Safety)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_SETTLED_TX\000\000\000"
 	.quad	0x4026666666666666              ; double 11.199999999999999
 	.quad	0x411cf7a000000000              ; double 474600
 	.quad	0x401d333333333333              ; double 7.2999999999999998
-	.quad	0x4015eb851eb851ec              ; double 5.4800000000000004
-	.quad	0x3fad88c1db0142f6              ; double 0.057683999999999999
-	.quad	0x3ffd1eb851eb851f              ; double 1.8200000000000001
+	.quad	0x40175c28f5c28f5c              ; double 5.8399999999999999
+	.quad	0x3faf80346dc5d639              ; double 0.061525000000000003
+	.quad	0x3ff75c28f5c28f5c              ; double 1.46
 	.quad	0x4065600000000000              ; double 171
 	.quad	515653777                       ; 0x1ebc4091
-	.asciz	"[Confirmed Tx #2: 0x1894...5cce] WETH/USDC (UniV3 0.05% Sweet-Spot 75% Settled / 25% Reserve)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #2: 0x1894...5cce] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Settled / 20% Reserve)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_SETTLED_TX\000\000\000"
 	.quad	0x4032800000000000              ; double 18.5
 	.quad	0x412cf7a000000000              ; double 949200
 	.quad	0x40402f5c28f5c28f              ; double 32.369999999999997
-	.quad	0x403847ae147ae148              ; double 24.280000000000001
-	.quad	0x3fd05eb313be22e6              ; double 0.25578000000000001
-	.quad	0x40202e147ae147ae              ; double 8.0899999999999999
+	.quad	0x4039e66666666666              ; double 25.899999999999999
+	.quad	0x3fd1768dfbd6a594              ; double 0.27286100000000002
+	.quad	0x4019e147ae147ae1              ; double 6.4699999999999998
 	.quad	0x4064800000000000              ; double 164
 	.quad	515650141                       ; 0x1ebc325d
-	.asciz	"[Confirmed Tx #1: 0x1664...00d3] WETH/USDC (UniV3 0.05% Sweet-Spot Auto-Settlement #1)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #1: 0x1664...00d3] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Auto-Settlement #1)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_SETTLED_TX\000\000\000"
 	.quad	0x402ecccccccccccd              ; double 15.4
 	.quad	0x411cf7a000000000              ; double 474600
 	.quad	0x40371c28f5c28f5c              ; double 23.109999999999999
-	.quad	0x4031547ae147ae14              ; double 17.329999999999998
-	.quad	0x3fc75f676ea4228a              ; double 0.18259900000000001
-	.quad	0x40171eb851eb851f              ; double 5.7800000000000002
+	.quad	0x40327d70a3d70a3d              ; double 18.489999999999998
+	.quad	0x3fc8ef1348b22079              ; double 0.194796
+	.quad	0x40127ae147ae147b              ; double 4.6200000000000001
 	.quad	0x4064c00000000000              ; double 166
 	.space	2912
 
@@ -7018,8 +7018,8 @@ __MergedGlobals:
 	.quad	516037509                       ; 0x1ec21b85
 	.quad	7                               ; 0x7
 	.quad	0x4053aae147ae147b              ; double 78.670000000000001
-	.quad	0x403f4a3d70a3d70a              ; double 31.289999999999999
-	.quad	0x4047b0a3d70a3d71              ; double 47.380000000000003
+	.quad	0x404f7851eb851eb8              ; double 62.939999999999998
+	.quad	0x402f75c28f5c28f6              ; double 15.73
 	.quad	162263                          ; 0x279d7
 	.quad	499198                          ; 0x79dfe
 	.quad	272900000000000                 ; 0xf8337b8f2800

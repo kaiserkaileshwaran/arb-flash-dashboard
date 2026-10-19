@@ -287,16 +287,16 @@ def main() -> int:
     # =========================================================================
     aave_high_risk_watchlist = [
         # (borrower_addr, debt_token, collateral_token, debt_to_cover_raw, min_net_20pct_raw, rel_fee_80pct_plus_gas_raw, is_weth, label)
-        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12 * 10**18, int(12 * 10**18 * 0.008), RELAYER_REIMB_WEI + int(12 * 10**18 * 0.032), True, "WETH_debt/USDC_col ($63.4k • ₹1.50L Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, usdt, 2900000000000000000, int(2900000000000000000 * 0.008), RELAYER_REIMB_WEI + int(2900000000000000000 * 0.032), True, "WETH_debt/USDT_col ($34.7k • ₹82.3k Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, int(25 * 10**18 * 0.008), RELAYER_REIMB_WEI + int(25 * 10**18 * 0.032), True, "WETH_debt/WETH_col ($124.7k • ₹2.96L Bonus • 80% Mudrex / 20% Safety)"),
-        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, int(17000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(17000 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($57.0k • ₹1.35L Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", weth, weth, 2200000000000000000, int(2200000000000000000 * 0.008), RELAYER_REIMB_WEI + int(2200000000000000000 * 0.032), True, "WETH_debt/WETH_col ($17.0k • ₹40.4k Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", usdc, weth, 5300 * 10**6, int(5300 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(5300 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($10.8k • ₹25.5k Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x7d7937bac6af9975bbacbcd53d53e5c61968cd36", usdc, weth, 14500 * 10**6, int(14500 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(14500 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($29.9k • ₹71.0k Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 10000 * 10**6, int(10000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(10000 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($21.8k • ₹51.8k Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x408dcf31e16b438a86fe01e258cd357651aa7b3f", usdc, weth, 900 * 10**6, int(900 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(900 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($1.94k • ₹4.6k Bonus • 80% Mudrex / 20% Safety)"),
-        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 250000 * 10**6, int(250000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(250000 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($580.2k • ₹13.77L Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12978000000000000000, int(12978000000000000000 * 0.008), RELAYER_REIMB_WEI + int(12978000000000000000 * 0.032), True, "WETH_debt/USDC_col (50% Close = ₹29.86L Loan • ₹1.49L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 25956000000000000000, int(25956000000000000000 * 0.008), RELAYER_REIMB_WEI + int(25956000000000000000 * 0.032), True, "WETH_debt/USDC_col (100% Close HF<0.95 = ₹59.72L Loan • ₹2.98L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
+        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, wbtc, 3500000000000000000, int(3500000000000000000 * 0.012), RELAYER_REIMB_WEI + int(3500000000000000000 * 0.048), True, "WETH_debt/WBTC_col (7.0% Bonus = 700 bps • ₹9.01L WBTC Collateral • 80% Mudrex / 20% Safety)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, wbtc, 115000 * 10**6, int(115000 * 10**6 * 0.012), RELAYER_REIMB_USDC + int(115000 * 10**6 * 0.048), False, "USDC_debt/WBTC_col (7.0% Bonus = 700 bps • ₹1.09Cr Flash Loan • ₹7.64L Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, arb, 1200 * 10**6, int(1200 * 10**6 * 0.018), RELAYER_REIMB_USDC + int(1200 * 10**6 * 0.072), False, "USDC_debt/ARB_col (10.0% Bonus = 1,000 bps • 1,653 ARB Collateral • 80% Mudrex / 20% Safety)"),
+        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", usdc, arb, 150 * 10**6, int(150 * 10**6 * 0.018), RELAYER_REIMB_USDC + int(150 * 10**6 * 0.072), False, "USDC_debt/ARB_col (10.0% Bonus = 1,000 bps • 229.25 ARB Collateral • 80% Mudrex / 20% Safety)"),
+        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, wbtc, 10000 * 10**6, int(10000 * 10**6 * 0.012), RELAYER_REIMB_USDC + int(10000 * 10**6 * 0.048), False, "USDC_debt/WBTC_col (7.0% Bonus = 700 bps • ₹9.49L Loan • ₹66.4k Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, int(25 * 10**18 * 0.008), RELAYER_REIMB_WEI + int(25 * 10**18 * 0.032), True, "WETH_debt/WETH_col (₹57.53L Loan • ₹2.96L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
+        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, int(17000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(17000 * 10**6 * 0.032), False, "USDC_debt/WETH_col (₹16.13L Loan • ₹1.35L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 250000 * 10**6, int(250000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(250000 * 10**6 * 0.032), False, "USDC_debt/WETH_col (₹2.37Cr Loan • ₹13.77L Bonus @ 5% • 80% Mudrex / 20% Safety)"),
     ]
 
     # =========================================================================
@@ -346,9 +346,9 @@ def main() -> int:
         })
         candidate_meta.append(("TRIANGULAR_OR_SUSHIV2_ARB", call_tuple, min_n + rf, rf, is_w, b_amt, "executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256)"))
 
-    # 3. Add Option 2 Aave V3 Liquidation Execution Tiers for Top 2 Closest Borrowers (Selector 0x1034ef63, Strategy 3)
+    # 3. Add Option 2 Aave V3 Liquidation Execution Tiers for Top 5 Closest & High-Bonus Borrowers (5% USDC, 7% WBTC, 10% ARB)
     aave_exec_start_id = len(batch_rpc) + 1
-    for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist[:2]:
+    for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist[:5]:
         req_id = len(batch_rpc) + 1
         cd_hex = _encode_gasless_arb_calldata(3, d_tok, c_tok, zero_addr, d_amt, min_n, 500, 0, True, b_addr, rf)
         call_tuple = f"(3,{d_tok},{c_tok},{zero_addr},{d_amt},{min_n},500,0,true,{b_addr})"
