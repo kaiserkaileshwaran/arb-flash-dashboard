@@ -536,8 +536,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xDeB89dE4bb6ecf5bFed581EB049308B52d9B2dA7\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":15},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x0e4831319a50228b9e450861297ab92dee15b44f\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":16},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x843ac8dc6d34aeb07a56812b8b36429ee46bdd07\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":17},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xc86eb7b85807020b4548ee05b54bfc956eebbfcd\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":18},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x8e295789c9465487074a65b1ae9ce0351172393f\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":19},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":18},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xc6f780497a95e246eb9449f5e4770916dcd6396a\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":19},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xa17afcab059f3c6751f5b64347b5a503c3291868\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":20},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xbe3ad6a5669dc0b8b12febc03608860c31e2eef6\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":21},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xfae2ae0a9f87fd35b5b0e24b47bac796a7eefea1\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":22},"
@@ -565,8 +565,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double p_cam_wsteth   = 1.245900;
     double p_uni_wbtc_u   = 82285.00;
     double p_pcs_wbtc_u   = 82285.00;
-    double p_cam_usdc_e   = 1.000040;
-    double p_uni_usdc_e   = 1.000040;
+    double p_pcs1_weth_arb= 12680.0;
+    double p_uni5_weth_arb= 12680.0;
     double p_cam_usdc_t   = 1.001050;
     double p_uni_usdc_t   = 1.001050;
     double p_cam_arb_u    = 0.190600;
@@ -604,8 +604,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
                 p_cam_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 15), 1.0,   0.8,   2.5,     p_uni_wsteth);
                 p_uni_wbtc_u   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 16), 1e2,   5000.0,500000.0,82285.00);
                 p_pcs_wbtc_u   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e2,   5000.0,500000.0,p_uni_wbtc_u);
-                p_cam_usdc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   0.98,  1.02,    1.000040);
-                p_uni_usdc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   0.98,  1.02,    p_cam_usdc_e);
+                p_pcs1_weth_arb= decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   100.0, 100000.0,12680.0);
+                p_uni5_weth_arb= decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   100.0, 100000.0,p_pcs1_weth_arb);
                 p_cam_usdc_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 20), 1.0,   0.98,  1.02,    1.001050);
                 p_uni_usdc_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 21), 1.0,   0.98,  1.02,    p_cam_usdc_t);
                 p_cam_arb_u    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 22), 1e12,  0.01,  10.0,    0.190600);
@@ -635,7 +635,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 0.05% 5.00bps)",
         "wstETH/WETH (Camelot V3 0.50bps <-> UniV3 1.00bps)",
         "WBTC/USDC (UniV3 5.00bps <-> PancakeSwap V3 5.00bps)",
-        "USDC/USDC.e (Camelot V3 0.05bps <-> UniV3 1.00bps)",
+        "[Choice 3 Cross-Tier] WETH/ARB (PancakeSwap V3 1bp <-> UniV3 5bps)",
         "USDC/USDT (Camelot V3 0.25bps <-> UniV3 1.00bps)",
         "ARB/USDC (Camelot V3 2.50bps <-> UniV3 5.00bps)",
         "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps)",
@@ -648,7 +648,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "[Choice 2 Aave V3 Liq] 0x270d..e6b2 ($62.9k WETH Debt • 500bps Bonus when HF<1.0)"
     };
     const char *borrow_syms[16] = {
-        "WETH", "WETH", "WETH", "WETH", "WBTC", "USDC.e", "USDT", "USDC",
+        "WETH", "WETH", "WETH", "WETH", "WBTC", "WETH", "USDT", "USDC",
         "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH"
     };
 
@@ -662,7 +662,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_pcs_1,
         p_cam_wsteth * p_uni_5,
         p_uni_wbtc_u,
-        p_cam_usdc_e,
+        (p_pcs1_weth_arb > 1.0) ? (p_uni_5 / p_pcs1_weth_arb) : 0.1908,
         p_cam_usdc_t,
         p_cam_arb_u,
         p_cam_wbtc_e * p_uni_5,
@@ -680,7 +680,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_uni_5,
         p_uni_wsteth * p_uni_5,
         p_pcs_wbtc_u,
-        p_uni_usdc_e,
+        (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1908,
         p_uni_usdc_t,
         p_uni_arb_u,
         p_pcs_wbtc_e * p_uni_5,
@@ -693,15 +693,15 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         aave_liq_p2
     };
     double y1[16] __attribute__((aligned(64))) = {
-        400.0, 400.0, 2860.0, 180.0, 0.85, 85630.0, 41760.0, 95000.0,
+        400.0, 400.0, 2860.0, 180.0, 0.85, 4925.0, 41760.0, 95000.0,
         0.117, 10.60, 4100.0, 850.0, 7.37, 34.76, 54.81, 12.95
     };
     double y2[16] __attribute__((aligned(64))) = {
-        2860.0, 6950.0, 28740.0, 420.0, 0.42, 86510.0, 120000.0, 180000.0,
+        2860.0, 6950.0, 28740.0, 420.0, 0.42, 42800000.0, 120000.0, 180000.0,
         0.222, 51.97, 6200.0, 920.0, 2860.0, 2860.0, 82.50, 2860.0
     };
     double fl[16] __attribute__((aligned(64))) = {
-        2.00, 2.00, 6.00, 1.50, 10.00, 1.05, 1.25, 7.50,
+        2.00, 2.00, 6.00, 1.50, 10.00, 6.00, 1.25, 7.50,
         1.90, 2.00, 10.00, 10.00, 31.00, 31.00, 60.00, aave_liq_fee
     };
     double bm[16] __attribute__((aligned(64))) = {

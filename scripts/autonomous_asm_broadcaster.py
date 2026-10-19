@@ -209,6 +209,16 @@ def main() -> int:
     uni30_rdnt_weth = "0x446bf9748b4ea044dd759d9b9311c70491df8f29"
     cam_pepe_weth = "0x224cbc20a8ac043bac4734200e6c247ab1ab6055"
     uni30_pepe_weth = "0x7f153bdd5328ad8e30127a1bf2e5530bed33427a"
+    # Newly discovered deep cross-tier V3 pools (WETH/ARB 1bp & 5bp, WETH/USDT UniV3 1bp & 5bp, WETH/USDC.e 1bp & 5bp)
+    uni1_weth_usdt = "0x42161084d0672e1d3f26a9b53e653be2084ff19c"
+    uni5_weth_usdt = "0x641c00a822e8b671738d32a431a4fb6074e5c79d"
+    uni1_weth_arb  = "0x89a4026e9ade251c67b7fb38054931a39936d9c5"
+    pcs1_weth_arb  = "0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3"
+    uni5_weth_arb  = "0xc6f780497a95e246eb9449f5e4770916dcd6396a"
+    pcs5_weth_arb  = "0x0d7c4b40018969f81750d0a164c3839a77353efb"
+    uni1_weth_usdce = "0xe754841b77c874135caca3386676e886459c2d61"
+    pcs1_weth_usdce = "0x4fc7ac44dae553464d92c049175133239a8705c1"
+    uni5_weth_usdce = "0xc31e54c7a869b9fcbecc14363cf510d1c41fa443"
 
     # STRICT GAS-COST GUARD: Every execution tier enforces min_gross >= 5,500,000,000,000 wei WETH (~₹1.27 INR > ₹1.13 INR L2 Gas)
     MIN_GROSS_WETH_WEI = 5_500_000_000_000
@@ -238,12 +248,12 @@ def main() -> int:
     # =========================================================================
     sushiv2_spatial_tiers = [
         # (borrow_tok, target_tok, borrow_amt, min_net, fee1, buy_uni_first, rel_fee, is_weth, label)
-        (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/USDC.e (BuyUni)"),
-        (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/USDC.e (BuySushi)"),
-        (weth, usdt, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/USDT (BuyUni)"),
-        (weth, usdt, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/USDT (BuySushi)"),
-        (weth, arb, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/ARB (BuyUni)"),
-        (weth, arb, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/ARB (BuySushi)"),
+        (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 100, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDC.e (BuyUni)"),
+        (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDC.e (BuySushi)"),
+        (weth, usdt, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDT (BuyUni)"),
+        (weth, usdt, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDT (BuySushi)"),
+        (weth, arb, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/ARB (BuyUni)"),
+        (weth, arb, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/ARB (BuySushi)"),
         (weth, wbtc, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/WBTC (BuyUni)"),
         (weth, wbtc, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/WBTC (BuySushi)"),
         (weth, link, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 3000, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/LINK (BuyUni)"),
@@ -262,6 +272,17 @@ def main() -> int:
         (uni1_weth_usdc, cam_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni1_weth_usdt, cam_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (cam_weth_usdt, uni1_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni1_weth_usdt, uni5_weth_usdt, weth, usdt, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni5_weth_usdt, uni1_weth_usdt, weth, usdt, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (pcs1_weth_arb, uni5_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni5_weth_arb, pcs1_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni1_weth_arb, uni5_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni5_weth_arb, uni1_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (pcs5_weth_arb, uni5_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (pcs1_weth_usdce, uni5_weth_usdce, weth, usdc_e, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni1_weth_usdce, uni5_weth_usdce, weth, usdc_e, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (uni_wsteth_weth, cam_wsteth_weth, weth, wsteth, 200_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (cam_wsteth_weth, uni_wsteth_weth, weth, wsteth, 200_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
