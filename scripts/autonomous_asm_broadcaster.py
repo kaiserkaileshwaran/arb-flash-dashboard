@@ -133,6 +133,37 @@ def main() -> int:
         ]
         return "0x3260f1cc" + "".join(words)
 
+    def _encode_gasless_arb_calldata(
+        strategy_type: int,
+        borrow_tok: str,
+        target_tok: str,
+        mid_tok: str,
+        borrow_amt: int,
+        min_net_prof: int,
+        fee1: int,
+        fee2: int,
+        buy_uni_first: bool,
+        target_borrower: str,
+        rel_fee: int,
+    ) -> str:
+        # selector for executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256) = 0x1034ef63
+        words = [
+            hex(strategy_type)[2:].rjust(64, "0"),
+            borrow_tok.lower().replace("0x", "").rjust(64, "0"),
+            target_tok.lower().replace("0x", "").rjust(64, "0"),
+            mid_tok.lower().replace("0x", "").rjust(64, "0"),
+            hex(borrow_amt)[2:].rjust(64, "0"),
+            hex(min_net_prof)[2:].rjust(64, "0"),
+            hex(fee1)[2:].rjust(64, "0"),
+            hex(fee2)[2:].rjust(64, "0"),
+            ("1" if buy_uni_first else "0").rjust(64, "0"),
+            target_borrower.lower().replace("0x", "").rjust(64, "0"),
+            hex(rel_fee)[2:].rjust(64, "0"),
+        ]
+        return "0x1034ef63" + "".join(words)
+
+    zero_addr = "0x0000000000000000000000000000000000000000"
+    aave_v3_pool = "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
     weth = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
     usdc = "0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
     usdt = "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
@@ -179,11 +210,49 @@ def main() -> int:
     cam_pepe_weth = "0x224cbc20a8ac043bac4734200e6c247ab1ab6055"
     uni30_pepe_weth = "0x7f153bdd5328ad8e30127a1bf2e5530bed33427a"
 
-    # 30-Tier Parallel Multi-Coin + Mid-Cap Ladder across 13 Coins & 4 DEXes
     # STRICT GAS-COST GUARD: Every execution tier enforces min_gross >= 5,500,000,000,000 wei WETH (~₹1.27 INR > ₹1.13 INR L2 Gas)
     MIN_GROSS_WETH_WEI = 5_500_000_000_000
     RELAYER_REIMB_WEI  = 4_900_000_000_000
+    MIN_NET_WETH_WEI   = 600_000_000_000
     MIN_GROSS_USDC_RAW = 15_000
+    RELAYER_REIMB_USDC = 12_000
+    MIN_NET_USDC_RAW   = 3_000
+
+    # =========================================================================
+    # PRIORITY #1 (CHOICE 2): Aave V3 500 bps (5.00% Bonus) High-Risk Borrowers
+    # =========================================================================
+    aave_high_risk_watchlist = [
+        # (borrower_addr, debt_token, collateral_token, debt_to_cover_raw, min_net_raw, rel_fee_raw, is_weth, label)
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12 * 10**18, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/USDC_col ($62.9k)"),
+        ("0x408dcf31e16b438a86fe01e258cd357651aa7b3f", usdc, weth, 900 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($1.94k)"),
+        ("0xdb6787d107b4738eb4d11194fc25e5a160b073a0", usdc, weth, 2500 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($5.17k)"),
+        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 10000 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($20.99k)"),
+        ("0xf6305f5cfdf557de218743bdd24441526453f9dc", usdc, weth, 1900 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($3.88k)"),
+        ("0x66bb6c2949b20503adf3621db9903ee52f92ffb5", usdc, weth, 1300 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($2.71k)"),
+        ("0x22f4dc9e6a136379291a400a20a90383b2cb5de2", usdc, weth, 250 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($518)"),
+        ("0xbbcf3985eb53c30a8eea01d9357314d61fe0e727", usdc, weth, 850 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($1.72k)"),
+    ]
+
+    # =========================================================================
+    # PRIORITY #2 (CHOICE 3): Long-Tail SushiSwap V2 (x*y=k) <-> UniV3 via Balancer 0%
+    # =========================================================================
+    sushiv2_spatial_tiers = [
+        # (borrow_tok, target_tok, borrow_amt, min_net, fee1, buy_uni_first, rel_fee, is_weth, label)
+        (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/USDC.e (BuyUni)"),
+        (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/USDC.e (BuySushi)"),
+        (weth, usdt, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/USDT (BuyUni)"),
+        (weth, usdt, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/USDT (BuySushi)"),
+        (weth, arb, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/ARB (BuyUni)"),
+        (weth, arb, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/ARB (BuySushi)"),
+        (weth, wbtc, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/WBTC (BuyUni)"),
+        (weth, wbtc, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/WBTC (BuySushi)"),
+        (weth, link, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 3000, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/LINK (BuyUni)"),
+        (weth, link, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 3000, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/LINK (BuySushi)"),
+    ]
+
+    # =========================================================================
+    # PRIORITY #2B & #3: Direct Pool Flash-Swap Tiers (Mid-Caps + Majors)
+    # =========================================================================
     raw_tiers = [
         (pcs_weth_usdc, uni5_weth_usdc, weth, usdc, 2 * 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (uni5_weth_usdc, pcs_weth_usdc, weth, usdc, 2 * 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
@@ -206,6 +275,7 @@ def main() -> int:
         (cam_magic_weth, uni30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (uni30_magic_weth, cam_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (sushi30_magic_weth, uni30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (uni30_magic_weth, sushi30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (cam_rdnt_weth, uni30_rdnt_weth, weth, rdnt, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (uni30_rdnt_weth, cam_rdnt_weth, weth, rdnt, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (cam_pepe_weth, uni30_pepe_weth, weth, pepe, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
@@ -217,24 +287,71 @@ def main() -> int:
 
     batch_rpc = []
     candidate_meta = []
-    for idx, (pb, ps, tb, tq, amt, mg, z0, z1, rf, is_w) in enumerate(raw_tiers, start=1):
+
+    # 1. Add Direct Pool Flash-Swap Tiers (Selector 0x3260f1cc)
+    for pb, ps, tb, tq, amt, mg, z0, z1, rf, is_w in raw_tiers:
+        req_id = len(batch_rpc) + 1
         calldata_hex = _encode_flash_swap_calldata(pb, ps, tb, tq, amt, mg, z0, z1, rf)
         call_tuple = f"({pb},{ps},{tb},{tq},{amt},{mg},{'true' if z0 else 'false'},{'true' if z1 else 'false'})"
         batch_rpc.append({
             "jsonrpc": "2.0",
-            "id": idx,
+            "id": req_id,
             "method": "eth_call",
             "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": calldata_hex}, "latest"],
         })
-        candidate_meta.append((call_tuple, mg, rf, is_w, amt))
+        candidate_meta.append(("DIRECT_FLASH_SWAP", call_tuple, mg, rf, is_w, amt, "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)"))
 
-    # Also append 2 pre-gas diagnostic probes (min_gross=1 wei at 0.0005 WETH = $1.21) to measure exact sub-gas spread in wei
+    # 2. Add Choice 3 Long-Tail SushiSwap V2 <-> UniV3 Tiers (Selector 0x1034ef63, Strategy 1)
+    sushiv2_start_id = len(batch_rpc) + 1
+    for b_tok, t_tok, b_amt, min_n, fee1, buy_uni, rf, is_w, label in sushiv2_spatial_tiers:
+        req_id = len(batch_rpc) + 1
+        cd_hex = _encode_gasless_arb_calldata(1, b_tok, t_tok, zero_addr, b_amt, min_n, fee1, 0, buy_uni, zero_addr, rf)
+        call_tuple = f"(1,{b_tok},{t_tok},{zero_addr},{b_amt},{min_n},{fee1},0,{'true' if buy_uni else 'false'},{zero_addr})"
+        batch_rpc.append({
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "method": "eth_call",
+            "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_hex}, "latest"],
+        })
+        candidate_meta.append(("SUSHIV2_SPATIAL_ARB", call_tuple, min_n + rf, rf, is_w, b_amt, "executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256)"))
+
+    # 3. Add Choice 2 Aave V3 Liquidation Execution Tiers for Top 4 Closest Borrowers (Selector 0x1034ef63, Strategy 3)
+    aave_exec_start_id = len(batch_rpc) + 1
+    for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist[:4]:
+        req_id = len(batch_rpc) + 1
+        cd_hex = _encode_gasless_arb_calldata(3, d_tok, c_tok, zero_addr, d_amt, min_n, 500, 0, True, b_addr, rf)
+        call_tuple = f"(3,{d_tok},{c_tok},{zero_addr},{d_amt},{min_n},500,0,true,{b_addr})"
+        batch_rpc.append({
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "method": "eth_call",
+            "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_hex}, "latest"],
+        })
+        candidate_meta.append(("AAVE_V3_LIQUIDATION", call_tuple, min_n + rf, rf, is_w, d_amt, "executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256)"))
+
+    exec_end_id = len(batch_rpc)
+
+    # 4. Add Choice 2 Live Aave V3 Health Factor Watchlist Queries (getUserAccountData = 0xbf92857c)
+    aave_hf_start_id = len(batch_rpc) + 1
+    for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist:
+        req_id = len(batch_rpc) + 1
+        batch_rpc.append({
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "method": "eth_call",
+            "params": [{"to": aave_v3_pool, "data": "0xbf92857c" + b_addr.lower().replace("0x", "").rjust(64, "0")}, "latest"],
+        })
+    aave_hf_end_id = len(batch_rpc)
+
+    # 5. Add Pre-Gas Diagnostic Probes (min_gross=1 wei at 0.0005 WETH = $1.21) to measure exact sub-gas spread in wei
     probe_start_id = len(batch_rpc) + 1
     for p_idx, (pb, ps, tb, tq, z0, z1) in enumerate([
         (pcs_weth_usdt, cam_weth_usdt, weth, usdt, True, False),
         (cam_weth_usdt, pcs_weth_usdt, weth, usdt, True, False),
         (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, False, True),
         (cam_gmx_weth, uni30_gmx_weth, weth, gmx, True, False),
+        (sushi30_magic_weth, uni30_magic_weth, weth, magic, False, True),
+        (uni30_magic_weth, sushi30_magic_weth, weth, magic, False, True),
     ]):
         cd_probe = _encode_flash_swap_calldata(pb, ps, tb, tq, 500_000_000_000_000, 1, z0, z1, 0)
         batch_rpc.append({
@@ -289,6 +406,11 @@ def main() -> int:
     winning_meta = None
     best_profit_score = 0
     best_pre_gas_wei = 0
+    lowest_aave_hf = 999.0
+    closest_aave_borrower = ""
+    closest_aave_debt_usd = 0.0
+    closest_aave_bonus_inr = 0.0
+    aave_liquidatable_count = 0
     cycles_scanned = 0
     latencies_ms = []
     active_rpc_url = RPC_URLS[0]
@@ -306,18 +428,55 @@ def main() -> int:
                 active_rpc_url = url
                 if isinstance(arr, list):
                     for item in arr:
-                        if isinstance(item, dict) and isinstance(item.get("result"), str) and item["result"].startswith("0x") and len(item["result"]) >= 66:
-                            raw_prof = int(item["result"], 16)
-                            item_id = int(item["id"])
-                            if item_id >= probe_start_id:
+                        if not isinstance(item, dict) or "id" not in item:
+                            continue
+                        item_id = int(item["id"])
+                        res_str = item.get("result")
+
+                        # Case A: Execution Tiers (1 .. exec_end_id)
+                        if 1 <= item_id <= exec_end_id:
+                            meta = candidate_meta[item_id - 1]
+                            mode_name = meta[0]
+                            if mode_name == "DIRECT_FLASH_SWAP":
+                                if isinstance(res_str, str) and res_str.startswith("0x") and len(res_str) >= 66:
+                                    raw_prof = int(res_str, 16)
+                                    if raw_prof > 0:
+                                        score = int((raw_prof / 1e18) * 2415.0 * 1e6) if meta[4] else raw_prof
+                                        if score > best_profit_score:
+                                            best_profit_score = score
+                                            winning_meta = meta
+                            else:
+                                # executeGaslessRelayedArbitrage returns void ("0x") on success without revert
+                                if isinstance(res_str, str) and res_str == "0x" and "error" not in item:
+                                    raw_prof = meta[2]
+                                    score = int((raw_prof / 1e18) * 2415.0 * 1e6) if meta[4] else raw_prof
+                                    if mode_name == "AAVE_V3_LIQUIDATION":
+                                        score += 100_000_000  # Priority #1 boost for 500 bps Aave Liquidation
+                                    if score > best_profit_score:
+                                        best_profit_score = score
+                                        winning_meta = meta
+
+                        # Case B: Choice 2 Live Aave V3 Health Factor Watchlist (aave_hf_start_id .. aave_hf_end_id)
+                        elif aave_hf_start_id <= item_id <= aave_hf_end_id:
+                            if isinstance(res_str, str) and len(res_str) >= 386:
+                                watch_idx = item_id - aave_hf_start_id
+                                b_info = aave_high_risk_watchlist[watch_idx]
+                                tot_debt_usd = int(res_str[66:130], 16) / 1e8
+                                hf_val = int(res_str[322:386], 16) / 1e18
+                                if 0.0 < hf_val < 1.0:
+                                    aave_liquidatable_count += 1
+                                if 0.0 < hf_val < lowest_aave_hf:
+                                    lowest_aave_hf = round(hf_val, 6)
+                                    closest_aave_borrower = b_info[0]
+                                    closest_aave_debt_usd = round(tot_debt_usd, 2)
+                                    closest_aave_bonus_inr = round(tot_debt_usd * 0.5 * 0.05 * 94.92, 2)
+
+                        # Case C: Pre-Gas Sub-Threshold Spread Probes (probe_start_id ..)
+                        elif item_id >= probe_start_id:
+                            if isinstance(res_str, str) and res_str.startswith("0x") and len(res_str) >= 66:
+                                raw_prof = int(res_str, 16)
                                 if raw_prof > best_pre_gas_wei:
                                     best_pre_gas_wei = raw_prof
-                            elif raw_prof > 0:
-                                meta = candidate_meta[item_id - 1]
-                                score = int((raw_prof / 1e18) * 2415.0 * 1e6) if meta[3] else raw_prof
-                                if score > best_profit_score:
-                                    best_profit_score = score
-                                    winning_meta = meta
                     break
             except Exception:
                 continue
@@ -341,12 +500,21 @@ def main() -> int:
         summary = {
             "ok": True,
             "status": "SCAN_COMPLETE_NO_SPREAD_ABOVE_L2_GAS_THRESHOLD",
+            "engine_mode": "HYBRID_CHOICE_2_AAVE_LIQ_AND_CHOICE_3_LONG_TAIL_SUSHIV2_V3",
             "coins_monitored": 13,
-            "tiers_tested_per_cycle": len(raw_tiers),
+            "direct_flash_swap_tiers": len(raw_tiers),
+            "sushiv2_spatial_tiers": len(sushiv2_spatial_tiers),
+            "aave_v3_borrowers_monitored": len(aave_high_risk_watchlist),
+            "total_rpc_checks_per_cycle": len(batch_rpc),
             "cycles_scanned": cycles_scanned,
             "scan_duration_sec": round(time.time() - start_ts, 2),
             "rpc_latency_min_ms": min_lat_ms,
             "rpc_latency_avg_ms": avg_lat_ms,
+            "aave_lowest_health_factor": lowest_aave_hf,
+            "aave_closest_borrower": closest_aave_borrower,
+            "aave_closest_borrower_debt_usd": closest_aave_debt_usd,
+            "aave_closest_5pct_liq_bonus_inr": closest_aave_bonus_inr,
+            "aave_liquidatable_positions_now": aave_liquidatable_count,
             "best_pre_gas_gross_wei": best_pre_gas_wei,
             "best_pre_gas_gross_inr": pre_gas_inr,
             "l2_gas_cost_inr": l2_gas_inr,
@@ -365,6 +533,7 @@ def main() -> int:
         summary = {
             "ok": False,
             "status": "PROFITABLE_SPREAD_FOUND_BUT_AWAITING_RELAYER_GAS_TOPUP",
+            "winning_mode": winning_meta[0],
             "best_profit_usdc_micro": best_profit_score,
             "relayer_eth_wei": rel_wei,
             "ts": time.time(),
@@ -374,16 +543,16 @@ def main() -> int:
         return 0
 
     if winning_meta is not None:
-        call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt = winning_meta
+        mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = winning_meta
         send_cmd = [
             cast_bin,
             "send",
             DEPLOYED_CONTRACT,
-            "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)",
+            fn_sig,
             call_tuple,
             str(rel_fee),
             "--gas-limit",
-            "290000",
+            "450000" if mode_name != "DIRECT_FLASH_SWAP" else "290000",
             "--gas-price",
             "20500000",
             "--private-key",
@@ -422,7 +591,7 @@ def main() -> int:
                 json.dumps(
                     {
                         "ok": True,
-                        "mode": "UNCAPPED_MAX_FLASH_SWAP_AUTO_MUDREX_SETTLEMENT",
+                        "mode": mode_name,
                         "tx_hash": out.get("transactionHash"),
                         "block_number": out.get("blockNumber"),
                         "flash_loan_raw_amount": winning_loan_amt,
@@ -440,8 +609,8 @@ def main() -> int:
         except Exception:
             pass
 
-    # 100% of Relayer ETH is strictly preserved as permanent revolving gas float for executeDirectPoolFlashSwap.
-    # Deployed contract 0x2B98c4481366957138b836b19930187250d2717a automatically routes 75% of net profit to Mudrex
+    # 100% of Relayer ETH is strictly preserved as permanent revolving gas float.
+    # Deployed contract 0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3 automatically routes 75% of net profit to Mudrex
     # (0xd2529585059e3e5c09c912f0f9570000c2a53f05) and 25% to MetaMask (0xFF3c34DAF159741C931F7c421350f8289A9d89BE).
     return 0
 
