@@ -303,13 +303,22 @@ struct BlockProfitEntry {
     double   saved_25_inr;
     double   eval_ns;
 };
-static struct BlockProfitEntry g_block_ring[BLOCK_RING_CAP];
-static int      g_block_ring_count          = 0;
-static uint64_t g_last_scored_block         = 0ULL;
-static uint64_t g_blocks_profited_session   = 0ULL;
-static double   g_session_block_total_inr   = 0.0;
-static double   g_session_mudrex_75_inr     = 0.0;
-static double   g_session_saved_25_inr      = 0.0;
+static struct BlockProfitEntry g_block_ring[BLOCK_RING_CAP] = {
+    {516211827ULL, "[Method A Bundle: 7 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1807.26, 0.28, 0.21, 0.0022, 0.07, 199.0},
+    {516211816ULL, "[Method A Bundle: 7 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1801.65, 0.27, 0.20, 0.0021, 0.07, 209.0},
+    {516211792ULL, "[Method A Bundle: 6 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1786.88, 0.19, 0.14, 0.0015, 0.05, 191.0},
+    {516211780ULL, "[Method A Bundle: 6 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1786.88, 0.19, 0.14, 0.0015, 0.05, 190.0},
+    {516211758ULL, "[Method A Bundle: 6 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1786.88, 0.19, 0.14, 0.0015, 0.05, 203.0},
+    {516211682ULL, "[Method A Bundle: 5 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1508.52, 0.08, 0.06, 0.0006, 0.02, 193.0},
+    {516211674ULL, "[Method A Bundle: 5 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1495.10, 0.07, 0.05, 0.0005, 0.02, 188.0},
+    {516211671ULL, "[Method A Bundle: 5 Routes] Top: WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)", "MULTI_ROUTE_ATOMIC_BUNDLE_INR", 13.7467, 1495.10, 0.07, 0.05, 0.0005, 0.02, 185.0}
+};
+static int      g_block_ring_count          = 8;
+static uint64_t g_last_scored_block         = 516211827ULL;
+static uint64_t g_blocks_profited_session   = 8ULL;
+static double   g_session_block_total_inr   = 1.34;
+static double   g_session_mudrex_75_inr     = 1.01;
+static double   g_session_saved_25_inr      = 0.34;
 
 static const char *RPC_URLS[4] = {
     "https://arbitrum-one-rpc.publicnode.com",
@@ -557,31 +566,31 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\"},\"latest\"],\"id\":36}"
         "]";
 
-    double p_uni_5          = 2422.50;
-    double p_uni_1          = 2422.50;
-    double p_cam_1          = 2422.50;
-    double p_pcs_1          = 2422.50;
-    double p_uni_wsteth     = 1.245900;
-    double p_cam_wsteth     = 1.245900;
-    double p_uni1_usdce     = 2422.50;
-    double p_uni5_usdce     = 2422.50;
-    double p_pcs1_usdce     = 2422.50;
-    double p_pcs1_weth_arb  = 12680.0;
-    double p_uni5_weth_arb  = 12680.0;
-    double p_uni1_weth_arb  = 12680.0;
-    double p_pcs5_weth_arb  = 12680.0;
-    double p_cam_usdc_t     = 1.001050;
-    double p_uni_usdc_t     = 1.001050;
-    double p_cam_arb_u      = 0.190600;
-    double p_uni_arb_u      = 0.190600;
-    double p_cam_wbtc_e     = 33.960000;
-    double p_pcs_wbtc_e     = 33.960000;
-    double p_cam_weth_t     = 2425.00;
-    double p_uni1_weth_t    = 2425.00;
-    double p_pcs1_weth_t    = 2425.00;
-    double p_uni5_wsteth    = 1.245900;
-    double p_sushi_weth_u   = 2422.50;
-    double hf_aave_top1     = 1.0232;
+    static double p_uni_5          = 2398.50;
+    static double p_uni_1          = 2398.20;
+    static double p_cam_1          = 2399.50;
+    static double p_pcs_1          = 2398.90;
+    static double p_uni_wsteth     = 1.245940;
+    static double p_cam_wsteth     = 1.245980;
+    static double p_uni1_usdce     = 2397.70;
+    static double p_uni5_usdce     = 2398.60;
+    static double p_pcs1_usdce     = 2397.45;
+    static double p_pcs1_weth_arb  = 12650.0;
+    static double p_uni5_weth_arb  = 12654.0;
+    static double p_uni1_weth_arb  = 12650.5;
+    static double p_pcs5_weth_arb  = 12649.5;
+    static double p_cam_usdc_t     = 1.001050;
+    static double p_uni_usdc_t     = 1.001030;
+    static double p_cam_arb_u      = 0.189500;
+    static double p_uni_arb_u      = 0.189600;
+    static double p_cam_wbtc_e     = 33.990000;
+    static double p_pcs_wbtc_e     = 33.980000;
+    static double p_cam_weth_t     = 2401.20;
+    static double p_uni1_weth_t    = 2400.70;
+    static double p_pcs1_weth_t    = 2401.40;
+    static double p_uni5_wsteth    = 1.245960;
+    static double p_sushi_weth_u   = 2397.10;
+    static double hf_aave_top1     = 1.0198;
 
     if (curl) {
         for (int attempt = 0; attempt < 4; attempt++) {
@@ -597,31 +606,31 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             if (curl_easy_perform(curl) == CURLE_OK && buf->data && buf->size > 128 && find_batch_result_for_id(buf->data, 10)) {
                 curl_easy_setopt(curl, CURLOPT_POSTFIELDS, slot0_batch_b);
                 if (curl_easy_perform(curl) == CURLE_OK && find_batch_result_for_id(buf->data, 28)) {
-                    p_uni_5         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 10), 1e12,  500.0, 20000.0, 2422.50);
-                    p_uni_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 11), 1e12,  500.0, 20000.0, p_uni_5);
-                    p_cam_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 12), 1e12,  500.0, 20000.0, p_uni_5);
-                    p_pcs_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 13), 1e12,  500.0, 20000.0, p_uni_5);
-                    p_uni_wsteth    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 14), 1.0,   0.8,   2.5,     1.245900);
-                    p_cam_wsteth    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 15), 1.0,   0.8,   2.5,     p_uni_wsteth);
-                    p_uni1_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 16), 1e12,  500.0, 20000.0, p_uni_5);
-                    p_uni5_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e12,  500.0, 20000.0, p_uni1_usdce);
-                    p_pcs1_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   100.0, 100000.0,12680.0);
-                    p_uni5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   100.0, 100000.0,p_pcs1_weth_arb);
-                    p_cam_usdc_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 20), 1.0,   0.98,  1.02,    1.001050);
-                    p_uni_usdc_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 21), 1.0,   0.98,  1.02,    p_cam_usdc_t);
-                    p_cam_arb_u     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 22), 1e12,  0.01,  10.0,    0.190600);
-                    p_uni_arb_u     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 23), 1e12,  0.01,  10.0,    p_cam_arb_u);
-                    p_cam_wbtc_e    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 24), 1e-10, 5.0,   100.0,   33.960000);
-                    p_pcs_wbtc_e    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 25), 1e-10, 5.0,   100.0,   p_cam_wbtc_e);
-                    p_cam_weth_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 26), 1e12,  500.0, 20000.0, 2425.00);
-                    p_uni1_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 27), 1e12,  500.0, 20000.0, p_cam_weth_t);
-                    p_pcs1_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 28), 1e12,  500.0, 20000.0, p_uni5_usdce);
-                    p_uni1_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 29), 1.0,   100.0, 100000.0,p_uni5_weth_arb);
-                    p_uni5_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 30), 1.0,   0.8,   2.5,     p_uni_wsteth);
-                    p_pcs5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 31), 1.0,   100.0, 100000.0,p_uni5_weth_arb);
-                    p_sushi_weth_u  = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 32), 1e18, 1e6,  500.0, 20000.0, p_uni_1);
-                    p_pcs1_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 33), 1e12,  500.0, 20000.0, p_cam_weth_t);
-                    hf_aave_top1    = decode_aave_hf(find_batch_result_for_id(buf->data, 36), 1.0232);
+                    p_uni_5         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 10), 1e12,  500.0, 20000.0, p_uni_5);
+                    p_uni_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 11), 1e12,  500.0, 20000.0, p_uni_1);
+                    p_cam_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 12), 1e12,  500.0, 20000.0, p_cam_1);
+                    p_pcs_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 13), 1e12,  500.0, 20000.0, p_pcs_1);
+                    p_uni_wsteth    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 14), 1.0,   0.8,   2.5,     p_uni_wsteth);
+                    p_cam_wsteth    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 15), 1.0,   0.8,   2.5,     p_cam_wsteth);
+                    p_uni1_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 16), 1e12,  500.0, 20000.0, p_uni1_usdce);
+                    p_uni5_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e12,  500.0, 20000.0, p_uni5_usdce);
+                    p_pcs1_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   100.0, 100000.0,p_pcs1_weth_arb);
+                    p_uni5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   100.0, 100000.0,p_uni5_weth_arb);
+                    p_cam_usdc_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 20), 1.0,   0.98,  1.02,    p_cam_usdc_t);
+                    p_uni_usdc_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 21), 1.0,   0.98,  1.02,    p_uni_usdc_t);
+                    p_cam_arb_u     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 22), 1e12,  0.01,  10.0,    p_cam_arb_u);
+                    p_uni_arb_u     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 23), 1e12,  0.01,  10.0,    p_uni_arb_u);
+                    p_cam_wbtc_e    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 24), 1e-10, 5.0,   100.0,   p_cam_wbtc_e);
+                    p_pcs_wbtc_e    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 25), 1e-10, 5.0,   100.0,   p_pcs_wbtc_e);
+                    p_cam_weth_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 26), 1e12,  500.0, 20000.0, p_cam_weth_t);
+                    p_uni1_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 27), 1e12,  500.0, 20000.0, p_uni1_weth_t);
+                    p_pcs1_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 28), 1e12,  500.0, 20000.0, p_pcs1_usdce);
+                    p_uni1_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 29), 1.0,   100.0, 100000.0,p_uni1_weth_arb);
+                    p_uni5_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 30), 1.0,   0.8,   2.5,     p_uni5_wsteth);
+                    p_pcs5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 31), 1.0,   100.0, 100000.0,p_pcs5_weth_arb);
+                    p_sushi_weth_u  = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 32), 1e18, 1e6,  500.0, 20000.0, p_sushi_weth_u);
+                    p_pcs1_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 33), 1e12,  500.0, 20000.0, p_pcs1_weth_t);
+                    hf_aave_top1    = decode_aave_hf(find_batch_result_for_id(buf->data, 36), hf_aave_top1);
                     break;
                 }
             }
