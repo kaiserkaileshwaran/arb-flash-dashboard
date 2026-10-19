@@ -5,21 +5,18 @@
 _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	.cfi_startproc
 ; %bb.0:
-	cmp	w0, #1
-	b.lt	LBB0_19
-; %bb.1:
-	sub	sp, sp, #192
-	stp	d15, d14, [sp, #32]             ; 16-byte Folded Spill
-	stp	d13, d12, [sp, #48]             ; 16-byte Folded Spill
-	stp	d11, d10, [sp, #64]             ; 16-byte Folded Spill
-	stp	d9, d8, [sp, #80]               ; 16-byte Folded Spill
-	stp	x28, x27, [sp, #96]             ; 16-byte Folded Spill
-	stp	x26, x25, [sp, #112]            ; 16-byte Folded Spill
-	stp	x24, x23, [sp, #128]            ; 16-byte Folded Spill
-	stp	x22, x21, [sp, #144]            ; 16-byte Folded Spill
-	stp	x20, x19, [sp, #160]            ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #176]            ; 16-byte Folded Spill
-	.cfi_def_cfa_offset 192
+	sub	sp, sp, #176
+	stp	d15, d14, [sp, #16]             ; 16-byte Folded Spill
+	stp	d13, d12, [sp, #32]             ; 16-byte Folded Spill
+	stp	d11, d10, [sp, #48]             ; 16-byte Folded Spill
+	stp	d9, d8, [sp, #64]               ; 16-byte Folded Spill
+	stp	x28, x27, [sp, #80]             ; 16-byte Folded Spill
+	stp	x26, x25, [sp, #96]             ; 16-byte Folded Spill
+	stp	x24, x23, [sp, #112]            ; 16-byte Folded Spill
+	stp	x22, x21, [sp, #128]            ; 16-byte Folded Spill
+	stp	x20, x19, [sp, #144]            ; 16-byte Folded Spill
+	stp	x29, x30, [sp, #160]            ; 16-byte Folded Spill
+	.cfi_def_cfa_offset 176
 	.cfi_offset w30, -8
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
@@ -40,289 +37,240 @@ _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	.cfi_offset b13, -144
 	.cfi_offset b14, -152
 	.cfi_offset b15, -160
-	mov	x26, #0                         ; =0x0
-	add	x10, x1, #32
-	ldp	x14, x9, [sp, #264]
-	add	x8, x2, #32
-	stp	x8, x10, [sp, #16]              ; 16-byte Folded Spill
+	str	d0, [sp, #8]                    ; 8-byte Folded Spill
+	cmp	w0, #1
+	b.lt	LBB0_19
+; %bb.1:
+	mov	x8, #0                          ; =0x0
+	add	x9, x1, #32
+	ldp	x15, x10, [sp, #248]
+	add	x11, x2, #32
 	add	x12, x3, #32
 	add	x13, x4, #32
-	mov	x8, #59921                      ; =0xea11
-	movk	x8, #33069, lsl #16
-	movk	x8, #38809, lsl #32
-	movk	x8, #15729, lsl #48
-	ldp	x16, x15, [sp, #248]
-	fmov	d1, x8
-	mov	x8, #149533581377536            ; =0x880000000000
-	movk	x8, #16579, lsl #48
-	str	x8, [sp, #8]                    ; 8-byte Folded Spill
-	mov	x8, #7378697629483820646        ; =0x6666666666666666
-	movk	x8, #16386, lsl #48
-	ldp	x19, x17, [sp, #232]
-	fmov	d3, x8
-	mov	x8, #4634204016564240384        ; =0x4050000000000000
-	fmov	d4, x8
-	mov	x8, #4639833516098453504        ; =0x4064000000000000
-	ldp	x21, x20, [sp, #216]
-	fmov	d5, x8
-	mov	x8, #20972                      ; =0x51ec
-	movk	x8, #7864, lsl #16
-	movk	x8, #60293, lsl #32
-	movk	x8, #16289, lsl #48
-	fmov	d6, x8
-	mov	x8, #47186                      ; =0xb852
-	movk	x8, #34078, lsl #16
-	movk	x8, #20971, lsl #32
-	movk	x8, #16366, lsl #48
-	ldp	x23, x22, [sp, #200]
-	fmov	d7, x8
-	mov	x8, #22038                      ; =0x5616
-	movk	x8, #40679, lsl #16
-	movk	x8, #943, lsl #32
-	movk	x8, #15570, lsl #48
-	fmov	d16, x8
-	mov	x8, #640942080                  ; =0x26340000
-	movk	x8, #27637, lsl #32
-	movk	x8, #17164, lsl #48
-	ldr	x24, [sp, #192]
-	fmov	d17, x8
-	mov	x8, #26865                      ; =0x68f1
-	movk	x8, #35043, lsl #16
-	movk	x8, #63669, lsl #32
-	movk	x8, #48868, lsl #48
-	fmov	d19, x8
-	mov	x8, #26865                      ; =0x68f1
-	movk	x8, #35043, lsl #16
-	movk	x8, #63669, lsl #32
-	movk	x8, #16100, lsl #48
-	fmov	d21, x8
-	mov	x8, #7864                       ; =0x1eb8
-	movk	x8, #60293, lsl #16
-	movk	x8, #47185, lsl #32
-	movk	x8, #16270, lsl #48
-	fmov	d22, x8
-	mov	x8, #17197                      ; =0x432d
-	movk	x8, #60188, lsl #16
-	movk	x8, #14050, lsl #32
-	movk	x8, #16154, lsl #48
-	fmov	d23, x8
-	mov	x8, #17197                      ; =0x432d
-	movk	x8, #60188, lsl #16
-	movk	x8, #14050, lsl #32
-	movk	x8, #16138, lsl #48
-	fmov	d24, x8
-	fmov	d25, #15.00000000
-	movi.2d	v26, #0000000000000000
-	mov	x8, #43516                      ; =0xa9fc
-	movk	x8, #54001, lsl #16
-	movk	x8, #25165, lsl #32
-	movk	x8, #16192, lsl #48
-	fmov	d27, x8
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16353, lsl #48
-	fmov	d28, x8
-	mov	x8, #-3689348814741910324       ; =0xcccccccccccccccc
-	movk	x8, #52429
-	movk	x8, #16348, lsl #48
-	fmov	d29, x8
-	mov	x8, #57147                      ; =0xdf3b
-	movk	x8, #36175, lsl #16
-	movk	x8, #28311, lsl #32
-	movk	x8, #16290, lsl #48
-	fmov	d30, x8
-	mov	x8, #35184372088832             ; =0x200000000000
-	movk	x8, #16475, lsl #48
-	fmov	d31, x8
-	fmov	d8, #0.75000000
-	fmov	d9, #0.25000000
-	mov	x28, #48234                     ; =0xbc6a
-	movk	x28, #37748, lsl #16
-	movk	x28, #1048, lsl #32
-	movk	x28, #16358, lsl #48
-	mov	x30, #34184                     ; =0x8588
-	movk	x30, #54106, lsl #16
-	movk	x30, #58300, lsl #32
-	movk	x30, #16244, lsl #48
-	mov	x25, x9
-	mov	w0, w0
-	b	LBB0_3
-LBB0_2:                                 ;   in Loop: Header=BB0_3 Depth=1
-	mov	x8, #0                          ; =0x0
-	str	w26, [x9, x8, lsl #2]
-	add	x26, x26, #1
-	add	x25, x25, #4
-	cmp	x26, x0
-	b.eq	LBB0_18
-LBB0_3:                                 ; =>This Loop Header: Depth=1
-                                        ;     Child Loop BB0_14 Depth 2
-	add	x8, x26, #4
-	cmp	x8, x0
-	b.hs	LBB0_5
-; %bb.4:                                ;   in Loop: Header=BB0_3 Depth=1
-	ldp	x8, x10, [sp, #16]              ; 16-byte Folded Reload
-	prfm	pldl1keep, [x10, x26, lsl #3]
-	prfm	pldl1keep, [x8, x26, lsl #3]
-	prfm	pldl1keep, [x12, x26, lsl #3]
-	prfm	pldl1keep, [x13, x26, lsl #3]
-LBB0_5:                                 ;   in Loop: Header=BB0_3 Depth=1
-	ldr	d2, [x1, x26, lsl #3]
-	ldr	d18, [x2, x26, lsl #3]
-	fminnm	d11, d2, d18
-	fcmp	d2, d18
-	csel	x8, x3, x4, le
-	ldr	d14, [x8, x26, lsl #3]
-	fmaxnm	d13, d2, d18
-	csel	x8, x4, x3, le
-	ldr	d15, [x8, x26, lsl #3]
-	movi.2d	v10, #0000000000000000
-	fcmp	d11, d1
-	b.le	LBB0_7
-; %bb.6:                                ;   in Loop: Header=BB0_3 Depth=1
-	fsub	d2, d13, d11
-	ldr	d18, [sp, #8]                   ; 8-byte Folded Reload
-	fmul	d2, d2, d18
-	fdiv	d10, d2, d11
-LBB0_7:                                 ;   in Loop: Header=BB0_3 Depth=1
-	ldr	d2, [x5, x26, lsl #3]
-	fsub	d12, d10, d2
-	fcmp	d2, d3
-	fcsel	d2, d5, d4, le
-	fmadd	d18, d12, d6, d7
+	add	x14, x10, #4
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d1, x17
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d0, x17
+	ldp	x17, x16, [sp, #232]
+	mov	x20, #20972                     ; =0x51ec
+	movk	x20, #7864, lsl #16
+	movk	x20, #60293, lsl #32
+	movk	x20, #16289, lsl #48
+	fmov	d3, x20
+	mov	x20, #47186                     ; =0xb852
+	movk	x20, #34078, lsl #16
+	movk	x20, #20971, lsl #32
+	movk	x20, #16366, lsl #48
+	fmov	d4, x20
+	ldp	x20, x19, [sp, #216]
+	mov	x22, #22038                     ; =0x5616
+	movk	x22, #40679, lsl #16
+	movk	x22, #943, lsl #32
+	movk	x22, #15570, lsl #48
+	fmov	d5, x22
+	mov	x22, #640942080                 ; =0x26340000
+	movk	x22, #27637, lsl #32
+	movk	x22, #17164, lsl #48
+	fmov	d6, x22
+	ldp	x22, x21, [sp, #200]
+	mov	x24, #17197                     ; =0x432d
+	movk	x24, #60188, lsl #16
+	movk	x24, #14050, lsl #32
+	movk	x24, #16154, lsl #48
+	fmov	d7, x24
+	mov	x24, #17197                     ; =0x432d
+	movk	x24, #60188, lsl #16
+	movk	x24, #14050, lsl #32
+	movk	x24, #16138, lsl #48
+	fmov	d16, x24
+	ldp	x24, x23, [sp, #184]
+	ldr	x25, [sp, #176]
+	mov	x26, #43516                     ; =0xa9fc
+	movk	x26, #54001, lsl #16
+	movk	x26, #25165, lsl #32
+	movk	x26, #16192, lsl #48
+	fmov	d17, #1.00000000
+	fmov	d18, x26
+	mov	x26, #43516                     ; =0xa9fc
+	movk	x26, #54001, lsl #16
+	movk	x26, #25165, lsl #32
+	movk	x26, #48960, lsl #48
+	fmov	d19, x26
 	fmov	d20, #1.50000000
-	fcmp	d12, d20
-	fmov	d20, #1.00000000
-	fcsel	d18, d18, d20, gt
-	fdiv	d2, d2, d18
-	fmul	d18, d14, d11
-	fmul	d18, d18, d2
-	fmul	d20, d15, d13
-	fmul	d2, d20, d2
-	fmul	d14, d18, d2
-	fadd	d2, d18, d2
-	fdiv	d18, d2, d14
-	fcmp	d14, d16
-	fcsel	d15, d18, d17, gt
-	ldr	d11, [x6, x26, lsl #3]
-	ldr	d18, [x7, x26, lsl #3]
-	fadd	d13, d18, d11
-	fadd	d18, d10, d19
-	fcmp	d10, d21
-	fcsel	d18, d18, d22, gt
-	fcmp	d12, #0.0
-	fcsel	d18, d18, d12, le
-	str	d10, [x24, x26, lsl #3]
-	str	d18, [x23, x26, lsl #3]
-	fcmp	d2, d16
-	mov.16b	v20, v13
-	b.le	LBB0_9
-; %bb.8:                                ;   in Loop: Header=BB0_3 Depth=1
-	fmul	d20, d18, d24
-	fmul	d20, d20, d14
-	fdiv	d20, d20, d2
-LBB0_9:                                 ;   in Loop: Header=BB0_3 Depth=1
-	fmul	d2, d18, d23
-	fmaxnm	d18, d20, d11
-	fcmp	d18, d13
-	fcsel	d18, d18, d13, le
-	fcmp	d12, d25
-	fcsel	d14, d13, d18, gt
-	fsub	d18, d14, d11
-	fcmp	d14, d11
-	fcsel	d13, d18, d26, gt
-	fmul	d2, d2, d14
-	fmul	d18, d14, d14
-	fmsub	d18, d18, d15, d2
-	fmul	d2, d2, d28
-	fcmp	d18, d0
-	fcsel	d2, d18, d2, gt
-	fmadd	d18, d10, d29, d30
-	fcmp	d2, d30
-	fcsel	d15, d18, d2, lt
-	fcmp	d12, #0.0
-	b.gt	LBB0_12
-; %bb.10:                               ;   in Loop: Header=BB0_3 Depth=1
-	fcmp	d15, d31
-	b.le	LBB0_12
-; %bb.11:                               ;   in Loop: Header=BB0_3 Depth=1
-	mov	x8, #7378697629483820646        ; =0x6666666666666666
-	movk	x8, #16428, lsl #48
-	fmov	d2, x8
-	mov	x8, #140737488355328            ; =0x800000000000
-	movk	x8, #16434, lsl #48
-	fmov	d18, x8
-	fmadd	d2, d10, d2, d18
-	mov	x8, #3689348814741910323        ; =0x3333333333333333
-	movk	x8, #16474, lsl #48
-	fmov	d18, x8
-	fcmp	d2, d18
-	fcsel	d15, d2, d18, le
-LBB0_12:                                ;   in Loop: Header=BB0_3 Depth=1
-	fminnm	d2, d14, d11
-	fmul	d18, d14, d27
-	fsub	d20, d15, d0
-	fmov	d10, x28
-	fmul	d10, d20, d10
-	fcmp	d20, #0.0
-	fcsel	d20, d10, d26, gt
-	fmul	d10, d20, d8
-	fcmp	d20, #0.0
-	fcsel	d11, d10, d26, gt
-	fmul	d10, d20, d9
-	fcsel	d12, d10, d26, gt
-	fmov	d10, x30
-	str	d14, [x22, x26, lsl #3]
-	str	d2, [x21, x26, lsl #3]
-	fcmp	d11, d10
-	fcsel	d10, d26, d20, lt
-	str	d13, [x20, x26, lsl #3]
-	str	d18, [x19, x26, lsl #3]
-	str	d15, [x17, x26, lsl #3]
-	str	d10, [x16, x26, lsl #3]
-	fcsel	d2, d26, d11, lt
-	fcsel	d18, d26, d12, lt
-	str	d2, [x15, x26, lsl #3]
-	str	d18, [x14, x26, lsl #3]
-	cbz	w26, LBB0_2
-; %bb.13:                               ;   in Loop: Header=BB0_3 Depth=1
-	mov	x10, x25
-	mov	x8, x26
-	mov	x27, x25
-LBB0_14:                                ;   Parent Loop BB0_3 Depth=1
+	mov	x26, #48234                     ; =0xbc6a
+	movk	x26, #37748, lsl #16
+	movk	x26, #1048, lsl #32
+	movk	x26, #16358, lsl #48
+	movi.2d	v21, #0000000000000000
+	fmov	d22, x26
+	mov	x26, #36176                     ; =0x8d50
+	movk	x26, #28311, lsl #16
+	movk	x26, #33554, lsl #32
+	movk	x26, #16352, lsl #48
+	fmov	d23, x26
+	mov	x26, #48232                     ; =0xbc68
+	movk	x26, #37748, lsl #16
+	movk	x26, #1048, lsl #32
+	movk	x26, #16326, lsl #48
+	fmov	d24, x26
+	mov	w26, #-1                        ; =0xffffffff
+	mov	w0, w0
+	b	LBB0_4
+LBB0_2:                                 ;   in Loop: Header=BB0_4 Depth=1
+	sub	x27, x8, #1
+LBB0_3:                                 ;   in Loop: Header=BB0_4 Depth=1
+	sbfiz	x27, x27, #2, #32
+	str	w8, [x14, x27]
+	add	x8, x8, #1
+	add	w26, w26, #1
+	cmp	x8, x0
+	b.eq	LBB0_19
+LBB0_4:                                 ; =>This Loop Header: Depth=1
+                                        ;     Child Loop BB0_13 Depth 2
+	add	x27, x8, #4
+	cmp	x27, x0
+	b.hs	LBB0_6
+; %bb.5:                                ;   in Loop: Header=BB0_4 Depth=1
+	prfm	pldl1keep, [x9, x8, lsl #3]
+	prfm	pldl1keep, [x11, x8, lsl #3]
+	prfm	pldl1keep, [x12, x8, lsl #3]
+	prfm	pldl1keep, [x13, x8, lsl #3]
+LBB0_6:                                 ;   in Loop: Header=BB0_4 Depth=1
+	ldr	d2, [x1, x8, lsl #3]
+	ldr	d25, [x2, x8, lsl #3]
+	fminnm	d29, d2, d25
+	fmaxnm	d28, d2, d25
+	fcmp	d2, d25
+	csel	x27, x3, x4, le
+	ldr	d30, [x27, x8, lsl #3]
+	csel	x27, x4, x3, le
+	ldr	d31, [x27, x8, lsl #3]
+	movi.2d	v26, #0000000000000000
+	fcmp	d29, d1
+	movi.2d	v27, #0000000000000000
+	b.le	LBB0_8
+; %bb.7:                                ;   in Loop: Header=BB0_4 Depth=1
+	fsub	d2, d28, d29
+	fmul	d2, d2, d0
+	fdiv	d27, d2, d29
+LBB0_8:                                 ;   in Loop: Header=BB0_4 Depth=1
+	ldr	d2, [x5, x8, lsl #3]
+	fsub	d25, d27, d2
+	fmadd	d2, d25, d3, d4
+	fdiv	d2, d17, d2
+	fcmp	d25, d20
+	fcsel	d2, d2, d17, gt
+	fmul	d29, d30, d29
+	fmul	d14, d29, d2
+	fmul	d28, d31, d28
+	fmul	d15, d28, d2
+	fmul	d12, d14, d15
+	fadd	d13, d14, d15
+	fdiv	d2, d13, d12
+	fcmp	d12, d5
+	fcsel	d8, d2, d6, gt
+	ldr	d10, [x6, x8, lsl #3]
+	fcmp	d25, #0.0
+	movi.2d	v29, #0000000000000000
+	ldr	d2, [x7, x8, lsl #3]
+	str	d27, [x25, x8, lsl #3]
+	str	d25, [x24, x8, lsl #3]
+	movi.2d	v30, #0000000000000000
+	movi.2d	v31, #0000000000000000
+	movi.2d	v27, #0000000000000000
+	movi.2d	v28, #0000000000000000
+	movi.2d	v9, #0000000000000000
+	movi.2d	v11, #0000000000000000
+	b.le	LBB0_10
+; %bb.9:                                ;   in Loop: Header=BB0_4 Depth=1
+	fadd	d2, d2, d10
+	fminnm	d26, d14, d15
+	fminnm	d2, d26, d2
+	fmul	d27, d25, d7
+	fcmp	d13, d5
+	fmul	d26, d25, d16
+	fmul	d26, d26, d12
+	fdiv	d26, d26, d13
+	fcsel	d26, d21, d26, le
+	fminnm	d26, d26, d2
+	fminnm	d29, d26, d10
+	fsub	d2, d26, d10
+	fcmp	d26, d10
+	fcsel	d30, d2, d21, gt
+	fmul	d31, d29, d18
+	fmul	d2, d26, d26
+	fmul	d2, d2, d8
+	fnmsub	d2, d27, d26, d2
+	fmadd	d2, d30, d19, d2
+	fmaxnm	d27, d2, d21
+	ldr	d2, [sp, #8]                    ; 8-byte Folded Reload
+	fsub	d2, d27, d2
+	fmul	d28, d2, d22
+	fmul	d8, d2, d23
+	fmul	d10, d2, d24
+	fcmp	d2, #0.0
+	fcsel	d28, d28, d21, gt
+	fcsel	d9, d8, d21, gt
+	fcsel	d11, d10, d21, gt
+LBB0_10:                                ;   in Loop: Header=BB0_4 Depth=1
+	str	d26, [x23, x8, lsl #3]
+	str	d29, [x22, x8, lsl #3]
+	str	d30, [x21, x8, lsl #3]
+	str	d31, [x20, x8, lsl #3]
+	str	d27, [x19, x8, lsl #3]
+	str	d28, [x17, x8, lsl #3]
+	str	d9, [x16, x8, lsl #3]
+	str	d11, [x15, x8, lsl #3]
+	mov	w26, w26
+	cbz	w8, LBB0_2
+; %bb.11:                               ;   in Loop: Header=BB0_4 Depth=1
+	mov	x27, x26
+	b	LBB0_13
+LBB0_12:                                ;   in Loop: Header=BB0_13 Depth=2
+	add	x30, x10, x27, lsl #2
+	str	w28, [x30, #4]
+	cmp	x27, #0
+	sub	x27, x27, #1
+	b.le	LBB0_18
+LBB0_13:                                ;   Parent Loop BB0_4 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
-	ldrsw	x11, [x27, #-4]!
-	ldr	d2, [x16, x11, lsl #3]
-	fcmp	d2, d10
-	b.ge	LBB0_17
-; %bb.15:                               ;   in Loop: Header=BB0_14 Depth=2
-	sub	x8, x8, #1
-	str	w11, [x10]
-	add	x11, x8, #1
-	mov	x10, x27
-	cmp	x11, #1
-	b.gt	LBB0_14
-; %bb.16:                               ;   in Loop: Header=BB0_3 Depth=1
-	mov	x8, #0                          ; =0x0
-LBB0_17:                                ;   in Loop: Header=BB0_3 Depth=1
-	sxtw	x8, w8
-	str	w26, [x9, x8, lsl #2]
-	add	x26, x26, #1
-	add	x25, x25, #4
-	cmp	x26, x0
+	ldr	w28, [x10, x27, lsl #2]
+	ldr	d2, [x17, w28, sxtw #3]
+	fcmp	d2, d28
+	b.lt	LBB0_12
+; %bb.14:                               ;   in Loop: Header=BB0_13 Depth=2
 	b.ne	LBB0_3
-LBB0_18:
-	ldp	x29, x30, [sp, #176]            ; 16-byte Folded Reload
-	ldp	x20, x19, [sp, #160]            ; 16-byte Folded Reload
-	ldp	x22, x21, [sp, #144]            ; 16-byte Folded Reload
-	ldp	x24, x23, [sp, #128]            ; 16-byte Folded Reload
-	ldp	x26, x25, [sp, #112]            ; 16-byte Folded Reload
-	ldp	x28, x27, [sp, #96]             ; 16-byte Folded Reload
-	ldp	d9, d8, [sp, #80]               ; 16-byte Folded Reload
-	ldp	d11, d10, [sp, #64]             ; 16-byte Folded Reload
-	ldp	d13, d12, [sp, #48]             ; 16-byte Folded Reload
-	ldp	d15, d14, [sp, #32]             ; 16-byte Folded Reload
-	add	sp, sp, #192
+; %bb.15:                               ;   in Loop: Header=BB0_13 Depth=2
+	ldr	d2, [x19, w28, sxtw #3]
+	fcmp	d2, d27
+	b.lt	LBB0_12
+; %bb.16:                               ;   in Loop: Header=BB0_13 Depth=2
+	b.ne	LBB0_3
+; %bb.17:                               ;   in Loop: Header=BB0_13 Depth=2
+	ldr	d2, [x24, w28, sxtw #3]
+	fcmp	d2, d25
+	b.lt	LBB0_12
+	b	LBB0_3
+LBB0_18:                                ;   in Loop: Header=BB0_4 Depth=1
+	mov	x27, #-1                        ; =0xffffffffffffffff
+	b	LBB0_3
 LBB0_19:
+	ldp	x29, x30, [sp, #160]            ; 16-byte Folded Reload
+	ldp	x20, x19, [sp, #144]            ; 16-byte Folded Reload
+	ldp	x22, x21, [sp, #128]            ; 16-byte Folded Reload
+	ldp	x24, x23, [sp, #112]            ; 16-byte Folded Reload
+	ldp	x26, x25, [sp, #96]             ; 16-byte Folded Reload
+	ldp	x28, x27, [sp, #80]             ; 16-byte Folded Reload
+	ldp	d9, d8, [sp, #64]               ; 16-byte Folded Reload
+	ldp	d11, d10, [sp, #48]             ; 16-byte Folded Reload
+	ldp	d13, d12, [sp, #32]             ; 16-byte Folded Reload
+	ldp	d15, d14, [sp, #16]             ; 16-byte Folded Reload
+	add	sp, sp, #176
 	ret
 	.cfi_endproc
                                         ; -- End function
@@ -343,8 +291,8 @@ _main:                                  ; @main
 	.cfi_offset w20, -32
 	.cfi_offset w21, -40
 	.cfi_offset w22, -48
-	cmp	w0, #1
-	b.le	LBB1_5
+	cmp	w0, #2
+	b.lt	LBB1_4
 ; %bb.1:
 	mov	w20, #0                         ; =0x0
 	mov	w8, w0
@@ -363,46 +311,32 @@ LBB1_2:                                 ; =>This Inner Loop Header: Depth=1
 	subs	x22, x22, #1
 	b.ne	LBB1_2
 ; %bb.3:
-	mov	w0, #3                          ; =0x3
-	bl	_curl_global_init
-	cbz	w20, LBB1_6
-; %bb.4:
-	mov	x0, #0                          ; =0x0
-	mov	x1, #0                          ; =0x0
-	mov	x2, #0                          ; =0x0
-	mov	w3, #1                          ; =0x1
-	bl	_run_native_asm_sniper_cycle
-	b	LBB1_11
+	cmp	w20, #0
+	cset	w21, eq
+	b	LBB1_5
+LBB1_4:
+	mov	w21, #1                         ; =0x1
 LBB1_5:
 	mov	w0, #3                          ; =0x3
 	bl	_curl_global_init
-LBB1_6:
-Lloh2:
-	adrp	x2, _lockfree_block_ticker_thread@PAGE
-Lloh3:
-	add	x2, x2, _lockfree_block_ticker_thread@PAGEOFF
-	add	x0, sp, #40
-	mov	x1, #0                          ; =0x0
-	mov	x3, #0                          ; =0x0
-	bl	_pthread_create
 	bl	_curl_easy_init
 	mov	x19, x0
-	stp	xzr, xzr, [sp, #16]
-	str	xzr, [sp, #32]
-Lloh4:
+	stp	xzr, xzr, [sp, #24]
+	str	xzr, [sp, #40]
+Lloh2:
 	adrp	x1, l_.str.1@PAGE
-Lloh5:
+Lloh3:
 	add	x1, x1, l_.str.1@PAGEOFF
 	mov	x0, #0                          ; =0x0
 	bl	_curl_slist_append
-Lloh6:
+Lloh4:
 	adrp	x1, l_.str.2@PAGE
-Lloh7:
+Lloh5:
 	add	x1, x1, l_.str.2@PAGEOFF
 	bl	_curl_slist_append
-Lloh8:
+Lloh6:
 	adrp	x1, l_.str.3@PAGE
-Lloh9:
+Lloh7:
 	add	x1, x1, l_.str.3@PAGEOFF
 	bl	_curl_slist_append
 	mov	x20, x0
@@ -416,11 +350,21 @@ Lloh9:
 	mov	x0, x19
 	mov	w1, #92                         ; =0x5c
 	bl	_curl_easy_setopt
+	tbz	w21, #0, LBB1_9
+; %bb.6:
+Lloh8:
+	adrp	x2, _lockfree_block_ticker_thread@PAGE
+Lloh9:
+	add	x2, x2, _lockfree_block_ticker_thread@PAGEOFF
+	add	x0, sp, #16
+	mov	x1, #0                          ; =0x0
+	mov	x3, #0                          ; =0x0
+	bl	_pthread_create
 	adrp	x21, __MergedGlobals@PAGE
 	ldr	w8, [x21, __MergedGlobals@PAGEOFF]
 	cbz	w8, LBB1_8
 LBB1_7:                                 ; =>This Inner Loop Header: Depth=1
-	add	x2, sp, #16
+	add	x2, sp, #24
 	mov	x0, x19
 	mov	x1, x20
 	mov	w3, #0                          ; =0x0
@@ -432,19 +376,27 @@ LBB1_7:                                 ; =>This Inner Loop Header: Depth=1
 	cbnz	w8, LBB1_7
 LBB1_8:
 	str	wzr, [x21, __MergedGlobals@PAGEOFF]
-	ldr	x0, [sp, #40]
+	ldr	x0, [sp, #16]
 	mov	x1, #0                          ; =0x0
 	bl	_pthread_join
-	ldr	x0, [sp, #16]
-	cbz	x0, LBB1_10
-; %bb.9:
-	bl	_free
+	ldr	x0, [sp, #24]
+	cbnz	x0, LBB1_10
+	b	LBB1_11
+LBB1_9:
+	add	x2, sp, #24
+	mov	x0, x19
+	mov	x1, x20
+	mov	w3, #1                          ; =0x1
+	bl	_run_native_asm_sniper_cycle
+	ldr	x0, [sp, #24]
+	cbz	x0, LBB1_11
 LBB1_10:
+	bl	_free
+LBB1_11:
 	mov	x0, x20
 	bl	_curl_slist_free_all
 	mov	x0, x19
 	bl	_curl_easy_cleanup
-LBB1_11:
 	bl	_curl_global_cleanup
 	mov	w0, #0                          ; =0x0
 	ldp	x29, x30, [sp, #80]             ; 16-byte Folded Reload
@@ -453,10 +405,10 @@ LBB1_11:
 	add	sp, sp, #96
 	ret
 	.loh AdrpAdd	Lloh0, Lloh1
-	.loh AdrpAdd	Lloh8, Lloh9
 	.loh AdrpAdd	Lloh6, Lloh7
 	.loh AdrpAdd	Lloh4, Lloh5
 	.loh AdrpAdd	Lloh2, Lloh3
+	.loh AdrpAdd	Lloh8, Lloh9
 	.cfi_endproc
                                         ; -- End function
 	.p2align	2                               ; -- Begin function run_native_asm_sniper_cycle
@@ -497,6 +449,7 @@ _run_native_asm_sniper_cycle:           ; @run_native_asm_sniper_cycle
 	.cfi_offset b13, -144
 	.cfi_offset b14, -152
 	.cfi_offset b15, -160
+	str	w3, [sp, #468]                  ; 4-byte Folded Spill
 Lloh10:
 	adrp	x8, ___stack_chk_guard@GOTPAGE
 Lloh11:
@@ -504,133 +457,15 @@ Lloh11:
 Lloh12:
 	ldr	x8, [x8]
 	str	x8, [sp, #2136]
-	mov	x8, #29570                      ; =0x7382
-	movk	x8, #37958, lsl #16
-	movk	x8, #5366, lsl #32
-	movk	x8, #16489, lsl #48
-	fmov	d0, x8
-	mov	x8, #30409                      ; =0x76c9
-	movk	x8, #40894, lsl #16
-	movk	x8, #6938, lsl #32
-	movk	x8, #16489, lsl #48
-	fmov	d14, x8
-	mov	x8, #59704                      ; =0xe938
-	movk	x8, #28871, lsl #16
-	movk	x8, #11398, lsl #32
-	movk	x8, #16204, lsl #48
-	fmov	d25, x8
-	mov	x8, #27369                      ; =0x6ae9
-	movk	x8, #44934, lsl #16
-	movk	x8, #12042, lsl #32
-	movk	x8, #16204, lsl #48
-	fmov	d26, x8
-	mov	x8, #60293                      ; =0xeb85
-	movk	x8, #47185, lsl #16
-	movk	x8, #51870, lsl #32
-	movk	x8, #16546, lsl #48
-	fmov	d23, x8
-	mov	x8, #60293                      ; =0xeb85
-	movk	x8, #47185, lsl #16
-	movk	x8, #51486, lsl #32
-	movk	x8, #16546, lsl #48
-	fmov	d24, x8
-	mov	x8, #30363                      ; =0x769b
-	movk	x8, #52529, lsl #16
-	movk	x8, #59252, lsl #32
-	movk	x8, #16448, lsl #48
-	fmov	d22, x8
-	mov	x8, #15431                      ; =0x3c47
-	movk	x8, #52697, lsl #16
-	movk	x8, #59020, lsl #32
-	movk	x8, #16448, lsl #48
-	fmov	d11, x8
-	mov	x8, #43528                      ; =0xaa08
-	movk	x8, #44870, lsl #16
-	movk	x8, #10246, lsl #32
-	movk	x8, #16327, lsl #48
-	fmov	d8, x8
-	mov	x8, #27867                      ; =0x6cdb
-	movk	x8, #50348, lsl #16
-	movk	x8, #11068, lsl #32
-	movk	x8, #16327, lsl #48
-	fmov	d12, x8
-	mov	x8, #64982                      ; =0xfdd6
-	movk	x8, #8547, lsl #16
-	movk	x8, #1082, lsl #32
-	movk	x8, #16368, lsl #48
-	fmov	d15, x8
-	mov	x8, #3997                       ; =0xf9d
-	movk	x8, #4815, lsl #16
-	movk	x8, #1124, lsl #32
-	movk	x8, #16368, lsl #48
-	fmov	d13, x8
-	mov	x8, #63988                      ; =0xf9f4
-	movk	x8, #9000, lsl #16
-	movk	x8, #46, lsl #32
-	movk	x8, #16368, lsl #48
-	fmov	d20, x8
-	mov	x8, #35794                      ; =0x8bd2
-	movk	x8, #64986, lsl #16
-	movk	x8, #42, lsl #32
-	movk	x8, #16368, lsl #48
-	fmov	d21, x8
-	mov	x8, #18350                      ; =0x47ae
-	movk	x8, #31457, lsl #16
-	movk	x8, #53796, lsl #32
-	movk	x8, #16627, lsl #48
-	fmov	d19, x8
-	mov	x8, #39322                      ; =0x999a
-	movk	x8, #39321, lsl #16
-	movk	x8, #53877, lsl #32
-	movk	x8, #16627, lsl #48
-	fmov	d16, x8
-	mov	x8, #13661                      ; =0x355d
-	movk	x8, #4559, lsl #16
-	movk	x8, #61177, lsl #32
-	movk	x8, #16371, lsl #48
-	fmov	d7, x8
-	mov	x8, #53255                      ; =0xd007
-	movk	x8, #64495, lsl #16
-	movk	x8, #61239, lsl #32
-	movk	x8, #16371, lsl #48
-	fmov	d18, x8
-	mov	x8, #10486                      ; =0x28f6
-	movk	x8, #36700, lsl #16
-	movk	x8, #50626, lsl #32
-	movk	x8, #16546, lsl #48
-	fmov	d10, x8
-	mov	x8, #44564                      ; =0xae14
-	movk	x8, #57671, lsl #16
-	movk	x8, #50554, lsl #32
-	movk	x8, #16546, lsl #48
-	fmov	d6, x8
-	mov	x8, #10486                      ; =0x28f6
-	movk	x8, #36700, lsl #16
-	movk	x8, #50498, lsl #32
-	movk	x8, #16546, lsl #48
-	fmov	d17, x8
-	mov	x8, #55050                      ; =0xd70a
-	movk	x8, #28835, lsl #16
-	movk	x8, #50237, lsl #32
-	movk	x8, #16546, lsl #48
-	fmov	d9, x8
-	mov	x8, #45859                      ; =0xb323
-	movk	x8, #32689, lsl #16
-	movk	x8, #50217, lsl #32
-	movk	x8, #16546, lsl #48
-	fmov	d1, x8
-	str	w3, [sp, #476]                  ; 4-byte Folded Spill
-	cbz	x0, LBB2_4
+	cbz	x0, LBB2_2
 ; %bb.1:
-	cbnz	w3, LBB2_4
-; %bb.2:
 	mov	x20, x2
 	mov	x21, x1
 	str	xzr, [x2, #8]
 Lloh13:
-	adrp	x8, __MergedGlobals.71@PAGE+8
+	adrp	x8, __MergedGlobals.75@PAGE+8
 Lloh14:
-	ldr	x8, [x8, __MergedGlobals.71@PAGEOFF+8]
+	ldr	x8, [x8, __MergedGlobals.75@PAGEOFF+8]
 	and	x8, x8, #0x3
 Lloh15:
 	adrp	x9, _RPC_URLS@PAGE
@@ -677,8 +512,8 @@ Lloh20:
 	bl	_curl_easy_setopt
 	mov	x0, x22
 	bl	_curl_easy_perform
-	cbz	w0, LBB2_16
-LBB2_3:
+	cbz	w0, LBB2_15
+LBB2_2:
 	mov	x8, #29570                      ; =0x7382
 	movk	x8, #37958, lsl #16
 	movk	x8, #5366, lsl #32
@@ -733,7 +568,7 @@ LBB2_3:
 	movk	x8, #8547, lsl #16
 	movk	x8, #1082, lsl #32
 	movk	x8, #16368, lsl #48
-	fmov	d15, x8
+	fmov	d27, x8
 	mov	x8, #3997                       ; =0xf9d
 	movk	x8, #4815, lsl #16
 	movk	x8, #1124, lsl #32
@@ -794,10 +629,10 @@ LBB2_3:
 	movk	x8, #50217, lsl #32
 	movk	x8, #16546, lsl #48
 	fmov	d1, x8
-LBB2_4:
+LBB2_3:
 	fmul	d2, d12, d9
 	fdiv	d2, d2, d8
-LBB2_5:
+LBB2_4:
 	fdiv	d3, d16, d11
 	mov	x8, #60813                      ; =0xed8d
 	movk	x8, #41141, lsl #16
@@ -841,7 +676,7 @@ LBB2_5:
 	str	d1, [sp, #1880]
 	str	d19, [sp, #1888]
 	str	d20, [sp, #1896]
-	str	d15, [sp, #1904]
+	str	d27, [sp, #1904]
 	str	d8, [sp, #1912]
 	fmul	d1, d22, d9
 	str	d1, [sp, #1920]
@@ -860,7 +695,7 @@ LBB2_5:
 	str	d10, [sp, #1952]
 	str	d17, [sp, #1960]
 	str	d10, [sp, #1968]
-	str	d15, [sp, #1976]
+	str	d27, [sp, #1976]
 	add	x1, sp, #496
 	mov	w0, #6                          ; =0x6
 	bl	_clock_gettime
@@ -882,16 +717,16 @@ Lloh25:
 	adrp	x23, l___const.run_native_asm_sniper_cycle.bm@PAGE
 Lloh26:
 	add	x23, x23, l___const.run_native_asm_sniper_cycle.bm@PAGEOFF
-	mov	x8, #17197                      ; =0x432d
-	movk	x8, #60188, lsl #16
-	movk	x8, #14050, lsl #32
-	movk	x8, #16234, lsl #48
+	mov	x8, #18036                      ; =0x4674
+	movk	x8, #63124, lsl #16
+	movk	x8, #24326, lsl #32
+	movk	x8, #16264, lsl #48
 	fmov	d8, x8
 Lloh27:
 	adrp	x24, l___const.run_native_asm_sniper_cycle.am@PAGE
 Lloh28:
 	add	x24, x24, l___const.run_native_asm_sniper_cycle.am@PAGEOFF
-LBB2_6:                                 ; =>This Inner Loop Header: Depth=1
+LBB2_5:                                 ; =>This Inner Loop Header: Depth=1
 	add	x8, sp, #1856
 	add	x9, sp, #1984
 	; InlineAsm Start
@@ -925,8 +760,8 @@ Lloh30:
 	; InlineAsm Start
 	; InlineAsm End
 	subs	w19, w19, #1
-	b.ne	LBB2_6
-; %bb.7:
+	b.ne	LBB2_5
+; %bb.6:
 	add	x1, sp, #480
 	mov	w0, #6                          ; =0x6
 	bl	_clock_gettime
@@ -959,46 +794,41 @@ Lloh32:
 	str	d8, [x8]
 	str	d9, [x8, #8]
 Lloh33:
-	adrp	x9, __MergedGlobals.71@PAGE+8
+	adrp	x9, __MergedGlobals.75@PAGE+8
 Lloh34:
-	add	x9, x9, __MergedGlobals.71@PAGEOFF+8
+	add	x9, x9, __MergedGlobals.75@PAGEOFF+8
 	ldr	x10, [x9]
 	add	x10, x10, #1
 	str	x10, [x9]
-	ldrsw	x13, [sp, #512]
+	ldrsw	x22, [sp, #512]
 	ldr	x8, [x8, #16]
 	ldr	x9, [x9, #8]
 Lloh35:
-	adrp	x14, l___const.run_native_asm_sniper_cycle.route_names@PAGE
+	adrp	x28, l___const.run_native_asm_sniper_cycle.route_names@PAGE
 Lloh36:
-	add	x14, x14, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
+	add	x28, x28, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
 	cmp	x8, x9
-Lloh37:
-	adrp	x28, l___const.run_native_asm_sniper_cycle.fl@PAGE
-Lloh38:
-	add	x28, x28, l___const.run_native_asm_sniper_cycle.fl@PAGEOFF
-	str	x13, [sp, #464]                 ; 8-byte Folded Spill
-	b.ls	LBB2_24
-; %bb.8:
+	b.ls	LBB2_23
+; %bb.7:
 	add	x9, sp, #832
-	ldr	d0, [x9, x13, lsl #3]
+	ldr	d0, [x9, x22, lsl #3]
 	fcmp	d0, #0.0
-	b.le	LBB2_24
-; %bb.9:
+	b.le	LBB2_23
+; %bb.8:
 	add	x9, sp, #704
-	ldr	d10, [x9, x13, lsl #3]
+	ldr	d10, [x9, x22, lsl #3]
 	mov	x9, #34184                      ; =0x8588
 	movk	x9, #54106, lsl #16
 	movk	x9, #58300, lsl #32
 	movk	x9, #16244, lsl #48
 	fmov	d1, x9
 	fcmp	d10, d1
-	b.lt	LBB2_24
-; %bb.10:
-Lloh39:
-	adrp	x19, __MergedGlobals.71@PAGE
-Lloh40:
-	add	x19, x19, __MergedGlobals.71@PAGEOFF
+	b.lt	LBB2_23
+; %bb.9:
+Lloh37:
+	adrp	x19, __MergedGlobals.75@PAGE
+Lloh38:
+	add	x19, x19, __MergedGlobals.75@PAGEOFF
 	ldr	x9, [x19, #24]
 	add	x9, x9, #1
 	stp	x8, x9, [x19, #16]
@@ -1010,7 +840,7 @@ Lloh40:
 	fmul	d11, d0, d1
 	fmul	d12, d10, d1
 	add	x9, sp, #576
-	ldr	d0, [x9, x13, lsl #3]
+	ldr	d0, [x9, x22, lsl #3]
 	fmul	d13, d0, d1
 	ldp	d0, d1, [x19, #32]
 	fadd	d0, d0, d11
@@ -1021,8 +851,8 @@ Lloh40:
 	str	d0, [x19, #48]
 	ldr	w9, [x19]
 	cmp	w9, #1
-	b.lt	LBB2_13
-; %bb.11:
+	b.lt	LBB2_12
+; %bb.10:
 	mov	w10, #19                        ; =0x13
 	cmp	w9, #19
 	csel	w11, w9, w10, lo
@@ -1033,7 +863,7 @@ Lloh40:
 	sub	w11, w11, #1
 	umaddl	x11, w11, w12, x19
 	add	x11, x11, #80
-LBB2_12:                                ; =>This Inner Loop Header: Depth=1
+LBB2_11:                                ; =>This Inner Loop Header: Depth=1
 	ldp	q0, q1, [x11, #128]
 	stp	q0, q1, [x10, #128]
 	ldp	q0, q1, [x11, #160]
@@ -1050,18 +880,18 @@ LBB2_12:                                ; =>This Inner Loop Header: Depth=1
 	sub	x10, x10, #192
 	sub	x11, x11, #192
 	cmp	w9, #1
-	b.gt	LBB2_12
-LBB2_13:
-Lloh41:
-	adrp	x0, __MergedGlobals.71@PAGE+80
-Lloh42:
-	add	x0, x0, __MergedGlobals.71@PAGEOFF+80
+	b.gt	LBB2_11
+LBB2_12:
+Lloh39:
+	adrp	x0, __MergedGlobals.75@PAGE+80
+Lloh40:
+	add	x0, x0, __MergedGlobals.75@PAGEOFF+80
 	str	x8, [x0], #8
-	ldr	x8, [x14, x13, lsl #3]
+	ldr	x8, [x28, x22, lsl #3]
 	str	x8, [sp]
-Lloh43:
+Lloh41:
 	adrp	x2, l_.str.26@PAGE
-Lloh44:
+Lloh42:
 	add	x2, x2, l_.str.26@PAGEOFF
 	mov	w1, #96                         ; =0x60
 	bl	_snprintf
@@ -1069,26 +899,26 @@ Lloh44:
 	movk	x8, #16632, lsl #48
 	fmov	d0, x8
 	fcmp	d11, d0
-	b.ge	LBB2_19
-; %bb.14:
+	b.ge	LBB2_18
+; %bb.13:
 	mov	x8, #4636737291354636288        ; =0x4059000000000000
 	fmov	d0, x8
 	fcmp	d11, d0
-	b.ge	LBB2_20
-; %bb.15:
-Lloh45:
+	b.ge	LBB2_19
+; %bb.14:
+Lloh43:
 	adrp	x8, l_.str.29@PAGE
-Lloh46:
+Lloh44:
 	add	x8, x8, l_.str.29@PAGEOFF
-	b	LBB2_21
-LBB2_16:
+	b	LBB2_20
+LBB2_15:
 	ldr	x0, [x20]
-	cbz	x0, LBB2_3
-; %bb.17:
+	cbz	x0, LBB2_2
+; %bb.16:
 	ldr	x8, [x20, #8]
 	cmp	x8, #33
-	b.lo	LBB2_3
-; %bb.18:
+	b.lo	LBB2_2
+; %bb.17:
 	mov	w1, #10                         ; =0xa
 	bl	_find_batch_result_for_id
 	mov	x8, #2717908992                 ; =0xa2000000
@@ -1123,7 +953,7 @@ LBB2_16:
 	mov.16b	v1, v8
 	mov.16b	v2, v10
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #448]                  ; 8-byte Folded Spill
+	str	d0, [sp, #456]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #12                         ; =0xc
 	bl	_find_batch_result_for_id
@@ -1134,11 +964,11 @@ LBB2_16:
 	fmov	d3, x8
 	mov.16b	v0, v12
 	mov.16b	v1, v8
-	str	d8, [sp, #464]                  ; 8-byte Folded Spill
+	str	d8, [sp, #376]                  ; 8-byte Folded Spill
 	mov.16b	v2, v10
-	str	d10, [sp, #400]                 ; 8-byte Folded Spill
+	str	d10, [sp, #408]                 ; 8-byte Folded Spill
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #440]                  ; 8-byte Folded Spill
+	str	d0, [sp, #448]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #13                         ; =0xd
 	bl	_find_batch_result_for_id
@@ -1168,7 +998,7 @@ LBB2_16:
 	fmov	d2, #2.50000000
 	mov.16b	v1, v8
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #432]                  ; 8-byte Folded Spill
+	str	d0, [sp, #440]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #15                         ; =0xf
 	bl	_find_batch_result_for_id
@@ -1181,12 +1011,12 @@ LBB2_16:
 	fmov	d2, #2.50000000
 	mov.16b	v1, v8
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #424]                  ; 8-byte Folded Spill
+	str	d0, [sp, #432]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #16                         ; =0x10
 	bl	_find_batch_result_for_id
 	mov	x8, #4636737291354636288        ; =0x4059000000000000
-	fmov	d14, x8
+	fmov	d15, x8
 	mov	x8, #149533581377536            ; =0x880000000000
 	movk	x8, #16563, lsl #48
 	fmov	d8, x8
@@ -1198,11 +1028,11 @@ LBB2_16:
 	movk	x8, #53877, lsl #32
 	movk	x8, #16627, lsl #48
 	fmov	d3, x8
-	mov.16b	v0, v14
+	mov.16b	v0, v15
 	mov.16b	v1, v8
 	mov.16b	v2, v11
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #416]                  ; 8-byte Folded Spill
+	str	d0, [sp, #424]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #17                         ; =0x11
 	bl	_find_batch_result_for_id
@@ -1211,11 +1041,11 @@ LBB2_16:
 	movk	x8, #53796, lsl #32
 	movk	x8, #16627, lsl #48
 	fmov	d3, x8
-	mov.16b	v0, v14
+	mov.16b	v0, v15
 	mov.16b	v1, v8
 	mov.16b	v2, v11
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #408]                  ; 8-byte Folded Spill
+	str	d0, [sp, #416]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #18                         ; =0x12
 	bl	_find_batch_result_for_id
@@ -1238,7 +1068,7 @@ LBB2_16:
 	mov.16b	v1, v8
 	mov.16b	v2, v11
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #392]                  ; 8-byte Folded Spill
+	str	d0, [sp, #400]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #19                         ; =0x13
 	bl	_find_batch_result_for_id
@@ -1251,7 +1081,7 @@ LBB2_16:
 	mov.16b	v1, v8
 	mov.16b	v2, v11
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #384]                  ; 8-byte Folded Spill
+	str	d0, [sp, #392]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #20                         ; =0x14
 	bl	_find_batch_result_for_id
@@ -1277,7 +1107,7 @@ LBB2_16:
 	mov.16b	v1, v8
 	mov.16b	v2, v11
 	bl	_decode_slot0_sqrt_price
-	mov.16b	v15, v0
+	str	d0, [sp, #384]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #22                         ; =0x16
 	bl	_find_batch_result_for_id
@@ -1293,7 +1123,7 @@ LBB2_16:
 	fmov	d3, x8
 	fmov	d2, #10.00000000
 	mov.16b	v11, v12
-	str	d12, [sp, #456]                 ; 8-byte Folded Spill
+	str	d12, [sp, #472]                 ; 8-byte Folded Spill
 	mov.16b	v0, v12
 	mov.16b	v1, v8
 	bl	_decode_slot0_sqrt_price
@@ -1318,15 +1148,15 @@ LBB2_16:
 	movk	x8, #55767, lsl #16
 	movk	x8, #31967, lsl #32
 	movk	x8, #15835, lsl #48
-	fmov	d0, x8
-	str	d0, [sp, #376]                  ; 8-byte Folded Spill
+	fmov	d14, x8
 	mov	x8, #15431                      ; =0x3c47
 	movk	x8, #52697, lsl #16
 	movk	x8, #59020, lsl #32
 	movk	x8, #16448, lsl #48
 	fmov	d3, x8
 	fmov	d1, #5.00000000
-	mov.16b	v2, v14
+	mov.16b	v0, v14
+	mov.16b	v2, v15
 	bl	_decode_slot0_sqrt_price
 	mov.16b	v11, v0
 	ldr	x0, [x20]
@@ -1338,10 +1168,10 @@ LBB2_16:
 	movk	x8, #16448, lsl #48
 	fmov	d3, x8
 	fmov	d1, #5.00000000
-	ldr	d0, [sp, #376]                  ; 8-byte Folded Reload
-	mov.16b	v2, v14
+	mov.16b	v0, v14
+	mov.16b	v2, v15
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #376]                  ; 8-byte Folded Spill
+	str	d0, [sp, #368]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #26                         ; =0x1a
 	bl	_find_batch_result_for_id
@@ -1350,11 +1180,13 @@ LBB2_16:
 	movk	x8, #51486, lsl #32
 	movk	x8, #16546, lsl #48
 	fmov	d3, x8
-	ldp	d0, d1, [sp, #456]              ; 16-byte Folded Reload
-	ldr	d14, [sp, #400]                 ; 8-byte Folded Reload
+	ldr	d0, [sp, #472]                  ; 8-byte Folded Reload
+	ldr	d15, [sp, #376]                 ; 8-byte Folded Reload
+	mov.16b	v1, v15
+	ldr	d14, [sp, #408]                 ; 8-byte Folded Reload
 	mov.16b	v2, v14
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #368]                  ; 8-byte Folded Spill
+	str	d0, [sp, #360]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #27                         ; =0x1b
 	bl	_find_batch_result_for_id
@@ -1363,10 +1195,11 @@ LBB2_16:
 	movk	x8, #51870, lsl #32
 	movk	x8, #16546, lsl #48
 	fmov	d3, x8
-	ldp	d0, d1, [sp, #456]              ; 16-byte Folded Reload
+	ldr	d0, [sp, #472]                  ; 8-byte Folded Reload
+	mov.16b	v1, v15
 	mov.16b	v2, v14
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #464]                  ; 8-byte Folded Spill
+	str	d0, [sp, #376]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #28                         ; =0x1c
 	bl	_find_batch_result_for_id
@@ -1374,8 +1207,7 @@ LBB2_16:
 	movk	x8, #35043, lsl #16
 	movk	x8, #63669, lsl #32
 	movk	x8, #16100, lsl #48
-	fmov	d1, x8
-	str	d1, [sp, #400]                  ; 8-byte Folded Spill
+	fmov	d15, x8
 	mov	x8, #-7378697629483820647       ; =0x9999999999999999
 	movk	x8, #39322
 	movk	x8, #16313, lsl #48
@@ -1386,9 +1218,10 @@ LBB2_16:
 	movk	x8, #16204, lsl #48
 	fmov	d3, x8
 	fmov	d0, #1.00000000
+	mov.16b	v1, v15
 	mov.16b	v2, v14
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #456]                  ; 8-byte Folded Spill
+	str	d0, [sp, #472]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #29                         ; =0x1d
 	bl	_find_batch_result_for_id
@@ -1398,17 +1231,16 @@ LBB2_16:
 	movk	x8, #16204, lsl #48
 	fmov	d3, x8
 	fmov	d0, #1.00000000
-	ldr	d1, [sp, #400]                  ; 8-byte Folded Reload
+	mov.16b	v1, v15
 	mov.16b	v2, v14
 	bl	_decode_slot0_sqrt_price
-	str	d0, [sp, #400]                  ; 8-byte Folded Spill
+	str	d0, [sp, #408]                  ; 8-byte Folded Spill
 	ldr	x0, [x20]
 	mov	w1, #30                         ; =0x1e
 	bl	_find_batch_result_for_id
 	mov	x8, #70368744177664             ; =0x400000000000
 	movk	x8, #16543, lsl #48
-	fmov	d2, x8
-	str	d2, [sp, #360]                  ; 8-byte Folded Spill
+	fmov	d15, x8
 	mov	x8, #30409                      ; =0x76c9
 	movk	x8, #40894, lsl #16
 	movk	x8, #6938, lsl #32
@@ -1416,6 +1248,7 @@ LBB2_16:
 	fmov	d3, x8
 	fmov	d0, #1.00000000
 	fmov	d1, #10.00000000
+	mov.16b	v2, v15
 	bl	_decode_slot0_sqrt_price
 	mov.16b	v14, v0
 	ldr	x0, [x20]
@@ -1428,60 +1261,60 @@ LBB2_16:
 	fmov	d3, x8
 	fmov	d0, #1.00000000
 	fmov	d1, #10.00000000
-	ldr	d2, [sp, #360]                  ; 8-byte Folded Reload
+	mov.16b	v2, v15
 	bl	_decode_slot0_sqrt_price
-	ldp	d26, d23, [sp, #456]            ; 16-byte Folded Reload
-	ldp	d21, d25, [sp, #392]            ; 16-byte Folded Reload
-	ldp	d24, d22, [sp, #368]            ; 16-byte Folded Reload
-	ldr	d20, [sp, #384]                 ; 8-byte Folded Reload
-	ldp	d16, d7, [sp, #416]             ; 16-byte Folded Reload
-	ldr	d19, [sp, #408]                 ; 8-byte Folded Reload
-	ldp	d18, d6, [sp, #432]             ; 16-byte Folded Reload
-	ldr	d17, [sp, #448]                 ; 8-byte Folded Reload
-	fdiv	d1, d24, d15
+	ldp	d23, d27, [sp, #376]            ; 16-byte Folded Reload
+	ldr	d26, [sp, #472]                 ; 8-byte Folded Reload
+	ldp	d21, d25, [sp, #400]            ; 16-byte Folded Reload
+	ldp	d24, d22, [sp, #360]            ; 16-byte Folded Reload
+	ldr	d20, [sp, #392]                 ; 8-byte Folded Reload
+	ldp	d16, d7, [sp, #424]             ; 16-byte Folded Reload
+	ldr	d19, [sp, #416]                 ; 8-byte Folded Reload
+	ldp	d18, d6, [sp, #440]             ; 16-byte Folded Reload
+	ldr	d17, [sp, #456]                 ; 8-byte Folded Reload
+	fdiv	d1, d24, d27
 	mov	x8, #60813                      ; =0xed8d
 	movk	x8, #41141, lsl #16
 	movk	x8, #50935, lsl #32
 	movk	x8, #16048, lsl #48
 	fmov	d2, x8
-	fcmp	d15, d2
+	fcmp	d27, d2
 	fcsel	d1, d1, d6, gt
 	fcmp	d8, d2
 	mov.16b	v2, v6
-	b.gt	LBB2_4
-	b	LBB2_5
-LBB2_19:
-Lloh47:
+	b.gt	LBB2_3
+	b	LBB2_4
+LBB2_18:
+Lloh45:
 	adrp	x8, l_.str.27@PAGE
-Lloh48:
+Lloh46:
 	add	x8, x8, l_.str.27@PAGEOFF
 	ldr	q0, [x8]
-Lloh49:
-	adrp	x9, __MergedGlobals.71@PAGE+184
-Lloh50:
-	add	x9, x9, __MergedGlobals.71@PAGEOFF+184
+Lloh47:
+	adrp	x9, __MergedGlobals.75@PAGE+184
+Lloh48:
+	add	x9, x9, __MergedGlobals.75@PAGEOFF+184
 	str	q0, [x9]
 	ldur	q0, [x8, #9]
 	stur	q0, [x9, #9]
-	b	LBB2_22
-LBB2_20:
-Lloh51:
+	b	LBB2_21
+LBB2_19:
+Lloh49:
 	adrp	x8, l_.str.28@PAGE
-Lloh52:
+Lloh50:
 	add	x8, x8, l_.str.28@PAGEOFF
-LBB2_21:
+LBB2_20:
 	ldr	q0, [x8]
-Lloh53:
-	adrp	x9, __MergedGlobals.71@PAGE+184
-Lloh54:
-	add	x9, x9, __MergedGlobals.71@PAGEOFF+184
+Lloh51:
+	adrp	x9, __MergedGlobals.75@PAGE+184
+Lloh52:
+	add	x9, x9, __MergedGlobals.75@PAGEOFF+184
 	str	q0, [x9]
 	ldur	x8, [x8, #14]
 	stur	x8, [x9, #14]
-LBB2_22:
-	ldr	x13, [sp, #464]                 ; 8-byte Folded Reload
+LBB2_21:
 	add	x8, sp, #1472
-	ldr	d0, [x8, x13, lsl #3]
+	ldr	d0, [x8, x22, lsl #3]
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
@@ -1489,299 +1322,296 @@ LBB2_22:
 	fmov	d1, x8
 	add	x8, sp, #1728
 	fmul	d0, d0, d1
-	ldr	d1, [x8, x13, lsl #3]
+	ldr	d1, [x8, x22, lsl #3]
 	stp	d1, d0, [x19, #216]
 	stp	d11, d12, [x19, #232]
 	stp	d10, d13, [x19, #248]
 	str	d8, [x19, #264]
 	ldr	w8, [x19]
 	cmp	w8, #19
-	b.gt	LBB2_24
-; %bb.23:
+	b.gt	LBB2_23
+; %bb.22:
 	add	w8, w8, #1
-	adrp	x9, __MergedGlobals.71@PAGE
-	str	w8, [x9, __MergedGlobals.71@PAGEOFF]
-LBB2_24:
-Lloh55:
-	adrp	x8, __MergedGlobals.71@PAGE+56
-Lloh56:
-	ldr	x19, [x8, __MergedGlobals.71@PAGEOFF+56]
+	adrp	x9, __MergedGlobals.75@PAGE
+	str	w8, [x9, __MergedGlobals.75@PAGEOFF]
+LBB2_23:
+Lloh53:
+	adrp	x8, __MergedGlobals.75@PAGE+56
+Lloh54:
+	ldr	x19, [x8, __MergedGlobals.75@PAGEOFF+56]
 	add	x21, sp, #832
-	ldr	d0, [x21, x13, lsl #3]
+	ldr	d0, [x21, x22, lsl #3]
 	fcmp	d0, #0.0
-	mov	x20, #47104                     ; =0xb800
-	movk	x20, #59457, lsl #16
-	movk	x20, #814, lsl #32
-	b.le	LBB2_29
+	mov	x9, #47104                      ; =0xb800
+	movk	x9, #59457, lsl #16
+	movk	x9, #814, lsl #32
+	b.le	LBB2_28
+; %bb.24:
+Lloh55:
+	adrp	x20, l_.str.33@PAGE
+Lloh56:
+	add	x20, x20, l_.str.33@PAGEOFF
+	ldr	w8, [sp, #468]                  ; 4-byte Folded Reload
+	cbnz	w8, LBB2_43
 ; %bb.25:
-Lloh57:
-	adrp	x22, l_.str.33@PAGE
-Lloh58:
-	add	x22, x22, l_.str.33@PAGEOFF
-	ldr	w8, [sp, #476]                  ; 4-byte Folded Reload
-	cbnz	w8, LBB2_30
+	mov	x27, x9
+	cmp	x19, x9
+	b.lo	LBB2_29
 ; %bb.26:
-	cmp	x19, x20
-	b.lo	LBB2_30
-; %bb.27:
 	adrp	x8, __MergedGlobals@PAGE+24
 	ldr	x10, [x8, __MergedGlobals@PAGEOFF+24]
-	adrp	x9, __MergedGlobals.71@PAGE+64
-	ldr	x11, [x9, __MergedGlobals.71@PAGEOFF+64]
+	adrp	x9, __MergedGlobals.75@PAGE+64
+	ldr	x11, [x9, __MergedGlobals.75@PAGEOFF+64]
 	add	x11, x11, #20
 	cmp	x10, x11
-	b.lo	LBB2_30
-; %bb.28:
+	b.lo	LBB2_29
+; %bb.27:
 	ldr	x8, [x8, __MergedGlobals@PAGEOFF+24]
-	str	x8, [x9, __MergedGlobals.71@PAGEOFF+64]
-Lloh59:
+	str	x8, [x9, __MergedGlobals.75@PAGEOFF+64]
+Lloh57:
 	adrp	x0, l_.str.31@PAGE
-Lloh60:
+Lloh58:
 	add	x0, x0, l_.str.31@PAGEOFF
 	bl	_system
-	ldr	x13, [sp, #464]                 ; 8-byte Folded Reload
+Lloh59:
+	adrp	x20, l_.str.32@PAGE
+Lloh60:
+	add	x20, x20, l_.str.32@PAGEOFF
+	b	LBB2_29
+LBB2_28:
+	mov	x27, x9
 Lloh61:
-	adrp	x22, l_.str.32@PAGE
+	adrp	x20, l_.str.30@PAGE
 Lloh62:
-	add	x22, x22, l_.str.32@PAGEOFF
-	b	LBB2_30
+	add	x20, x20, l_.str.30@PAGEOFF
 LBB2_29:
+	str	x22, [sp, #472]                 ; 8-byte Folded Spill
 Lloh63:
-	adrp	x22, l_.str.30@PAGE
-Lloh64:
-	add	x22, x22, l_.str.30@PAGEOFF
-LBB2_30:
-Lloh65:
 	adrp	x8, __MergedGlobals@PAGE+32
-Lloh66:
+Lloh64:
 	add	x8, x8, __MergedGlobals@PAGEOFF+32
-	ldr	x27, [x8]
+	ldr	x24, [x8]
+Lloh65:
+	adrp	x9, __MergedGlobals.75@PAGE+24
+Lloh66:
+	add	x9, x9, __MergedGlobals.75@PAGEOFF+24
 	ldr	x25, [x8, #8]
-Lloh67:
-	adrp	x9, __MergedGlobals.71@PAGE+24
-Lloh68:
-	add	x9, x9, __MergedGlobals.71@PAGEOFF+24
 	ldr	x26, [x9, #48]
-	ldr	x24, [x9, #32]
-	ldr	x23, [x8, #16]
+	ldr	x23, [x9, #32]
+	ldr	x22, [x8, #16]
 	ldrsw	x8, [sp, #572]
-	ldr	d0, [x21, x8, lsl #3]
-	mov	x8, #5243                       ; =0x147b
-	movk	x8, #18350, lsl #16
-	movk	x8, #47841, lsl #32
-	movk	x8, #16471, lsl #48
-	fmov	d1, x8
+	ldr	x9, [x9]
+	cbz	x9, LBB2_31
+; %bb.30:
+Lloh67:
+	adrp	x10, __MergedGlobals.75@PAGE+32
+Lloh68:
+	ldr	d0, [x10, __MergedGlobals.75@PAGEOFF+32]
+	ucvtf	d1, x9
+	fdiv	d10, d0, d1
+	b	LBB2_32
+LBB2_31:
+	add	x9, sp, #832
+	ldr	x10, [sp, #472]                 ; 8-byte Folded Reload
+	ldr	d0, [x9, x10, lsl #3]
+	mov	x9, #5243                       ; =0x147b
+	movk	x9, #18350, lsl #16
+	movk	x9, #47841, lsl #32
+	movk	x9, #16471, lsl #48
+	fmov	d1, x9
 	fmul	d10, d0, d1
-	ldr	x8, [x9]
-	cbz	x8, LBB2_32
-; %bb.31:
-Lloh69:
-	adrp	x9, __MergedGlobals.71@PAGE+32
-Lloh70:
-	ldr	d1, [x9, __MergedGlobals.71@PAGEOFF+32]
-	ucvtf	d2, x8
-	fdiv	d12, d1, d2
-	b	LBB2_33
 LBB2_32:
-	add	x8, sp, #832
-	ldr	d1, [x8, x13, lsl #3]
-	mov	x8, #5243                       ; =0x147b
-	movk	x8, #18350, lsl #16
-	movk	x8, #47841, lsl #32
-	movk	x8, #16471, lsl #48
-	fmov	d2, x8
-	fmul	d12, d1, d2
-LBB2_33:
-	mov	x8, #177523883245568            ; =0xa17500000000
-	movk	x8, #16774, lsl #48
-	fmov	d1, x8
-	fmul	d0, d0, d1
-	fmov	d1, #2.00000000
-	fcmp	d10, d1
-	mov	x8, #145685290680320            ; =0x848000000000
-	movk	x8, #16686, lsl #48
-	fmov	d1, x8
-	fcsel	d11, d0, d1, ge
-Lloh71:
+	ldr	d11, [x21, x8, lsl #3]
+Lloh69:
 	adrp	x0, l_.str.34@PAGE
-Lloh72:
+Lloh70:
 	add	x0, x0, l_.str.34@PAGEOFF
-Lloh73:
+Lloh71:
 	adrp	x1, l_.str.35@PAGE
-Lloh74:
+Lloh72:
 	add	x1, x1, l_.str.35@PAGEOFF
 	bl	_fopen
-	cbz	x0, LBB2_40
-; %bb.34:
+	mov	x9, #12801                      ; =0x3201
+	movk	x9, #60532, lsl #16
+	movk	x9, #4768, lsl #32
+	movk	x9, #16370, lsl #48
+	cbz	x0, LBB2_39
+; %bb.33:
 	mov	x21, x0
 	mov	x8, #60813                      ; =0xed8d
 	movk	x8, #41141, lsl #16
 	movk	x8, #50935, lsl #32
 	movk	x8, #16048, lsl #48
-	ucvtf	d1, x27
+	ucvtf	d1, x24
 	fmov	d2, x8
 	fmul	d0, d1, d2
 	ucvtf	d3, x25
-	ucvtf	d17, x26
+	ucvtf	d19, x26
 	mov	x8, #17324                      ; =0x43ac
 	movk	x8, #53714, lsl #16
 	movk	x8, #29277, lsl #32
 	movk	x8, #15410, lsl #48
-	fmadd	d4, d3, d2, d0
-	fmul	d7, d17, d2
-	ucvtf	d2, x24
-	fmov	d3, x8
-	ucvtf	d5, x23
-	fadd	d16, d4, d7
-	fmul	d2, d2, d3
-	fmul	d5, d5, d3
+	mov	x9, #5243                       ; =0x147b
+	movk	x9, #18350, lsl #16
+	movk	x9, #47841, lsl #32
+	movk	x9, #16471, lsl #48
+	fmadd	d3, d3, d2, d0
+	fmul	d7, d19, d2
+	ucvtf	d2, x23
+	fmov	d5, x8
+	ucvtf	d6, x22
+	fmov	d17, x9
+	fadd	d16, d3, d7
+	fmul	d4, d2, d5
+	fmul	d6, d6, d5
+	fmul	d2, d11, d17
+	mov	x8, #80126909874176             ; =0x48e000000000
+	movk	x8, #16767, lsl #48
+	fmov	d5, x8
+	fmul	d5, d11, d5
 	mov	x8, #32890                      ; =0x807a
 	movk	x8, #11989, lsl #16
 	movk	x8, #57849, lsl #32
 	movk	x8, #16152, lsl #48
-	fmov	d18, x8
-	fmul	d1, d1, d18
+	fmov	d20, x8
+	fmul	d1, d1, d20
+Lloh73:
+	adrp	x22, __MergedGlobals.75@PAGE
+Lloh74:
+	add	x22, x22, __MergedGlobals.75@PAGEOFF
+	ldr	x8, [x22, #8]
+	ldr	x9, [x22, #24]
+	ldr	q17, [x22, #32]
+	ldr	d18, [x22, #48]
 Lloh75:
-	adrp	x25, __MergedGlobals.71@PAGE
-Lloh76:
-	add	x25, x25, __MergedGlobals.71@PAGEOFF
-	ldr	x8, [x25, #8]
-	ldr	x9, [x25, #24]
-	ldr	q3, [x25, #32]
-	ldr	d6, [x25, #48]
-Lloh77:
 	adrp	x11, __MergedGlobals@PAGE+24
-Lloh78:
+Lloh76:
 	add	x11, x11, __MergedGlobals@PAGEOFF+24
 	ldr	x10, [x11]
 	ldr	x11, [x11, #32]
-Lloh79:
+Lloh77:
 	adrp	x12, l_.str.37@PAGE
-Lloh80:
+Lloh78:
 	add	x12, x12, l_.str.37@PAGEOFF
-Lloh81:
+Lloh79:
 	adrp	x13, l_.str.38@PAGE
-Lloh82:
+Lloh80:
 	add	x13, x13, l_.str.38@PAGEOFF
-	cmp	x19, x20
+	cmp	x19, x27
 	csel	x12, x13, x12, lo
 	mov	x13, #5243                      ; =0x147b
 	movk	x13, #18350, lsl #16
 	movk	x13, #47841, lsl #32
 	movk	x13, #16471, lsl #48
-	fmov	d19, x13
-	fmul	d20, d16, d19
-	fmul	d21, d4, d19
-	ldr	x15, [sp, #464]                 ; 8-byte Folded Reload
-Lloh83:
-	adrp	x13, l___const.run_native_asm_sniper_cycle.route_names@PAGE
-Lloh84:
-	add	x13, x13, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
-	ldr	x13, [x13, x15, lsl #3]
-	fmul	d17, d17, d18
-Lloh85:
+	fmov	d21, x13
+	fmul	d22, d16, d21
+	fmul	d23, d3, d21
+	ldr	x15, [sp, #472]                 ; 8-byte Folded Reload
+	ldr	x13, [x28, x15, lsl #3]
+	fmul	d19, d19, d20
+Lloh81:
 	adrp	x14, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGE
-Lloh86:
+Lloh82:
 	add	x14, x14, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGEOFF
 	ldr	x14, [x14, x15, lsl #3]
 	add	x16, sp, #1728
-	ldr	d18, [x16, x15, lsl #3]
+	ldr	d20, [x16, x15, lsl #3]
 	add	x16, sp, #1472
-	ldr	d22, [x16, x15, lsl #3]
-	fmul	d23, d22, d19
-	add	x16, sp, #1344
 	ldr	d24, [x16, x15, lsl #3]
+	fmul	d25, d24, d21
+	add	x16, sp, #1344
+	ldr	d26, [x16, x15, lsl #3]
 	add	x16, sp, #1216
-	ldr	d25, [x16, x15, lsl #3]
-	fmul	d26, d24, d19
-	fmul	d27, d25, d19
+	ldr	d27, [x16, x15, lsl #3]
+	fmul	d28, d26, d21
+	fmul	d29, d27, d21
 	add	x16, sp, #1088
-	ldr	d28, [x16, x15, lsl #3]
-	fmul	d29, d28, d19
-	add	x16, sp, #832
 	ldr	d30, [x16, x15, lsl #3]
+	fmul	d31, d30, d21
+	add	x16, sp, #832
+	ldr	d11, [x16, x15, lsl #3]
 	add	x16, sp, #704
-	ldr	d31, [x16, x15, lsl #3]
-	fmul	d13, d30, d19
-	fmul	d14, d31, d19
+	ldr	d12, [x16, x15, lsl #3]
+	fmul	d13, d11, d21
+	fmul	d14, d12, d21
 	add	x16, sp, #576
 	ldr	d15, [x16, x15, lsl #3]
-	fmul	d19, d15, d19
-	stp	d19, d15, [sp, #312]
-	stp	d14, d31, [sp, #296]
-	stp	d13, d30, [sp, #280]
-	stp	d29, d28, [sp, #264]
-	stp	d27, d25, [sp, #248]
-	stp	d26, d24, [sp, #232]
-	stp	d23, d22, [sp, #216]
-	str	d18, [sp, #208]
+	fmul	d21, d15, d21
+	stp	d21, d15, [sp, #312]
+	stp	d14, d12, [sp, #296]
+	stp	d13, d11, [sp, #280]
+	stp	d31, d30, [sp, #264]
+	stp	d29, d27, [sp, #248]
+	stp	d28, d26, [sp, #232]
+	stp	d25, d24, [sp, #216]
+	str	d20, [sp, #208]
 	stp	x13, x14, [sp, #192]
-	stp	d17, d7, [sp, #176]
-	stp	d21, d4, [sp, #160]
-	stp	d20, d16, [sp, #144]
-	stp	x12, x22, [sp, #128]
-	stp	d2, d5, [sp, #112]
+	stp	d19, d7, [sp, #176]
+	stp	d23, d3, [sp, #160]
+	stp	d22, d16, [sp, #144]
+	stp	x12, x20, [sp, #128]
+	stp	d4, d6, [sp, #112]
 	stp	x10, x11, [sp, #96]
 	stp	d8, d9, [sp, #80]
-	stp	d12, d11, [sp, #64]
-	stp	d6, d10, [sp, #48]
-	str	q3, [sp, #32]
+	stp	d10, d5, [sp, #64]
+	stp	d18, d2, [sp, #48]
+	str	q17, [sp, #32]
 	stp	x8, x9, [sp, #16]
-Lloh87:
+Lloh83:
 	adrp	x1, l_.str.36@PAGE
-Lloh88:
+Lloh84:
 	add	x1, x1, l_.str.36@PAGEOFF
 	stp	d0, d1, [sp]
 	bl	_fprintf
-	ldr	w8, [x25]
-Lloh89:
-	adrp	x20, l_.str.41@PAGE
-Lloh90:
-	add	x20, x20, l_.str.41@PAGEOFF
-Lloh91:
+	ldr	w8, [x22]
+Lloh85:
+	adrp	x19, l_.str.41@PAGE
+Lloh86:
+	add	x19, x19, l_.str.41@PAGEOFF
+Lloh87:
 	adrp	x25, l_.str.40@PAGE
-Lloh92:
+Lloh88:
 	add	x25, x25, l_.str.40@PAGEOFF
 	cmp	w8, #1
-	b.lt	LBB2_37
-; %bb.35:
-Lloh93:
-	adrp	x19, __MergedGlobals.71@PAGE+184
-Lloh94:
-	add	x19, x19, __MergedGlobals.71@PAGEOFF+184
+	b.lt	LBB2_36
+; %bb.34:
+Lloh89:
+	adrp	x20, __MergedGlobals.75@PAGE+184
+Lloh90:
+	add	x20, x20, __MergedGlobals.75@PAGEOFF+184
 	mov	w23, #1                         ; =0x1
-	adrp	x24, __MergedGlobals.71@PAGE
-Lloh95:
+	adrp	x24, __MergedGlobals.75@PAGE
+Lloh91:
 	adrp	x22, l_.str.39@PAGE
-Lloh96:
+Lloh92:
 	add	x22, x22, l_.str.39@PAGEOFF
-LBB2_36:                                ; =>This Inner Loop Header: Depth=1
-	ldur	x9, [x19, #-104]
-	sub	x10, x19, #96
-	ldp	q0, q1, [x19, #32]
-	ldr	q2, [x19, #64]
+LBB2_35:                                ; =>This Inner Loop Header: Depth=1
+	ldur	x9, [x20, #-104]
+	sub	x10, x20, #96
+	ldp	q0, q1, [x20, #32]
+	ldr	q2, [x20, #64]
 	cmp	x23, w8, sxtw
-	csel	x8, x25, x20, lt
-	ldr	d3, [x19, #80]
+	csel	x8, x25, x19, lt
+	ldr	d3, [x20, #80]
 	str	x8, [sp, #80]
 	str	d3, [sp, #72]
 	stur	q2, [sp, #56]
 	stur	q1, [sp, #40]
 	stur	q0, [sp, #24]
-	stp	x10, x19, [sp, #8]
+	stp	x10, x20, [sp, #8]
 	str	x9, [sp]
 	mov	x0, x21
 	mov	x1, x22
 	bl	_fprintf
-	ldrsw	x8, [x24, __MergedGlobals.71@PAGEOFF]
-	add	x19, x19, #192
+	ldrsw	x8, [x24, __MergedGlobals.75@PAGEOFF]
+	add	x20, x20, #192
 	cmp	x23, x8
 	add	x23, x23, #1
-	b.lt	LBB2_36
-LBB2_37:
-Lloh97:
+	b.lt	LBB2_35
+LBB2_36:
+Lloh93:
 	adrp	x0, l_.str.42@PAGE
-Lloh98:
+Lloh94:
 	add	x0, x0, l_.str.42@PAGEOFF
 	mov	w1, #19                         ; =0x13
 	mov	w2, #1                          ; =0x1
@@ -1792,144 +1622,175 @@ Lloh98:
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
 	movk	x8, #16471, lsl #48
-	fmov	d12, x8
-Lloh99:
-	adrp	x26, l___const.run_native_asm_sniper_cycle.route_names@PAGE
-Lloh100:
-	add	x26, x26, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
-Lloh101:
-	adrp	x20, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGE
-Lloh102:
-	add	x20, x20, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGEOFF
-	add	x25, sp, #1728
-	add	x28, sp, #1472
-	add	x19, sp, #1344
+	fmov	d10, x8
+Lloh95:
+	adrp	x28, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGE
+Lloh96:
+	add	x28, x28, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGEOFF
+	add	x19, sp, #1728
+	add	x23, sp, #1472
+	add	x25, sp, #1344
 	add	x24, sp, #1216
-	add	x23, sp, #1088
+	add	x26, sp, #1088
+	add	x20, sp, #832
 	add	x22, sp, #704
-LBB2_38:                                ; =>This Inner Loop Header: Depth=1
+LBB2_37:                                ; =>This Inner Loop Header: Depth=1
 	add	x8, sp, #512
 	ldrsw	x8, [x8, x27, lsl #2]
-	ldr	x9, [x26, x8, lsl #3]
-	ldr	x10, [x20, x8, lsl #3]
+	add	x27, x27, #1
+Lloh97:
+	adrp	x9, l___const.run_native_asm_sniper_cycle.route_names@PAGE
+Lloh98:
+	add	x9, x9, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
+	ldr	x9, [x9, x8, lsl #3]
+	ldr	x10, [x28, x8, lsl #3]
 	add	x11, sp, #1984
 	ldr	d0, [x11, x8, lsl #3]
 	add	x11, sp, #1856
 	ldr	d1, [x11, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
-Lloh103:
+	ldr	d2, [x19, x8, lsl #3]
+Lloh99:
 	adrp	x11, l___const.run_native_asm_sniper_cycle.fl@PAGE
-Lloh104:
+Lloh100:
 	add	x11, x11, l___const.run_native_asm_sniper_cycle.fl@PAGEOFF
 	ldr	d3, [x11, x8, lsl #3]
 	add	x11, sp, #1600
 	ldr	d4, [x11, x8, lsl #3]
-	ldr	d5, [x28, x8, lsl #3]
-	add	x27, x27, #1
-	fmul	d6, d5, d12
-	ldr	d7, [x19, x8, lsl #3]
+	ldr	d5, [x23, x8, lsl #3]
+	ldr	d6, [x25, x8, lsl #3]
+	fmul	d7, d5, d10
 	ldr	d16, [x24, x8, lsl #3]
-	ldr	d17, [x23, x8, lsl #3]
-	fmul	d18, d17, d12
-	add	x11, sp, #832
+	ldr	d17, [x26, x8, lsl #3]
+	fmul	d18, d17, d10
+	add	x11, sp, #960
 	ldr	d19, [x11, x8, lsl #3]
-	fmul	d20, d19, d12
-	ldr	d21, [x22, x8, lsl #3]
-	fmul	d22, d21, d12
+	fmul	d20, d19, d10
+	ldr	d21, [x20, x8, lsl #3]
+	fmul	d22, d21, d10
+	ldr	d23, [x22, x8, lsl #3]
+	fmul	d24, d23, d10
 	add	x11, sp, #576
-	ldr	d23, [x11, x8, lsl #3]
-	fmul	d24, d23, d12
-Lloh105:
+	ldr	d25, [x11, x8, lsl #3]
+	fmul	d26, d25, d10
+Lloh101:
 	adrp	x8, l_.str.40@PAGE
-Lloh106:
+Lloh102:
 	add	x8, x8, l_.str.40@PAGEOFF
-	str	x8, [sp, #160]
-	stp	d24, d23, [sp, #144]
-	stp	d22, d21, [sp, #128]
+	str	x8, [sp, #192]
+	stp	d26, d25, [sp, #176]
+	stp	d24, d23, [sp, #160]
+	stp	d22, d21, [sp, #144]
+	mov	x8, #18036                      ; =0x4674
+	movk	x8, #63124, lsl #16
+	movk	x8, #24326, lsl #32
+	movk	x8, #16264, lsl #48
+	str	x8, [sp, #136]
+	mov	x8, #12801                      ; =0x3201
+	movk	x8, #60532, lsl #16
+	movk	x8, #4768, lsl #32
+	movk	x8, #16370, lsl #48
+	str	x8, [sp, #128]
 	stp	d20, d19, [sp, #112]
 	stp	d18, d17, [sp, #96]
-	stp	d7, d16, [sp, #80]
-	stp	d6, d5, [sp, #64]
+	stp	d6, d16, [sp, #80]
+	stp	d7, d5, [sp, #64]
 	stp	d3, d4, [sp, #48]
 	stp	d1, d2, [sp, #32]
 	str	d0, [sp, #24]
 	stp	x9, x10, [sp, #8]
 	str	x27, [sp]
 	mov	x0, x21
-Lloh107:
+Lloh103:
 	adrp	x1, l_.str.43@PAGE
-Lloh108:
+Lloh104:
 	add	x1, x1, l_.str.43@PAGEOFF
 	bl	_fprintf
 	cmp	x27, #15
-	b.ne	LBB2_38
-; %bb.39:
-	ldrsw	x9, [sp, #572]
-	ldr	x8, [x26, x9, lsl #3]
-	ldr	x10, [x20, x9, lsl #3]
+	b.ne	LBB2_37
+; %bb.38:
+	ldrsw	x10, [sp, #572]
+Lloh105:
+	adrp	x20, l___const.run_native_asm_sniper_cycle.route_names@PAGE
+Lloh106:
+	add	x20, x20, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
+	ldr	x8, [x20, x10, lsl #3]
+	ldr	x9, [x28, x10, lsl #3]
 	add	x11, sp, #1984
-	ldr	d0, [x11, x9, lsl #3]
+	ldr	d0, [x11, x10, lsl #3]
 	add	x11, sp, #1856
-	ldr	d1, [x11, x9, lsl #3]
+	ldr	d1, [x11, x10, lsl #3]
 	add	x11, sp, #1728
-	ldr	d2, [x11, x9, lsl #3]
-Lloh109:
-	adrp	x28, l___const.run_native_asm_sniper_cycle.fl@PAGE
-Lloh110:
-	add	x28, x28, l___const.run_native_asm_sniper_cycle.fl@PAGEOFF
-	ldr	d3, [x28, x9, lsl #3]
+	ldr	d2, [x11, x10, lsl #3]
+Lloh107:
+	adrp	x11, l___const.run_native_asm_sniper_cycle.fl@PAGE
+Lloh108:
+	add	x11, x11, l___const.run_native_asm_sniper_cycle.fl@PAGEOFF
+	ldr	d3, [x11, x10, lsl #3]
 	add	x11, sp, #1600
-	ldr	d4, [x11, x9, lsl #3]
+	ldr	d4, [x11, x10, lsl #3]
 	add	x11, sp, #1472
-	ldr	d5, [x11, x9, lsl #3]
+	ldr	d5, [x11, x10, lsl #3]
 	mov	x11, #5243                      ; =0x147b
 	movk	x11, #18350, lsl #16
 	movk	x11, #47841, lsl #32
 	movk	x11, #16471, lsl #48
 	fmov	d6, x11
-	fmul	d7, d5, d6
 	add	x11, sp, #1344
-	ldr	d16, [x11, x9, lsl #3]
+	ldr	d7, [x11, x10, lsl #3]
 	add	x11, sp, #1216
-	ldr	d17, [x11, x9, lsl #3]
+	ldr	d16, [x11, x10, lsl #3]
 	add	x11, sp, #1088
-	ldr	d18, [x11, x9, lsl #3]
-	fmul	d19, d18, d6
+	ldr	d17, [x11, x10, lsl #3]
+	fmul	d18, d5, d6
+	fmul	d19, d17, d6
+	add	x11, sp, #960
+	ldr	d20, [x11, x10, lsl #3]
+	fmul	d21, d20, d6
 	add	x11, sp, #832
-	ldr	d20, [x11, x9, lsl #3]
+	ldr	d22, [x11, x10, lsl #3]
 	add	x11, sp, #704
-	ldr	d21, [x11, x9, lsl #3]
-	fmul	d22, d20, d6
-	fmul	d23, d21, d6
+	ldr	d23, [x11, x10, lsl #3]
+	fmul	d24, d22, d6
+	fmul	d25, d23, d6
 	add	x11, sp, #576
-	ldr	d24, [x11, x9, lsl #3]
-	fmul	d6, d24, d6
-Lloh111:
-	adrp	x9, l_.str.41@PAGE
-Lloh112:
-	add	x9, x9, l_.str.41@PAGEOFF
-	str	x9, [sp, #160]
-	stp	d6, d24, [sp, #144]
-	stp	d23, d21, [sp, #128]
-	stp	d22, d20, [sp, #112]
-	stp	d19, d18, [sp, #96]
-	stp	d16, d17, [sp, #80]
-	stp	d7, d5, [sp, #64]
+	ldr	d26, [x11, x10, lsl #3]
+	fmul	d6, d26, d6
+Lloh109:
+	adrp	x10, l_.str.41@PAGE
+Lloh110:
+	add	x10, x10, l_.str.41@PAGEOFF
+	str	x10, [sp, #192]
+	stp	d6, d26, [sp, #176]
+	stp	d25, d23, [sp, #160]
+	stp	d24, d22, [sp, #144]
+	mov	x10, #18036                     ; =0x4674
+	movk	x10, #63124, lsl #16
+	movk	x10, #24326, lsl #32
+	movk	x10, #16264, lsl #48
+	mov	x19, #12801                     ; =0x3201
+	movk	x19, #60532, lsl #16
+	movk	x19, #4768, lsl #32
+	movk	x19, #16370, lsl #48
+	stp	x19, x10, [sp, #128]
+	stp	d21, d20, [sp, #112]
+	stp	d19, d17, [sp, #96]
+	stp	d7, d16, [sp, #80]
+	stp	d18, d5, [sp, #64]
 	stp	d3, d4, [sp, #48]
 	stp	d1, d2, [sp, #32]
 	str	d0, [sp, #24]
-	stp	x8, x10, [sp, #8]
+	stp	x8, x9, [sp, #8]
 	mov	w9, #16                         ; =0x10
-Lloh113:
+Lloh111:
 	adrp	x1, l_.str.43@PAGE
-Lloh114:
+Lloh112:
 	add	x1, x1, l_.str.43@PAGEOFF
 	str	x9, [sp]
 	mov	x0, x21
 	bl	_fprintf
-Lloh115:
+Lloh113:
 	adrp	x0, l_.str.44@PAGE
-Lloh116:
+Lloh114:
 	add	x0, x0, l_.str.44@PAGEOFF
 	mov	w1, #6                          ; =0x6
 	mov	w2, #1                          ; =0x1
@@ -1937,127 +1798,483 @@ Lloh116:
 	bl	_fwrite
 	mov	x0, x21
 	bl	_fclose
-Lloh117:
+Lloh115:
 	adrp	x0, l_.str.34@PAGE
-Lloh118:
+Lloh116:
 	add	x0, x0, l_.str.34@PAGEOFF
-Lloh119:
+Lloh117:
 	adrp	x1, l_.str.45@PAGE
-Lloh120:
+Lloh118:
 	add	x1, x1, l_.str.45@PAGEOFF
 	bl	_rename
-LBB2_40:
-	ldr	w8, [sp, #476]                  ; 4-byte Folded Reload
-	cbz	w8, LBB2_42
-; %bb.41:
-Lloh121:
-	adrp	x19, l_str.70@PAGE
-Lloh122:
-	add	x19, x19, l_str.70@PAGEOFF
+	mov	x28, x20
+	mov	x9, x19
+LBB2_39:
+	ldr	w8, [sp, #468]                  ; 4-byte Folded Reload
+	cbz	w8, LBB2_41
+; %bb.40:
+	add	x26, sp, #960
+	ldr	x21, [sp, #472]                 ; 8-byte Folded Reload
+	ldr	d11, [x26, x21, lsl #3]
+	mov	x8, #18036                      ; =0x4674
+	movk	x8, #63124, lsl #16
+	movk	x8, #24326, lsl #32
+	movk	x8, #49032, lsl #48
+	fmov	d0, x8
+	fadd	d10, d11, d0
+Lloh119:
+	adrp	x19, l_str.74@PAGE
+Lloh120:
+	add	x19, x19, l_str.74@PAGEOFF
 	mov	x0, x19
+	mov	x25, x9
 	bl	_puts
-Lloh123:
-	adrp	x0, l_str.67@PAGE
-Lloh124:
-	add	x0, x0, l_str.67@PAGEOFF
-	bl	_puts
+Lloh121:
+	adrp	x0, l_.str.47@PAGE
+Lloh122:
+	add	x0, x0, l_.str.47@PAGEOFF
+	bl	_printf
 	mov	x0, x19
 	bl	_puts
 	stp	d8, d9, [sp]
-Lloh125:
+Lloh123:
 	adrp	x0, l_.str.48@PAGE
-Lloh126:
+Lloh124:
 	add	x0, x0, l_.str.48@PAGEOFF
 	bl	_printf
+	ldr	x8, [x28, x21, lsl #3]
+	str	x8, [sp]
+Lloh125:
+	adrp	x0, l_.str.49@PAGE
+Lloh126:
+	add	x0, x0, l_.str.49@PAGEOFF
+	bl	_printf
+	add	x8, sp, #1984
+	ldr	d0, [x8, x21, lsl #3]
+	add	x24, sp, #1984
 Lloh127:
-	adrp	x0, l_str.69@PAGE
+	adrp	x20, l___const.run_native_asm_sniper_cycle.fl@PAGE
 Lloh128:
-	add	x0, x0, l_str.69@PAGEOFF
-	bl	_puts
-	stp	d10, d11, [sp]
+	add	x20, x20, l___const.run_native_asm_sniper_cycle.fl@PAGEOFF
+	add	x27, sp, #1856
+	ldr	d1, [x27, x21, lsl #3]
+	mov	x23, x28
+	add	x28, sp, #1728
+	ldr	d2, [x28, x21, lsl #3]
+	ldr	d3, [x20, x21, lsl #3]
+	add	x19, sp, #1600
+	ldr	d4, [x19, x21, lsl #3]
+	stp	d3, d4, [sp, #24]
+	stp	d1, d2, [sp, #8]
+	str	d0, [sp]
 Lloh129:
 	adrp	x0, l_.str.50@PAGE
 Lloh130:
 	add	x0, x0, l_.str.50@PAGEOFF
 	bl	_printf
-	ldr	x20, [sp, #464]                 ; 8-byte Folded Reload
-Lloh131:
-	adrp	x8, l___const.run_native_asm_sniper_cycle.route_names@PAGE
-Lloh132:
-	add	x8, x8, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
-	ldr	x8, [x8, x20, lsl #3]
-	str	x8, [sp]
-Lloh133:
-	adrp	x0, l_.str.51@PAGE
-Lloh134:
-	add	x0, x0, l_.str.51@PAGEOFF
-	bl	_printf
-	add	x8, sp, #1984
-	ldr	d0, [x8, x20, lsl #3]
+	add	x22, sp, #1472
+	ldr	d0, [x22, x21, lsl #3]
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
 	movk	x8, #16471, lsl #48
 	fmov	d8, x8
-	fmul	d0, d0, d8
-	add	x8, sp, #1856
-	ldr	d1, [x8, x20, lsl #3]
-	fmul	d1, d1, d8
-	add	x8, sp, #1728
-	ldr	d2, [x8, x20, lsl #3]
-	ldr	d3, [x28, x20, lsl #3]
-	stp	d2, d3, [sp, #16]
+	fmul	d1, d0, d8
 	stp	d0, d1, [sp]
-Lloh135:
+Lloh131:
+	adrp	x0, l_.str.51@PAGE
+Lloh132:
+	add	x0, x0, l_.str.51@PAGEOFF
+	bl	_printf
+	fmul	d0, d11, d8
+	stp	d11, d0, [sp]
+Lloh133:
 	adrp	x0, l_.str.52@PAGE
-Lloh136:
+Lloh134:
 	add	x0, x0, l_.str.52@PAGEOFF
 	bl	_printf
-	add	x8, sp, #1472
-	ldr	d0, [x8, x20, lsl #3]
-	add	x8, sp, #1344
-	ldr	d1, [x8, x20, lsl #3]
-	fmul	d0, d0, d8
-	fmul	d1, d1, d8
-	add	x8, sp, #1216
-	ldr	d2, [x8, x20, lsl #3]
-	fmul	d2, d2, d8
-	stp	d1, d2, [sp, #8]
-	str	d0, [sp]
-Lloh137:
+	mov	x8, #18036                      ; =0x4674
+	movk	x8, #63124, lsl #16
+	movk	x8, #24326, lsl #32
+	movk	x8, #16264, lsl #48
+	stp	x8, x25, [sp]
+Lloh135:
 	adrp	x0, l_.str.53@PAGE
-Lloh138:
+Lloh136:
 	add	x0, x0, l_.str.53@PAGEOFF
 	bl	_printf
-	add	x8, sp, #832
-	ldr	d0, [x8, x20, lsl #3]
-	add	x8, sp, #704
-	ldr	d1, [x8, x20, lsl #3]
-	fmul	d0, d0, d8
-	fmul	d1, d1, d8
-	add	x8, sp, #576
-	ldr	d2, [x8, x20, lsl #3]
-	fmul	d2, d2, d8
-	stp	d1, d2, [sp, #8]
-	str	d0, [sp]
-Lloh139:
+	fmul	d0, d10, d8
+	stp	d10, d0, [sp]
+Lloh137:
 	adrp	x0, l_.str.54@PAGE
-Lloh140:
+Lloh138:
 	add	x0, x0, l_.str.54@PAGEOFF
 	bl	_printf
-	mov	x0, x19
-	bl	_puts
-LBB2_42:
-	ldr	x8, [sp, #2136]
+	add	x25, sp, #832
+	ldr	d0, [x25, x21, lsl #3]
+	fmul	d1, d0, d8
+Lloh139:
+	adrp	x8, l_.str.57@PAGE
+Lloh140:
+	add	x8, x8, l_.str.57@PAGEOFF
 Lloh141:
-	adrp	x9, ___stack_chk_guard@GOTPAGE
+	adrp	x9, l_.str.56@PAGE
 Lloh142:
-	ldr	x9, [x9, ___stack_chk_guard@GOTPAGEOFF]
+	add	x9, x9, l_.str.56@PAGEOFF
+	fcmp	d0, #0.0
+	csel	x8, x9, x8, gt
+	str	x8, [sp, #16]
+	stp	d0, d1, [sp]
 Lloh143:
+	adrp	x0, l_.str.55@PAGE
+Lloh144:
+	add	x0, x0, l_.str.55@PAGEOFF
+	bl	_printf
+Lloh145:
+	adrp	x0, l_str.73@PAGE
+Lloh146:
+	add	x0, x0, l_str.73@PAGEOFF
+	bl	_puts
+	ldrsw	x8, [sp, #512]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #1                          ; =0x1
+Lloh147:
+	adrp	x21, l_.str.59@PAGE
+Lloh148:
+	add	x21, x21, l_.str.59@PAGEOFF
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #516]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #2                          ; =0x2
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #520]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #3                          ; =0x3
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #524]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #4                          ; =0x4
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #528]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #5                          ; =0x5
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #532]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #6                          ; =0x6
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #536]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #7                          ; =0x7
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #540]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #8                          ; =0x8
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #544]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #9                          ; =0x9
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #548]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #10                         ; =0xa
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #552]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #11                         ; =0xb
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #556]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #12                         ; =0xc
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #560]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #13                         ; =0xd
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #564]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #14                         ; =0xe
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #568]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #15                         ; =0xf
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+	ldrsw	x8, [sp, #572]
+	ldr	x9, [x23, x8, lsl #3]
+	ldr	d0, [x24, x8, lsl #3]
+	ldr	d1, [x27, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
+	ldr	d3, [x20, x8, lsl #3]
+	ldr	d4, [x19, x8, lsl #3]
+	ldr	d5, [x22, x8, lsl #3]
+	ldr	d6, [x26, x8, lsl #3]
+	fmul	d6, d6, d8
+	ldr	d7, [x25, x8, lsl #3]
+	fmul	d7, d7, d8
+	stp	d6, d7, [sp, #64]
+	stp	d4, d5, [sp, #48]
+	stp	d2, d3, [sp, #32]
+	stp	d0, d1, [sp, #16]
+	mov	w8, #16                         ; =0x10
+	stp	x8, x9, [sp]
+	mov	x0, x21
+	bl	_printf
+Lloh149:
+	adrp	x0, l_str.74@PAGE
+Lloh150:
+	add	x0, x0, l_str.74@PAGEOFF
+	bl	_puts
+LBB2_41:
+	ldr	x8, [sp, #2136]
+Lloh151:
+	adrp	x9, ___stack_chk_guard@GOTPAGE
+Lloh152:
+	ldr	x9, [x9, ___stack_chk_guard@GOTPAGEOFF]
+Lloh153:
 	ldr	x9, [x9]
 	cmp	x9, x8
 	b.ne	LBB2_44
-; %bb.43:
+; %bb.42:
 	sub	sp, x29, #144
 	ldp	x29, x30, [sp, #144]            ; 16-byte Folded Reload
 	ldp	x20, x19, [sp, #128]            ; 16-byte Folded Reload
@@ -2070,6 +2287,9 @@ Lloh143:
 	ldp	d13, d12, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d15, d14, [sp], #160            ; 16-byte Folded Reload
 	ret
+LBB2_43:
+	mov	x27, x9
+	b	LBB2_29
 LBB2_44:
 	bl	___stack_chk_fail
 	.loh AdrpLdrGotLdr	Lloh10, Lloh11, Lloh12
@@ -2082,30 +2302,27 @@ LBB2_44:
 	.loh AdrpAdd	Lloh23, Lloh24
 	.loh AdrpAdd	Lloh21, Lloh22
 	.loh AdrpAdd	Lloh29, Lloh30
-	.loh AdrpAdd	Lloh37, Lloh38
 	.loh AdrpAdd	Lloh35, Lloh36
 	.loh AdrpAdd	Lloh33, Lloh34
 	.loh AdrpAdd	Lloh31, Lloh32
+	.loh AdrpAdd	Lloh37, Lloh38
+	.loh AdrpAdd	Lloh41, Lloh42
 	.loh AdrpAdd	Lloh39, Lloh40
 	.loh AdrpAdd	Lloh43, Lloh44
-	.loh AdrpAdd	Lloh41, Lloh42
+	.loh AdrpAdd	Lloh47, Lloh48
 	.loh AdrpAdd	Lloh45, Lloh46
 	.loh AdrpAdd	Lloh49, Lloh50
-	.loh AdrpAdd	Lloh47, Lloh48
 	.loh AdrpAdd	Lloh51, Lloh52
-	.loh AdrpAdd	Lloh53, Lloh54
-	.loh AdrpLdr	Lloh55, Lloh56
+	.loh AdrpLdr	Lloh53, Lloh54
+	.loh AdrpAdd	Lloh55, Lloh56
+	.loh AdrpAdd	Lloh59, Lloh60
 	.loh AdrpAdd	Lloh57, Lloh58
 	.loh AdrpAdd	Lloh61, Lloh62
-	.loh AdrpAdd	Lloh59, Lloh60
-	.loh AdrpAdd	Lloh63, Lloh64
-	.loh AdrpAdd	Lloh67, Lloh68
 	.loh AdrpAdd	Lloh65, Lloh66
-	.loh AdrpLdr	Lloh69, Lloh70
-	.loh AdrpAdd	Lloh73, Lloh74
+	.loh AdrpAdd	Lloh63, Lloh64
+	.loh AdrpLdr	Lloh67, Lloh68
 	.loh AdrpAdd	Lloh71, Lloh72
-	.loh AdrpAdd	Lloh91, Lloh92
-	.loh AdrpAdd	Lloh89, Lloh90
+	.loh AdrpAdd	Lloh69, Lloh70
 	.loh AdrpAdd	Lloh87, Lloh88
 	.loh AdrpAdd	Lloh85, Lloh86
 	.loh AdrpAdd	Lloh83, Lloh84
@@ -2113,20 +2330,27 @@ LBB2_44:
 	.loh AdrpAdd	Lloh79, Lloh80
 	.loh AdrpAdd	Lloh77, Lloh78
 	.loh AdrpAdd	Lloh75, Lloh76
+	.loh AdrpAdd	Lloh73, Lloh74
+	.loh AdrpAdd	Lloh91, Lloh92
+	.loh AdrpAdd	Lloh89, Lloh90
 	.loh AdrpAdd	Lloh95, Lloh96
 	.loh AdrpAdd	Lloh93, Lloh94
+	.loh AdrpAdd	Lloh103, Lloh104
 	.loh AdrpAdd	Lloh101, Lloh102
 	.loh AdrpAdd	Lloh99, Lloh100
 	.loh AdrpAdd	Lloh97, Lloh98
-	.loh AdrpAdd	Lloh107, Lloh108
-	.loh AdrpAdd	Lloh105, Lloh106
-	.loh AdrpAdd	Lloh103, Lloh104
-	.loh AdrpAdd	Lloh119, Lloh120
 	.loh AdrpAdd	Lloh117, Lloh118
 	.loh AdrpAdd	Lloh115, Lloh116
 	.loh AdrpAdd	Lloh113, Lloh114
 	.loh AdrpAdd	Lloh111, Lloh112
 	.loh AdrpAdd	Lloh109, Lloh110
+	.loh AdrpAdd	Lloh107, Lloh108
+	.loh AdrpAdd	Lloh105, Lloh106
+	.loh AdrpAdd	Lloh149, Lloh150
+	.loh AdrpAdd	Lloh147, Lloh148
+	.loh AdrpAdd	Lloh145, Lloh146
+	.loh AdrpAdd	Lloh143, Lloh144
+	.loh AdrpAdd	Lloh141, Lloh142
 	.loh AdrpAdd	Lloh139, Lloh140
 	.loh AdrpAdd	Lloh137, Lloh138
 	.loh AdrpAdd	Lloh135, Lloh136
@@ -2137,7 +2361,8 @@ LBB2_44:
 	.loh AdrpAdd	Lloh125, Lloh126
 	.loh AdrpAdd	Lloh123, Lloh124
 	.loh AdrpAdd	Lloh121, Lloh122
-	.loh AdrpLdrGotLdr	Lloh141, Lloh142, Lloh143
+	.loh AdrpAdd	Lloh119, Lloh120
+	.loh AdrpLdrGotLdr	Lloh151, Lloh152, Lloh153
 	.cfi_endproc
                                         ; -- End function
 	.p2align	2                               ; -- Begin function lockfree_block_ticker_thread
@@ -2181,20 +2406,20 @@ _lockfree_block_ticker_thread:          ; @lockfree_block_ticker_thread
 	mov	x19, x0
 	stp	xzr, xzr, [x29, #-176]
 	stur	xzr, [x29, #-160]
-Lloh144:
+Lloh154:
 	adrp	x1, l_.str.1@PAGE
-Lloh145:
+Lloh155:
 	add	x1, x1, l_.str.1@PAGEOFF
 	mov	x0, #0                          ; =0x0
 	bl	_curl_slist_append
-Lloh146:
+Lloh156:
 	adrp	x1, l_.str.2@PAGE
-Lloh147:
+Lloh157:
 	add	x1, x1, l_.str.2@PAGEOFF
 	bl	_curl_slist_append
-Lloh148:
+Lloh158:
 	adrp	x1, l_.str.3@PAGE
-Lloh149:
+Lloh159:
 	add	x1, x1, l_.str.3@PAGEOFF
 	bl	_curl_slist_append
 	mov	x22, x0
@@ -2203,17 +2428,17 @@ Lloh149:
 	cbz	w8, LBB3_102
 ; %bb.1:
 	mov	w24, #0                         ; =0x0
-Lloh150:
+Lloh160:
 	adrp	x26, _RPC_URLS@PAGE
-Lloh151:
+Lloh161:
 	add	x26, x26, _RPC_URLS@PAGEOFF
-Lloh152:
-	adrp	x27, l_.str.63@PAGE
-Lloh153:
-	add	x27, x27, l_.str.63@PAGEOFF
-Lloh154:
+Lloh162:
+	adrp	x27, l_.str.68@PAGE
+Lloh163:
+	add	x27, x27, l_.str.68@PAGEOFF
+Lloh164:
 	adrp	x28, _curl_write_cb@PAGE
-Lloh155:
+Lloh165:
 	add	x28, x28, _curl_write_cb@PAGEOFF
 	mov	w20, #1                         ; =0x1
 	mov	x8, #70368744177664             ; =0x400000000000
@@ -2374,10 +2599,10 @@ LBB3_3:                                 ; =>This Loop Header: Depth=1
 	ldur	x0, [x29, #-176]
 	mov	w1, #8                          ; =0x8
 	bl	_find_batch_result_for_id
-Lloh156:
-	adrp	x25, l_.str.64@PAGE
-Lloh157:
-	add	x25, x25, l_.str.64@PAGEOFF
+Lloh166:
+	adrp	x25, l_.str.69@PAGE
+Lloh167:
+	add	x25, x25, l_.str.69@PAGEOFF
 	mov	x16, #1                         ; =0x1
 	movk	x16, #4100, lsl #32
 	cbz	x21, LBB3_18
@@ -2449,9 +2674,9 @@ LBB3_15:                                ;   Parent Loop BB3_3 Depth=1
 	cbnz	x22, LBB3_20
 	b	LBB3_30
 LBB3_18:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh158:
+Lloh168:
 	adrp	x8, __MergedGlobals@PAGE+24
-Lloh159:
+Lloh169:
 	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+24]
 	ldur	w8, [x29, #-212]                ; 4-byte Folded Reload
 	add	w8, w8, #1
@@ -2586,9 +2811,9 @@ LBB3_38:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_38
 ; %bb.39:                               ;   in Loop: Header=BB3_3 Depth=1
-Lloh160:
+Lloh170:
 	adrp	x9, __MergedGlobals@PAGE+40
-Lloh161:
+Lloh171:
 	ldr	x9, [x9, __MergedGlobals@PAGEOFF+40]
 	cmp	x8, x9
 	b.ls	LBB3_41
@@ -2605,10 +2830,10 @@ LBB3_42:                                ;   in Loop: Header=BB3_3 Depth=1
 	movk	x16, #4100, lsl #32
 	cmp	x0, #66
 	mov	x0, x21
-Lloh162:
-	adrp	x25, l_.str.64@PAGE
-Lloh163:
-	add	x25, x25, l_.str.64@PAGEOFF
+Lloh172:
+	adrp	x25, l_.str.69@PAGE
+Lloh173:
+	add	x25, x25, l_.str.69@PAGEOFF
 	b.lo	LBB3_53
 ; %bb.43:                               ;   in Loop: Header=BB3_3 Depth=1
 	ldrb	w8, [x23]
@@ -2668,13 +2893,13 @@ LBB3_50:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_50
 LBB3_51:                                ;   in Loop: Header=BB3_3 Depth=1
-	adrp	x9, __MergedGlobals.71@PAGE+72
-	str	x8, [x9, __MergedGlobals.71@PAGEOFF+72]
+	adrp	x9, __MergedGlobals.75@PAGE+72
+	str	x8, [x9, __MergedGlobals.75@PAGEOFF+72]
 	b	LBB3_53
 LBB3_52:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh164:
+Lloh174:
 	adrp	x8, __MergedGlobals@PAGE+40
-Lloh165:
+Lloh175:
 	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+40]
 	cbnz	x23, LBB3_42
 LBB3_53:                                ;   in Loop: Header=BB3_3 Depth=1
@@ -2801,9 +3026,9 @@ LBB3_72:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_72
 LBB3_73:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh166:
+Lloh176:
 	adrp	x9, __MergedGlobals@PAGE+56
-Lloh167:
+Lloh177:
 	ldr	x9, [x9, __MergedGlobals@PAGEOFF+56]
 	cmp	x8, x9
 	b.lo	LBB3_75
@@ -2870,8 +3095,8 @@ LBB3_83:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_83
 LBB3_84:                                ;   in Loop: Header=BB3_3 Depth=1
-	adrp	x9, __MergedGlobals.71@PAGE+56
-	str	x8, [x9, __MergedGlobals.71@PAGEOFF+56]
+	adrp	x9, __MergedGlobals.75@PAGE+56
+	str	x8, [x9, __MergedGlobals.75@PAGEOFF+56]
 LBB3_85:                                ;   in Loop: Header=BB3_3 Depth=1
 	cbz	x0, LBB3_97
 ; %bb.86:                               ;   in Loop: Header=BB3_3 Depth=1
@@ -2932,9 +3157,9 @@ LBB3_93:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_93
 ; %bb.94:                               ;   in Loop: Header=BB3_3 Depth=1
-Lloh168:
+Lloh178:
 	adrp	x9, __MergedGlobals@PAGE+32
-Lloh169:
+Lloh179:
 	ldr	x9, [x9, __MergedGlobals@PAGEOFF+32]
 	cmp	x8, x9
 	b.ls	LBB3_97
@@ -2943,29 +3168,29 @@ Lloh169:
 	str	x8, [x9, __MergedGlobals@PAGEOFF+32]
 	b	LBB3_97
 LBB3_96:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh170:
+Lloh180:
 	adrp	x8, __MergedGlobals@PAGE+32
-Lloh171:
+Lloh181:
 	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+32]
 LBB3_97:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh172:
+Lloh182:
 	adrp	x8, __MergedGlobals@PAGE+32
-Lloh173:
+Lloh183:
 	add	x8, x8, __MergedGlobals@PAGEOFF+32
 	ldr	x24, [x8]
 	ldr	x23, [x8, #8]
-Lloh174:
-	adrp	x9, __MergedGlobals.71@PAGE+56
-Lloh175:
-	add	x9, x9, __MergedGlobals.71@PAGEOFF+56
+Lloh184:
+	adrp	x9, __MergedGlobals.75@PAGE+56
+Lloh185:
+	add	x9, x9, __MergedGlobals.75@PAGEOFF+56
 	ldr	x22, [x9, #16]
 	ldr	x26, [x8, #16]
 	ldr	x27, [x9]
 	ldr	x28, [x8, #32]
 	mov	x0, x25
-Lloh176:
+Lloh186:
 	adrp	x1, l_.str.35@PAGE
-Lloh177:
+Lloh187:
 	add	x1, x1, l_.str.35@PAGEOFF
 	bl	_fopen
 	cbz	x0, LBB3_99
@@ -2999,9 +3224,9 @@ Lloh177:
 	ucvtf	d1, x22
 	fmul	d13, d1, d2
 	fadd	d9, d12, d13
-Lloh178:
+Lloh188:
 	adrp	x8, __MergedGlobals@PAGE+8
-Lloh179:
+Lloh189:
 	add	x8, x8, __MergedGlobals@PAGEOFF+8
 	ldr	d3, [x8]
 	ldr	d2, [x8, #8]
@@ -3010,10 +3235,10 @@ Lloh179:
 	ldr	x23, [x8, #48]
 	ldr	x24, [x8, #48]
 	ldr	x26, [x8, #24]
-Lloh180:
-	adrp	x8, __MergedGlobals.71@PAGE+72
-Lloh181:
-	ldr	x27, [x8, __MergedGlobals.71@PAGEOFF+72]
+Lloh190:
+	adrp	x8, __MergedGlobals.75@PAGE+72
+Lloh191:
+	ldr	x27, [x8, __MergedGlobals.75@PAGEOFF+72]
 	ldr	d2, [sp, #176]                  ; 8-byte Folded Reload
 	fmul	d14, d0, d2
 	ldr	d0, [sp, #168]                  ; 8-byte Folded Reload
@@ -3041,34 +3266,34 @@ Lloh181:
 	ldur	x8, [x29, #-224]                ; 8-byte Folded Reload
 	str	x8, [sp]
 	mov	x0, x21
-Lloh182:
-	adrp	x1, l_.str.65@PAGE
-Lloh183:
-	add	x1, x1, l_.str.65@PAGEOFF
+Lloh192:
+	adrp	x1, l_.str.70@PAGE
+Lloh193:
+	add	x1, x1, l_.str.70@PAGEOFF
 	bl	_fprintf
 	mov	x0, x21
 	bl	_fclose
 	mov	x0, x25
-Lloh184:
-	adrp	x1, l_.str.66@PAGE
-Lloh185:
-	add	x1, x1, l_.str.66@PAGEOFF
+Lloh194:
+	adrp	x1, l_.str.71@PAGE
+Lloh195:
+	add	x1, x1, l_.str.71@PAGEOFF
 	bl	_rename
 LBB3_99:                                ;   in Loop: Header=BB3_3 Depth=1
 	ldr	x22, [sp, #216]                 ; 8-byte Folded Reload
 	adrp	x23, __MergedGlobals@PAGE
 	ldur	w24, [x29, #-212]               ; 4-byte Folded Reload
-Lloh186:
+Lloh196:
 	adrp	x26, _RPC_URLS@PAGE
-Lloh187:
+Lloh197:
 	add	x26, x26, _RPC_URLS@PAGEOFF
-Lloh188:
-	adrp	x27, l_.str.63@PAGE
-Lloh189:
-	add	x27, x27, l_.str.63@PAGEOFF
-Lloh190:
+Lloh198:
+	adrp	x27, l_.str.68@PAGE
+Lloh199:
+	add	x27, x27, l_.str.68@PAGEOFF
+Lloh200:
 	adrp	x28, _curl_write_cb@PAGE
-Lloh191:
+Lloh201:
 	add	x28, x28, _curl_write_cb@PAGEOFF
 	mov	w0, #53392                      ; =0xd090
 	movk	w0, #3, lsl #16
@@ -3098,30 +3323,30 @@ LBB3_102:
 	ldp	d13, d12, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d15, d14, [sp], #160            ; 16-byte Folded Reload
 	ret
-	.loh AdrpAdd	Lloh148, Lloh149
-	.loh AdrpAdd	Lloh146, Lloh147
-	.loh AdrpAdd	Lloh144, Lloh145
-	.loh AdrpAdd	Lloh154, Lloh155
-	.loh AdrpAdd	Lloh152, Lloh153
-	.loh AdrpAdd	Lloh150, Lloh151
+	.loh AdrpAdd	Lloh158, Lloh159
 	.loh AdrpAdd	Lloh156, Lloh157
-	.loh AdrpLdr	Lloh158, Lloh159
-	.loh AdrpLdr	Lloh160, Lloh161
+	.loh AdrpAdd	Lloh154, Lloh155
+	.loh AdrpAdd	Lloh164, Lloh165
 	.loh AdrpAdd	Lloh162, Lloh163
-	.loh AdrpLdr	Lloh164, Lloh165
-	.loh AdrpLdr	Lloh166, Lloh167
+	.loh AdrpAdd	Lloh160, Lloh161
+	.loh AdrpAdd	Lloh166, Lloh167
 	.loh AdrpLdr	Lloh168, Lloh169
 	.loh AdrpLdr	Lloh170, Lloh171
-	.loh AdrpAdd	Lloh176, Lloh177
-	.loh AdrpAdd	Lloh174, Lloh175
 	.loh AdrpAdd	Lloh172, Lloh173
+	.loh AdrpLdr	Lloh174, Lloh175
+	.loh AdrpLdr	Lloh176, Lloh177
+	.loh AdrpLdr	Lloh178, Lloh179
+	.loh AdrpLdr	Lloh180, Lloh181
+	.loh AdrpAdd	Lloh186, Lloh187
 	.loh AdrpAdd	Lloh184, Lloh185
 	.loh AdrpAdd	Lloh182, Lloh183
-	.loh AdrpLdr	Lloh180, Lloh181
-	.loh AdrpAdd	Lloh178, Lloh179
-	.loh AdrpAdd	Lloh190, Lloh191
+	.loh AdrpAdd	Lloh194, Lloh195
+	.loh AdrpAdd	Lloh192, Lloh193
+	.loh AdrpLdr	Lloh190, Lloh191
 	.loh AdrpAdd	Lloh188, Lloh189
-	.loh AdrpAdd	Lloh186, Lloh187
+	.loh AdrpAdd	Lloh200, Lloh201
+	.loh AdrpAdd	Lloh198, Lloh199
+	.loh AdrpAdd	Lloh196, Lloh197
 	.cfi_endproc
                                         ; -- End function
 	.p2align	2                               ; -- Begin function curl_write_cb
@@ -3216,10 +3441,10 @@ _decode_slot0_sqrt_price:               ; @decode_slot0_sqrt_price
 	mov.16b	v9, v0
 	mov.16b	v11, v1
 	mov.16b	v10, v2
-Lloh192:
-	adrp	x1, l_.str.59@PAGE
-Lloh193:
-	add	x1, x1, l_.str.59@PAGEOFF
+Lloh202:
+	adrp	x1, l_.str.64@PAGE
+Lloh203:
+	add	x1, x1, l_.str.64@PAGEOFF
 	bl	_strstr
 	cbz	x0, LBB5_9
 ; %bb.2:
@@ -3307,7 +3532,7 @@ LBB5_12:                                ; =>This Inner Loop Header: Depth=1
 	ldp	d11, d10, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d13, d12, [sp], #64             ; 16-byte Folded Reload
 	ret
-	.loh AdrpAdd	Lloh192, Lloh193
+	.loh AdrpAdd	Lloh202, Lloh203
 	.cfi_endproc
                                         ; -- End function
 	.p2align	2                               ; -- Begin function find_batch_result_for_id
@@ -3323,11 +3548,11 @@ _find_batch_result_for_id:              ; @find_batch_result_for_id
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
 	.cfi_offset w20, -32
-Lloh194:
+Lloh204:
 	adrp	x8, ___stack_chk_guard@GOTPAGE
-Lloh195:
+Lloh205:
 	ldr	x8, [x8, ___stack_chk_guard@GOTPAGEOFF]
-Lloh196:
+Lloh206:
 	ldr	x8, [x8]
 	stur	x8, [x29, #-24]
 	cbz	x0, LBB6_25
@@ -3335,18 +3560,18 @@ Lloh196:
 	mov	x19, x1
 	mov	x20, x0
 	str	x1, [sp]
-Lloh197:
-	adrp	x2, l_.str.60@PAGE
-Lloh198:
-	add	x2, x2, l_.str.60@PAGEOFF
+Lloh207:
+	adrp	x2, l_.str.65@PAGE
+Lloh208:
+	add	x2, x2, l_.str.65@PAGEOFF
 	add	x0, sp, #40
 	mov	w1, #32                         ; =0x20
 	bl	_snprintf
 	str	x19, [sp]
-Lloh199:
-	adrp	x2, l_.str.61@PAGE
-Lloh200:
-	add	x2, x2, l_.str.61@PAGEOFF
+Lloh209:
+	adrp	x2, l_.str.66@PAGE
+Lloh210:
+	add	x2, x2, l_.str.66@PAGEOFF
 	add	x0, sp, #8
 	mov	w1, #32                         ; =0x20
 	bl	_snprintf
@@ -3425,10 +3650,10 @@ LBB6_20:                                ; =>This Inner Loop Header: Depth=1
 	cmp	w8, #125
 	b.ne	LBB6_19
 LBB6_22:
-Lloh201:
-	adrp	x1, l_.str.62@PAGE
-Lloh202:
-	add	x1, x1, l_.str.62@PAGEOFF
+Lloh211:
+	adrp	x1, l_.str.67@PAGE
+Lloh212:
+	add	x1, x1, l_.str.67@PAGEOFF
 	bl	_strstr
 	mov	x8, x0
 	mov	x0, #0                          ; =0x0
@@ -3437,21 +3662,21 @@ Lloh202:
 	cmp	x8, x19
 	b.hs	LBB6_25
 ; %bb.24:
-Lloh203:
-	adrp	x1, l_.str.59@PAGE
-Lloh204:
-	add	x1, x1, l_.str.59@PAGEOFF
+Lloh213:
+	adrp	x1, l_.str.64@PAGE
+Lloh214:
+	add	x1, x1, l_.str.64@PAGEOFF
 	mov	x0, x8
 	bl	_strstr
 	cmp	x0, x19
 	csel	x0, x0, xzr, lo
 LBB6_25:
 	ldur	x8, [x29, #-24]
-Lloh205:
+Lloh215:
 	adrp	x9, ___stack_chk_guard@GOTPAGE
-Lloh206:
+Lloh216:
 	ldr	x9, [x9, ___stack_chk_guard@GOTPAGEOFF]
-Lloh207:
+Lloh217:
 	ldr	x9, [x9]
 	cmp	x9, x8
 	b.ne	LBB6_27
@@ -3462,12 +3687,12 @@ Lloh207:
 	ret
 LBB6_27:
 	bl	___stack_chk_fail
-	.loh AdrpLdrGotLdr	Lloh194, Lloh195, Lloh196
-	.loh AdrpAdd	Lloh199, Lloh200
-	.loh AdrpAdd	Lloh197, Lloh198
-	.loh AdrpAdd	Lloh201, Lloh202
-	.loh AdrpAdd	Lloh203, Lloh204
-	.loh AdrpLdrGotLdr	Lloh205, Lloh206, Lloh207
+	.loh AdrpLdrGotLdr	Lloh204, Lloh205, Lloh206
+	.loh AdrpAdd	Lloh209, Lloh210
+	.loh AdrpAdd	Lloh207, Lloh208
+	.loh AdrpAdd	Lloh211, Lloh212
+	.loh AdrpAdd	Lloh213, Lloh214
+	.loh AdrpLdrGotLdr	Lloh215, Lloh216, Lloh217
 	.cfi_endproc
                                         ; -- End function
 	.section	__TEXT,__cstring,cstring_literals
@@ -3489,10 +3714,10 @@ l_.str.4:                               ; @.str.4
 	.section	__DATA,__const
 	.p2align	3, 0x0                          ; @RPC_URLS
 _RPC_URLS:
-	.quad	l_.str.55
-	.quad	l_.str.56
-	.quad	l_.str.57
-	.quad	l_.str.58
+	.quad	l_.str.60
+	.quad	l_.str.61
+	.quad	l_.str.62
+	.quad	l_.str.63
 
 	.section	__TEXT,__cstring,cstring_literals
 l_.str.5:                               ; @.str.5
@@ -3602,41 +3827,41 @@ l___const.run_native_asm_sniper_cycle.borrow_syms:
 	.section	__TEXT,__const
 	.p2align	6, 0x0                          ; @__const.run_native_asm_sniper_cycle.y1
 l___const.run_native_asm_sniper_cycle.y1:
-	.quad	0x4088ac7ae147ae14              ; double 789.55999999999995
-	.quad	0x4088ac7ae147ae14              ; double 789.55999999999995
-	.quad	0x408235999999999a              ; double 582.70000000000005
-	.quad	0x40c4fcbc28f5c28f              ; double 10745.469999999999
-	.quad	0x4067100000000000              ; double 184.5
+	.quad	0x4079000000000000              ; double 400
+	.quad	0x4079000000000000              ; double 400
+	.quad	0x40a6580000000000              ; double 2860
+	.quad	0x4066800000000000              ; double 180
+	.quad	0x3feb333333333333              ; double 0.84999999999999998
 	.quad	0x40f4e7e000000000              ; double 85630
 	.quad	0x40e4640000000000              ; double 41760
-	.quad	0x4133999400000000              ; double 1284500
-	.quad	0x403c000000000000              ; double 28
-	.quad	0x4080400000000000              ; double 520
-	.quad	0x4119064000000000              ; double 4.1E+5
-	.quad	0x40dc340000000000              ; double 28880
-	.quad	0x4084000000000000              ; double 640
-	.quad	0x407ea00000000000              ; double 490
-	.quad	0x407a400000000000              ; double 420
 	.quad	0x40f7318000000000              ; double 95000
+	.quad	0x3fbdf3b645a1cac1              ; double 0.11700000000000001
+	.quad	0x4025333333333333              ; double 10.6
+	.quad	0x40b0040000000000              ; double 4100
+	.quad	0x408a900000000000              ; double 850
+	.quad	0x4025333333333333              ; double 10.6
+	.quad	0x4025333333333333              ; double 10.6
+	.quad	0x3fbdf3b645a1cac1              ; double 0.11700000000000001
+	.quad	0x40e4640000000000              ; double 41760
 
 	.p2align	6, 0x0                          ; @__const.run_native_asm_sniper_cycle.y2
 l___const.run_native_asm_sniper_cycle.y2:
-	.quad	0x4069047ae147ae14              ; double 200.13999999999999
-	.quad	0x408235999999999a              ; double 582.70000000000005
-	.quad	0x40f04c54a3d70a3d              ; double 66757.289999999994
-	.quad	0x410821371eb851ec              ; double 197670.89000000001
-	.quad	0x4057066666666666              ; double 92.099999999999994
+	.quad	0x40a6580000000000              ; double 2860
+	.quad	0x40bb260000000000              ; double 6950
+	.quad	0x40dc110000000000              ; double 28740
+	.quad	0x407a400000000000              ; double 420
+	.quad	0x3fdae147ae147ae1              ; double 0.41999999999999998
 	.quad	0x40f51ee000000000              ; double 86510
-	.quad	0x4147c8c500000000              ; double 3117450
-	.quad	0x415178a800000000              ; double 4.58E+6
-	.quad	0x4068600000000000              ; double 195
-	.quad	0x4096a80000000000              ; double 1450
-	.quad	0x4122ebc000000000              ; double 6.2E+5
-	.quad	0x40cb580000000000              ; double 14000
-	.quad	0x408235999999999a              ; double 582.70000000000005
-	.quad	0x4069047ae147ae14              ; double 200.13999999999999
-	.quad	0x408235999999999a              ; double 582.70000000000005
-	.quad	0x4147c8c500000000              ; double 3117450
+	.quad	0x40fd4c0000000000              ; double 1.2E+5
+	.quad	0x4105f90000000000              ; double 1.8E+5
+	.quad	0x3fcc6a7ef9db22d1              ; double 0.222
+	.quad	0x4049fc28f5c28f5c              ; double 51.969999999999999
+	.quad	0x40b8380000000000              ; double 6200
+	.quad	0x408cc00000000000              ; double 920
+	.quad	0x403747ae147ae148              ; double 23.280000000000001
+	.quad	0x40253d70a3d70a3d              ; double 10.619999999999999
+	.quad	0x3fcc6a7ef9db22d1              ; double 0.222
+	.quad	0x40f4e7e000000000              ; double 85630
 
 	.p2align	6, 0x0                          ; @__const.run_native_asm_sniper_cycle.fl
 l___const.run_native_asm_sniper_cycle.fl:
@@ -3727,7 +3952,7 @@ l_.str.35:                              ; @.str.35
 	.asciz	"w"
 
 l_.str.36:                              ; @.str.36
-	.asciz	"{\n  \"ok\": true,\n  \"binary_path\": \"./bin/arb_sniper_asm\",\n  \"assembly_source\": \"engine/arb_sniper_daemon.s\",\n  \"execution_mode\": \"100%% Native C/Assembly Standalone Binary (22 Live Pools \342\200\242 16 Routes \342\200\242 Real Hardware ns/\302\265s Timing \342\200\242 Per-Block Arbitrum Profit Engine)\",\n  \"loan_sizing_policy\": \"3-Tier Per-Block Max Flash Loan: Micro Block Floor (\342\202\2712-\342\202\27116+ INR) + Active Spreads (\342\202\271150-\342\202\2719,480 INR) + Whale Market Shifts (Lakhs/Crores INR) \342\200\224 Strictly Profit-Only\",\n  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n  \"mudrex_min_deposit_usdc\": 0.005,\n  \"mudrex_min_deposit_inr\": 0.47,\n  \"mudrex_usdc_balance\": %.6f,\n  \"mudrex_inr_balance\": %.2f,\n  \"asm_cycles_completed\": %llu,\n  \"arbitrum_blocks_profited_session\": %llu,\n  \"session_block_total_inr\": %.2f,\n  \"session_mudrex_75_inr\": %.2f,\n  \"session_saved_25_inr\": %.2f,\n  \"min_guaranteed_block_profit_inr\": %.2f,\n  \"avg_block_profit_inr\": %.2f,\n  \"daily_500k_blocks_floor_inr\": %.2f,\n  \"cpu_eval_latency_nanoseconds\": %.2f,\n  \"cpu_eval_latency_microseconds\": %.4f,\n  \"live_block_number\": %llu,\n  \"precached_nonce_ram\": %llu,\n  \"relayer_eth_balance\": %.8f,\n  \"metamask_eth_balance\": %.8f,\n  \"relayer_gas_funded\": %s,\n  \"autonomous_exec_status\": \"%s\",\n  \"real_total_amount_100_inr\": %.2f,\n  \"real_total_amount_100_usd\": %.6f,\n  \"real_amount_transferred_75_inr\": %.2f,\n  \"real_amount_transferred_75_usd\": %.6f,\n  \"real_amount_saved_25_inr\": %.2f,\n  \"real_amount_saved_25_usd\": %.6f,\n  \"top_route\": \"%s\",\n  \"top_borrow_asset\": \"%s\",\n  \"top_spread_bps\": %.4f,\n  \"top_full_sweet_spot_loan_inr\": %.2f,\n  \"top_full_sweet_spot_loan_usd\": %.2f,\n  \"top_balancer_0pct_portion_inr\": %.2f,\n  \"top_balancer_0pct_portion_usd\": %.2f,\n  \"top_overflow_portion_inr\": %.2f,\n  \"top_overflow_portion_usd\": %.2f,\n  \"top_hybrid_fee_saved_inr\": %.2f,\n  \"top_hybrid_fee_saved_usd\": %.2f,\n  \"top_net_profit_inr\": %.2f,\n  \"top_net_profit_usd\": %.4f,\n  \"top_transferred_75_inr\": %.2f,\n  \"top_transferred_75_usd\": %.4f,\n  \"top_saved_25_inr\": %.2f,\n  \"top_saved_25_usd\": %.4f,\n  \"per_block_profit_stream\": [\n"
+	.asciz	"{\n  \"ok\": true,\n  \"binary_path\": \"./bin/arb_sniper_asm\",\n  \"assembly_source\": \"engine/arb_sniper_daemon.s\",\n  \"execution_mode\": \"100%% Native C/Assembly Standalone Binary (22 Live Pools \342\200\242 16 Routes \342\200\242 Real Hardware ns/\302\265s Timing \342\200\242 Zero Fake Floors)\",\n  \"loan_sizing_policy\": \"100%% Real Un-Sugarcoated Closed-Form Arbitrage Math (Zero Fake Floors \342\200\224 Executes Strictly When Spread > DEX Fee Floor + L2 Gas)\",\n  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n  \"mudrex_min_deposit_usdc\": 0.005,\n  \"mudrex_min_deposit_inr\": 0.47,\n  \"mudrex_usdc_balance\": %.6f,\n  \"mudrex_inr_balance\": %.2f,\n  \"asm_cycles_completed\": %llu,\n  \"arbitrum_blocks_profited_session\": %llu,\n  \"session_block_total_inr\": %.2f,\n  \"session_mudrex_75_inr\": %.2f,\n  \"session_saved_25_inr\": %.2f,\n  \"min_guaranteed_block_profit_inr\": %.2f,\n  \"avg_block_profit_inr\": %.2f,\n  \"daily_500k_blocks_floor_inr\": %.2f,\n  \"cpu_eval_latency_nanoseconds\": %.2f,\n  \"cpu_eval_latency_microseconds\": %.4f,\n  \"live_block_number\": %llu,\n  \"precached_nonce_ram\": %llu,\n  \"relayer_eth_balance\": %.8f,\n  \"metamask_eth_balance\": %.8f,\n  \"relayer_gas_funded\": %s,\n  \"autonomous_exec_status\": \"%s\",\n  \"real_total_amount_100_inr\": %.2f,\n  \"real_total_amount_100_usd\": %.6f,\n  \"real_amount_transferred_75_inr\": %.2f,\n  \"real_amount_transferred_75_usd\": %.6f,\n  \"real_amount_saved_25_inr\": %.2f,\n  \"real_amount_saved_25_usd\": %.6f,\n  \"top_route\": \"%s\",\n  \"top_borrow_asset\": \"%s\",\n  \"top_spread_bps\": %.4f,\n  \"top_full_sweet_spot_loan_inr\": %.2f,\n  \"top_full_sweet_spot_loan_usd\": %.2f,\n  \"top_balancer_0pct_portion_inr\": %.2f,\n  \"top_balancer_0pct_portion_usd\": %.2f,\n  \"top_overflow_portion_inr\": %.2f,\n  \"top_overflow_portion_usd\": %.2f,\n  \"top_hybrid_fee_saved_inr\": %.2f,\n  \"top_hybrid_fee_saved_usd\": %.2f,\n  \"top_net_profit_inr\": %.2f,\n  \"top_net_profit_usd\": %.4f,\n  \"top_transferred_75_inr\": %.2f,\n  \"top_transferred_75_usd\": %.4f,\n  \"top_saved_25_inr\": %.2f,\n  \"top_saved_25_usd\": %.4f,\n  \"per_block_profit_stream\": [\n"
 
 l_.str.37:                              ; @.str.37
 	.asciz	"true"
@@ -3748,7 +3973,7 @@ l_.str.42:                              ; @.str.42
 	.asciz	"  ],\n  \"routes\": [\n"
 
 l_.str.43:                              ; @.str.43
-	.asciz	"    {\"rank\": %d, \"route\": \"%s\", \"asset\": \"%s\", \"p1\": %.6f, \"p2\": %.6f, \"spread_bps\": %.4f, \"fee_floor_bps\": %.2f, \"net_margin_bps\": %.4f, \"full_loan_inr\": %.2f, \"full_loan_usd\": %.2f, \"balancer_0pct_usd\": %.2f, \"overflow_usd\": %.2f, \"fee_saved_inr\": %.2f, \"fee_saved_usd\": %.2f, \"net_inr\": %.2f, \"net_usd\": %.4f, \"transferred_75_inr\": %.2f, \"transferred_75_usd\": %.4f, \"saved_25_inr\": %.2f, \"saved_25_usd\": %.4f}%s\n"
+	.asciz	"    {\"rank\": %d, \"route\": \"%s\", \"asset\": \"%s\", \"p1\": %.6f, \"p2\": %.6f, \"spread_bps\": %.4f, \"fee_floor_bps\": %.2f, \"net_margin_bps\": %.4f, \"full_loan_inr\": %.2f, \"full_loan_usd\": %.2f, \"balancer_0pct_usd\": %.2f, \"overflow_usd\": %.2f, \"fee_saved_inr\": %.2f, \"fee_saved_usd\": %.2f, \"gross_inr\": %.4f, \"gross_usd\": %.6f, \"l2_gas_inr\": %.4f, \"l2_gas_usd\": %.6f, \"net_inr\": %.2f, \"net_usd\": %.4f, \"transferred_75_inr\": %.2f, \"transferred_75_usd\": %.4f, \"saved_25_inr\": %.2f, \"saved_25_usd\": %.4f}%s\n"
 
 l_.str.44:                              ; @.str.44
 	.asciz	"  ]\n}\n"
@@ -3756,67 +3981,82 @@ l_.str.44:                              ; @.str.44
 l_.str.45:                              ; @.str.45
 	.asciz	"reports/asm_sniper_telemetry.json"
 
+l_.str.47:                              ; @.str.47
+	.asciz	"100%% REAL LIVE ARBITRUM ONE RPC SCAN (ZERO FAKE FLOORS \342\200\242 ZERO SUGARCOATING)\n"
+
 l_.str.48:                              ; @.str.48
 	.asciz	"Real Hardware Eval Speed  : %.2f nanoseconds (%.4f microseconds across 16 Routes)\n"
 
-l_.str.50:                              ; @.str.50
-	.asciz	"Min Block Profit Floor    : \342\202\271+%.2f INR / Block (5,00,000 Blocks/Day Floor = \342\202\271%.2f INR / Day)\n"
-
-l_.str.51:                              ; @.str.51
+l_.str.49:                              ; @.str.49
 	.asciz	"Top Route (#1)            : %s\n"
 
+l_.str.50:                              ; @.str.50
+	.asciz	"Live Pool Prices          : P1=$%.6f vs P2=$%.6f (Spread=%.4f bps vs %.2f bps DEX Fee Floor | Net Margin=%+.4f bps)\n"
+
+l_.str.51:                              ; @.str.51
+	.asciz	"Optimal Flash Loan (dx*)  : $%.2f USD (\342\202\271%.2f INR)\n"
+
 l_.str.52:                              ; @.str.52
-	.asciz	"Live Pool Prices          : P1=\342\202\271%.2f vs P2=\342\202\271%.2f (Spread=%.4f bps vs %.2f bps Floor)\n"
+	.asciz	"Real Gross Profit         : $%.6f USD (\342\202\271%.4f INR)\n"
 
 l_.str.53:                              ; @.str.53
-	.asciz	"100%% Max Flash Loan (dx*) : \342\202\271%.2f INR (Balancer 0%%: \342\202\271%.2f INR + Overflow: \342\202\271%.2f INR)\n"
+	.asciz	"Real Arbitrum L2 Gas Fee  : $%.6f USD (\342\202\271%.4f INR)\n"
 
 l_.str.54:                              ; @.str.54
-	.asciz	"Net Profit (100%% Total)   : \342\202\271%+.2f INR (75%%=\342\202\271%.2f INR -> Mudrex 0xd252...3f05 | 25%%=\342\202\271%.2f INR -> Saved)\n"
+	.asciz	"Unfiltered (Gross - Gas)  : $%+.6f USD (\342\202\271%+.4f INR)\n"
 
 l_.str.55:                              ; @.str.55
-	.asciz	"https://arbitrum-one-rpc.publicnode.com"
+	.asciz	"Real Net Profit Executed  : $%.4f USD (\342\202\271%.2f INR) [%s]\n"
 
 l_.str.56:                              ; @.str.56
-	.asciz	"https://arb-pokt.nodies.app"
+	.asciz	"EXECUTE: Gross > L2 Gas"
 
 l_.str.57:                              ; @.str.57
-	.asciz	"https://arb1.arbitrum.io/rpc"
-
-l_.str.58:                              ; @.str.58
-	.asciz	"https://1rpc.io/arb"
+	.asciz	"SKIP: Gross < L2 Gas (Gas Protected)"
 
 l_.str.59:                              ; @.str.59
-	.asciz	"0x"
+	.asciz	" #%02d | %-58s | P1=$%10.4f P2=$%10.4f | Spread=%6.2f bps | Fee=%5.2f bps | Margin=%+6.2f bps | Loan=$%8.2f | Gross=\342\202\271%6.4f | Net=\342\202\271%6.2f\n"
 
 l_.str.60:                              ; @.str.60
-	.asciz	"\"id\":%d"
+	.asciz	"https://arbitrum-one-rpc.publicnode.com"
 
 l_.str.61:                              ; @.str.61
-	.asciz	"\"id\": %d"
+	.asciz	"https://arb-pokt.nodies.app"
 
 l_.str.62:                              ; @.str.62
-	.asciz	"\"result\""
+	.asciz	"https://arb1.arbitrum.io/rpc"
 
 l_.str.63:                              ; @.str.63
-	.asciz	"[{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1},{\"jsonrpc\":\"2.0\",\"method\":\"eth_gasPrice\",\"params\":[],\"id\":2},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000b411f0Bf1E010FCc81585eDD2b65C5a49d3d0099\"},\"latest\"],\"id\":3},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000FF3c34DAF159741C931F7c421350f8289A9d89BE\"},\"latest\"],\"id\":4},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xFF3c34DAF159741C931F7c421350f8289A9d89BE\",\"latest\"],\"id\":5},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\":[\"0xFF3c34DAF159741C931F7c421350f8289A9d89BE\",\"latest\"],\"id\":6},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x9dD041dbd964DE086Da8f907518f6E25c45aea70\",\"latest\"],\"id\":7},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000d2529585059e3e5c09c912f0f9570000c2a53f05\"},\"latest\"],\"id\":8}]"
+	.asciz	"https://1rpc.io/arb"
 
 l_.str.64:                              ; @.str.64
-	.asciz	"reports/live_block_ticker.json.tmp"
+	.asciz	"0x"
 
 l_.str.65:                              ; @.str.65
-	.asciz	"{\n  \"ok\": true,\n  \"engine_binary\": \"./bin/arb_sniper_asm (Native C/Assembly Pthreads + HTTP/2 TCP_NODELAY)\",\n  \"rpc_endpoint\": \"%s\",\n  \"asm_eval_ns\": %.1f,\n  \"asm_eval_us\": %.3f,\n  \"rpc_rtt_ms\": %.2f,\n  \"block_number\": %llu,\n  \"gas_price_gwei\": %.4f,\n  \"latest_nonce\": %llu,\n  \"latest_nonce_hex\": \"0x%llx\",\n  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n  \"mudrex_usdc_raw\": %llu,\n  \"metamask_usdc_raw\": %llu,\n  \"mudrex_usdc_balance\": \"%.6f\",\n  \"mudrex_inr\": \"%.2f\",\n  \"binance_usdc_balance\": \"%.6f\",\n  \"metamask_usdc_balance\": \"%.6f\",\n  \"total_onchain_usdc\": \"%.6f\",\n  \"binance_inr\": \"%.2f\",\n  \"metamask_inr\": \"%.2f\",\n  \"total_onchain_inr\": \"%.2f\",\n  \"metamask_eth_balance\": \"%.8f\",\n  \"relayer_eth_balance\": \"%.8f\",\n  \"updated_epoch\": %ld\n}\n"
+	.asciz	"\"id\":%d"
 
 l_.str.66:                              ; @.str.66
+	.asciz	"\"id\": %d"
+
+l_.str.67:                              ; @.str.67
+	.asciz	"\"result\""
+
+l_.str.68:                              ; @.str.68
+	.asciz	"[{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1},{\"jsonrpc\":\"2.0\",\"method\":\"eth_gasPrice\",\"params\":[],\"id\":2},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000b411f0Bf1E010FCc81585eDD2b65C5a49d3d0099\"},\"latest\"],\"id\":3},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000FF3c34DAF159741C931F7c421350f8289A9d89BE\"},\"latest\"],\"id\":4},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xFF3c34DAF159741C931F7c421350f8289A9d89BE\",\"latest\"],\"id\":5},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\":[\"0xFF3c34DAF159741C931F7c421350f8289A9d89BE\",\"latest\"],\"id\":6},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x9dD041dbd964DE086Da8f907518f6E25c45aea70\",\"latest\"],\"id\":7},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000d2529585059e3e5c09c912f0f9570000c2a53f05\"},\"latest\"],\"id\":8}]"
+
+l_.str.69:                              ; @.str.69
+	.asciz	"reports/live_block_ticker.json.tmp"
+
+l_.str.70:                              ; @.str.70
+	.asciz	"{\n  \"ok\": true,\n  \"engine_binary\": \"./bin/arb_sniper_asm (Native C/Assembly Pthreads + HTTP/2 TCP_NODELAY)\",\n  \"rpc_endpoint\": \"%s\",\n  \"asm_eval_ns\": %.1f,\n  \"asm_eval_us\": %.3f,\n  \"rpc_rtt_ms\": %.2f,\n  \"block_number\": %llu,\n  \"gas_price_gwei\": %.4f,\n  \"latest_nonce\": %llu,\n  \"latest_nonce_hex\": \"0x%llx\",\n  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n  \"mudrex_usdc_raw\": %llu,\n  \"metamask_usdc_raw\": %llu,\n  \"mudrex_usdc_balance\": \"%.6f\",\n  \"mudrex_inr\": \"%.2f\",\n  \"binance_usdc_balance\": \"%.6f\",\n  \"metamask_usdc_balance\": \"%.6f\",\n  \"total_onchain_usdc\": \"%.6f\",\n  \"binance_inr\": \"%.2f\",\n  \"metamask_inr\": \"%.2f\",\n  \"total_onchain_inr\": \"%.2f\",\n  \"metamask_eth_balance\": \"%.8f\",\n  \"relayer_eth_balance\": \"%.8f\",\n  \"updated_epoch\": %ld\n}\n"
+
+l_.str.71:                              ; @.str.71
 	.asciz	"reports/live_block_ticker.json"
 
-l_str.67:                               ; @str.67
-	.asciz	"NATIVE ASSEMBLY SNIPER BINARY (./bin/arb_sniper_asm) SELF-TEST PASSED"
+l_str.73:                               ; @str.73
+	.asciz	"--------------------------------------------------------------------------------"
 
-l_str.69:                               ; @str.69
-	.asciz	"Mudrex Mediator Wallet    : 0xd2529585059e3e5c09c912f0f9570000c2a53f05 (Min Dep > 0.005 USDC = \342\202\2710.47 INR)"
-
-l_str.70:                               ; @str.70
+l_str.74:                               ; @str.74
 	.asciz	"================================================================================"
 
 	.section	__DATA,__data
@@ -3833,5 +4073,5 @@ __MergedGlobals:
 	.quad	5                               ; 0x5
 	.quad	20000000                        ; 0x1312d00
 
-.zerofill __DATA,__bss,__MergedGlobals.71,3920,3 ; @_MergedGlobals.71
+.zerofill __DATA,__bss,__MergedGlobals.75,3920,3 ; @_MergedGlobals.75
 .subsections_via_symbols

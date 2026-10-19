@@ -2,7 +2,7 @@ name: Arbitrum One 24x7 Cloud Flash Loan Sniper & US-East Keep-Alive
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
   push:
     branches:
@@ -41,7 +41,7 @@ jobs:
         env:
           OWNER_PROFIT_WALLET: "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
           MUDREX_DEPOSIT_WALLET: "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
-          DEPLOYED_CONTRACT_ADDRESS: "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
+          DEPLOYED_CONTRACT_ADDRESS: "0x2B98c4481366957138b836b19930187250d2717a"
           LOCAL_RELAYER_ADDRESS: "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
           LOCAL_RELAYER_PRIVATE_KEY: ${{ secrets.LOCAL_RELAYER_PRIVATE_KEY }}
         run: |
@@ -49,9 +49,14 @@ jobs:
             printf "LOCAL_RELAYER_ADDRESS=0x9dD041dbd964DE086Da8f907518f6E25c45aea70\nLOCAL_RELAYER_PRIVATE_KEY=%s\n" "$LOCAL_RELAYER_PRIVATE_KEY" > ~/.arb_flash_local_relayer.env
             chmod 600 ~/.arb_flash_local_relayer.env
           fi
-          python3 scripts/verify_real_onchain_proofs.py || true
-          python3 scripts/autonomous_asm_broadcaster.py || true
-          timeout 480 ./bin/arb_sniper_asm || true
+          ./bin/arb_sniper_asm --self-test || true
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 240 || true
+            timeout 120 ./bin/arb_sniper_asm || true
+          else
+            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 15 || true
+            timeout 15 ./bin/arb_sniper_asm || true
+          fi
           python3 scripts/verify_real_onchain_proofs.py || true
           python3 -c 'import sys; sys.path.insert(0, "scripts"); import serve_metamask_portal as m; from pathlib import Path; Path("index.html").write_text(m.HTML_PAGE, encoding="utf-8")' || true
 
@@ -59,7 +64,7 @@ jobs:
         run: |
           git config user.name "arb-sniper-bot"
           git config user.email "arb-sniper-bot@users.noreply.github.com"
-          git add index.html reports/two_hour_test_summary.json reports/verified_onchain_proofs.json reports/asm_sniper_telemetry.json || true
+          git add index.html reports/two_hour_test_summary.json reports/verified_onchain_proofs.json reports/asm_sniper_telemetry.json reports/autonomous_broadcaster_last.json || true
           if ! git diff --cached --quiet; then
             git commit -m "chore(cloud-sniper): auto-sync verified Arbitrum One on-chain proofs [skip ci]"
             git pull --rebase origin main || true

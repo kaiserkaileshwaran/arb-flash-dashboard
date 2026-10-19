@@ -36,8 +36,8 @@
     "USDC.e": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
     "weETH": "0x35751007a407ca6FEFfE80b3cB397736D2cf4dbe"
   },
-  "updated_at": "2026-10-18T12:59:57Z",
-  "last_scanner_block": 515979107,
+  "updated_at": "2026-10-19T02:01:08Z",
+  "last_scanner_block": 516150724,
   "last_scanner_rpc": "https://arbitrum-one-rpc.publicnode.com",
-  "last_scanner_latency_ms": 485.55
+  "last_scanner_latency_ms": 488.32
 }

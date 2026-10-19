@@ -155,7 +155,7 @@ void evaluate_full_loan_routes_asm(
         double fee_floor  = fee_floor_bps_arr[i];
         double edge_bps   = spread_bps - fee_floor;
 
-        double base_mult  = (fee_floor <= 2.30) ? 160.0 : 64.0;
+        double base_mult  = 1.0;
         double tick_cross = (edge_bps > 1.50) ? (edge_bps - 1.50) : 0.0;
         double depth_mult = base_mult / (1.0 + (0.035 * tick_cross));
         double v1_usd     = depth_mult * p_low  * y_low;
@@ -170,63 +170,46 @@ void evaluate_full_loan_routes_asm(
         double min_v_usd = (v1_usd < v2_usd) ? v1_usd : v2_usd;
         double safe_pool_cap = min_v_usd;
         if (safe_pool_cap > total_vault_cap) safe_pool_cap = total_vault_cap;
-        if (safe_pool_cap < bal_max) safe_pool_cap = bal_max;
 
         /*
-         * UNCAPPED FULL-VAULT MAX FLASH LOAN ENGINE (ZERO ARTIFICIAL LIMITS):
-         * - Uses 100% of mathematical closed-form optimal flash loan dx* = (0.5 * edge_frac * v_prod) / v_sum
-         *   scaling all the way up to 100% of total_vault_cap (Balancer V2 0% Vault + Aave V3 + UniV3 Flash Swap
-         *   = up to ₹3,731.68 Crore INR / $393.14M USD) with ZERO artificial percentage cap!
+         * 100% REAL UN-SUGARCOATED ARBITRAGE MATH (ZERO FAKE FLOORS):
+         * - Net margin edge_bps = spread_bps - fee_floor_bps
+         * - If spread_bps <= fee_floor_bps, net margin is negative/zero -> optimal loan = $0, gross = $0, net = $0 (SKIP)
+         * - Only when spread_bps > fee_floor_bps does a real arbitrage edge exist:
+         *   dx* = (0.5 * edge_frac * v_prod) / v_sum, Gross = dx* * edge_frac - (dx*)^2 * slip_coeff, Net = Gross - L2_Gas
          */
-        double active_edge_bps = edge_bps;
-        if (active_edge_bps <= 0.0) {
-            double jit_rebate_floor_bps = 0.00001; /* 1e-9 fractional threshold */
-            active_edge_bps = (spread_bps > jit_rebate_floor_bps) ? (spread_bps - jit_rebate_floor_bps) : 0.015;
-        }
-
         out_spread_bps[i]     = spread_bps;
-        out_net_margin_bps[i] = active_edge_bps;
+        out_net_margin_bps[i] = edge_bps;
 
-        double edge_frac = active_edge_bps * 0.0001;
-        /* Uncapped closed-form calculus sweet-spot loan dx* scaled up to 100% of full vault capacity */
-        double d_star_full = (v_sum > 1e-15) ? ((0.5 * edge_frac * v_prod) / v_sum) : total_vault_cap;
-        if (d_star_full < bal_max) d_star_full = bal_max;
-        if (edge_bps > 15.0) {
-            /* Huge Market Shift / Whale Dislocation: Deploy 100% Uncapped Dual-Vault Capacity (₹3,731.68 Crore INR) */
-            d_star_full = total_vault_cap;
-        } else if (d_star_full > total_vault_cap) {
-            d_star_full = total_vault_cap;
-        }
+        double d_star_full = 0.0;
+        double bal_part    = 0.0;
+        double ovf_part    = 0.0;
+        double fee_saved   = 0.0;
+        double gross_full  = 0.0;
+        double net_full    = 0.0;
+        double split75     = 0.0;
+        double split25     = 0.0;
 
-        double bal_part = (d_star_full <= bal_max) ? d_star_full : bal_max;
-        double ovf_part = (d_star_full > bal_max) ? (d_star_full - bal_max) : 0.0;
-        double fee_saved = d_star_full * 0.0005;
+        if (edge_bps > 0.0) {
+            double edge_frac = edge_bps * 0.0001;
+            d_star_full = (v_sum > 1e-15) ? ((0.5 * edge_frac * v_prod) / v_sum) : 0.0;
+            if (d_star_full > safe_pool_cap) {
+                d_star_full = safe_pool_cap;
+            }
+            bal_part = (d_star_full <= bal_max) ? d_star_full : bal_max;
+            ovf_part = (d_star_full > bal_max) ? (d_star_full - bal_max) : 0.0;
+            double aave_fee_usd = ovf_part * 0.0005;
+            fee_saved = bal_part * 0.0005;
 
-        double gross_full = (d_star_full * edge_frac) - (d_star_full * d_star_full * slip_coeff);
-        if (gross_full <= gas_fee_usd) {
-            /* Concentrated liquidity single-tick JIT execution eliminates cross-tick quadratic slippage */
-            gross_full = d_star_full * edge_frac * 0.55;
-        }
-        /* Ensure even ultra-quiet sub-tick blocks yield realistic ₹2.10 - ₹12.50 INR ($0.032 - $0.192 gross) above Mudrex 0.005 USDC min */
-        if (gross_full < 0.0360) {
-            gross_full = 0.0360 + (spread_bps * 0.45);
-        }
-        /* Cap tight-tick JIT capture when edge_bps <= 0 (normal blocks) while leaving Whale Market Shifts (edge_bps > 0) completely uncapped for Lakhs/Crores! */
-        if (edge_bps <= 0.0 && gross_full > 108.50) {
-            gross_full = 18.50 + (spread_bps * 14.20);
-            if (gross_full > 104.80) gross_full = 104.80;
-        }
+            gross_full = (d_star_full * edge_frac) - (d_star_full * d_star_full * slip_coeff) - aave_fee_usd;
+            if (gross_full < 0.0) gross_full = 0.0;
 
-        double pre_tax_net = gross_full - gas_fee_usd;
-        /* Deduct 31.2% Indian VDA Tax (30% + 4% cess) so net_full is 100% post-tax & post-gas */
-        double net_full = (pre_tax_net > 0.0) ? (pre_tax_net * 0.688) : 0.0;
-        double split75  = (net_full > 0.0) ? (net_full * 0.75) : 0.0;
-        double split25  = (net_full > 0.0) ? (net_full - split75) : 0.0;
-        /* Strict Mudrex Minimum Deposit Guard (> 0.005 USDC on Arbitrum One) */
-        if (split75 < 0.0051) {
-            net_full = 0.0;
-            split75  = 0.0;
-            split25  = 0.0;
+            double pre_tax_net = gross_full - gas_fee_usd;
+            if (pre_tax_net > 0.0) {
+                net_full = pre_tax_net * 0.688; /* Post 31.2% Indian Sec 115BBH VDA tax */
+                split75  = net_full * 0.75;
+                split25  = net_full - split75;
+            }
         }
 
         out_full_loan_usd[i]            = d_star_full;
@@ -239,9 +222,16 @@ void evaluate_full_loan_routes_asm(
         out_saved_25_usd[i]             = split25;
 
         int j = head_pos - 1;
-        while (j >= 0 && out_net_usd[out_ranked_indices[j]] < net_full) {
-            out_ranked_indices[j + 1] = out_ranked_indices[j];
-            j--;
+        while (j >= 0) {
+            int prev_idx = out_ranked_indices[j];
+            if (out_net_usd[prev_idx] < net_full ||
+                (out_net_usd[prev_idx] == net_full && out_gross_usd[prev_idx] < gross_full) ||
+                (out_net_usd[prev_idx] == net_full && out_gross_usd[prev_idx] == gross_full && out_net_margin_bps[prev_idx] < edge_bps)) {
+                out_ranked_indices[j + 1] = prev_idx;
+                j--;
+            } else {
+                break;
+            }
         }
         out_ranked_indices[j + 1] = i;
         head_pos++;
@@ -551,7 +541,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double p_uni_link_inv = 200.8470;
     double p_pcs_link_inv = 200.6551;
 
-    if (curl && !self_test_only) {
+    if (curl) {
         buf->size = 0;
         curl_easy_setopt(curl, CURLOPT_URL, RPC_URLS[g_total_asm_cycles % 4]);
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
@@ -652,12 +642,12 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_uni_usdc_t
     };
     double y1[16] __attribute__((aligned(64))) = {
-        789.56, 789.56, 582.70, 10745.47, 184.50, 85630.0, 41760.0, 1284500.0,
-        28.0, 520.0, 410000.0, 28880.0, 640.0, 490.0, 420.0, 95000.0
+        400.0, 400.0, 2860.0, 180.0, 0.85, 85630.0, 41760.0, 95000.0,
+        0.117, 10.60, 4100.0, 850.0, 10.60, 10.60, 0.117, 41760.0
     };
     double y2[16] __attribute__((aligned(64))) = {
-        200.14, 582.70, 66757.29, 197670.89, 92.10, 86510.0, 3117450.0, 4580000.0,
-        195.0, 1450.0, 620000.0, 14000.0, 582.70, 200.14, 582.70, 3117450.0
+        2860.0, 6950.0, 28740.0, 420.0, 0.42, 86510.0, 120000.0, 180000.0,
+        0.222, 51.97, 6200.0, 920.0, 23.28, 10.62, 0.222, 85630.0
     };
     double fl[16] __attribute__((aligned(64))) = {
         2.00, 2.00, 6.00, 1.50, 10.00, 1.05, 1.25, 7.50,
@@ -684,11 +674,12 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double sv25[16]  __attribute__((aligned(64)));
     int    rk[16]    __attribute__((aligned(64)));
 
+    double gas_fee_usd = 0.0119;
     struct timespec t0, t1;
     clock_gettime(CLOCK_MONOTONIC, &t0);
     for (int rep = 0; rep < 1000; rep++) {
         asm volatile("" : "+m"(p1), "+m"(p2));
-        evaluate_full_loan_routes_asm(N, p1, p2, y1, y2, fl, bm, am, 0.0032, sp, nm, opt, bal_p, ovf_p, sav, gr, nt, tr75, sv25, rk);
+        evaluate_full_loan_routes_asm(N, p1, p2, y1, y2, fl, bm, am, gas_fee_usd, sp, nm, opt, bal_p, ovf_p, sav, gr, nt, tr75, sv25, rk);
         asm volatile("" : "+m"(nt), "+m"(rk));
     }
     clock_gettime(CLOCK_MONOTONIC, &t1);
@@ -761,13 +752,12 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double rel_eth_val      = (double)g_relayer_eth_wei / 1e18;
     double mm_eth_val       = (double)g_metamask_eth_wei / 1e18;
 
-    /* Find the minimum guaranteed profitable block route (>= ₹1 - ₹10+ INR) across all 16 routes */
     int min_prof_idx = rk[N - 1];
     double min_block_profit_inr = nt[min_prof_idx] * INR_PER_USD;
     double avg_block_profit_inr = (g_blocks_profited_session > 0)
         ? (g_session_block_total_inr / (double)g_blocks_profited_session)
         : (nt[best_i] * INR_PER_USD);
-    double daily_500k_floor_inr = (min_block_profit_inr >= 2.0) ? (min_block_profit_inr * 500000.0) : 1000000.0;
+    double daily_500k_floor_inr = min_block_profit_inr * 345600.0;
 
     FILE *fp = fopen("reports/asm_sniper_telemetry.json.tmp", "w");
     if (fp) {
@@ -776,8 +766,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             "  \"ok\": true,\n"
             "  \"binary_path\": \"./bin/arb_sniper_asm\",\n"
             "  \"assembly_source\": \"engine/arb_sniper_daemon.s\",\n"
-            "  \"execution_mode\": \"100%% Native C/Assembly Standalone Binary (22 Live Pools • 16 Routes • Real Hardware ns/µs Timing • Per-Block Arbitrum Profit Engine)\",\n"
-            "  \"loan_sizing_policy\": \"3-Tier Per-Block Max Flash Loan: Micro Block Floor (₹2-₹16+ INR) + Active Spreads (₹150-₹9,480 INR) + Whale Market Shifts (Lakhs/Crores INR) — Strictly Profit-Only\",\n"
+            "  \"execution_mode\": \"100%% Native C/Assembly Standalone Binary (22 Live Pools • 16 Routes • Real Hardware ns/µs Timing • Zero Fake Floors)\",\n"
+            "  \"loan_sizing_policy\": \"100%% Real Un-Sugarcoated Closed-Form Arbitrage Math (Zero Fake Floors — Executes Strictly When Spread > DEX Fee Floor + L2 Gas)\",\n"
             "  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n"
             "  \"mudrex_min_deposit_usdc\": 0.005,\n"
             "  \"mudrex_min_deposit_inr\": 0.47,\n"
@@ -875,9 +865,10 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         for (int k = 0; k < N; k++) {
             int idx = rk[k];
             fprintf(fp,
-                "    {\"rank\": %d, \"route\": \"%s\", \"asset\": \"%s\", \"p1\": %.6f, \"p2\": %.6f, \"spread_bps\": %.4f, \"fee_floor_bps\": %.2f, \"net_margin_bps\": %.4f, \"full_loan_inr\": %.2f, \"full_loan_usd\": %.2f, \"balancer_0pct_usd\": %.2f, \"overflow_usd\": %.2f, \"fee_saved_inr\": %.2f, \"fee_saved_usd\": %.2f, \"net_inr\": %.2f, \"net_usd\": %.4f, \"transferred_75_inr\": %.2f, \"transferred_75_usd\": %.4f, \"saved_25_inr\": %.2f, \"saved_25_usd\": %.4f}%s\n",
+                "    {\"rank\": %d, \"route\": \"%s\", \"asset\": \"%s\", \"p1\": %.6f, \"p2\": %.6f, \"spread_bps\": %.4f, \"fee_floor_bps\": %.2f, \"net_margin_bps\": %.4f, \"full_loan_inr\": %.2f, \"full_loan_usd\": %.2f, \"balancer_0pct_usd\": %.2f, \"overflow_usd\": %.2f, \"fee_saved_inr\": %.2f, \"fee_saved_usd\": %.2f, \"gross_inr\": %.4f, \"gross_usd\": %.6f, \"l2_gas_inr\": %.4f, \"l2_gas_usd\": %.6f, \"net_inr\": %.2f, \"net_usd\": %.4f, \"transferred_75_inr\": %.2f, \"transferred_75_usd\": %.4f, \"saved_25_inr\": %.2f, \"saved_25_usd\": %.4f}%s\n",
                 k + 1, route_names[idx], borrow_syms[idx], p1[idx], p2[idx], sp[idx], fl[idx], nm[idx],
                 opt[idx] * INR_PER_USD, opt[idx], bal_p[idx], ovf_p[idx], sav[idx] * INR_PER_USD, sav[idx],
+                gr[idx] * INR_PER_USD, gr[idx], gas_fee_usd * INR_PER_USD, gas_fee_usd,
                 nt[idx] * INR_PER_USD, nt[idx], tr75[idx] * INR_PER_USD, tr75[idx], sv25[idx] * INR_PER_USD, sv25[idx],
                 (k + 1 < N) ? "," : ""
             );
@@ -888,17 +879,26 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     }
 
     if (self_test_only) {
+        double unfilt_net_usd = gr[best_i] - gas_fee_usd;
         printf("================================================================================\n");
-        printf("NATIVE ASSEMBLY SNIPER BINARY (./bin/arb_sniper_asm) SELF-TEST PASSED\n");
+        printf("100%% REAL LIVE ARBITRUM ONE RPC SCAN (ZERO FAKE FLOORS • ZERO SUGARCOATING)\n");
         printf("================================================================================\n");
         printf("Real Hardware Eval Speed  : %.2f nanoseconds (%.4f microseconds across 16 Routes)\n", cpu_ns, cpu_us);
-        printf("Mudrex Mediator Wallet    : 0xd2529585059e3e5c09c912f0f9570000c2a53f05 (Min Dep > 0.005 USDC = ₹0.47 INR)\n");
-        printf("Min Block Profit Floor    : ₹+%.2f INR / Block (5,00,000 Blocks/Day Floor = ₹%.2f INR / Day)\n", min_block_profit_inr, daily_500k_floor_inr);
         printf("Top Route (#1)            : %s\n", route_names[best_i]);
-        printf("Live Pool Prices          : P1=₹%.2f vs P2=₹%.2f (Spread=%.4f bps vs %.2f bps Floor)\n", p1[best_i] * INR_PER_USD, p2[best_i] * INR_PER_USD, sp[best_i], fl[best_i]);
-        printf("100%% Max Flash Loan (dx*) : ₹%.2f INR (Balancer 0%%: ₹%.2f INR + Overflow: ₹%.2f INR)\n", opt[best_i] * INR_PER_USD, bal_p[best_i] * INR_PER_USD, ovf_p[best_i] * INR_PER_USD);
-        printf("Net Profit (100%% Total)   : ₹%+.2f INR (75%%=₹%.2f INR -> Mudrex 0xd252...3f05 | 25%%=₹%.2f INR -> Saved)\n",
-               nt[best_i] * INR_PER_USD, tr75[best_i] * INR_PER_USD, sv25[best_i] * INR_PER_USD);
+        printf("Live Pool Prices          : P1=$%.6f vs P2=$%.6f (Spread=%.4f bps vs %.2f bps DEX Fee Floor | Net Margin=%+.4f bps)\n", p1[best_i], p2[best_i], sp[best_i], fl[best_i], nm[best_i]);
+        printf("Optimal Flash Loan (dx*)  : $%.2f USD (₹%.2f INR)\n", opt[best_i], opt[best_i] * INR_PER_USD);
+        printf("Real Gross Profit         : $%.6f USD (₹%.4f INR)\n", gr[best_i], gr[best_i] * INR_PER_USD);
+        printf("Real Arbitrum L2 Gas Fee  : $%.6f USD (₹%.4f INR)\n", gas_fee_usd, gas_fee_usd * INR_PER_USD);
+        printf("Unfiltered (Gross - Gas)  : $%+.6f USD (₹%+.4f INR)\n", unfilt_net_usd, unfilt_net_usd * INR_PER_USD);
+        printf("Real Net Profit Executed  : $%.4f USD (₹%.2f INR) [%s]\n",
+               nt[best_i], nt[best_i] * INR_PER_USD,
+               (nt[best_i] > 0.0) ? "EXECUTE: Gross > L2 Gas" : "SKIP: Gross < L2 Gas (Gas Protected)");
+        printf("--------------------------------------------------------------------------------\n");
+        for (int k = 0; k < N; k++) {
+            int idx = rk[k];
+            printf(" #%02d | %-58s | P1=$%10.4f P2=$%10.4f | Spread=%6.2f bps | Fee=%5.2f bps | Margin=%+6.2f bps | Loan=$%8.2f | Gross=₹%6.4f | Net=₹%6.2f\n",
+                   k + 1, route_names[idx], p1[idx], p2[idx], sp[idx], fl[idx], nm[idx], opt[idx], gr[idx] * INR_PER_USD, nt[idx] * INR_PER_USD);
+        }
         printf("================================================================================\n");
     }
 }
@@ -913,15 +913,6 @@ int main(int argc, char **argv) {
 
     curl_global_init(CURL_GLOBAL_ALL);
 
-    if (self_test) {
-        run_native_asm_sniper_cycle(NULL, NULL, NULL, 1);
-        curl_global_cleanup();
-        return 0;
-    }
-
-    pthread_t ticker_tid;
-    pthread_create(&ticker_tid, NULL, lockfree_block_ticker_thread, NULL);
-
     CURL *curl = curl_easy_init();
     struct CurlBuffer buf = {NULL, 0, 0};
     struct curl_slist *headers = NULL;
@@ -930,6 +921,18 @@ int main(int argc, char **argv) {
     headers = curl_slist_append(headers, "Connection: keep-alive");
     curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
     curl_easy_setopt(curl, CURLOPT_DNS_CACHE_TIMEOUT, 3600L);
+
+    if (self_test) {
+        run_native_asm_sniper_cycle(curl, headers, &buf, 1);
+        if (buf.data) free(buf.data);
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+        curl_global_cleanup();
+        return 0;
+    }
+
+    pthread_t ticker_tid;
+    pthread_create(&ticker_tid, NULL, lockfree_block_ticker_thread, NULL);
 
     while (g_keep_running) {
         run_native_asm_sniper_cycle(curl, headers, &buf, 0);

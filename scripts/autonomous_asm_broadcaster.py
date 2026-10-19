@@ -81,6 +81,19 @@ def main() -> int:
     except BlockingIOError:
         return 0
 
+    loop_seconds = 0
+    for idx_arg, arg in enumerate(sys.argv[1:]):
+        if arg == "--loop-seconds" and idx_arg + 2 < len(sys.argv):
+            try:
+                loop_seconds = int(sys.argv[idx_arg + 2])
+            except Exception:
+                loop_seconds = 0
+        elif arg.startswith("--loop-seconds="):
+            try:
+                loop_seconds = int(arg.split("=", 1)[1])
+            except Exception:
+                loop_seconds = 0
+
     try:
         rel_hex = rpc_call("eth_getBalance", [RELAYER_WALLET, "latest"]).get("result", "0x0")
         rel_wei = int(rel_hex, 16)
@@ -91,36 +104,17 @@ def main() -> int:
         BROADCAST_LOG_JSON.write_text(json.dumps({"ok": False, "error": str(e), "ts": time.time()}, indent=2))
         return 1
 
-    if rel_wei < 6_000_000_000_000 or not is_authorized:
-        BROADCAST_LOG_JSON.write_text(
-            json.dumps(
-                {
-                    "ok": False,
-                    "status": "AWAITING_RELAYER_GAS_FLOAT_OR_AUTH" if not is_authorized else "AWAITING_RELAYER_GAS_TOPUP",
-                    "relayer_wallet": RELAYER_WALLET,
-                    "relayer_authorized_on_contract": is_authorized,
-                    "relayer_eth_wei": rel_wei,
-                    "relayer_eth": round(rel_wei / 1e18, 8),
-                    "required_min_eth": 0.0000060,
-                    "recommended_revolving_float_eth": 0.00005,
-                    "ts": time.time(),
-                },
-                indent=2,
-            )
-        )
-        return 0
-
     cast_bin = "/Users/kailesh/.foundry/bin/cast"
     if not Path(cast_bin).exists():
         cast_bin = "cast"
 
     # Read dynamic uncapped L* optimal flash loan from Assembly telemetry (reports/asm_sniper_telemetry.json)
-    asm_opt_weth_wei = 105_000_000_000_000_000_000  # default ~105 WETH (₹2.43 Crore INR)
+    asm_opt_weth_wei = 105_000_000_000_000_000_000  # default ~105 WETH
     if ASM_TELEM_JSON.exists():
         try:
             tel = json.loads(ASM_TELEM_JSON.read_text(encoding="utf-8"))
             opt_usd = float(tel.get("top_full_sweet_spot_loan_usd", 256300.0) or 256300.0)
-            asm_opt_weth_wei = max(1_000_000_000_000_000, int((opt_usd / 2446.60) * 1e18))
+            asm_opt_weth_wei = max(1_000_000_000_000_000, int((opt_usd / 2415.0) * 1e18))
         except Exception:
             pass
 
@@ -148,10 +142,15 @@ def main() -> int:
     link = "0xf97f4df75117a78c1A5a0DBb814Af92458539FB4"
     pendle = "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8"
     wsteth = "0x5979D7b546E38E414F7E9822514be443A4800529"
+    gmx = "0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a"
+    magic = "0x539bdE0d7Dbd336b79148AA742883198BBF60342"
+    rdnt = "0x3082CC23568eA640225c2467653dB90e9250AaA0"
+    pepe = "0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00"
 
     pcs_weth_usdc = "0x7fCDC35463E3770c2fB992716Cd070B63540b947"
     cam_weth_usdc = "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526"
     uni1_weth_usdc = "0x6f38e884725a116C9C7fBF208e79FE8828a2595F"
+    uni5_weth_usdc = "0xC6962004f452bE9203591991D15f6b388e09E8D0"
     pcs_weth_usdt = "0x389938cf14be379217570d8e4619e51fbdafaa21"
     cam_weth_usdt = "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358"
     cam_usdc_usdt = "0xa17afcab059f3c6751f5b64347b5a503c3291868"
@@ -168,31 +167,52 @@ def main() -> int:
     pcs_pendle_weth = "0x042691f78269ba3d6325c945044239758aecc275"
     uni_wsteth_weth = "0x35218a1cbaC5Bbc3E57fd9Bd38219D37571b3537"
     cam_wsteth_weth = "0xDeB89dE4bb6ecf5bFed581EB049308B52d9B2dA7"
+    # High-Spread Mid-Cap Pools (GMX, MAGIC, RDNT, PEPE across Camelot V3, UniV3, PancakeSwap V3, SushiSwap V3)
+    cam_gmx_weth = "0xc99be44383bc8d82357f5a1d9ae9976ee9d75bee"
+    uni30_gmx_weth = "0x1aeedd3727a6431b8f070c0afaa81cc74f273882"
+    pcs5_gmx_weth = "0x39230d814d605663e3f469dcbe739fb005db9331"
+    cam_magic_weth = "0x1106db7165a8d4a8559b441ecdee14a5d5070dbc"
+    uni30_magic_weth = "0x59d72ddb29da32847a4665d08ffc8464a7185fae"
+    sushi30_magic_weth = "0xb1aeb76b4e3e628ee54753ad4b8ef68c41e67a9f"
+    cam_rdnt_weth = "0xd51f7383c906cfd995d7f24729f37933ff264fa6"
+    uni30_rdnt_weth = "0x446bf9748b4ea044dd759d9b9311c70491df8f29"
+    cam_pepe_weth = "0x224cbc20a8ac043bac4734200e6c247ab1ab6055"
+    uni30_pepe_weth = "0x7f153bdd5328ad8e30127a1bf2e5530bed33427a"
 
-    # 22-Tier Parallel Multi-Coin Uncapped + Active-Tick Sweet-Spot Ladder across 9 Coins
+    # 30-Tier Parallel Multi-Coin + Mid-Cap Ladder across 13 Coins & 4 DEXes
+    # STRICT GAS-COST GUARD: Every execution tier enforces min_gross >= 5,500,000,000,000 wei WETH (~₹1.27 INR > ₹1.13 INR L2 Gas)
+    MIN_GROSS_WETH_WEI = 5_500_000_000_000
+    RELAYER_REIMB_WEI  = 4_900_000_000_000
+    MIN_GROSS_USDC_RAW = 15_000
     raw_tiers = [
-        (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 1000 * 10**18, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdc, cam_weth_usdc, weth, usdc, asm_opt_weth_wei, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 100 * 10**18, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 25 * 10**18, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 10 * 10**18, 3500000000000, True, False, 3000000000000, True),
-        (cam_weth_usdc, pcs_weth_usdc, weth, usdc, 10 * 10**18, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 10 * 10**18, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 1 * 10**18, 3500000000000, True, False, 3000000000000, True),
-        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 1 * 10**18, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 50_000_000_000_000_000, 3500000000000, True, False, 3000000000000, True),
-        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 100_000_000_000_000, 1, True, False, 0, True),
-        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 100_000_000_000_000, 1, True, False, 0, True),
-        (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 100_000_000_000_000, 1, True, False, 0, True),
-        (pcs_weth_usdc, uni1_weth_usdc, weth, usdc, 100_000_000_000_000, 1, True, False, 0, True),
-        (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, 500_000_000_000_000, 1, False, True, 0, True),
-        (cam_wbtc_weth, pcs_wbtc_weth, weth, wbtc, 500_000_000_000_000, 1, False, True, 0, True),
-        (uni_wsteth_weth, cam_wsteth_weth, weth, wsteth, 1_000_000_000_000_000, 1, False, True, 0, True),
-        (uni_link_weth, pcs_link_weth, weth, link, 1_000_000_000_000_000, 1, True, False, 0, True),
-        (uni_pendle_weth, pcs_pendle_weth, weth, pendle, 1_000_000_000_000_000, 1, False, True, 0, True),
-        (cam_arb_usdc, uni_arb_usdc, usdc, arb, 1_000 * 10**6, 1000, False, True, 0, False),
-        (cam_usdc_usdce, uni_usdc_usdce, usdc, usdc_e, 10_000 * 10**6, 1000, True, False, 0, False),
-        (cam_usdc_usdt, uni_usdc_usdt, usdc, usdt, 8_500 * 10**6, 10000, True, False, 7500, False),
+        (pcs_weth_usdc, uni5_weth_usdc, weth, usdc, 2 * 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni5_weth_usdc, pcs_weth_usdc, weth, usdc, 2 * 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (cam_weth_usdc, pcs_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (cam_weth_usdc, uni1_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni1_weth_usdc, cam_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni_wsteth_weth, cam_wsteth_weth, weth, wsteth, 200_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (cam_wsteth_weth, uni_wsteth_weth, weth, wsteth, 200_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (cam_wbtc_weth, pcs_wbtc_weth, weth, wbtc, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (uni_link_weth, pcs_link_weth, weth, link, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni_pendle_weth, pcs_pendle_weth, weth, pendle, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        # Mid-cap high-volatility Arbitrum pools (GMX, MAGIC, RDNT, PEPE)
+        (cam_gmx_weth, uni30_gmx_weth, weth, gmx, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (uni30_gmx_weth, cam_gmx_weth, weth, gmx, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (pcs5_gmx_weth, uni30_gmx_weth, weth, gmx, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (cam_magic_weth, uni30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (uni30_magic_weth, cam_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (sushi30_magic_weth, uni30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (cam_rdnt_weth, uni30_rdnt_weth, weth, rdnt, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (uni30_rdnt_weth, cam_rdnt_weth, weth, rdnt, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (cam_pepe_weth, uni30_pepe_weth, weth, pepe, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (uni30_pepe_weth, cam_pepe_weth, weth, pepe, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
+        (cam_arb_usdc, uni_arb_usdc, usdc, arb, 100 * 10**6, MIN_GROSS_USDC_RAW, False, True, 0, False),
+        (cam_usdc_usdce, uni_usdc_usdce, usdc, usdc_e, 200 * 10**6, MIN_GROSS_USDC_RAW, True, False, 0, False),
+        (cam_usdc_usdt, uni_usdc_usdt, usdc, usdt, 200 * 10**6, MIN_GROSS_USDC_RAW, True, False, 12000, False),
     ]
 
     batch_rpc = []
@@ -208,29 +228,103 @@ def main() -> int:
         })
         candidate_meta.append((call_tuple, mg, rf, is_w, amt))
 
+    # Also append 2 pre-gas diagnostic probes (min_gross=1 wei at 0.0005 WETH = $1.21) to measure exact sub-gas spread in wei
+    probe_start_id = len(batch_rpc) + 1
+    for p_idx, (pb, ps, tb, tq, z0, z1) in enumerate([
+        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, True, False),
+        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, True, False),
+        (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, False, True),
+        (cam_gmx_weth, uni30_gmx_weth, weth, gmx, True, False),
+    ]):
+        cd_probe = _encode_flash_swap_calldata(pb, ps, tb, tq, 500_000_000_000_000, 1, z0, z1, 0)
+        batch_rpc.append({
+            "jsonrpc": "2.0",
+            "id": probe_start_id + p_idx,
+            "method": "eth_call",
+            "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_probe}, "latest"],
+        })
+
     winning_meta = None
     best_profit_score = 0
-    for url in RPC_URLS:
-        try:
-            req = urllib.request.Request(
-                url,
-                data=json.dumps(batch_rpc).encode("utf-8"),
-                headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
-            )
-            arr = json.loads(urllib.request.urlopen(req, timeout=5).read().decode("utf-8"))
-            if isinstance(arr, list):
-                for item in arr:
-                    if isinstance(item, dict) and isinstance(item.get("result"), str) and item["result"].startswith("0x") and len(item["result"]) >= 66:
-                        raw_prof = int(item["result"], 16)
-                        if raw_prof > 0:
-                            meta = candidate_meta[int(item["id"]) - 1]
-                            score = int((raw_prof / 1e18) * 2446.60 * 1e6) if meta[3] else raw_prof
-                            if score > best_profit_score:
-                                best_profit_score = score
-                                winning_meta = meta
-                break
-        except Exception:
-            continue
+    best_pre_gas_wei = 0
+    cycles_scanned = 0
+    latencies_ms = []
+    start_ts = time.time()
+
+    while True:
+        cycles_scanned += 1
+        for url in RPC_URLS:
+            try:
+                t_rpc0 = time.time()
+                req = urllib.request.Request(
+                    url,
+                    data=json.dumps(batch_rpc).encode("utf-8"),
+                    headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
+                )
+                arr = json.loads(urllib.request.urlopen(req, timeout=5).read().decode("utf-8"))
+                latencies_ms.append((time.time() - t_rpc0) * 1000.0)
+                if isinstance(arr, list):
+                    for item in arr:
+                        if isinstance(item, dict) and isinstance(item.get("result"), str) and item["result"].startswith("0x") and len(item["result"]) >= 66:
+                            raw_prof = int(item["result"], 16)
+                            item_id = int(item["id"])
+                            if item_id >= probe_start_id:
+                                if raw_prof > best_pre_gas_wei:
+                                    best_pre_gas_wei = raw_prof
+                            elif raw_prof > 0:
+                                meta = candidate_meta[item_id - 1]
+                                score = int((raw_prof / 1e18) * 2415.0 * 1e6) if meta[3] else raw_prof
+                                if score > best_profit_score:
+                                    best_profit_score = score
+                                    winning_meta = meta
+                    break
+            except Exception:
+                continue
+
+        if winning_meta is not None or (time.time() - start_ts) >= loop_seconds:
+            break
+        time.sleep(0.25)
+
+    min_lat_ms = round(min(latencies_ms), 2) if latencies_ms else 0.0
+    avg_lat_ms = round(sum(latencies_ms) / len(latencies_ms), 2) if latencies_ms else 0.0
+    pre_gas_inr = round((best_pre_gas_wei / 1e18) * 2415.0 * 94.92, 4)
+    l2_gas_inr = round(0.0119 * 94.92, 4)
+
+    if winning_meta is None:
+        summary = {
+            "ok": True,
+            "status": "SCAN_COMPLETE_NO_SPREAD_ABOVE_L2_GAS_THRESHOLD",
+            "coins_monitored": 13,
+            "tiers_tested_per_cycle": len(raw_tiers),
+            "cycles_scanned": cycles_scanned,
+            "scan_duration_sec": round(time.time() - start_ts, 2),
+            "rpc_latency_min_ms": min_lat_ms,
+            "rpc_latency_avg_ms": avg_lat_ms,
+            "best_pre_gas_gross_wei": best_pre_gas_wei,
+            "best_pre_gas_gross_inr": pre_gas_inr,
+            "l2_gas_cost_inr": l2_gas_inr,
+            "net_if_forced_inr": round(pre_gas_inr - l2_gas_inr, 4) if best_pre_gas_wei > 0 else 0.0,
+            "real_net_profit_executed_inr": 0.0,
+            "relayer_wallet": RELAYER_WALLET,
+            "relayer_eth_wei": rel_wei,
+            "relayer_eth": round(rel_wei / 1e18, 8),
+            "ts": time.time(),
+        }
+        BROADCAST_LOG_JSON.write_text(json.dumps(summary, indent=2))
+        print(json.dumps(summary, indent=2))
+        return 0
+
+    if rel_wei < 5_000_000_000_000 or not is_authorized:
+        summary = {
+            "ok": False,
+            "status": "PROFITABLE_SPREAD_FOUND_BUT_AWAITING_RELAYER_GAS_TOPUP",
+            "best_profit_usdc_micro": best_profit_score,
+            "relayer_eth_wei": rel_wei,
+            "ts": time.time(),
+        }
+        BROADCAST_LOG_JSON.write_text(json.dumps(summary, indent=2))
+        print(json.dumps(summary, indent=2))
+        return 0
 
     if winning_meta is not None:
         call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt = winning_meta
