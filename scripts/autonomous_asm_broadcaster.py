@@ -732,16 +732,19 @@ def main() -> int:
 
     if winning_meta is not None:
         mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = winning_meta
+        gas_price_wei = 20_010_000
+        max_affordable_gas = max(285_000, int((rel_wei - 10_000_000_000) // gas_price_wei))
         if fn_sig == "RAW_CALLDATA":
+            target_gas_limit = min(1_800_000, max_affordable_gas)
             send_cmd = [
                 cast_bin,
                 "send",
                 DEPLOYED_CONTRACT,
                 call_tuple,
                 "--gas-limit",
-                "1800000",
+                str(target_gas_limit),
                 "--gas-price",
-                "20500000",
+                str(gas_price_wei),
                 "--private-key",
                 RELAYER_PK,
                 "--rpc-url",
@@ -749,6 +752,8 @@ def main() -> int:
                 "--json",
             ]
         else:
+            default_lim = 850_000 if mode_name != "DIRECT_FLASH_SWAP" else 680_000
+            target_gas_limit = min(default_lim, max_affordable_gas)
             send_cmd = [
                 cast_bin,
                 "send",
@@ -757,9 +762,9 @@ def main() -> int:
                 call_tuple,
                 str(rel_fee),
                 "--gas-limit",
-                "850000" if mode_name != "DIRECT_FLASH_SWAP" else "680000",
+                str(target_gas_limit),
                 "--gas-price",
-                "20200000",
+                str(gas_price_wei),
                 "--private-key",
                 RELAYER_PK,
                 "--rpc-url",
