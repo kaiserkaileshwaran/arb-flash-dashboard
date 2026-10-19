@@ -45,9 +45,9 @@ def _load_local_relayer_env() -> tuple:
 
 RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
 RPC_URLS = [
-    "https://arbitrum.drpc.org",
-    "https://arbitrum-one-rpc.publicnode.com",
     "https://arb1.arbitrum.io/rpc",
+    "https://arbitrum-one-rpc.publicnode.com",
+    "https://arbitrum.drpc.org",
     "https://arb-pokt.nodies.app",
     "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX",
 ]
@@ -244,25 +244,66 @@ def main() -> int:
             "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_probe}, "latest"],
         })
 
+    import http.client
+    import socket
+    from urllib.parse import urlparse
+
+    batch_payload_bytes = json.dumps(batch_rpc, separators=(",", ":")).encode("utf-8")
+    persistent_conns = {}
+
+    def _fast_keepalive_post(url: str, payload: bytes):
+        parsed = urlparse(url)
+        host = parsed.netloc
+        path = parsed.path or "/"
+        conn = persistent_conns.get(host)
+        if conn is None:
+            conn = http.client.HTTPSConnection(host, timeout=3.5)
+            conn.connect()
+            if conn.sock is not None:
+                conn.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+            persistent_conns[host] = conn
+        try:
+            conn.request(
+                "POST",
+                path,
+                body=payload,
+                headers={
+                    "Content-Type": "application/json",
+                    "User-Agent": "Mozilla/5.0",
+                    "Connection": "keep-alive",
+                },
+            )
+            resp = conn.getresponse()
+            raw = resp.read()
+            if resp.status != 200:
+                raise RuntimeError(f"HTTP {resp.status}")
+            return json.loads(raw.decode("utf-8"))
+        except Exception:
+            try:
+                conn.close()
+            except Exception:
+                pass
+            persistent_conns.pop(host, None)
+            raise
+
     winning_meta = None
     best_profit_score = 0
     best_pre_gas_wei = 0
     cycles_scanned = 0
     latencies_ms = []
+    active_rpc_url = RPC_URLS[0]
     start_ts = time.time()
 
     while True:
         cycles_scanned += 1
-        for url in RPC_URLS:
+        ordered_urls = [active_rpc_url] + [u for u in RPC_URLS if u != active_rpc_url]
+        for url in ordered_urls:
             try:
                 t_rpc0 = time.time()
-                req = urllib.request.Request(
-                    url,
-                    data=json.dumps(batch_rpc).encode("utf-8"),
-                    headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
-                )
-                arr = json.loads(urllib.request.urlopen(req, timeout=5).read().decode("utf-8"))
-                latencies_ms.append((time.time() - t_rpc0) * 1000.0)
+                arr = _fast_keepalive_post(url, batch_payload_bytes)
+                lat_ms = (time.time() - t_rpc0) * 1000.0
+                latencies_ms.append(lat_ms)
+                active_rpc_url = url
                 if isinstance(arr, list):
                     for item in arr:
                         if isinstance(item, dict) and isinstance(item.get("result"), str) and item["result"].startswith("0x") and len(item["result"]) >= 66:
@@ -283,7 +324,13 @@ def main() -> int:
 
         if winning_meta is not None or (time.time() - start_ts) >= loop_seconds:
             break
-        time.sleep(0.25)
+        time.sleep(0.05)
+
+    for c in persistent_conns.values():
+        try:
+            c.close()
+        except Exception:
+            pass
 
     min_lat_ms = round(min(latencies_ms), 2) if latencies_ms else 0.0
     avg_lat_ms = round(sum(latencies_ms) / len(latencies_ms), 2) if latencies_ms else 0.0

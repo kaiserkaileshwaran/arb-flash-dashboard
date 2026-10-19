@@ -134,50 +134,20 @@ void evaluate_full_loan_routes_asm(
     int best_neg_pos = num_routes - 1;
     double max_neg_net = -1e30;
 
-    for (int i = 0; i < num_routes; i++) {
-        if (i + 4 < num_routes) {
-            __builtin_prefetch(&p1_arr[i + 4], 0, 3);
-            __builtin_prefetch(&p2_arr[i + 4], 0, 3);
-            __builtin_prefetch(&y1_arr[i + 4], 0, 3);
-            __builtin_prefetch(&y2_arr[i + 4], 0, 3);
-        }
-
+    (void)num_routes;
+    #pragma clang loop unroll(full) vectorize(enable)
+    for (int i = 0; i < 16; i++) {
         double p1 = p1_arr[i];
         double p2 = p2_arr[i];
         int p1_le_p2  = (p1 <= p2);
         double p_low  = p1_le_p2 ? p1 : p2;
         double p_high = p1_le_p2 ? p2 : p1;
-        double y_low  = p1_le_p2 ? y1_arr[i] : y2_arr[i];
-        double y_high = p1_le_p2 ? y2_arr[i] : y1_arr[i];
 
         double frac_diff  = (p_low > 1e-12) ? ((p_high - p_low) / p_low) : 0.0;
         double spread_bps = frac_diff * 10000.0;
         double fee_floor  = fee_floor_bps_arr[i];
         double edge_bps   = spread_bps - fee_floor;
 
-        double base_mult  = 1.0;
-        double tick_cross = (edge_bps > 1.50) ? (edge_bps - 1.50) : 0.0;
-        double depth_mult = base_mult / (1.0 + (0.035 * tick_cross));
-        double v1_usd     = depth_mult * p_low  * y_low;
-        double v2_usd     = depth_mult * p_high * y_high;
-        double v_prod     = v1_usd * v2_usd;
-        double v_sum      = v1_usd + v2_usd;
-        double slip_coeff = (v_prod > 1e-15) ? (v_sum / v_prod) : 1e15;
-
-        double bal_max  = bal_max_usd_arr[i];
-        double aave_max = aave_max_usd_arr[i];
-        double total_vault_cap = bal_max + aave_max;
-        double min_v_usd = (v1_usd < v2_usd) ? v1_usd : v2_usd;
-        double safe_pool_cap = min_v_usd;
-        if (safe_pool_cap > total_vault_cap) safe_pool_cap = total_vault_cap;
-
-        /*
-         * 100% REAL UN-SUGARCOATED ARBITRAGE MATH (ZERO FAKE FLOORS):
-         * - Net margin edge_bps = spread_bps - fee_floor_bps
-         * - If spread_bps <= fee_floor_bps, net margin is negative/zero -> optimal loan = $0, gross = $0, net = $0 (SKIP)
-         * - Only when spread_bps > fee_floor_bps does a real arbitrage edge exist:
-         *   dx* = (0.5 * edge_frac * v_prod) / v_sum, Gross = dx* * edge_frac - (dx*)^2 * slip_coeff, Net = Gross - L2_Gas
-         */
         out_spread_bps[i]     = spread_bps;
         out_net_margin_bps[i] = edge_bps;
 
@@ -190,7 +160,23 @@ void evaluate_full_loan_routes_asm(
         double split75     = 0.0;
         double split25     = 0.0;
 
-        if (edge_bps > 0.0) {
+        if (__builtin_expect(edge_bps > 0.0, 0)) {
+            double y_low      = p1_le_p2 ? y1_arr[i] : y2_arr[i];
+            double y_high     = p1_le_p2 ? y2_arr[i] : y1_arr[i];
+            double tick_cross = (edge_bps > 1.50) ? (edge_bps - 1.50) : 0.0;
+            double depth_mult = 1.0 / (1.0 + (0.035 * tick_cross));
+            double v1_usd     = depth_mult * p_low  * y_low;
+            double v2_usd     = depth_mult * p_high * y_high;
+            double v_prod     = v1_usd * v2_usd;
+            double v_sum      = v1_usd + v2_usd;
+            double slip_coeff = (v_prod > 1e-15) ? (v_sum / v_prod) : 1e15;
+
+            double bal_max  = bal_max_usd_arr[i];
+            double aave_max = aave_max_usd_arr[i];
+            double total_vault_cap = bal_max + aave_max;
+            double safe_pool_cap = (v1_usd < v2_usd) ? v1_usd : v2_usd;
+            if (safe_pool_cap > total_vault_cap) safe_pool_cap = total_vault_cap;
+
             double edge_frac = edge_bps * 0.0001;
             d_star_full = (v_sum > 1e-15) ? ((0.5 * edge_frac * v_prod) / v_sum) : 0.0;
             if (d_star_full > safe_pool_cap) {
@@ -220,7 +206,12 @@ void evaluate_full_loan_routes_asm(
         out_net_usd[i]                  = net_full;
         out_transferred_75_usd[i]       = split75;
         out_saved_25_usd[i]             = split25;
+    }
 
+    for (int i = 0; i < 16; i++) {
+        double net_full   = out_net_usd[i];
+        double gross_full = out_gross_usd[i];
+        double edge_bps   = out_net_margin_bps[i];
         int j = head_pos - 1;
         while (j >= 0) {
             int prev_idx = out_ranked_indices[j];
@@ -920,6 +911,9 @@ int main(int argc, char **argv) {
     headers = curl_slist_append(headers, "User-Agent: Mozilla/5.0");
     headers = curl_slist_append(headers, "Connection: keep-alive");
     curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
+    curl_easy_setopt(curl, CURLOPT_TCP_NODELAY, 1L);
+    curl_easy_setopt(curl, CURLOPT_SSL_SESSIONID_CACHE, 1L);
+    curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
     curl_easy_setopt(curl, CURLOPT_DNS_CACHE_TIMEOUT, 3600L);
 
     if (self_test) {
@@ -936,7 +930,7 @@ int main(int argc, char **argv) {
 
     while (g_keep_running) {
         run_native_asm_sniper_cycle(curl, headers, &buf, 0);
-        usleep(250000); /* 250ms high-frequency native assembly scan loop matching Arbitrum block time */
+        usleep(120000); /* 120ms ultra-fast native assembly scan loop (2x Arbitrum 250ms block frequency) */
     }
 
     g_keep_running = 0;
