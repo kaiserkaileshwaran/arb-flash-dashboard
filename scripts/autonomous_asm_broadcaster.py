@@ -286,17 +286,17 @@ def main() -> int:
     # PRIORITY #1 (OPTION 2): Top 10 Bidirectional Aave V3 High-Risk Borrowers (37 Tracked)
     # =========================================================================
     aave_high_risk_watchlist = [
-        # (borrower_addr, debt_token, collateral_token, debt_to_cover_raw, min_net_raw, rel_fee_raw, is_weth, label)
-        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12 * 10**18, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/USDC_col ($63.4k • ₹1.50L Bonus)"),
-        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, usdt, 2900000000000000000, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/USDT_col ($34.7k • ₹82.3k Bonus)"),
-        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/WETH_col ($124.7k • ₹2.96L Bonus)"),
-        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($57.0k • ₹1.35L Bonus)"),
-        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", weth, weth, 2200000000000000000, MIN_NET_WETH_WEI, RELAYER_REIMB_WEI, True, "WETH_debt/WETH_col ($17.0k • ₹40.4k Bonus)"),
-        ("0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", usdc, weth, 5300 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($10.8k • ₹25.5k Bonus)"),
-        ("0x7d7937bac6af9975bbacbcd53d53e5c61968cd36", usdc, weth, 14500 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($29.9k • ₹71.0k Bonus)"),
-        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 10000 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($21.8k • ₹51.8k Bonus)"),
-        ("0x408dcf31e16b438a86fe01e258cd357651aa7b3f", usdc, weth, 900 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($1.94k • ₹4.6k Bonus)"),
-        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 250000 * 10**6, MIN_NET_USDC_RAW, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col ($580.2k • ₹13.77L Bonus)"),
+        # (borrower_addr, debt_token, collateral_token, debt_to_cover_raw, min_net_20pct_raw, rel_fee_80pct_plus_gas_raw, is_weth, label)
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 12 * 10**18, int(12 * 10**18 * 0.008), RELAYER_REIMB_WEI + int(12 * 10**18 * 0.032), True, "WETH_debt/USDC_col ($63.4k • ₹1.50L Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, usdt, 2900000000000000000, int(2900000000000000000 * 0.008), RELAYER_REIMB_WEI + int(2900000000000000000 * 0.032), True, "WETH_debt/USDT_col ($34.7k • ₹82.3k Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, int(25 * 10**18 * 0.008), RELAYER_REIMB_WEI + int(25 * 10**18 * 0.032), True, "WETH_debt/WETH_col ($124.7k • ₹2.96L Bonus • 80% Mudrex / 20% Safety)"),
+        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, int(17000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(17000 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($57.0k • ₹1.35L Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", weth, weth, 2200000000000000000, int(2200000000000000000 * 0.008), RELAYER_REIMB_WEI + int(2200000000000000000 * 0.032), True, "WETH_debt/WETH_col ($17.0k • ₹40.4k Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", usdc, weth, 5300 * 10**6, int(5300 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(5300 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($10.8k • ₹25.5k Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x7d7937bac6af9975bbacbcd53d53e5c61968cd36", usdc, weth, 14500 * 10**6, int(14500 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(14500 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($29.9k • ₹71.0k Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 10000 * 10**6, int(10000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(10000 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($21.8k • ₹51.8k Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x408dcf31e16b438a86fe01e258cd357651aa7b3f", usdc, weth, 900 * 10**6, int(900 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(900 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($1.94k • ₹4.6k Bonus • 80% Mudrex / 20% Safety)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 250000 * 10**6, int(250000 * 10**6 * 0.008), RELAYER_REIMB_USDC + int(250000 * 10**6 * 0.032), False, "USDC_debt/WETH_col ($580.2k • ₹13.77L Bonus • 80% Mudrex / 20% Safety)"),
     ]
 
     # =========================================================================
@@ -553,10 +553,33 @@ def main() -> int:
                                 p_idx = item_id - probe_start_id
                                 if 0 <= p_idx < len(probe_defs) and raw_prof > 0:
                                     p_def = probe_defs[p_idx]
-                                    equiv_wei = raw_prof if p_def[3].lower() == weth.lower() else int((raw_prof / 1e6) / 2415.0 * 1e18)
+                                    is_probe_weth = p_def[3].lower() == weth.lower()
+                                    equiv_wei = raw_prof if is_probe_weth else int((raw_prof / 1e6) / 2415.0 * 1e18)
                                     if equiv_wei > best_pre_gas_wei:
                                         best_pre_gas_wei = equiv_wei
                                     cycle_positive_probes.append((equiv_wei, raw_prof, p_def))
+                                    # Promote any single probe that beats L2 gas + min net floor using 80% Mudrex / 20% Safety split!
+                                    if equiv_wei >= MIN_GROSS_WETH_WEI:
+                                        reimb_raw = RELAYER_REIMB_WEI if is_probe_weth else RELAYER_REIMB_USDC
+                                        if raw_prof > reimb_raw:
+                                            net_raw = raw_prof - reimb_raw
+                                            mudrex_80_raw = int(net_raw * 0.80)
+                                            safety_20_raw = max(1, net_raw - mudrex_80_raw)
+                                            rel_total_raw = reimb_raw + mudrex_80_raw
+                                            p_lbl, pb, ps, tb, tq, p_amt, z0, z1 = p_def
+                                            cd_exec = _encode_flash_swap_calldata(pb, ps, tb, tq, p_amt, safety_20_raw, z0, z1, rel_total_raw)
+                                            s_score = int((equiv_wei / 1e18) * 2415.0 * 1e6)
+                                            if s_score > best_profit_score:
+                                                best_profit_score = s_score
+                                                winning_meta = (
+                                                    f"DIRECT_FLASH_SWAP_{p_lbl}_80_20_SPLIT",
+                                                    cd_exec,
+                                                    safety_20_raw,
+                                                    rel_total_raw,
+                                                    is_probe_weth,
+                                                    p_amt,
+                                                    "RAW_CALLDATA",
+                                                )
 
                     # Method A: Verify Multi-Route Atomic Bundle (executeMultiMaxDirectPoolFlashSwaps = 0xd34ac4bb)
                     if cycle_positive_probes:
@@ -587,6 +610,7 @@ def main() -> int:
                         if len(bundle_loans) >= 2:
                             try:
                                 core_bundle_loans = bundle_loans[:8]
+                                marginal_gas_wei = int(RELAYER_REIMB_WEI * (1.0 + 0.6658 * (len(core_bundle_loans) - 1)))
                                 fees_zero = [0] * len(core_bundle_loans)
                                 cd_multi = _encode_multi_flash_swaps_calldata(core_bundle_loans, fees_zero)
                                 m_req = json.dumps([{
@@ -599,16 +623,16 @@ def main() -> int:
                                 onchain_bundle_raw = 0
                                 if isinstance(m_arr, list) and m_arr and isinstance(m_arr[0].get("result"), str) and len(m_arr[0]["result"]) >= 66:
                                     onchain_bundle_raw = int(m_arr[0]["result"], 16)
-                                if sum_probe_wei >= MIN_GROSS_WETH_WEI and (onchain_bundle_raw > 0 or len(bundle_lbls) >= 6):
-                                    # Promote Atomic Bundle to winning_meta when combined gross >= L2 gas + ₹0.10 INR!
-                                    b_score = int((sum_probe_wei / 1e18) * 2415.0 * 1e6)
+                                if onchain_bundle_raw > marginal_gas_wei + MIN_NET_WETH_WEI:
+                                    # Promote Atomic Bundle only when true on-chain output exceeds full multi-route gas + min net profit!
+                                    b_score = int((onchain_bundle_raw / 1e18) * 2415.0 * 1e6)
                                     if b_score > best_profit_score:
                                         best_profit_score = b_score
                                         winning_meta = (
-                                            "MULTI_ROUTE_ATOMIC_BUNDLE",
+                                            "MULTI_ROUTE_ATOMIC_BUNDLE_80_20_SPLIT",
                                             cd_multi,
-                                            sum_probe_wei,
-                                            0,
+                                            onchain_bundle_raw,
+                                            marginal_gas_wei,
                                             True,
                                             sum(x[4] for x in bundle_loans if x[2].lower() == weth.lower()),
                                             "RAW_CALLDATA",
@@ -640,6 +664,7 @@ def main() -> int:
             "ok": True,
             "status": "SCAN_COMPLETE_NO_SPREAD_ABOVE_L2_GAS_THRESHOLD",
             "engine_mode": "HYBRID_CHOICE_2_AAVE_LIQ_CHOICE_3_CROSS_TIER_AND_METHOD_A_ATOMIC_BUNDLE",
+            "profit_split_policy": "80% Automatic Mudrex Withdrawal (0xd252...3f05) + 20% MetaMask Safety Reserve (0xFF3c...89BE) + 100% Relayer Gas Reimbursed",
             "coins_monitored": 19,
             "direct_flash_swap_tiers": len(raw_tiers),
             "sushiv2_spatial_tiers": len(sushiv2_spatial_tiers),
@@ -675,11 +700,12 @@ def main() -> int:
         return 0
 
     if rel_wei < 5_000_000_000_000 or not is_authorized:
-        net_b_inr = round(max(0.0, bundled_pre_gas_inr - l2_gas_inr), 4)
+        net_b_inr = round(max(0.0, pre_gas_inr - l2_gas_inr), 4)
         summary = {
             "ok": True,
-            "status": "PROFITABLE_ATOMIC_BUNDLE_READY_FOR_RELAYER_BROADCAST",
+            "status": "PROFITABLE_TRADE_READY_FOR_RELAYER_BROADCAST",
             "winning_mode": winning_meta[0],
+            "profit_split_policy": "80% Automatic Mudrex Withdrawal (0xd252...3f05) + 20% MetaMask Safety Reserve (0xFF3c...89BE)",
             "best_profit_usdc_micro": best_profit_score,
             "bundled_routes_count": bundled_routes_count,
             "bundled_route_labels": bundled_route_labels,
@@ -687,10 +713,10 @@ def main() -> int:
             "bundled_multi_route_gross_inr": bundled_pre_gas_inr,
             "l2_gas_cost_inr": l2_gas_inr,
             "bundled_net_profit_inr": net_b_inr,
-            "bundled_mudrex_75_inr": round(net_b_inr * 0.75, 4),
-            "bundled_saved_25_inr": round(net_b_inr * 0.25, 4),
+            "bundled_mudrex_75_inr": round(net_b_inr * 0.80, 4),
+            "bundled_saved_25_inr": round(net_b_inr * 0.20, 4),
             "hourly_net_profit_rate_inr": round(net_b_inr * 3600.0, 2),
-            "hourly_mudrex_75_rate_inr": round(net_b_inr * 0.75 * 3600.0, 2),
+            "hourly_mudrex_75_rate_inr": round(net_b_inr * 0.80 * 3600.0, 2),
             "hourly_14400_blocks_net_inr": round(net_b_inr * 14400.0, 2),
             "rpc_latency_min_ms": min_lat_ms,
             "rpc_latency_avg_ms": avg_lat_ms,
@@ -742,15 +768,19 @@ def main() -> int:
             ]
         try:
             out = json.loads(subprocess.check_output(send_cmd, timeout=20).decode("utf-8"))
+            mudrex_settlement_tx = None
             if is_weth and rel_fee > 0:
+                reimb_eth_wei = min(rel_fee, RELAYER_REIMB_WEI)
+                mudrex_80_weth_wei = max(0, rel_fee - reimb_eth_wei)
                 try:
+                    # 1. Unwrap exact gas reimbursement to native ETH so the relayer gas float never runs dry
                     subprocess.check_output(
                         [
                             cast_bin,
                             "send",
                             weth,
                             "withdraw(uint256)",
-                            str(rel_fee),
+                            str(reimb_eth_wei),
                             "--gas-limit",
                             "60000",
                             "--gas-price",
@@ -765,6 +795,87 @@ def main() -> int:
                     )
                 except Exception:
                     pass
+                # 2. Automatically swap & transfer the 80% WETH net profit share straight into Mudrex (0xd252...3f05) as USDC!
+                if mudrex_80_weth_wei > 2_500_000_000_000:
+                    try:
+                        uni_router = "0xE592427A0AEce92De3Edee1F18E0157C05861564"
+                        subprocess.check_output(
+                            [
+                                cast_bin,
+                                "send",
+                                weth,
+                                "approve(address,uint256)",
+                                uni_router,
+                                str(mudrex_80_weth_wei),
+                                "--gas-limit",
+                                "70000",
+                                "--gas-price",
+                                "20500000",
+                                "--private-key",
+                                RELAYER_PK,
+                                "--rpc-url",
+                                RPC_URL,
+                            ],
+                            stderr=subprocess.DEVNULL,
+                            timeout=15,
+                        )
+                        swap_tuple = f"({weth},{usdc},500,{MUDREX_WALLET},{int(time.time()) + 300},{mudrex_80_weth_wei},0,0)"
+                        swap_out = json.loads(
+                            subprocess.check_output(
+                                [
+                                    cast_bin,
+                                    "send",
+                                    uni_router,
+                                    "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))(uint256)",
+                                    swap_tuple,
+                                    "--gas-limit",
+                                    "180000",
+                                    "--gas-price",
+                                    "20500000",
+                                    "--private-key",
+                                    RELAYER_PK,
+                                    "--rpc-url",
+                                    RPC_URL,
+                                    "--json",
+                                ],
+                                stderr=subprocess.DEVNULL,
+                                timeout=20,
+                            ).decode("utf-8")
+                        )
+                        mudrex_settlement_tx = swap_out.get("transactionHash")
+                    except Exception:
+                        pass
+            elif not is_weth and rel_fee > RELAYER_REIMB_USDC:
+                # Direct USDC 80% transfer to Mudrex (0xd252...3f05)
+                mudrex_80_usdc = rel_fee - RELAYER_REIMB_USDC
+                if mudrex_80_usdc >= MIN_MUDREX_USDC_UNITS:
+                    try:
+                        t_out = json.loads(
+                            subprocess.check_output(
+                                [
+                                    cast_bin,
+                                    "send",
+                                    usdc,
+                                    "transfer(address,uint256)(bool)",
+                                    MUDREX_WALLET,
+                                    str(mudrex_80_usdc),
+                                    "--gas-limit",
+                                    "75000",
+                                    "--gas-price",
+                                    "20500000",
+                                    "--private-key",
+                                    RELAYER_PK,
+                                    "--rpc-url",
+                                    RPC_URL,
+                                    "--json",
+                                ],
+                                stderr=subprocess.DEVNULL,
+                                timeout=15,
+                            ).decode("utf-8")
+                        )
+                        mudrex_settlement_tx = t_out.get("transactionHash")
+                    except Exception:
+                        pass
             subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
             BROADCAST_LOG_JSON.write_text(
                 json.dumps(
@@ -772,9 +883,11 @@ def main() -> int:
                         "ok": True,
                         "mode": mode_name,
                         "tx_hash": out.get("transactionHash"),
+                        "mudrex_80pct_auto_settlement_tx": mudrex_settlement_tx,
                         "block_number": out.get("blockNumber"),
                         "flash_loan_raw_amount": winning_loan_amt,
                         "relayer_gas_reimbursed_raw": rel_fee,
+                        "profit_split_policy": "80% Mudrex (0xd252...3f05) / 20% MetaMask Safety Reserve (0xFF3c...89BE)",
                         "ts": time.time(),
                     },
                     indent=2,
@@ -789,8 +902,8 @@ def main() -> int:
             pass
 
     # 100% of Relayer ETH is strictly preserved as permanent revolving gas float.
-    # Deployed contract 0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3 automatically routes 75% of net profit to Mudrex
-    # (0xd2529585059e3e5c09c912f0f9570000c2a53f05) and 25% to MetaMask (0xFF3c34DAF159741C931F7c421350f8289A9d89BE).
+    # 80% of Net Profit is automatically swapped/settled directly to Mudrex (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
+    # and 20% is sent atomically by 0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3 to MetaMask Safety Reserve (0xFF3c34DAF159741C931F7c421350f8289A9d89BE).
     return 0
 
 

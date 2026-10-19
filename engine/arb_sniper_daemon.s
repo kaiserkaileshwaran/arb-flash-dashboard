@@ -10,10 +10,10 @@ _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	ldp	x14, x13, [sp, #32]
 	ldp	x16, x15, [sp, #16]
 	ldp	x17, x10, [sp]
-	ldr	d5, [x1]
-	ldr	d6, [x2]
-	fminnm	d2, d5, d6
-	fmaxnm	d3, d5, d6
+	ldr	d6, [x1]
+	ldr	d17, [x2]
+	fminnm	d2, d6, d17
+	fmaxnm	d3, d6, d17
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -21,42 +21,42 @@ _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	movk	x0, #15729, lsl #48
 	fmov	d4, x0
 	fcmp	d2, d4
-	movi.2d	v7, #0000000000000000
+	movi.2d	v5, #0000000000000000
 	b.le	LBB0_2
 ; %bb.1:
 	fsub	d4, d3, d2
 	mov	x0, #149533581377536            ; =0x880000000000
 	movk	x0, #16579, lsl #48
-	fmov	d7, x0
-	fmul	d4, d4, d7
-	fdiv	d7, d4, d2
+	fmov	d5, x0
+	fmul	d4, d4, d5
+	fdiv	d5, d4, d2
 LBB0_2:
 	ldr	d4, [x5]
-	fsub	d4, d7, d4
+	fsub	d4, d5, d4
 	fcmp	d4, #0.0
 	movi.2d	v20, #0000000000000000
-	str	d7, [x17]
+	str	d5, [x17]
 	str	d4, [x10]
 	movi.2d	v21, #0000000000000000
 	movi.2d	v19, #0000000000000000
 	movi.2d	v18, #0000000000000000
-	movi.2d	v16, #0000000000000000
 	movi.2d	v7, #0000000000000000
-	movi.2d	v17, #0000000000000000
+	movi.2d	v5, #0000000000000000
+	movi.2d	v16, #0000000000000000
 	b.gt	LBB0_61
 LBB0_3:
-	str	d17, [x16]
-	str	d7, [x15]
-	str	d16, [x14]
+	str	d16, [x16]
+	str	d5, [x15]
+	str	d7, [x14]
 	str	d18, [x13]
 	str	d19, [x9]
 	str	d21, [x8]
 	str	d20, [x12]
 	str	d1, [x11]
-	ldr	d17, [x1, #8]
+	ldr	d18, [x1, #8]
 	ldr	d19, [x2, #8]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -81,7 +81,7 @@ LBB0_5:
 	str	d3, [x17, #8]
 	str	d2, [x10, #8]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -92,14 +92,14 @@ LBB0_6:
 	str	d3, [x15, #8]
 	str	d4, [x14, #8]
 	str	d6, [x13, #8]
-	str	d18, [x9, #8]
+	str	d17, [x9, #8]
 	str	d21, [x8, #8]
 	str	d20, [x12, #8]
 	str	d1, [x11, #8]
-	ldr	d17, [x1, #16]
+	ldr	d18, [x1, #16]
 	ldr	d19, [x2, #16]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -124,7 +124,7 @@ LBB0_8:
 	str	d3, [x17, #16]
 	str	d2, [x10, #16]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -135,14 +135,14 @@ LBB0_9:
 	str	d3, [x15, #16]
 	str	d4, [x14, #16]
 	str	d6, [x13, #16]
-	str	d18, [x9, #16]
+	str	d17, [x9, #16]
 	str	d21, [x8, #16]
 	str	d20, [x12, #16]
 	str	d1, [x11, #16]
-	ldr	d17, [x1, #24]
+	ldr	d18, [x1, #24]
 	ldr	d19, [x2, #24]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -167,7 +167,7 @@ LBB0_11:
 	str	d3, [x17, #24]
 	str	d2, [x10, #24]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -178,14 +178,14 @@ LBB0_12:
 	str	d3, [x15, #24]
 	str	d4, [x14, #24]
 	str	d6, [x13, #24]
-	str	d18, [x9, #24]
+	str	d17, [x9, #24]
 	str	d21, [x8, #24]
 	str	d20, [x12, #24]
 	str	d1, [x11, #24]
-	ldr	d17, [x1, #32]
+	ldr	d18, [x1, #32]
 	ldr	d19, [x2, #32]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -210,7 +210,7 @@ LBB0_14:
 	str	d3, [x17, #32]
 	str	d2, [x10, #32]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -221,14 +221,14 @@ LBB0_15:
 	str	d3, [x15, #32]
 	str	d4, [x14, #32]
 	str	d6, [x13, #32]
-	str	d18, [x9, #32]
+	str	d17, [x9, #32]
 	str	d21, [x8, #32]
 	str	d20, [x12, #32]
 	str	d1, [x11, #32]
-	ldr	d17, [x1, #40]
+	ldr	d18, [x1, #40]
 	ldr	d19, [x2, #40]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -253,7 +253,7 @@ LBB0_17:
 	str	d3, [x17, #40]
 	str	d2, [x10, #40]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -264,14 +264,14 @@ LBB0_18:
 	str	d3, [x15, #40]
 	str	d4, [x14, #40]
 	str	d6, [x13, #40]
-	str	d18, [x9, #40]
+	str	d17, [x9, #40]
 	str	d21, [x8, #40]
 	str	d20, [x12, #40]
 	str	d1, [x11, #40]
-	ldr	d17, [x1, #48]
+	ldr	d18, [x1, #48]
 	ldr	d19, [x2, #48]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -296,7 +296,7 @@ LBB0_20:
 	str	d3, [x17, #48]
 	str	d2, [x10, #48]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -307,14 +307,14 @@ LBB0_21:
 	str	d3, [x15, #48]
 	str	d4, [x14, #48]
 	str	d6, [x13, #48]
-	str	d18, [x9, #48]
+	str	d17, [x9, #48]
 	str	d21, [x8, #48]
 	str	d20, [x12, #48]
 	str	d1, [x11, #48]
-	ldr	d17, [x1, #56]
+	ldr	d18, [x1, #56]
 	ldr	d19, [x2, #56]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -339,7 +339,7 @@ LBB0_23:
 	str	d3, [x17, #56]
 	str	d2, [x10, #56]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -350,14 +350,14 @@ LBB0_24:
 	str	d3, [x15, #56]
 	str	d4, [x14, #56]
 	str	d6, [x13, #56]
-	str	d18, [x9, #56]
+	str	d17, [x9, #56]
 	str	d21, [x8, #56]
 	str	d20, [x12, #56]
 	str	d1, [x11, #56]
-	ldr	d17, [x1, #64]
+	ldr	d18, [x1, #64]
 	ldr	d19, [x2, #64]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -382,7 +382,7 @@ LBB0_26:
 	str	d3, [x17, #64]
 	str	d2, [x10, #64]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -393,14 +393,14 @@ LBB0_27:
 	str	d3, [x15, #64]
 	str	d4, [x14, #64]
 	str	d6, [x13, #64]
-	str	d18, [x9, #64]
+	str	d17, [x9, #64]
 	str	d21, [x8, #64]
 	str	d20, [x12, #64]
 	str	d1, [x11, #64]
-	ldr	d17, [x1, #72]
+	ldr	d18, [x1, #72]
 	ldr	d19, [x2, #72]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -425,7 +425,7 @@ LBB0_29:
 	str	d3, [x17, #72]
 	str	d2, [x10, #72]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -436,14 +436,14 @@ LBB0_30:
 	str	d3, [x15, #72]
 	str	d4, [x14, #72]
 	str	d6, [x13, #72]
-	str	d18, [x9, #72]
+	str	d17, [x9, #72]
 	str	d21, [x8, #72]
 	str	d20, [x12, #72]
 	str	d1, [x11, #72]
-	ldr	d17, [x1, #80]
+	ldr	d18, [x1, #80]
 	ldr	d19, [x2, #80]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -468,7 +468,7 @@ LBB0_32:
 	str	d3, [x17, #80]
 	str	d2, [x10, #80]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -479,14 +479,14 @@ LBB0_33:
 	str	d3, [x15, #80]
 	str	d4, [x14, #80]
 	str	d6, [x13, #80]
-	str	d18, [x9, #80]
+	str	d17, [x9, #80]
 	str	d21, [x8, #80]
 	str	d20, [x12, #80]
 	str	d1, [x11, #80]
-	ldr	d17, [x1, #88]
+	ldr	d18, [x1, #88]
 	ldr	d19, [x2, #88]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -511,7 +511,7 @@ LBB0_35:
 	str	d3, [x17, #88]
 	str	d2, [x10, #88]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -522,14 +522,14 @@ LBB0_36:
 	str	d3, [x15, #88]
 	str	d4, [x14, #88]
 	str	d6, [x13, #88]
-	str	d18, [x9, #88]
+	str	d17, [x9, #88]
 	str	d21, [x8, #88]
 	str	d20, [x12, #88]
 	str	d1, [x11, #88]
-	ldr	d17, [x1, #96]
+	ldr	d18, [x1, #96]
 	ldr	d19, [x2, #96]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -554,7 +554,7 @@ LBB0_38:
 	str	d3, [x17, #96]
 	str	d2, [x10, #96]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -565,14 +565,14 @@ LBB0_39:
 	str	d3, [x15, #96]
 	str	d4, [x14, #96]
 	str	d6, [x13, #96]
-	str	d18, [x9, #96]
+	str	d17, [x9, #96]
 	str	d21, [x8, #96]
 	str	d20, [x12, #96]
 	str	d1, [x11, #96]
-	ldr	d17, [x1, #104]
+	ldr	d18, [x1, #104]
 	ldr	d19, [x2, #104]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -597,7 +597,7 @@ LBB0_41:
 	str	d3, [x17, #104]
 	str	d2, [x10, #104]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -608,14 +608,14 @@ LBB0_42:
 	str	d3, [x15, #104]
 	str	d4, [x14, #104]
 	str	d6, [x13, #104]
-	str	d18, [x9, #104]
+	str	d17, [x9, #104]
 	str	d21, [x8, #104]
 	str	d20, [x12, #104]
 	str	d1, [x11, #104]
-	ldr	d17, [x1, #112]
+	ldr	d18, [x1, #112]
 	ldr	d19, [x2, #112]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -640,7 +640,7 @@ LBB0_44:
 	str	d3, [x17, #112]
 	str	d2, [x10, #112]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -651,14 +651,14 @@ LBB0_45:
 	str	d3, [x15, #112]
 	str	d4, [x14, #112]
 	str	d6, [x13, #112]
-	str	d18, [x9, #112]
+	str	d17, [x9, #112]
 	str	d21, [x8, #112]
 	str	d20, [x12, #112]
 	str	d1, [x11, #112]
-	ldr	d17, [x1, #120]
+	ldr	d18, [x1, #120]
 	ldr	d19, [x2, #120]
-	fminnm	d7, d17, d19
-	fmaxnm	d16, d17, d19
+	fminnm	d7, d18, d19
+	fmaxnm	d16, d18, d19
 	movi.2d	v1, #0000000000000000
 	mov	x0, #59921                      ; =0xea11
 	movk	x0, #33069, lsl #16
@@ -684,7 +684,7 @@ LBB0_47:
 	str	d3, [x17, #120]
 	str	d2, [x10, #120]
 	movi.2d	v21, #0000000000000000
-	movi.2d	v18, #0000000000000000
+	movi.2d	v17, #0000000000000000
 	movi.2d	v6, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	movi.2d	v3, #0000000000000000
@@ -696,7 +696,7 @@ LBB0_48:
 	str	d3, [x15, #120]
 	str	d4, [x14, #120]
 	str	d6, [x13, #120]
-	str	d18, [x9, #120]
+	str	d17, [x9, #120]
 	str	d21, [x8, #120]
 	str	d20, [x12, #120]
 	add	x12, x0, #4
@@ -752,7 +752,7 @@ LBB0_59:                                ;   in Loop: Header=BB0_51 Depth=1
 LBB0_60:
 	ret
 LBB0_61:
-	fcmp	d5, d6
+	fcmp	d6, d17
 	csel	x0, x3, x4, le
 	ldr	d1, [x0]
 	csel	x0, x4, x3, le
@@ -773,11 +773,11 @@ LBB0_61:
 	movk	x0, #17164, lsl #48
 	fmov	d7, x0
 	fcsel	d1, d1, d7, gt
-	ldr	d16, [x6]
-	ldr	d7, [x7]
-	fadd	d7, d7, d16
+	ldr	d7, [x6]
+	ldr	d16, [x7]
+	fadd	d16, d16, d7
 	fminnm	d2, d2, d3
-	fminnm	d7, d2, d7
+	fminnm	d16, d2, d16
 	mov	x0, #17197                      ; =0x432d
 	movk	x0, #60188, lsl #16
 	movk	x0, #14050, lsl #32
@@ -798,31 +798,37 @@ LBB0_61:
 	fmul	d4, d4, d5
 	fdiv	d17, d4, d6
 LBB0_63:
-	fminnm	d17, d17, d7
-	fminnm	d7, d17, d16
-	fsub	d4, d17, d16
-	fcmp	d17, d16
-	fcsel	d16, d4, d2, gt
+	fminnm	d16, d17, d16
+	fminnm	d5, d16, d7
+	fsub	d4, d16, d7
+	fcmp	d16, d7
+	fcsel	d7, d4, d2, gt
 	mov	x0, #43516                      ; =0xa9fc
 	movk	x0, #54001, lsl #16
 	movk	x0, #25165, lsl #32
 	movk	x0, #16192, lsl #48
 	fmov	d4, x0
-	fmul	d18, d7, d4
-	fmul	d4, d17, d17
+	fmul	d18, d5, d4
+	fmul	d4, d16, d16
 	fmul	d1, d4, d1
 	mov	x0, #43516                      ; =0xa9fc
 	movk	x0, #54001, lsl #16
 	movk	x0, #25165, lsl #32
 	movk	x0, #48960, lsl #48
 	fmov	d4, x0
-	fnmsub	d1, d3, d17, d1
-	fmadd	d1, d16, d4, d1
+	fnmsub	d1, d3, d16, d1
+	fmadd	d1, d7, d4, d1
 	fmaxnm	d19, d1, d2
 	fsub	d3, d19, d0
-	fmov	d1, #0.75000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d4, d3, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d3, d1
 	fcmp	d3, #0.0
 	fcsel	d1, d1, d2, gt
@@ -830,7 +836,7 @@ LBB0_63:
 	fmaxnm	d21, d3, d2
 	b	LBB0_3
 LBB0_64:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #8]
 	csel	x0, x4, x3, le
@@ -896,11 +902,17 @@ LBB0_66:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -908,7 +920,7 @@ LBB0_66:
 	fmaxnm	d21, d2, d7
 	b	LBB0_6
 LBB0_67:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #16]
 	csel	x0, x4, x3, le
@@ -974,11 +986,17 @@ LBB0_69:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -986,7 +1004,7 @@ LBB0_69:
 	fmaxnm	d21, d2, d7
 	b	LBB0_9
 LBB0_70:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #24]
 	csel	x0, x4, x3, le
@@ -1052,11 +1070,17 @@ LBB0_72:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1064,7 +1088,7 @@ LBB0_72:
 	fmaxnm	d21, d2, d7
 	b	LBB0_12
 LBB0_73:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #32]
 	csel	x0, x4, x3, le
@@ -1130,11 +1154,17 @@ LBB0_75:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1142,7 +1172,7 @@ LBB0_75:
 	fmaxnm	d21, d2, d7
 	b	LBB0_15
 LBB0_76:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #40]
 	csel	x0, x4, x3, le
@@ -1208,11 +1238,17 @@ LBB0_78:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1220,7 +1256,7 @@ LBB0_78:
 	fmaxnm	d21, d2, d7
 	b	LBB0_18
 LBB0_79:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #48]
 	csel	x0, x4, x3, le
@@ -1286,11 +1322,17 @@ LBB0_81:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1298,7 +1340,7 @@ LBB0_81:
 	fmaxnm	d21, d2, d7
 	b	LBB0_21
 LBB0_82:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #56]
 	csel	x0, x4, x3, le
@@ -1364,11 +1406,17 @@ LBB0_84:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1376,7 +1424,7 @@ LBB0_84:
 	fmaxnm	d21, d2, d7
 	b	LBB0_24
 LBB0_85:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #64]
 	csel	x0, x4, x3, le
@@ -1442,11 +1490,17 @@ LBB0_87:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1454,7 +1508,7 @@ LBB0_87:
 	fmaxnm	d21, d2, d7
 	b	LBB0_27
 LBB0_88:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #72]
 	csel	x0, x4, x3, le
@@ -1520,11 +1574,17 @@ LBB0_90:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1532,7 +1592,7 @@ LBB0_90:
 	fmaxnm	d21, d2, d7
 	b	LBB0_30
 LBB0_91:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #80]
 	csel	x0, x4, x3, le
@@ -1598,11 +1658,17 @@ LBB0_93:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1610,7 +1676,7 @@ LBB0_93:
 	fmaxnm	d21, d2, d7
 	b	LBB0_33
 LBB0_94:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #88]
 	csel	x0, x4, x3, le
@@ -1676,11 +1742,17 @@ LBB0_96:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1688,7 +1760,7 @@ LBB0_96:
 	fmaxnm	d21, d2, d7
 	b	LBB0_36
 LBB0_97:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #96]
 	csel	x0, x4, x3, le
@@ -1754,11 +1826,17 @@ LBB0_99:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1766,7 +1844,7 @@ LBB0_99:
 	fmaxnm	d21, d2, d7
 	b	LBB0_39
 LBB0_100:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #104]
 	csel	x0, x4, x3, le
@@ -1832,11 +1910,17 @@ LBB0_102:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1844,7 +1928,7 @@ LBB0_102:
 	fmaxnm	d21, d2, d7
 	b	LBB0_42
 LBB0_103:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x0, x3, x4, le
 	ldr	d1, [x0, #112]
 	csel	x0, x4, x3, le
@@ -1910,11 +1994,17 @@ LBB0_105:
 	fmov	d2, x0
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d2, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d2, d17, d0
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39322
+	movk	x0, #16361, lsl #48
+	fmov	d1, x0
 	fmul	d16, d2, d1
-	fmov	d1, #0.25000000
+	mov	x0, #-7378697629483820647       ; =0x9999999999999999
+	movk	x0, #39320
+	movk	x0, #16329, lsl #48
+	fmov	d1, x0
 	fmul	d1, d2, d1
 	fcmp	d2, #0.0
 	fcsel	d1, d1, d7, gt
@@ -1922,7 +2012,7 @@ LBB0_105:
 	fmaxnm	d21, d2, d7
 	b	LBB0_45
 LBB0_106:
-	fcmp	d17, d19
+	fcmp	d18, d19
 	csel	x17, x3, x4, le
 	ldr	d1, [x17, #120]
 	csel	x17, x4, x3, le
@@ -1988,11 +2078,17 @@ LBB0_108:
 	fmov	d2, x17
 	fnmsub	d1, d16, d5, d1
 	fmadd	d1, d4, d2, d1
-	fmaxnm	d18, d1, d7
-	fsub	d0, d18, d0
-	fmov	d1, #0.75000000
+	fmaxnm	d17, d1, d7
+	fsub	d0, d17, d0
+	mov	x17, #-7378697629483820647      ; =0x9999999999999999
+	movk	x17, #39322
+	movk	x17, #16361, lsl #48
+	fmov	d1, x17
 	fmul	d2, d0, d1
-	fmov	d1, #0.25000000
+	mov	x17, #-7378697629483820647      ; =0x9999999999999999
+	movk	x17, #39320
+	movk	x17, #16329, lsl #48
+	fmov	d1, x17
 	fmul	d1, d0, d1
 	fcmp	d0, #0.0
 	fcsel	d1, d1, d7, gt
@@ -2970,14 +3066,14 @@ Lloh54:
 	ldr	x8, [x9, __MergedGlobals.78@PAGEOFF]
 	add	x8, x8, #1
 	str	x8, [x9, __MergedGlobals.78@PAGEOFF]
-	ldr	d18, [sp, #1152]
+	ldr	d20, [sp, #1152]
 	movi.2d	v0, #0000000000000000
 	mov	x8, #18036                      ; =0x4674
 	movk	x8, #63124, lsl #16
 	movk	x8, #24326, lsl #32
 	movk	x8, #16264, lsl #48
 	fmov	d1, x8
-	fcmp	d18, d1
+	fcmp	d20, d1
 	b.gt	LBB2_19
 ; %bb.18:
 	mov	w8, #0                          ; =0x0
@@ -2992,14 +3088,14 @@ LBB2_19:
 	movk	x9, #14833, lsl #32
 	movk	x9, #16256, lsl #48
 	fmov	d1, x9
-	mov.16b	v3, v18
+	mov.16b	v3, v20
 LBB2_20:
 	ldrsw	x23, [sp, #704]
 	ldr	d4, [sp, #1672]
 	ldr	d5, [sp, #1680]
 	fadd	d4, d4, d2
 	ldr	d23, [sp, #1160]
-	ldr	d20, [sp, #1168]
+	ldr	d21, [sp, #1168]
 	fcmp	d23, d1
 	fcsel	d0, d23, d0, gt
 	fadd	d1, d3, d0
@@ -3018,8 +3114,8 @@ LBB2_20:
 	fmov	d24, x28
 	fcsel	d3, d24, d0, eq
 	fadd	d4, d5, d2
-	fadd	d5, d20, d1
-	fcmp	d20, d3
+	fadd	d5, d21, d1
+	fcmp	d21, d3
 	fcsel	d1, d5, d1, gt
 	fcsel	d2, d4, d2, gt
 	cinc	w8, w8, gt
@@ -3029,7 +3125,7 @@ LBB2_20:
 	ldr	d5, [sp, #1696]
 	fadd	d4, d4, d2
 	ldr	d22, [sp, #1176]
-	ldr	d19, [sp, #1184]
+	ldr	d18, [sp, #1184]
 	fadd	d6, d22, d1
 	fcmp	d22, d3
 	fcsel	d1, d6, d1, gt
@@ -3038,8 +3134,8 @@ LBB2_20:
 	cmp	w8, #0
 	fcsel	d3, d24, d0, eq
 	fadd	d4, d5, d2
-	fadd	d5, d19, d1
-	fcmp	d19, d3
+	fadd	d5, d18, d1
+	fcmp	d18, d3
 	fcsel	d1, d5, d1, gt
 	fcsel	d2, d4, d2, gt
 	cinc	w8, w8, gt
@@ -3048,10 +3144,10 @@ LBB2_20:
 	ldr	d4, [sp, #1704]
 	ldr	d5, [sp, #1712]
 	fadd	d4, d4, d2
-	ldr	d21, [sp, #1192]
+	ldr	d19, [sp, #1192]
 	ldr	d16, [sp, #1200]
-	fadd	d6, d21, d1
-	fcmp	d21, d3
+	fadd	d6, d19, d1
+	fcmp	d19, d3
 	fcsel	d1, d6, d1, gt
 	fcsel	d2, d4, d2, gt
 	cinc	w8, w8, gt
@@ -3140,7 +3236,7 @@ LBB2_20:
 	fadd	d28, d28, d26
 	fadd	d29, d1, d25
 	fcmp	d1, d27
-	fcsel	d13, d29, d25, gt
+	fcsel	d14, d29, d25, gt
 	fcsel	d11, d28, d26, gt
 	cinc	w21, w8, gt
 	cmp	w21, #0
@@ -3152,7 +3248,7 @@ LBB2_20:
 	add	w21, w21, #1
 	ldr	d24, [sp, #1784]
 	fadd	d11, d24, d11
-	fadd	d13, d0, d13
+	fadd	d14, d0, d14
 	b	LBB2_23
 LBB2_22:
 	cbz	w21, LBB2_73
@@ -3169,10 +3265,10 @@ LBB2_23:
 	movk	x8, #24326, lsl #32
 	movk	x8, #49032, lsl #48
 	fmov	d26, x8
-	fadd	d26, d13, d26
+	fadd	d26, d14, d26
 	fmadd	d9, d24, d25, d26
 	movi.2d	v24, #0000000000000000
-	fmaxnm	d14, d9, d24
+	fmaxnm	d13, d9, d24
 	fcmp	d9, #0.0
 	b.le	LBB2_74
 LBB2_24:
@@ -3181,7 +3277,7 @@ LBB2_24:
 	movk	x8, #38809, lsl #32
 	movk	x8, #15729, lsl #48
 	fmov	d24, x8
-	fcmp	d13, d24
+	fcmp	d14, d24
 	b.le	LBB2_74
 ; %bb.25:
 	mov	x8, #53374                      ; =0xd07e
@@ -3189,113 +3285,173 @@ LBB2_24:
 	movk	x8, #14833, lsl #32
 	movk	x8, #16256, lsl #48
 	fmov	d24, x8
-	fcmp	d18, d24
+	fcmp	d20, d24
 	b.le	LBB2_28
 ; %bb.26:
 	ldr	d24, [sp, #1024]
 	fcmp	d24, #0.0
 	b.gt	LBB2_28
 ; %bb.27:
-	fmul	d18, d14, d18
-	fdiv	d18, d18, d13
-	str	d18, [sp, #1024]
-	fmov	d24, #0.75000000
-	fmul	d24, d18, d24
+	fmul	d20, d13, d20
+	fdiv	d20, d20, d14
+	str	d20, [sp, #1024]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d24, x8
+	fmul	d24, d20, d24
 	str	d24, [sp, #896]
-	fmov	d24, #0.25000000
-	fmul	d18, d18, d24
-	str	d18, [sp, #768]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d24, x8
+	fmul	d20, d20, d24
+	str	d20, [sp, #768]
 LBB2_28:
-	fmov	d18, x8
-	fcmp	d23, d18
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
+	fmov	d20, x8
+	fcmp	d23, d20
 	b.le	LBB2_31
 ; %bb.29:
-	ldr	d18, [sp, #1032]
-	fcmp	d18, #0.0
+	ldr	d20, [sp, #1032]
+	fcmp	d20, #0.0
 	b.gt	LBB2_31
 ; %bb.30:
-	fmul	d18, d14, d23
-	fdiv	d18, d18, d13
-	str	d18, [sp, #1032]
-	fmov	d23, #0.75000000
-	fmul	d23, d18, d23
+	fmul	d20, d13, d23
+	fdiv	d20, d20, d14
+	str	d20, [sp, #1032]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d23, x8
+	fmul	d23, d20, d23
 	str	d23, [sp, #904]
-	fmov	d23, #0.25000000
-	fmul	d18, d18, d23
-	str	d18, [sp, #776]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d23, x8
+	fmul	d20, d20, d23
+	str	d20, [sp, #776]
 LBB2_31:
-	fmov	d18, x8
-	fcmp	d20, d18
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
+	fmov	d20, x8
+	fcmp	d21, d20
 	b.le	LBB2_34
 ; %bb.32:
-	ldr	d18, [sp, #1040]
-	fcmp	d18, #0.0
+	ldr	d20, [sp, #1040]
+	fcmp	d20, #0.0
 	b.gt	LBB2_34
 ; %bb.33:
-	fmul	d18, d14, d20
-	fdiv	d18, d18, d13
-	str	d18, [sp, #1040]
-	fmov	d20, #0.75000000
-	fmul	d20, d18, d20
-	str	d20, [sp, #912]
-	fmov	d20, #0.25000000
-	fmul	d18, d18, d20
-	str	d18, [sp, #784]
+	fmul	d20, d13, d21
+	fdiv	d20, d20, d14
+	str	d20, [sp, #1040]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d21, x8
+	fmul	d21, d20, d21
+	str	d21, [sp, #912]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d21, x8
+	fmul	d20, d20, d21
+	str	d20, [sp, #784]
 LBB2_34:
-	fmov	d18, x8
-	fcmp	d22, d18
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
+	fmov	d20, x8
+	fcmp	d22, d20
 	b.le	LBB2_37
 ; %bb.35:
-	ldr	d18, [sp, #1048]
-	fcmp	d18, #0.0
+	ldr	d20, [sp, #1048]
+	fcmp	d20, #0.0
 	b.gt	LBB2_37
 ; %bb.36:
-	fmul	d18, d14, d22
-	fdiv	d18, d18, d13
-	str	d18, [sp, #1048]
-	fmov	d20, #0.75000000
-	fmul	d20, d18, d20
-	str	d20, [sp, #920]
-	fmov	d20, #0.25000000
-	fmul	d18, d18, d20
-	str	d18, [sp, #792]
+	fmul	d20, d13, d22
+	fdiv	d20, d20, d14
+	str	d20, [sp, #1048]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d21, x8
+	fmul	d21, d20, d21
+	str	d21, [sp, #920]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d21, x8
+	fmul	d20, d20, d21
+	str	d20, [sp, #792]
 LBB2_37:
-	fmov	d18, x8
-	fcmp	d19, d18
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
+	fmov	d20, x8
+	fcmp	d18, d20
 	b.le	LBB2_40
 ; %bb.38:
-	ldr	d18, [sp, #1056]
-	fcmp	d18, #0.0
+	ldr	d20, [sp, #1056]
+	fcmp	d20, #0.0
 	b.gt	LBB2_40
 ; %bb.39:
-	fmul	d18, d14, d19
-	fdiv	d18, d18, d13
+	fmul	d18, d13, d18
+	fdiv	d18, d18, d14
 	str	d18, [sp, #1056]
-	fmov	d19, #0.75000000
-	fmul	d19, d18, d19
-	str	d19, [sp, #928]
-	fmov	d19, #0.25000000
-	fmul	d18, d18, d19
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d20, x8
+	fmul	d20, d18, d20
+	str	d20, [sp, #928]
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d20, x8
+	fmul	d18, d18, d20
 	str	d18, [sp, #800]
 LBB2_40:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d18, x8
-	fcmp	d21, d18
+	fcmp	d19, d18
 	b.le	LBB2_43
 ; %bb.41:
 	ldr	d18, [sp, #1064]
 	fcmp	d18, #0.0
 	b.gt	LBB2_43
 ; %bb.42:
-	fmul	d18, d14, d21
-	fdiv	d18, d18, d13
+	fmul	d18, d13, d19
+	fdiv	d18, d18, d14
 	str	d18, [sp, #1064]
-	fmov	d19, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d19, x8
 	fmul	d19, d18, d19
 	str	d19, [sp, #936]
-	fmov	d19, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d19, x8
 	fmul	d18, d18, d19
 	str	d18, [sp, #808]
 LBB2_43:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d18, x8
 	fcmp	d16, d18
 	b.le	LBB2_46
@@ -3304,16 +3460,26 @@ LBB2_43:
 	fcmp	d18, #0.0
 	b.gt	LBB2_46
 ; %bb.45:
-	fmul	d16, d14, d16
-	fdiv	d16, d16, d13
+	fmul	d16, d13, d16
+	fdiv	d16, d16, d14
 	str	d16, [sp, #1072]
-	fmov	d18, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d18, x8
 	fmul	d18, d16, d18
 	str	d18, [sp, #944]
-	fmov	d18, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d18, x8
 	fmul	d16, d16, d18
 	str	d16, [sp, #816]
 LBB2_46:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d16, x8
 	fcmp	d17, d16
 	b.le	LBB2_49
@@ -3322,16 +3488,26 @@ LBB2_46:
 	fcmp	d16, #0.0
 	b.gt	LBB2_49
 ; %bb.48:
-	fmul	d16, d14, d17
-	fdiv	d16, d16, d13
+	fmul	d16, d13, d17
+	fdiv	d16, d16, d14
 	str	d16, [sp, #1080]
-	fmov	d17, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d17, x8
 	fmul	d17, d16, d17
 	str	d17, [sp, #952]
-	fmov	d17, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d17, x8
 	fmul	d16, d16, d17
 	str	d16, [sp, #824]
 LBB2_49:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d16, x8
 	fcmp	d6, d16
 	b.le	LBB2_52
@@ -3340,16 +3516,26 @@ LBB2_49:
 	fcmp	d16, #0.0
 	b.gt	LBB2_52
 ; %bb.51:
-	fmul	d6, d14, d6
-	fdiv	d6, d6, d13
+	fmul	d6, d13, d6
+	fdiv	d6, d6, d14
 	str	d6, [sp, #1088]
-	fmov	d16, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d16, x8
 	fmul	d16, d6, d16
 	str	d16, [sp, #960]
-	fmov	d16, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d16, x8
 	fmul	d6, d6, d16
 	str	d6, [sp, #832]
 LBB2_52:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d6, x8
 	fcmp	d7, d6
 	b.le	LBB2_55
@@ -3358,16 +3544,26 @@ LBB2_52:
 	fcmp	d6, #0.0
 	b.gt	LBB2_55
 ; %bb.54:
-	fmul	d6, d14, d7
-	fdiv	d6, d6, d13
+	fmul	d6, d13, d7
+	fdiv	d6, d6, d14
 	str	d6, [sp, #1096]
-	fmov	d7, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d7, x8
 	fmul	d7, d6, d7
 	str	d7, [sp, #968]
-	fmov	d7, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d7, x8
 	fmul	d6, d6, d7
 	str	d6, [sp, #840]
 LBB2_55:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d6, x8
 	fcmp	d4, d6
 	b.le	LBB2_58
@@ -3376,16 +3572,26 @@ LBB2_55:
 	fcmp	d6, #0.0
 	b.gt	LBB2_58
 ; %bb.57:
-	fmul	d4, d14, d4
-	fdiv	d4, d4, d13
+	fmul	d4, d13, d4
+	fdiv	d4, d4, d14
 	str	d4, [sp, #1104]
-	fmov	d6, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d6, x8
 	fmul	d6, d4, d6
 	str	d6, [sp, #976]
-	fmov	d6, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d6, x8
 	fmul	d4, d4, d6
 	str	d4, [sp, #848]
 LBB2_58:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d4, x8
 	fcmp	d5, d4
 	b.le	LBB2_61
@@ -3394,16 +3600,26 @@ LBB2_58:
 	fcmp	d4, #0.0
 	b.gt	LBB2_61
 ; %bb.60:
-	fmul	d4, d14, d5
-	fdiv	d4, d4, d13
+	fmul	d4, d13, d5
+	fdiv	d4, d4, d14
 	str	d4, [sp, #1112]
-	fmov	d5, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d5, x8
 	fmul	d5, d4, d5
 	str	d5, [sp, #984]
-	fmov	d5, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d5, x8
 	fmul	d4, d4, d5
 	str	d4, [sp, #856]
 LBB2_61:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d4, x8
 	fcmp	d2, d4
 	b.le	LBB2_64
@@ -3412,16 +3628,26 @@ LBB2_61:
 	fcmp	d4, #0.0
 	b.gt	LBB2_64
 ; %bb.63:
-	fmul	d2, d14, d2
-	fdiv	d2, d2, d13
+	fmul	d2, d13, d2
+	fdiv	d2, d2, d14
 	str	d2, [sp, #1120]
-	fmov	d4, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d4, x8
 	fmul	d4, d2, d4
 	str	d4, [sp, #992]
-	fmov	d4, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d4, x8
 	fmul	d2, d2, d4
 	str	d2, [sp, #864]
 LBB2_64:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d2, x8
 	fcmp	d3, d2
 	b.le	LBB2_67
@@ -3430,16 +3656,26 @@ LBB2_64:
 	fcmp	d2, #0.0
 	b.gt	LBB2_67
 ; %bb.66:
-	fmul	d2, d14, d3
-	fdiv	d2, d2, d13
+	fmul	d2, d13, d3
+	fdiv	d2, d2, d14
 	str	d2, [sp, #1128]
-	fmov	d3, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d3, x8
 	fmul	d3, d2, d3
 	str	d3, [sp, #1000]
-	fmov	d3, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d3, x8
 	fmul	d2, d2, d3
 	str	d2, [sp, #872]
 LBB2_67:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d2, x8
 	fcmp	d1, d2
 	b.le	LBB2_70
@@ -3448,16 +3684,26 @@ LBB2_67:
 	fcmp	d2, #0.0
 	b.gt	LBB2_70
 ; %bb.69:
-	fmul	d1, d14, d1
-	fdiv	d1, d1, d13
+	fmul	d1, d13, d1
+	fdiv	d1, d1, d14
 	str	d1, [sp, #1136]
-	fmov	d2, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d2, x8
 	fmul	d2, d1, d2
 	str	d2, [sp, #1008]
-	fmov	d2, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d2, x8
 	fmul	d1, d1, d2
 	str	d1, [sp, #880]
 LBB2_70:
+	mov	x8, #53374                      ; =0xd07e
+	movk	x8, #48712, lsl #16
+	movk	x8, #14833, lsl #32
+	movk	x8, #16256, lsl #48
 	fmov	d1, x8
 	fcmp	d0, d1
 	b.le	LBB2_74
@@ -3466,13 +3712,19 @@ LBB2_70:
 	fcmp	d1, #0.0
 	b.gt	LBB2_74
 ; %bb.72:
-	fmul	d0, d14, d0
-	fdiv	d0, d0, d13
+	fmul	d0, d13, d0
+	fdiv	d0, d0, d14
 	str	d0, [sp, #1144]
-	fmov	d1, #0.75000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	fmov	d1, x8
 	fmul	d1, d0, d1
 	str	d1, [sp, #1016]
-	fmov	d1, #0.25000000
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39320
+	movk	x8, #16329, lsl #48
+	fmov	d1, x8
 	fmul	d0, d0, d1
 	str	d0, [sp, #888]
 	b	LBB2_74
@@ -3486,19 +3738,25 @@ LBB2_73:
 	fmov	d25, x8
 	fadd	d9, d24, d25
 	movi.2d	v24, #0000000000000000
-	fmaxnm	d14, d9, d24
+	fmaxnm	d13, d9, d24
 	fcmp	d9, #0.0
 	b.gt	LBB2_24
 LBB2_74:
 	add	x8, sp, #1024
 	ldr	d0, [x8, x23, lsl #3]
-	fcmp	d14, d0
+	fcmp	d13, d0
 	b.le	LBB2_76
 ; %bb.75:
-	fmov	d1, #0.75000000
-	fmov	d2, #0.25000000
-	fmul	d10, d14, d1
-	fmul	d8, d14, d2
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16361, lsl #48
+	mov	x9, #-7378697629483820647       ; =0x9999999999999999
+	movk	x9, #39320
+	movk	x9, #16329, lsl #48
+	fmov	d1, x8
+	fmov	d2, x9
+	fmul	d10, d13, d1
+	fmul	d8, d13, d2
 	b	LBB2_77
 LBB2_76:
 	add	x8, sp, #896
@@ -3506,7 +3764,7 @@ LBB2_76:
 	add	x8, sp, #768
 	ldr	d8, [x8, x23, lsl #3]
 LBB2_77:
-	fmaxnm	d15, d14, d0
+	fmaxnm	d15, d13, d0
 Lloh55:
 	adrp	x8, __MergedGlobals.78@PAGE+8
 Lloh56:
@@ -3629,7 +3887,7 @@ Lloh69:
 Lloh70:
 	add	x8, x8, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
 	ldr	x8, [x8, x23, lsl #3]
-	fcmp	d14, d0
+	fcmp	d13, d0
 	b.le	LBB2_106
 ; %bb.89:
 	cmp	w21, #1
@@ -3788,12 +4046,12 @@ Lloh88:
 	fmov	d26, x8
 	fmul	d0, d11, d26
 	str	d0, [sp, #544]                  ; 8-byte Folded Spill
-	fmul	d0, d13, d26
+	fmul	d0, d14, d26
 	str	d0, [sp, #536]                  ; 8-byte Folded Spill
 	str	d9, [sp, #584]                  ; 8-byte Folded Spill
 	fmul	d0, d9, d26
 	str	d0, [sp, #512]                  ; 8-byte Folded Spill
-	fmul	d7, d14, d26
+	fmul	d7, d13, d26
 	mov	x8, #32890                      ; =0x807a
 	movk	x8, #11989, lsl #16
 	movk	x8, #57849, lsl #32
@@ -3848,10 +4106,10 @@ Lloh98:
 	add	x0, sp, #1024
 	mov.16b	v3, v11
 	ldr	d11, [x0, x15, lsl #3]
-	mov.16b	v4, v13
-	fmul	d13, d9, d26
-	mov.16b	v5, v14
-	fmul	d14, d11, d26
+	mov.16b	v4, v14
+	fmul	d14, d9, d26
+	mov.16b	v5, v13
+	fmul	d13, d11, d26
 	add	x0, sp, #896
 	ldr	d15, [x0, x15, lsl #3]
 	add	x0, sp, #768
@@ -3861,10 +4119,10 @@ Lloh98:
 	ldr	d2, [x17, x15, lsl #3]
 	stp	d26, d0, [sp, #440]
 	stp	d1, d15, [sp, #424]
-	stp	d14, d11, [sp, #408]
+	stp	d13, d11, [sp, #408]
 	mov.16b	v11, v3
-	stp	d13, d9, [sp, #392]
-	mov.16b	v13, v4
+	stp	d14, d9, [sp, #392]
+	mov.16b	v14, v4
 	stp	d10, d12, [sp, #376]
 	stp	d8, d30, [sp, #360]
 	stp	d31, d27, [sp, #344]
@@ -4164,7 +4422,7 @@ LBB2_102:
 	movk	x8, #24326, lsl #32
 	movk	x8, #49032, lsl #48
 	fmov	d0, x8
-	fadd	d14, d15, d0
+	fadd	d13, d15, d0
 Lloh129:
 	adrp	x19, l_str.77@PAGE
 Lloh130:
@@ -4239,8 +4497,8 @@ Lloh144:
 	add	x0, x0, l_.str.52@PAGEOFF
 	bl	_printf
 	fmul	d0, d11, d8
-	fmul	d1, d13, d8
-	stp	d13, d1, [sp, #24]
+	fmul	d1, d14, d8
+	stp	d14, d1, [sp, #24]
 	stp	d11, d0, [sp, #8]
 	ldr	x8, [sp, #632]                  ; 8-byte Folded Reload
                                         ; kill: def $w8 killed $w8 killed $x8 def $x8
@@ -4256,8 +4514,8 @@ Lloh147:
 Lloh148:
 	add	x0, x0, l_.str.54@PAGEOFF
 	bl	_printf
-	fmul	d0, d14, d8
-	stp	d14, d0, [sp]
+	fmul	d0, d13, d8
+	stp	d13, d0, [sp]
 Lloh149:
 	adrp	x0, l_.str.55@PAGE
 Lloh150:

@@ -233,8 +233,8 @@ void evaluate_full_loan_routes_asm(
 
             double pre_tax_net = gross_full - gas_fee_usd;
             if (pre_tax_net > 0.0) {
-                net_full = pre_tax_net; /* 100% On-Chain Net Profit (75% Mudrex + 25% Tax/Gas Reserve) */
-                split75  = net_full * 0.75;
+                net_full = pre_tax_net; /* 100% On-Chain Net Profit (80% Mudrex Auto-Withdrawal + 20% Safety Reserve) */
+                split75  = net_full * 0.80;
                 split25  = net_full - split75;
             }
         }
@@ -794,7 +794,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double bundle_total_gas_usd  = (bundle_routes_count > 0) ? (gas_fee_usd + (bundle_routes_count - 1) * marginal_route_gas) : gas_fee_usd;
     double bundle_unfilt_net_usd = (bundle_routes_count > 0) ? (bundle_gross_usd - bundle_total_gas_usd) : (gr[best_i] - gas_fee_usd);
     double bundle_net_usd        = (bundle_unfilt_net_usd > 0.0) ? bundle_unfilt_net_usd : 0.0;
-    double bundle_tr75_usd       = bundle_net_usd * 0.75;
+    double bundle_tr75_usd       = bundle_net_usd * 0.80;
     double bundle_sv25_usd       = bundle_net_usd - bundle_tr75_usd;
 
     /* When Method A Atomic Bundle is net-positive, allocate shared L2 gas proportionally across bundled routes so Table 3 shows each route's real net contribution */
@@ -803,7 +803,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             if (gr[i] > marginal_route_gas && nt[i] <= 0.0) {
                 double share_net = bundle_net_usd * (gr[i] / bundle_gross_usd);
                 nt[i]   = share_net;
-                tr75[i] = share_net * 0.75;
+                tr75[i] = share_net * 0.80;
                 sv25[i] = share_net - tr75[i];
             }
         }

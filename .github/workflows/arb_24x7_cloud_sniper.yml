@@ -58,8 +58,7 @@ jobs:
             timeout 12 ./bin/arb_sniper_asm --daemon || true
           fi
           python3 scripts/verify_real_onchain_proofs.py || true
-          python3 -c 'import sys; sys.path.insert(0, "scripts"); import serve_metamask_portal as m; from pathlib import Path; Path("index.html").write_text(m.HTML_PAGE, encoding="utf-8"); Path("docs").mkdir(exist_ok=True); Path("docs/index.html").write_text(m.HTML_PAGE, encoding="utf-8")' || true
-          mkdir -p docs/reports && cp -f reports/*.json docs/reports/ || true
+          mkdir -p docs/reports && cp -f index.html docs/index.html && cp -f reports/*.json docs/reports/ || true
 
       - name: Commit & Push Updated On-Chain Telemetry to GitHub Pages
         run: |

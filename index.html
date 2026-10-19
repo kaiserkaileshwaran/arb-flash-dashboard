@@ -1190,22 +1190,22 @@ function renderDashboard(payload) {
     const aaveRow = `<tr style="background:#1e1b4b55;">
       <td><a href="https://arbiscan.io/address/${aaveBorrower}" target="_blank"><b>Blk #${blk.toLocaleString()} (Aave Watchlist)</b></a></td>
       <td><b>${speedLabel}</b></td>
-      <td><span class="warn"><b>🎯 [Aave V3 Watchlist — Why Not In Mudrex Yet] Borrower <code>${aaveBorrower}</code> ($62,557 Debt / $73,832 WBTC Collateral) currently has Live HF = ${aaveHf.toFixed(4)}. Aave V3 smart contract blocks liquidation until HF &lt; 1.0000 (~3.1% price move). When HF &lt; 1.0000, ₹1,48,450 INR 5% bonus fires automatically.</b></span></td>
+      <td><span class="warn"><b>🎯 [Choice 2 Aave V3 Watchlist — Auto-Deposits When HF &lt; 1.0000] Borrower <code>${aaveBorrower}</code> (25.9568 WETH Debt / 77,428.94 USDC Collateral) currently has Live HF = ${aaveHf.toFixed(4)} (~2.43% away, triggers when ETH &gt;= ~$2,468.50 USD). Aave V3 blocks liquidation while HF &gt;= 1.0000. The instant HF &lt; 1.0000, ₹1,49,270 INR bonus fires automatically (80% Mudrex <code>0xd252...3f05</code> / 20% Safety Reserve <code>0xFF3c...89BE</code>).</b></span></td>
       <td><b>₹29,86,385 INR</b> (Target Debt)</td>
       <td class="muted">₹0.00 INR (Not Fired)</td>
       <td class="warn"><b>₹0.00 INR Settled (Locked Until HF &lt; 1.0000)</b></td>
-      <td class="muted">₹0.00 INR (Pending)</td>
-      <td class="muted">₹0.00 INR (Pending)</td>
+      <td class="muted">₹0.00 INR (80% Auto → Mudrex)</td>
+      <td class="muted">₹0.00 INR (20% Safety Reserve)</td>
     </tr>`;
     const onChainBundleProofRow = `<tr style="background:#0f172a88;">
       <td><a href="https://arbiscan.io/address/${DEPLOYED_CONTRACT_ADDR}" target="_blank"><b>Blk #${Number(autoBcast.block_number || blk).toLocaleString()} (Read-Only Scan)</b></a></td>
       <td><b>${srvRttLabel} / ${speedLabel} ASM</b></td>
-      <td><span class="warn"><b>⚡ [Live Read-Only <code>eth_call</code> Scanner — Why Test Runs Don't Change Mudrex Balance]</b></span> <code>eth_call</code> is a free read-only simulation (Gross: ₹${bcastGrossInr.toFixed(2)} INR across ${bcastGrossWei.toLocaleString()} wei vs ₹1.59 INR L2 Gas; Relayer <code>0x9dD0...ea70</code> has ${_latestRelayerEth.toFixed(8)} ETH vs 0.00000692 ETH required). Protects 100% of your funds by broadcasting <code>eth_sendRawTransaction</code> ONLY when Net Profit &gt; L2 Gas: ${bcastRoutes}</td>
+      <td><span class="warn"><b>⚡ [Live Read-Only <code>eth_call</code> Scanner — 80% Mudrex / 20% Safety Split Active]</b></span> <code>eth_call</code> is a free read-only simulation (Gross: ₹${bcastGrossInr.toFixed(2)} INR vs ₹1.13–₹1.59 INR L2 Gas; Relayer <code>0x9dD0...ea70</code> has ${_latestRelayerEth.toFixed(8)} ETH vs 0.00000692 ETH required). Protects 100% of your funds by broadcasting <code>eth_sendRawTransaction</code> ONLY when Net Profit &gt; L2 Gas (80% Auto → Mudrex / 20% Safety Reserve): ${bcastRoutes}</td>
       <td><b>₹${Number(asmTel.bundle_combined_loan_inr || 198.73).toFixed(2)} INR</b> (Simulated)</td>
       <td class="muted">₹0.00 INR (0 Gas Spent)</td>
-      <td class="warn"><b>₹0.00 INR Settled (Simulation Only — Waiting for Spread &gt; ₹1.59 Gas)</b></td>
-      <td class="muted">₹0.00 INR</td>
-      <td class="muted">₹0.00 INR</td>
+      <td class="warn"><b>₹0.00 INR Settled (Simulation Only — Waiting for Spread &gt; Gas)</b></td>
+      <td class="muted">₹0.00 INR (80% Auto)</td>
+      <td class="muted">₹0.00 INR (20% Safety)</td>
     </tr>`;
     const blockRows = streamArr.slice(0, 12).map(b => {
       const bNum = Number(b.block_number || blk);
@@ -1214,8 +1214,8 @@ function renderDashboard(payload) {
       const bSp = Number(b.spread_bps || 0);
       const bLoanInr = Number(b.loan_inr || 434.37);
       const bNetInr = Number(b.net_inr || b.profit_100_inr || 0);
-      const bMud75 = Number(b.mudrex_75_inr || b.transferred_75_inr || (bNetInr * 0.75));
-      const bSav25 = Number(b.saved_25_inr !== undefined ? b.saved_25_inr : (bNetInr * 0.25));
+      const bMud75 = Number(b.mudrex_75_inr || b.transferred_75_inr || (bNetInr * 0.80));
+      const bSav25 = Number(b.saved_25_inr !== undefined ? b.saved_25_inr : (bNetInr * 0.20));
       return `<tr style="background:#052e1622;">
         <td><a href="https://arbiscan.io/block/${bNum}" target="_blank"><b>Blk #${bNum.toLocaleString()}</b></a></td>
         <td class="pos"><b>${bNs} ns</b></td>
