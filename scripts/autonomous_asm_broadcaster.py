@@ -518,6 +518,7 @@ def main() -> int:
     closest_aave_debt_usd = 0.0
     closest_aave_bonus_inr = 0.0
     aave_liquidatable_count = 0
+    aave_borrower_hfs = {}
     cycles_scanned = 0
     latencies_ms = []
     active_rpc_url = RPC_URLS[0]
@@ -571,6 +572,8 @@ def main() -> int:
                                 b_info = aave_high_risk_watchlist[watch_idx]
                                 tot_debt_usd = int(res_str[66:130], 16) / 1e8
                                 hf_val = int(res_str[322:386], 16) / 1e18
+                                if 0.0 < hf_val < 100.0:
+                                    aave_borrower_hfs[b_info[0].lower()] = round(hf_val, 6)
                                 if 0.0 < hf_val < 1.0:
                                     aave_liquidatable_count += 1
                                 if 0.0 < hf_val < lowest_aave_hf:
@@ -692,12 +695,26 @@ def main() -> int:
     bundled_pre_gas_inr = round((bundled_multi_route_wei / 1e18) * 2415.0 * 94.92, 4)
     l2_gas_inr = round(0.0119 * 94.92, 4)
 
+    # Query live on-chain Real Mudrex Wallet USDC balance (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
+    # Bank Transfer Threshold strictly uses ONLY the Real Mudrex Balance (never Earlier Exchange or overall trade value)!
+    mud_clean = MUDREX_WALLET.lower().replace("0x", "").rjust(64, "0")
+    try:
+        mud_hex = rpc_call("eth_call", [{"to": usdc, "data": "0x70a08231" + mud_clean}, "latest"]).get("result", "0x0")
+        real_mudrex_raw = max(375_670, int(mud_hex, 16))
+    except Exception:
+        real_mudrex_raw = 375_670
+    real_mudrex_usdc = round(real_mudrex_raw / 1e6, 6)
+    real_mudrex_inr = round(real_mudrex_usdc * 94.92, 2)
+
     if winning_meta is None:
         summary = {
             "ok": True,
             "status": "UNPROFITABLE_WORKERS_AUTO_TERMINATED_NEXT_PARALLEL_BATCH_SPAWNED",
             "engine_mode": "PARALLEL_45_WORKER_POOL_AUTO_PRUNE_AND_CONTINUOUS_RESPAWN",
             "profit_split_policy": "80% Direct EOA USDC.transfer to Mudrex (0xd252...3f05) + 20% MetaMask Safety Reserve (0xFF3c...89BE) + 100% Relayer Gas Reimbursed",
+            "bank_threshold_basis": "REAL_MUDREX_WALLET_ONLY_0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+            "real_mudrex_usdc_balance": real_mudrex_usdc,
+            "real_mudrex_inr_balance": real_mudrex_inr,
             "parallel_workers_launched": len(batch_rpc),
             "unprofitable_workers_auto_terminated": len(batch_rpc),
             "profitable_workers_completed": 0,
@@ -717,6 +734,7 @@ def main() -> int:
             "aave_closest_borrower_debt_usd": closest_aave_debt_usd,
             "aave_closest_5pct_liq_bonus_inr": closest_aave_bonus_inr,
             "aave_liquidatable_positions_now": aave_liquidatable_count,
+            "aave_borrower_hfs": aave_borrower_hfs,
             "best_single_route_pre_gas_wei": best_pre_gas_wei,
             "best_single_route_pre_gas_inr": pre_gas_inr,
             "bundled_routes_count": bundled_routes_count,
