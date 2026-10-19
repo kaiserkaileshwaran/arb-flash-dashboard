@@ -41,7 +41,7 @@
   "cumulative_flash_net_profit_inr_pre_tax": 78.67,
   "cumulative_flash_net_profit_inr_post_tax": 78.67,
   "verified_onchain_liquidations_count": 0,
-  "verified_intrablock_swaps_count": 801,
+  "verified_intrablock_swaps_count": 829,
   "per_trade_profit_ledger": [
     {
       "trade_number": 1,
@@ -550,6 +550,26 @@
       "est_flash_loan_usd": 2146.3,
       "est_liq_bonus_usd": 103.02,
       "est_liq_bonus_inr": 9778.86
+    },
+    {
+      "borrower": "0xb71ae1fe3a27d8b3f9a769f033374cfe1587b07a",
+      "health_factor": 1.1047,
+      "debt_usd": 42583.26,
+      "collateral_usd": 58084.36,
+      "distance_to_liquidation_pct": 9.48,
+      "est_flash_loan_usd": 21291.63,
+      "est_liq_bonus_usd": 1022.0,
+      "est_liq_bonus_inr": 97008.07
+    },
+    {
+      "borrower": "0x875e726fa2e984570b32f505c9c64f864d1d2e5b",
+      "health_factor": 1.1048,
+      "debt_usd": 113073.03,
+      "collateral_usd": 160161.31,
+      "distance_to_liquidation_pct": 9.49,
+      "est_flash_loan_usd": 56536.51,
+      "est_liq_bonus_usd": 2713.75,
+      "est_liq_bonus_inr": 257589.41
     },
     {
       "borrower": "0xf5415033f7211ea19ba2a448ec04db9c99ead270",
