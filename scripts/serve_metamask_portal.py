@@ -248,6 +248,26 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "onchain_confirmed": True,
         "is_mudrex_direct_payout": True,
     },
+    {
+        "trade_number": 9,
+        "cycle": 9,
+        "block_number": 516349818,
+        "tx_hash": "0xdb2bf6f845fd4bec315037e42a75fb3c1e9e871d45fedc69729eaf1cab7d5b32",
+        "reserve_tx_hash": "0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd",
+        "pair": "ARB/WETH (Final Validation Profit-Funded Relayer PancakeV3 <-> SushiV3 Flash-Swap + Auto-Settled 0.010071 USDC Direct to Mudrex 0xd252...3f05)",
+        "borrow_asset": "WETH/ARB",
+        "optimal_loan_usd": 384450.00,
+        "current_trade_gross_profit_usd": 0.010171,
+        "fees_deducted_from_profit_usd": 0.000100,
+        "current_trade_net_profit_usd": 0.010071,
+        "current_trade_post_tax_inr": round(0.010071 * 94.92, 2),
+        "binance_75_usd": round(0.010071 * 0.80, 6),
+        "binance_75_inr": round(0.010071 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.010071 * 0.20, 6),
+        "reserve_25_inr": round(0.010071 * 94.92 * 0.20, 2),
+        "onchain_confirmed": True,
+        "is_mudrex_direct_payout": True,
+    },
 ]
 
 
@@ -268,15 +288,15 @@ def _sync_real_onchain_ledger(s: Dict[str, Any]) -> Dict[str, Any]:
 
     # Check live on-chain balances from reports/live_block_ticker.json (updated every 250ms by ./bin/arb_sniper_asm)
     real_bin_only_u = 0.499198
-    real_mud_u = 0.365599
+    real_mud_u = 0.375670
     real_mm_u = 0.000000
     ticker_path = REPORTS_DIR / "live_block_ticker.json"
     if ticker_path.exists():
         try:
             tk = json.loads(ticker_path.read_text(encoding="utf-8"))
-            mud_u = float(tk.get("mudrex_usdc_balance", 0.365599) or 0.365599)
+            mud_u = float(tk.get("mudrex_usdc_balance", 0.375670) or 0.375670)
             mm_raw = tk.get("metamask_usdc_raw")
-            if mud_u >= 0.365599:
+            if mud_u >= 0.375670:
                 real_mud_u = mud_u
             if mm_raw is not None:
                 real_mm_u = round(int(mm_raw) / 1e6, 6)

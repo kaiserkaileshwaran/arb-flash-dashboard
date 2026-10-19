@@ -1,23 +1,23 @@
 {
   "ok": true,
-  "verified_at_epoch": 1792428719.634877,
+  "verified_at_epoch": 1792430553.2959628,
   "chain_id": 42161,
-  "live_block_number": 516344472,
+  "live_block_number": 516351016,
   "owner_metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
   "mudrex_deposit_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
   "binance_deposit_wallet": "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099",
-  "real_total_amount_100_usd": 0.864797,
-  "real_total_amount_100_inr": 82.09,
-  "real_amount_transferred_75_usd": 0.864797,
-  "real_amount_transferred_75_inr": 82.09,
-  "real_mudrex_usdc_balance": 0.365599,
-  "real_mudrex_inr_balance": 34.7,
+  "real_total_amount_100_usd": 0.874868,
+  "real_total_amount_100_inr": 83.04,
+  "real_amount_transferred_75_usd": 0.874868,
+  "real_amount_transferred_75_inr": 83.04,
+  "real_mudrex_usdc_balance": 0.37567,
+  "real_mudrex_inr_balance": 35.66,
   "real_amount_transferred_pct": 100.0,
   "real_amount_saved_25_usd": 0.0,
   "real_amount_saved_25_inr": 0.0,
   "real_amount_saved_pct": 0.0,
   "real_metamask_eth_balance": 0.00011693,
-  "real_relayer_eth_balance": 1.913e-05,
+  "real_relayer_eth_balance": 6.43e-06,
   "verified_onchain_trades": [
     {
       "trade_number": 1,
@@ -178,6 +178,26 @@
       "binance_75_inr": 2.73,
       "reserve_25_usd": 0.007198,
       "reserve_25_inr": 0.68
+    },
+    {
+      "trade_number": 9,
+      "cycle": 9,
+      "block_number": 516349818,
+      "tx_hash": "0xdb2bf6f845fd4bec315037e42a75fb3c1e9e871d45fedc69729eaf1cab7d5b32",
+      "reserve_tx_hash": "0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd",
+      "real_onchain_settled": true,
+      "onchain_confirmed": true,
+      "pair": "ARB/WETH (Final Validation Profit-Funded Relayer PancakeV3 <-> SushiV3 Flash-Swap + Auto-Settled 10,071 Units Direct to Mudrex 0xd252...3f05)",
+      "borrow_asset": "WETH/ARB",
+      "optimal_loan_usd": 384450.0,
+      "current_trade_gross_profit_usd": 0.03227,
+      "fees_deducted_from_profit_usd": 0.022199,
+      "current_trade_net_profit_usd": 0.010071,
+      "current_trade_post_tax_inr": 0.96,
+      "binance_75_usd": 0.008057,
+      "binance_75_inr": 0.76,
+      "reserve_25_usd": 0.002014,
+      "reserve_25_inr": 0.19
     }
   ],
   "verified_tx_receipts": [
@@ -390,6 +410,31 @@
         }
       ],
       "arbiscan_url": "https://arbiscan.io/tx/0x72ca01e7eb14cc8ecddc54b60ba444da6909494fb31b6f77845cfdeb123446dc"
+    },
+    {
+      "tx_hash": "0xdb2bf6f845fd4bec315037e42a75fb3c1e9e871d45fedc69729eaf1cab7d5b32",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516349818,
+      "gas_used": 316477,
+      "gas_fee_usd": 0.015526,
+      "usdc_transfers": [],
+      "arbiscan_url": "https://arbiscan.io/tx/0xdb2bf6f845fd4bec315037e42a75fb3c1e9e871d45fedc69729eaf1cab7d5b32"
+    },
+    {
+      "tx_hash": "0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516349834,
+      "gas_used": 136262,
+      "gas_fee_usd": 0.006673,
+      "usdc_transfers": [
+        {
+          "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+          "amount_usdc": 0.010071
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd"
     }
   ]
 }

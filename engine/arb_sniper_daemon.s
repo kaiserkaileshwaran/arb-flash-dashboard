@@ -6842,6 +6842,16 @@ l_.str.69:                              ; @.str.69
 	.section	__DATA,__data
 	.p2align	3, 0x0                          ; @g_block_ring
 _g_block_ring:
+	.quad	516349818                       ; 0x1ec6df7a
+	.asciz	"[Confirmed Tx #9: 0xdb2b...5b32] ARB/WETH (PancakeV3 <-> SushiV3 Flash-Swap -> Mudrex 0x921d...4edd)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX\000\000\000\000"
+	.quad	0x402cb33333333333              ; double 14.35
+	.quad	0x41816696d0000000              ; double 36491994
+	.quad	0x3feeb851eb851eb8              ; double 0.95999999999999996
+	.quad	0x3fe851eb851eb852              ; double 0.76000000000000001
+	.quad	0x3f8080303c07ee0b              ; double 0.0080569999999999999
+	.quad	0x3fc851eb851eb852              ; double 0.19
+	.quad	0x4057400000000000              ; double 93
 	.quad	516343677                       ; 0x1ec6c77d
 	.asciz	"[Confirmed Tx #8: 0x2121...e7bb] UNI/WETH (Max-Edge HF<5.0 SushiV3 <-> PancakeV3 Flash-Swap -> Mudrex)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX\000\000\000\000"
@@ -6922,7 +6932,7 @@ _g_block_ring:
 	.quad	0x3fc8ef1348b22079              ; double 0.194796
 	.quad	0x40127ae147ae147b              ; double 4.6200000000000001
 	.quad	0x4064c00000000000              ; double 166
-	.space	2688
+	.space	2464
 
 	.section	__TEXT,__cstring,cstring_literals
 l_.str.71:                              ; @.str.71
@@ -6947,7 +6957,7 @@ l_str.77:                               ; @str.77
 	.p2align	3, 0x0                          ; @_MergedGlobals
 __MergedGlobals:
 	.long	1                               ; 0x1
-	.long	8                               ; 0x8
+	.long	9                               ; 0x9
 	.quad	0x40a2f30000000000              ; double 2425.5
 	.quad	0x40f3fe66147ae148              ; double 81894.380000000005
 	.quad	0x3fc8ea077036c9c1              ; double 0.19464200000000001
@@ -6982,14 +6992,14 @@ __MergedGlobals:
 	.quad	0x3ff08ce703afb7e9              ; double 1.0344
 	.quad	0x4057400000000000              ; double 93
 	.quad	0x3fb7ced916872b02              ; double 0.092999999999999999
-	.quad	19130000000000                  ; 0x11660cdac400
-	.quad	516344472                       ; 0x1ec6ca98
-	.quad	516343677                       ; 0x1ec6c77d
-	.quad	8                               ; 0x8
-	.quad	0x405485c28f5c28f6              ; double 82.090000000000003
-	.quad	0x40506ae147ae147b              ; double 65.670000000000002
-	.quad	0x40306b851eb851ec              ; double 16.420000000000002
-	.quad	365599                          ; 0x5941f
+	.quad	6430000000000                   ; 0x5d919ddac00
+	.quad	516351016                       ; 0x1ec6e428
+	.quad	516349818                       ; 0x1ec6df7a
+	.quad	9                               ; 0x9
+	.quad	0x4054c28f5c28f5c3              ; double 83.040000000000006
+	.quad	0x40509b851eb851ec              ; double 66.430000000000007
+	.quad	0x40309c28f5c28f5c              ; double 16.609999999999999
+	.quad	375670                          ; 0x5bb76
 	.quad	499198                          ; 0x79dfe
 	.quad	116930000000000                 ; 0x6a58e31d1400
 	.quad	9                               ; 0x9

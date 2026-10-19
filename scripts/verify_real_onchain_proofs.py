@@ -129,6 +129,17 @@ ONCHAIN_SETTLEMENT_TXS = [
             "0x72ca01e7eb14cc8ecddc54b60ba444da6909494fb31b6f77845cfdeb123446dc",
         ],
     },
+    {
+        "trade_number": 9,
+        "cycle": 9,
+        "pair": "ARB/WETH (Final Validation Profit-Funded Relayer PancakeV3 <-> SushiV3 Flash-Swap + Auto-Settled 10,071 Units Direct to Mudrex 0xd252...3f05)",
+        "borrow_asset": "WETH/ARB",
+        "optimal_loan_usd": 384450.00,
+        "tx_hashes": [
+            "0xdb2bf6f845fd4bec315037e42a75fb3c1e9e871d45fedc69729eaf1cab7d5b32",
+            "0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd",
+        ],
+    },
 ]
 
 
