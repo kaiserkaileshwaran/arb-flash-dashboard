@@ -2191,6 +2191,12 @@ setInterval(refreshRelayerAuthBanner, 3000);
 </html>
 """
 
+if (BASE_DIR / "index.html").exists():
+    try:
+        HTML_PAGE = (BASE_DIR / "index.html").read_text(encoding="utf-8")
+    except Exception:
+        pass
+
 
 def get_live_wallet_balances_payload(
     wallet: str = "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
