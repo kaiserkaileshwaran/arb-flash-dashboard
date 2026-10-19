@@ -2472,7 +2472,13 @@ class LivePortalHandler(http.server.BaseHTTPRequestHandler):
             b = qs.get("binance", ["0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099"])[0]
             self._send_json(verify_arbitrum_tx_receipt(tx, b))
             return
-        raw = HTML_PAGE.encode("utf-8")
+        page_str = HTML_PAGE
+        if (BASE_DIR / "index.html").exists():
+            try:
+                page_str = (BASE_DIR / "index.html").read_text(encoding="utf-8")
+            except Exception:
+                pass
+        raw = page_str.encode("utf-8")
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
