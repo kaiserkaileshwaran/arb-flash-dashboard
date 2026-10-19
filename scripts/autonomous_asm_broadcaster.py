@@ -45,13 +45,14 @@ def _load_local_relayer_env() -> tuple:
 
 RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
 RPC_URLS = [
-    "https://arb1.arbitrum.io/rpc",
-    "https://arbitrum-one-rpc.publicnode.com",
-    "https://arb-pokt.nodies.app",
     "https://arbitrum.drpc.org",
+    "https://arbitrum-one-rpc.publicnode.com",
+    "https://arb1.arbitrum.io/rpc",
+    "https://arb-pokt.nodies.app",
+    "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX",
 ]
 RPC_URL = RPC_URLS[0]
-MIN_GAS_RESERVE_WEI = 12_000_000_000_000  # Keep 0.000012 ETH (~2 full 290k-gas Flash-Swap txs) in relayer gas reserve
+MIN_GAS_RESERVE_WEI = 25_000_000_000_000  # Keep 0.000025 ETH (~5 full Flash-Swap txs) permanently in relayer gas reserve
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
