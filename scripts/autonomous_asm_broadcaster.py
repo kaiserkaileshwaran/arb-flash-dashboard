@@ -239,7 +239,17 @@ def main() -> int:
     uni30_rdnt_weth = "0x446bf9748b4ea044dd759d9b9311c70491df8f29"
     cam_pepe_weth = "0x224cbc20a8ac043bac4734200e6c247ab1ab6055"
     uni30_pepe_weth = "0x7f153bdd5328ad8e30127a1bf2e5530bed33427a"
-    # Newly discovered deep cross-tier V3 pools (WETH/ARB 1bp & 5bp, WETH/USDT UniV3 1bp & 5bp, WETH/USDC.e 1bp & 5bp)
+    # Newly discovered deep cross-tier & SushiSwap V3 / PancakeSwap V3 / UniV3 pools
+    uni_tok = "0xFa7F8980b0f1E64A2062791cc3b0871572f1F7f0"
+    dai_tok = "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1"
+    sushi30_uni_weth  = "0xf57dbfb951136d273c793f40f546160c9b8a0edb"
+    pcs5_uni_weth     = "0xad198ad5f32cba24bcafa6e9ffece312c2ddcd6f"
+    pcs25_link_weth   = "0x0ba3d55678c019b8101061855fe4ea8d3ece784f"
+    sushi30_link_weth = "0x55a7e0ab34038d75d0e2118254fd84fdedcd4e65"
+    sushi5_weth_arb   = "0x99543bf98ca1830aa20d3eb12c1b9962f8eadc11"
+    sushi5_weth_usdce = "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40"
+    pcs5_weth_dai     = "0x000e082e68623294bdda4da4e608f20fed91621d"
+    uni5_weth_dai     = "0x31fa55e03bad93c7f8affdd2ec616ebfde246001"
     uni1_weth_usdt = "0x42161084d0672e1d3f26a9b53e653be2084ff19c"
     uni5_weth_usdt = "0x641c00a822e8b671738d32a431a4fb6074e5c79d"
     uni1_weth_arb  = "0x89a4026e9ade251c67b7fb38054931a39936d9c5"
@@ -360,22 +370,26 @@ def main() -> int:
         })
     aave_hf_end_id = len(batch_rpc)
 
-    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at sweet-spot sizes; exact 40 total RPC calls = 2x20 chunks)
+    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at sweet-spot sizes)
     probe_defs = [
-        ("USDT_UNI1_PCS1",   uni1_weth_usdt,   pcs_weth_usdt,   weth, usdt,  1_500_000_000_000_000, True,  False),
-        ("ARB_PCS1_UNI1",    pcs1_weth_arb,    uni1_weth_arb,   weth, arb,     150_000_000_000_000, True,  False),
-        ("ARB_PCS5_UNI1",    pcs5_weth_arb,    uni1_weth_arb,   weth, arb,     150_000_000_000_000, True,  False),
-        ("ARB_UNI5_UNI1",    uni5_weth_arb,    uni1_weth_arb,   weth, arb,     150_000_000_000_000, True,  False),
-        ("ARB_PCS1_UNI5",    pcs1_weth_arb,    uni5_weth_arb,   weth, arb,     600_000_000_000_000, True,  False),
-        ("ARB_PCS5_UNI5",    pcs5_weth_arb,    uni5_weth_arb,   weth, arb,     500_000_000_000_000, True,  False),
-        ("USDCE_UNI1_PCS1",  uni1_weth_usdce,  pcs1_weth_usdce, weth, usdc_e,   50_000_000_000_000, True,  False),
-        ("USDCE_PCS1_UNI5",  pcs1_weth_usdce,  uni5_weth_usdce, weth, usdc_e,  500_000_000_000_000, True,  False),
-        ("USDCE_UNI5_UNI1",  uni5_weth_usdce,  uni1_weth_usdce, weth, usdc_e,   50_000_000_000_000, True,  False),
-        ("USDCE_UNI1_UNI5",  uni1_weth_usdce,  uni5_weth_usdce, weth, usdc_e,   50_000_000_000_000, True,  False),
-        ("USDT_CAM_PCS1",    cam_weth_usdt,    pcs_weth_usdt,   weth, usdt,  1_500_000_000_000_000, True,  False),
-        ("USDT_CAM_UNI1",    cam_weth_usdt,    uni1_weth_usdt,  weth, usdt,    500_000_000_000_000, True,  False),
-        ("WSTETH_UNI5_UNI1", uni5_wsteth_weth, uni_wsteth_weth, weth, wsteth,  150_000_000_000_000, False, True),
-        ("WEETH_UNI1_UNI5",  uni1_weeth_weth,  uni5_weeth_weth, weth, weeth,    20_000_000_000_000, False, True),
+        ("UNI_SUSHI30_PCS5",   sushi30_uni_weth,  pcs5_uni_weth,    weth, uni_tok, 150_000_000_000_000, True,  False),
+        ("LINK_PCS25_SUSHI30", pcs25_link_weth,   sushi30_link_weth,weth, link,    150_000_000_000_000, True,  False),
+        ("LINK_PCS5_SUSHI30",  pcs_link_weth,     sushi30_link_weth,weth, link,    150_000_000_000_000, True,  False),
+        ("LINK_UNI5_SUSHI30",  uni_link_weth,     sushi30_link_weth,weth, link,    150_000_000_000_000, True,  False),
+        ("USDCE_SUSHI5_UNI1",  sushi5_weth_usdce, uni1_weth_usdce,  weth, usdc_e,  150_000_000_000_000, True,  False),
+        ("USDCE_UNI1_SUSHI5",  uni1_weth_usdce,   sushi5_weth_usdce,weth, usdc_e,  150_000_000_000_000, True,  False),
+        ("USDCE_SUSHI5_PCS1",  sushi5_weth_usdce, pcs1_weth_usdce,  weth, usdc_e,  500_000_000_000_000, True,  False),
+        ("USDCE_PCS1_SUSHI5",  pcs1_weth_usdce,   sushi5_weth_usdce,weth, usdc_e,  500_000_000_000_000, True,  False),
+        ("USDCE_UNI5_UNI1",    uni5_weth_usdce,   uni1_weth_usdce,  weth, usdc_e,  150_000_000_000_000, True,  False),
+        ("USDCE_UNI5_PCS1",    uni5_weth_usdce,   pcs1_weth_usdce,  weth, usdc_e,  500_000_000_000_000, True,  False),
+        ("ARB_PCS5_SUSHI5",    pcs5_weth_arb,     sushi5_weth_arb,  weth, arb,     600_000_000_000_000, True,  False),
+        ("ARB_UNI5_SUSHI5",    uni5_weth_arb,     sushi5_weth_arb,  weth, arb,     600_000_000_000_000, True,  False),
+        ("ARB_PCS1_UNI1",      pcs1_weth_arb,     uni1_weth_arb,    weth, arb,     150_000_000_000_000, True,  False),
+        ("DAI_PCS5_UNI5",      pcs5_weth_dai,     uni5_weth_dai,    weth, dai_tok, 150_000_000_000_000, True,  False),
+        ("USDT_PCS1_CAM",      pcs_weth_usdt,     cam_weth_usdt,    weth, usdt,  1_500_000_000_000_000, True,  False),
+        ("USDT_UNI1_PCS1",     uni1_weth_usdt,    pcs_weth_usdt,    weth, usdt,    800_000_000_000_000, True,  False),
+        ("WSTETH_UNI5_UNI1",   uni5_wsteth_weth,  uni_wsteth_weth,  weth, wsteth,  150_000_000_000_000, False, True),
+        ("WEETH_UNI1_UNI5",    uni1_weeth_weth,   uni5_weeth_weth,  weth, weeth,    20_000_000_000_000, False, True),
     ]
     probe_start_id = len(batch_rpc) + 1
     for p_idx, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in enumerate(probe_defs):

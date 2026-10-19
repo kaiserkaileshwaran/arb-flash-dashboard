@@ -540,59 +540,63 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":12},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x7fCDC35463E3770c2fB992716Cd070B63540b947\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":13},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x35218a1cbaC5Bbc3E57fd9Bd38219D37571b3537\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":14},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xDeB89dE4bb6ecf5bFed581EB049308B52d9B2dA7\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":15},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x99543bf98ca1830aa20d3eb12c1b9962f8eadc11\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":15},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xe754841b77c874135caca3386676e886459c2d61\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":16},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xc31e54c7a869b9fcbecc14363cf510d1c41fa443\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":17},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":18},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xc6f780497a95e246eb9449f5e4770916dcd6396a\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":19},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xa17afcab059f3c6751f5b64347b5a503c3291868\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":20},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xbe3ad6a5669dc0b8b12febc03608860c31e2eef6\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":21},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xf57dbfb951136d273c793f40f546160c9b8a0edb\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":20},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xad198ad5f32cba24bcafa6e9ffece312c2ddcd6f\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":21},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xfae2ae0a9f87fd35b5b0e24b47bac796a7eefea1\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":22}"
         "]";
 
     const char *slot0_batch_b =
         "["
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":23},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xD845f7D4F4deb9fF5BcF09D140Ef13718F6f6C71\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":24},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x4bfc22a4da7f31f8a912a79a7e44a822398b4390\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":25},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x0ba3d55678c019b8101061855fe4ea8d3ece784f\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":23},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x55a7e0ab34038d75d0e2118254fd84fdedcd4e65\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":24},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x91308bc9ce8ca2db82aa30c65619856cc939d907\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":25},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x7cCCba38e2D959FE135e79aEBB57ccB27b128358\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":26},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x42161084d0672e1d3f26a9b53e653be2084ff19c\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":27},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x4fc7ac44dae553464d92c049175133239a8705c1\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":28},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x89a4026e9ade251c67b7fb38054931a39936d9c5\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":29},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xb93f8a075509e71325c1c2fc8fa6a75f2d536a13\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":30},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x0d7c4b40018969f81750d0a164c3839a77353efb\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":31},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x905dfcd5649217c42684f23958568e533c711aa3\",\"data\":\"0x0902f1ac\"},\"latest\"],\"id\":32},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x15e444da5b343c5a0931f5d3e85d158d1efc3d40\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":32},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x389938cf14be379217570d8e4619e51fbdafaa21\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":33},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x000e082e68623294bdda4da4e608f20fed91621d\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":34},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x31fa55e03bad93c7f8affdd2ec616ebfde246001\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":35},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\"},\"latest\"],\"id\":36},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb\"},\"latest\"],\"id\":37}"
         "]";
 
-    static double p_uni_5          = 2398.50;
-    static double p_uni_1          = 2398.20;
-    static double p_cam_1          = 2399.50;
-    static double p_pcs_1          = 2398.90;
-    static double p_uni_wsteth     = 1.245940;
-    static double p_cam_wsteth     = 1.245980;
-    static double p_uni1_usdce     = 2397.70;
-    static double p_uni5_usdce     = 2398.60;
-    static double p_pcs1_usdce     = 2397.45;
-    static double p_pcs1_weth_arb  = 12650.0;
-    static double p_uni5_weth_arb  = 12654.0;
-    static double p_uni1_weth_arb  = 12650.5;
-    static double p_pcs5_weth_arb  = 12649.5;
-    static double p_cam_usdc_t     = 1.001050;
-    static double p_uni_usdc_t     = 1.001030;
-    static double p_cam_arb_u      = 0.189500;
-    static double p_uni_arb_u      = 0.189600;
-    static double p_cam_wbtc_e     = 33.990000;
-    static double p_pcs_wbtc_e     = 33.980000;
-    static double p_cam_weth_t     = 2401.20;
-    static double p_uni1_weth_t    = 2400.70;
-    static double p_pcs1_weth_t    = 2401.40;
-    static double p_uni5_wsteth    = 1.245960;
-    static double p_sushi_weth_u   = 2397.10;
-    static double hf_aave_top1     = 1.0198;
-    static double hf_aave_top2     = 1.0344;
+    static double p_uni_5           = 2425.50;
+    static double p_uni_1           = 2425.20;
+    static double p_cam_1           = 2425.80;
+    static double p_pcs_1           = 2425.40;
+    static double p_uni_wsteth      = 1.246324;
+    static double p_sushi5_weth_arb = 12374.83;
+    static double p_uni1_usdce      = 2431.98;
+    static double p_uni5_usdce      = 2425.05;
+    static double p_pcs1_usdce      = 2429.75;
+    static double p_pcs1_weth_arb   = 12357.87;
+    static double p_uni5_weth_arb   = 12351.80;
+    static double p_uni1_weth_arb   = 12307.79;
+    static double p_pcs5_weth_arb   = 12340.52;
+    static double p_sushi30_uni     = 335.4870;
+    static double p_pcs5_uni        = 329.2308;
+    static double p_cam_arb_u       = 0.196500;
+    static double p_pcs25_link      = 202.8847;
+    static double p_sushi30_link    = 199.2787;
+    static double p_uni5_link       = 200.9659;
+    static double p_cam_weth_t      = 2428.32;
+    static double p_uni1_weth_t     = 2429.32;
+    static double p_pcs1_weth_t     = 2429.12;
+    static double p_uni5_wsteth     = 1.244551;
+    static double p_sushi5_usdce    = 2421.82;
+    static double p_pcs5_dai        = 2431.61;
+    static double p_uni5_dai        = 2421.58;
+    static double hf_aave_top1      = 1.0198;
+    static double hf_aave_top2      = 1.0344;
 
     if (curl) {
         for (int attempt = 0; attempt < 4; attempt++) {
@@ -608,32 +612,34 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             if (curl_easy_perform(curl) == CURLE_OK && buf->data && buf->size > 128 && find_batch_result_for_id(buf->data, 10)) {
                 curl_easy_setopt(curl, CURLOPT_POSTFIELDS, slot0_batch_b);
                 if (curl_easy_perform(curl) == CURLE_OK && find_batch_result_for_id(buf->data, 28)) {
-                    p_uni_5         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 10), 1e12,  500.0, 20000.0, p_uni_5);
-                    p_uni_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 11), 1e12,  500.0, 20000.0, p_uni_1);
-                    p_cam_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 12), 1e12,  500.0, 20000.0, p_cam_1);
-                    p_pcs_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 13), 1e12,  500.0, 20000.0, p_pcs_1);
-                    p_uni_wsteth    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 14), 1.0,   0.8,   2.5,     p_uni_wsteth);
-                    p_cam_wsteth    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 15), 1.0,   0.8,   2.5,     p_cam_wsteth);
-                    p_uni1_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 16), 1e12,  500.0, 20000.0, p_uni1_usdce);
-                    p_uni5_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e12,  500.0, 20000.0, p_uni5_usdce);
-                    p_pcs1_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   100.0, 100000.0,p_pcs1_weth_arb);
-                    p_uni5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   100.0, 100000.0,p_uni5_weth_arb);
-                    p_cam_usdc_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 20), 1.0,   0.98,  1.02,    p_cam_usdc_t);
-                    p_uni_usdc_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 21), 1.0,   0.98,  1.02,    p_uni_usdc_t);
-                    p_cam_arb_u     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 22), 1e12,  0.01,  10.0,    p_cam_arb_u);
-                    p_uni_arb_u     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 23), 1e12,  0.01,  10.0,    p_uni_arb_u);
-                    p_cam_wbtc_e    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 24), 1e-10, 5.0,   100.0,   p_cam_wbtc_e);
-                    p_pcs_wbtc_e    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 25), 1e-10, 5.0,   100.0,   p_pcs_wbtc_e);
-                    p_cam_weth_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 26), 1e12,  500.0, 20000.0, p_cam_weth_t);
-                    p_uni1_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 27), 1e12,  500.0, 20000.0, p_uni1_weth_t);
-                    p_pcs1_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 28), 1e12,  500.0, 20000.0, p_pcs1_usdce);
-                    p_uni1_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 29), 1.0,   100.0, 100000.0,p_uni1_weth_arb);
-                    p_uni5_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 30), 1.0,   0.8,   2.5,     p_uni5_wsteth);
-                    p_pcs5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 31), 1.0,   100.0, 100000.0,p_pcs5_weth_arb);
-                    p_sushi_weth_u  = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 32), 1e18, 1e6,  500.0, 20000.0, p_sushi_weth_u);
-                    p_pcs1_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 33), 1e12,  500.0, 20000.0, p_pcs1_weth_t);
-                    hf_aave_top1    = decode_aave_hf(find_batch_result_for_id(buf->data, 36), hf_aave_top1);
-                    hf_aave_top2    = decode_aave_hf(find_batch_result_for_id(buf->data, 37), hf_aave_top2);
+                    p_uni_5           = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 10), 1e12,  500.0, 20000.0, p_uni_5);
+                    p_uni_1           = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 11), 1e12,  500.0, 20000.0, p_uni_1);
+                    p_cam_1           = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 12), 1e12,  500.0, 20000.0, p_cam_1);
+                    p_pcs_1           = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 13), 1e12,  500.0, 20000.0, p_pcs_1);
+                    p_uni_wsteth      = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 14), 1.0,   0.8,   2.5,     p_uni_wsteth);
+                    p_sushi5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 15), 1.0,   100.0, 100000.0,p_sushi5_weth_arb);
+                    p_uni1_usdce      = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 16), 1e12,  500.0, 20000.0, p_uni1_usdce);
+                    p_uni5_usdce      = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e12,  500.0, 20000.0, p_uni5_usdce);
+                    p_pcs1_weth_arb   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   100.0, 100000.0,p_pcs1_weth_arb);
+                    p_uni5_weth_arb   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   100.0, 100000.0,p_uni5_weth_arb);
+                    p_sushi30_uni     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 20), 1.0,   20.0,  5000.0,  p_sushi30_uni);
+                    p_pcs5_uni        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 21), 1.0,   20.0,  5000.0,  p_pcs5_uni);
+                    p_cam_arb_u       = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 22), 1e12,  0.01,  10.0,    p_cam_arb_u);
+                    p_pcs25_link      = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 23), 1.0,   10.0,  2000.0,  p_pcs25_link);
+                    p_sushi30_link    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 24), 1.0,   10.0,  2000.0,  p_sushi30_link);
+                    p_uni5_link       = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 25), 1.0,   10.0,  2000.0,  p_uni5_link);
+                    p_cam_weth_t      = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 26), 1e12,  500.0, 20000.0, p_cam_weth_t);
+                    p_uni1_weth_t     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 27), 1e12,  500.0, 20000.0, p_uni1_weth_t);
+                    p_pcs1_usdce      = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 28), 1e12,  500.0, 20000.0, p_pcs1_usdce);
+                    p_uni1_weth_arb   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 29), 1.0,   100.0, 100000.0,p_uni1_weth_arb);
+                    p_uni5_wsteth     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 30), 1.0,   0.8,   2.5,     p_uni5_wsteth);
+                    p_pcs5_weth_arb   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 31), 1.0,   100.0, 100000.0,p_pcs5_weth_arb);
+                    p_sushi5_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 32), 1e12,  500.0, 20000.0, p_sushi5_usdce);
+                    p_pcs1_weth_t     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 33), 1e12,  500.0, 20000.0, p_pcs1_weth_t);
+                    p_pcs5_dai        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 34), 1.0,   500.0, 20000.0, p_pcs5_dai);
+                    p_uni5_dai        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 35), 1.0,   500.0, 20000.0, p_uni5_dai);
+                    hf_aave_top1      = decode_aave_hf(find_batch_result_for_id(buf->data, 36), hf_aave_top1);
+                    hf_aave_top2      = decode_aave_hf(find_batch_result_for_id(buf->data, 37), hf_aave_top2);
                     if (hf_aave_top2 < hf_aave_top1) hf_aave_top1 = hf_aave_top2;
                     break;
                 }
@@ -643,88 +649,88 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
 
     const int N = 16;
     const char *route_names[16] = {
+        "[Cross-DEX Spatial] UNI/WETH (SushiSwap V3 30bps <-> PancakeSwap V3 5bps)",
+        "[Cross-DEX Spatial] LINK/WETH (PancakeSwap V3 25bps <-> SushiSwap V3 30bps)",
+        "[Choice 3 Cross-Tier] WETH/USDC.e (UniV3 1bp <-> SushiSwap V3 5bps)",
+        "[Cross-DEX Spatial] LINK/WETH (UniV3 5bps <-> SushiSwap V3 30bps)",
+        "[Choice 3 Cross-Tier] WETH/USDC.e (PancakeSwap V3 1bp <-> SushiSwap V3 5bps)",
+        "[Cross-DEX Spatial] WETH/ARB (PancakeSwap V3 5bps <-> SushiSwap V3 5bps)",
+        "[Cross-DEX Spatial] WETH/ARB (UniV3 5bps <-> SushiSwap V3 5bps)",
+        "[Cross-DEX Spatial] WETH/DAI (PancakeSwap V3 5bps <-> UniV3 5bps)",
+        "[Choice 3 Cross-Tier] WETH/ARB (PancakeSwap V3 1bp <-> UniV3 1bp)",
+        "WETH/USDT (UniV3 1.00bps <-> PancakeSwap V3 1.00bps)",
         "WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps)",
-        "WETH/USDC (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
-        "[Choice 3 Cross-Tier] WETH/USDC.e (UniV3 1bp <-> UniV3 5bps)",
-        "wstETH/WETH (Camelot V3 0.50bps <-> UniV3 1.00bps)",
-        "[Choice 3 Cross-Tier] WETH/USDC.e (PancakeSwap V3 1bp <-> UniV3 5bps)",
-        "[Choice 3 Cross-Tier] WETH/ARB (PancakeSwap V3 1bp <-> UniV3 5bps)",
-        "USDC/USDT (Camelot V3 0.25bps <-> UniV3 1.00bps)",
-        "ARB/USDC (Camelot V3 2.50bps <-> UniV3 5.00bps)",
-        "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps)",
-        "WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)",
-        "[Option 3 Triangular 3-Hop] WETH -> USDT (Cam1) -> USDC (Uni1) -> WETH (Uni1)",
         "[Choice 3 Cross-Tier] WETH/ARB (UniV3 1bp <-> UniV3 5bps)",
         "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
-        "[Option 3 Triangular 3-Hop] WETH -> ARB (PCS1) -> USDC (Cam2.5) -> WETH (Uni1)",
+        "[Option 3 Triangular 3-Hop] WETH -> ARB (Sushi5) -> USDC (Cam2.5) -> WETH (Uni1)",
         "[Choice 3 Cross-Tier] wstETH/WETH (UniV3 1bp <-> UniV3 5bps)",
         "[Option 2 Aave V3 37-Whale Liq] 0x270d..e6b2 & 0x954b..44bb (₹4.46L Bonus when HF<1.0)"
     };
     const char *borrow_syms[16] = {
-        "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "USDT", "USDC",
+        "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH",
         "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH"
     };
 
     double aave_liq_p1  = p_uni_1;
     double aave_liq_p2  = (hf_aave_top1 < 1.0) ? (p_uni_1 * 1.0500) : (p_uni_1 / hf_aave_top1);
     double aave_liq_fee = (hf_aave_top1 < 1.0) ? 1.00 : 500.00;
-    double tri_weth_usdt_usdc = (p_uni_usdc_t > 0.5) ? (p_cam_weth_t / p_uni_usdc_t) : p_cam_weth_t;
-    double tri_weth_arb_usdc  = (p_pcs1_weth_arb > 1.0) ? (p_pcs1_weth_arb * p_cam_arb_u) : p_uni_1;
+    double tri_weth_arb_usdc = (p_sushi5_weth_arb > 1.0) ? (p_sushi5_weth_arb * p_cam_arb_u) : p_uni_1;
 
     double p1[16] __attribute__((aligned(64))) = {
-        p_cam_1,
-        p_cam_1,
+        (p_sushi30_uni > 1.0) ? (p_uni_5 / p_sushi30_uni) : 7.23,
+        (p_pcs25_link > 1.0)  ? (p_uni_5 / p_pcs25_link)  : 11.95,
         p_uni1_usdce,
-        p_cam_wsteth * p_uni_5,
+        (p_uni5_link > 1.0)   ? (p_uni_5 / p_uni5_link)   : 12.07,
         p_pcs1_usdce,
-        (p_pcs1_weth_arb > 1.0) ? (p_uni_5 / p_pcs1_weth_arb) : 0.1908,
-        p_cam_usdc_t,
-        p_cam_arb_u,
-        p_cam_wbtc_e * p_uni_5,
-        p_cam_weth_t,
-        tri_weth_usdt_usdc,
-        (p_uni1_weth_arb > 1.0) ? (p_uni_5 / p_uni1_weth_arb) : 0.1908,
+        (p_pcs5_weth_arb > 1.0) ? (p_uni_5 / p_pcs5_weth_arb) : 0.1965,
+        (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1966,
+        p_pcs5_dai,
+        (p_pcs1_weth_arb > 1.0) ? (p_uni_5 / p_pcs1_weth_arb) : 0.1963,
+        p_uni1_weth_t,
+        p_cam_1,
+        (p_uni1_weth_arb > 1.0) ? (p_uni_5 / p_uni1_weth_arb) : 0.1971,
         p_cam_weth_t,
         tri_weth_arb_usdc,
         p_uni_wsteth * p_uni_5,
         aave_liq_p1
     };
     double p2[16] __attribute__((aligned(64))) = {
+        (p_pcs5_uni > 1.0)      ? (p_uni_5 / p_pcs5_uni)      : 7.36,
+        (p_sushi30_link > 1.0)  ? (p_uni_5 / p_sushi30_link)  : 12.17,
+        p_sushi5_usdce,
+        (p_sushi30_link > 1.0)  ? (p_uni_5 / p_sushi30_link)  : 12.17,
+        p_sushi5_usdce,
+        (p_sushi5_weth_arb > 1.0) ? (p_uni_5 / p_sushi5_weth_arb) : 0.1959,
+        (p_sushi5_weth_arb > 1.0) ? (p_uni_5 / p_sushi5_weth_arb) : 0.1959,
+        p_uni5_dai,
+        (p_uni1_weth_arb > 1.0) ? (p_uni_5 / p_uni1_weth_arb) : 0.1971,
+        p_pcs1_weth_t,
         p_uni_1,
-        p_pcs_1,
-        p_uni5_usdce,
-        p_uni_wsteth * p_uni_5,
-        p_uni5_usdce,
-        (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1908,
-        p_uni_usdc_t,
-        p_uni_arb_u,
-        p_pcs_wbtc_e * p_uni_5,
-        p_uni1_weth_t,
-        p_uni_1,
-        (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1908,
+        (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1966,
         p_pcs1_weth_t,
         p_uni_1,
         p_uni5_wsteth * p_uni_5,
         aave_liq_p2
     };
+    /* Exact On-Chain Virtual Liquidity Reserves y0_virt = (L / sqrtPriceX96) verified via 0x1a686502 */
     double y1[16] __attribute__((aligned(64))) = {
-        400.0, 400.0, 0.095, 180.0, 0.650, 2400.0, 41760.0, 95000.0,
-        0.117, 1.60, 0.85, 965.0, 1.60, 0.140, 420.0, 12.95
+        6.31,  5.44,  0.1356, 127322.0, 1.1670, 35870.0, 31670000.0, 0.1163,
+        4866.0, 4.1956, 806.53, 1789.0, 11.38, 0.5780, 283679.0, 12.95
     };
     double y2[16] __attribute__((aligned(64))) = {
-        2860.0, 6950.0, 464.39, 420.0, 464.39, 42800000.0, 120000.0, 180000.0,
-        0.222, 1.40, 2860.0, 42800000.0, 2.40, 2860.0, 0.145, 2860.0
+        1300.0, 31.43, 3.3659, 31.43, 3.3659, 7152.0, 7152.0, 0.7960,
+        1789.0, 106.55, 209.46, 31670000.0, 106.55, 209.46, 0.2452, 2860.0
     };
     double fl[16] __attribute__((aligned(64))) = {
-        2.00, 2.00, 6.00, 1.50, 6.00, 6.00, 1.25, 7.50,
-        1.90, 2.00, 3.00, 6.00, 2.00, 4.50, 6.00, aave_liq_fee
+        35.00, 55.00, 6.00, 35.00, 6.00, 10.00, 10.00, 10.00,
+        2.00, 2.00, 2.00, 6.00, 2.00, 8.50, 6.00, aave_liq_fee
     };
     double bm[16] __attribute__((aligned(64))) = {
-        256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 157436.3, 73143.4, 9106.9,
+        256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 157436.3, 157436.3, 256300.0,
         256300.0, 256300.0, 256300.0, 157436.3, 256300.0, 256300.0, 256300.0, 62373.3
     };
     double am[16] __attribute__((aligned(64))) = {
-        29367983.1, 29367983.1, 29367983.1, 55924610.5, 29367983.1, 56560994.7, 8568960.8, 56560994.7,
+        29367983.1, 29367983.1, 29367983.1, 29367983.1, 29367983.1, 56560994.7, 56560994.7, 29367983.1,
         29367983.1, 29367983.1, 29367983.1, 56560994.7, 29367983.1, 29367983.1, 55924610.5, 29367983.1
     };
 
