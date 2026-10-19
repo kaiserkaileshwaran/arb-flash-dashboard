@@ -45,9 +45,8 @@ def _load_local_relayer_env() -> tuple:
 
 RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
 RPC_URLS = [
-    "https://arbitrum-one-rpc.publicnode.com",
     "https://arb1.arbitrum.io/rpc",
-    "https://arbitrum.drpc.org",
+    "https://arbitrum-one-rpc.publicnode.com",
     "https://arb-pokt.nodies.app",
     "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX",
 ]
@@ -314,17 +313,7 @@ def main() -> int:
     # =========================================================================
     raw_tiers = [
         (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (cam_weth_usdc, uni1_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (cam_weth_usdt, uni1_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (pcs1_weth_arb, uni5_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni1_weth_arb, uni5_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (pcs1_weth_usdce, uni5_weth_usdce, weth, usdc_e, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni_wsteth_weth, cam_wsteth_weth, weth, wsteth, 200_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (cam_gmx_weth, uni30_gmx_weth, weth, gmx, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (sushi30_magic_weth, uni30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (cam_pepe_weth, uni30_pepe_weth, weth, pepe, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
     ]
 
     batch_rpc = []
@@ -375,7 +364,7 @@ def main() -> int:
 
     # 4. Add Choice 2 Live Aave V3 Health Factor Watchlist Queries (getUserAccountData = 0xbf92857c)
     aave_hf_start_id = len(batch_rpc) + 1
-    for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist:
+    for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist[:4]:
         req_id = len(batch_rpc) + 1
         batch_rpc.append({
             "jsonrpc": "2.0",
@@ -385,16 +374,18 @@ def main() -> int:
         })
     aave_hf_end_id = len(batch_rpc)
 
-    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at sweet-spot sizes)
+    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at dual-size sweet-spot tiers)
     probe_defs = [
         ("UNI_SUSHI30_PCS5",   sushi30_uni_weth,  pcs5_uni_weth,    weth,   uni_tok,  150_000_000_000_000, True,  False),
         ("WBTC_USDCE_P1_U5",   "0x06607df154875f0507c33418707f366bd47a62fa", "0xac70bd92f89e6739b3a08db9b6081a923912f73d", usdc_e, wbtc,               1_500_000, False, True),
+        ("WBTC_USDCE_P1_U5_S", "0x06607df154875f0507c33418707f366bd47a62fa", "0xac70bd92f89e6739b3a08db9b6081a923912f73d", usdc_e, wbtc,                 600_000, False, True),
         ("WBTC_USDT_U30_P1",   "0x53c6ca2597711ca7a73b6921faf4031eedf71339", "0xeaf03f385c642b02b5c563640bba7c4fbf96c27d", usdt,   wbtc,               8_000_000, False, True),
         ("LINK_PCS25_SUSHI30", pcs25_link_weth,   sushi30_link_weth,weth,   link,     150_000_000_000_000, True,  False),
-        ("ARB_PCS1_SUSHI5",    pcs1_weth_arb,     sushi5_weth_arb,  weth,   arb,      200_000_000_000_000, True,  False),
-        ("ARB_PCS5_SUSHI5",    pcs5_weth_arb,     sushi5_weth_arb,  weth,   arb,      250_000_000_000_000, True,  False),
-        ("ARB_UNI5_SUSHI5",    uni5_weth_arb,     sushi5_weth_arb,  weth,   arb,      250_000_000_000_000, True,  False),
+        ("ARB_PCS1_SUSHI5",    pcs1_weth_arb,     sushi5_weth_arb,  weth,   arb,      150_000_000_000_000, True,  False),
+        ("ARB_PCS5_SUSHI5",    pcs5_weth_arb,     sushi5_weth_arb,  weth,   arb,      180_000_000_000_000, True,  False),
+        ("ARB_UNI5_SUSHI5",    uni5_weth_arb,     sushi5_weth_arb,  weth,   arb,      200_000_000_000_000, True,  False),
         ("ARB_USDT_S30_U5",    "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    250_000, False, True),
+        ("ARB_USDT_S30_U5_S",  "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    100_000, False, True),
         ("ARB_USDC_S30_U5",    "0x14716a16ef9eeaada7e266bcf023b71d2c9adbf3", "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", usdc,   arb,                    300_000, False, True),
         ("ARB_USDC_U1_U5",     u1_arb_usdc,       "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", usdc,   arb,                    250_000, False, True),
         ("USDT_UNI_U5_U30",    u5_uni_usdt,       u30_uni_usdt,     usdt,   uni_tok,               60_000, False, True),
@@ -407,16 +398,16 @@ def main() -> int:
         ("USDCE_SUSHI5_UNI1",  sushi5_weth_usdce, uni1_weth_usdce,  weth,   usdc_e,   150_000_000_000_000, True,  False),
         ("USDCE_PCS1_UNI1",    pcs1_weth_usdce,   uni1_weth_usdce,  weth,   usdc_e,   150_000_000_000_000, True,  False),
         ("USDCE_UNI5_UNI1",    uni5_weth_usdce,   uni1_weth_usdce,  weth,   usdc_e,   150_000_000_000_000, True,  False),
-        ("LINK_PCS5_SUSHI30",  pcs_link_weth,     sushi30_link_weth,weth,   link,     150_000_000_000_000, True,  False),
-        ("LINK_UNI5_SUSHI30",  uni_link_weth,     sushi30_link_weth,weth,   link,     150_000_000_000_000, True,  False),
+        ("LINK_PCS5_SUSHI30",  pcs_link_weth,     sushi30_link_weth,weth,   link,     120_000_000_000_000, True,  False),
+        ("LINK_UNI5_SUSHI30",  uni_link_weth,     sushi30_link_weth,weth,   link,     120_000_000_000_000, True,  False),
         ("ARB_PCS1_UNI1",      pcs1_weth_arb,     uni1_weth_arb,    weth,   arb,      150_000_000_000_000, True,  False),
         ("ARB_WETH_U1_U5",     uni1_weth_arb,     uni5_weth_arb,    weth,   arb,      150_000_000_000_000, True,  False),
         ("ARB_WETH_P5_U5",     pcs5_weth_arb,     uni5_weth_arb,    weth,   arb,      200_000_000_000_000, True,  False),
-        ("PENDLE_P25_P5",      "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", pcs_pendle_weth,  weth,   pendle,   250_000_000_000_000, False, True),
-        ("PENDLE_P25_U5",      "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", uni_pendle_weth,  weth,   pendle,   250_000_000_000_000, False, True),
+        ("PENDLE_P25_U5",      "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", uni_pendle_weth,  weth,   pendle,   200_000_000_000_000, False, True),
         ("WSTETH_UNI5_UNI1",   uni5_wsteth_weth,  uni_wsteth_weth,  weth,   wsteth,   150_000_000_000_000, False, True),
         ("WEETH_UNI1_UNI5",    uni1_weeth_weth,   uni5_weeth_weth,  weth,   weeth,     20_000_000_000_000, False, True),
-        ("ARB_USDCE_P1_U5",    "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                  1_750_000, False, True),
+        ("ARB_USDCE_P1_U5",    "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                  1_500_000, False, True),
+        ("ARB_USDCE_P1_U5_S",  "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                    600_000, False, True),
     ]
     probe_start_id = len(batch_rpc) + 1
     for p_idx, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in enumerate(probe_defs):
@@ -432,10 +423,10 @@ def main() -> int:
     import socket
     from urllib.parse import urlparse
 
-    # Split into <= 20-item chunks so 40 checks execute in exactly 2 HTTP keep-alive round-trips
+    # Split into <= 25-item chunks so 42 checks execute in exactly 2 HTTP keep-alive round-trips on arb1.arbitrum.io/rpc
     batch_chunks_bytes = [
-        json.dumps(batch_rpc[i : i + 20], separators=(",", ":")).encode("utf-8")
-        for i in range(0, len(batch_rpc), 20)
+        json.dumps(batch_rpc[i : i + 25], separators=(",", ":")).encode("utf-8")
+        for i in range(0, len(batch_rpc), 25)
     ]
     persistent_conns = {}
 
