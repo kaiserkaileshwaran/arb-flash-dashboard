@@ -5,2045 +5,1865 @@
 _evaluate_full_loan_routes_asm:         ; @evaluate_full_loan_routes_asm
 	.cfi_startproc
 ; %bb.0:
-	ldp	x12, x11, [sp, #64]
 	ldp	x9, x8, [sp, #48]
-	ldp	x14, x13, [sp, #32]
-	ldp	x16, x15, [sp, #16]
-	ldp	x17, x10, [sp]
-	ldr	d16, [x1]
-	ldr	d17, [x2]
-	fminnm	d5, d16, d17
-	fmaxnm	d6, d16, d17
+	ldp	x13, x11, [sp, #32]
+	ldp	x15, x14, [sp, #16]
+	ldp	x16, x10, [sp]
+	ldp	x12, x17, [sp, #64]
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d5, d2
-	movi.2d	v2, #0000000000000000
+	stp	q1, q1, [x17, #96]
+	stp	q1, q1, [x17, #64]
+	stp	q1, q1, [x17, #32]
+	stp	q1, q1, [x17]
+	ldr	d4, [x1]
+	ldr	d5, [x2]
+	fcmp	d4, d5
+	fcsel	d2, d4, d5, ls
+	fcsel	d3, d5, d4, ls
+	movi.2d	v1, #0000000000000000
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d6, x17
+	fcmp	d2, d6
+	movi.2d	v6, #0000000000000000
 	b.le	LBB0_2
 ; %bb.1:
-	fsub	d2, d6, d5
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
-	fmul	d2, d2, d3
-	fdiv	d2, d2, d5
+	fsub	d6, d3, d2
+	fdiv	d6, d6, d2
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d7, x17
+	fmul	d6, d6, d7
 LBB0_2:
-	ldr	d3, [x5]
-	fsub	d18, d2, d3
-	fcmp	d18, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17]
+	ldr	d7, [x5]
+	fsub	d18, d6, d7
+	str	d6, [x16]
 	str	d18, [x10]
-	movi.2d	v21, #0000000000000000
+	fcmp	d18, #0.0
 	movi.2d	v19, #0000000000000000
+	movi.2d	v17, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v7, #0000000000000000
-	movi.2d	v3, #0000000000000000
-	movi.2d	v2, #0000000000000000
-	movi.2d	v4, #0000000000000000
+	movi.2d	v16, #0000000000000000
 	b.gt	LBB0_61
 LBB0_3:
-	str	d4, [x16]
-	str	d2, [x15]
-	str	d3, [x14]
-	str	d7, [x13]
+	str	d16, [x15]
+	str	d7, [x14]
+	str	d6, [x13]
+	str	d17, [x11]
 	str	d19, [x9]
-	str	d21, [x8]
-	str	d20, [x12]
-	str	d1, [x11]
-	ldr	d18, [x1, #8]
-	ldr	d19, [x2, #8]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d1, [x8]
+	str	d1, [x12]
+	ldr	d16, [x1, #8]
+	ldr	d17, [x2, #8]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_5
 ; %bb.4:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_5:
 	ldr	d3, [x5, #8]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #8]
-	str	d7, [x10, #8]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #8]
+	str	d18, [x10, #8]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_64
 LBB0_6:
-	str	d4, [x16, #8]
-	str	d2, [x15, #8]
+	str	d4, [x15, #8]
 	str	d3, [x14, #8]
-	str	d5, [x13, #8]
-	str	d17, [x9, #8]
-	str	d21, [x8, #8]
-	str	d20, [x12, #8]
-	str	d1, [x11, #8]
-	ldr	d18, [x1, #16]
-	ldr	d19, [x2, #16]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #8]
+	str	d6, [x11, #8]
+	str	d19, [x9, #8]
+	str	d1, [x8, #8]
+	str	d1, [x12, #8]
+	ldr	d16, [x1, #16]
+	ldr	d17, [x2, #16]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_8
 ; %bb.7:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_8:
 	ldr	d3, [x5, #16]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #16]
-	str	d7, [x10, #16]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #16]
+	str	d18, [x10, #16]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_67
 LBB0_9:
-	str	d4, [x16, #16]
-	str	d2, [x15, #16]
+	str	d4, [x15, #16]
 	str	d3, [x14, #16]
-	str	d5, [x13, #16]
-	str	d17, [x9, #16]
-	str	d21, [x8, #16]
-	str	d20, [x12, #16]
-	str	d1, [x11, #16]
-	ldr	d18, [x1, #24]
-	ldr	d19, [x2, #24]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #16]
+	str	d6, [x11, #16]
+	str	d19, [x9, #16]
+	str	d1, [x8, #16]
+	str	d1, [x12, #16]
+	ldr	d16, [x1, #24]
+	ldr	d17, [x2, #24]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_11
 ; %bb.10:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_11:
 	ldr	d3, [x5, #24]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #24]
-	str	d7, [x10, #24]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #24]
+	str	d18, [x10, #24]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_70
 LBB0_12:
-	str	d4, [x16, #24]
-	str	d2, [x15, #24]
+	str	d4, [x15, #24]
 	str	d3, [x14, #24]
-	str	d5, [x13, #24]
-	str	d17, [x9, #24]
-	str	d21, [x8, #24]
-	str	d20, [x12, #24]
-	str	d1, [x11, #24]
-	ldr	d18, [x1, #32]
-	ldr	d19, [x2, #32]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #24]
+	str	d6, [x11, #24]
+	str	d19, [x9, #24]
+	str	d1, [x8, #24]
+	str	d1, [x12, #24]
+	ldr	d16, [x1, #32]
+	ldr	d17, [x2, #32]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_14
 ; %bb.13:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_14:
 	ldr	d3, [x5, #32]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #32]
-	str	d7, [x10, #32]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #32]
+	str	d18, [x10, #32]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_73
 LBB0_15:
-	str	d4, [x16, #32]
-	str	d2, [x15, #32]
+	str	d4, [x15, #32]
 	str	d3, [x14, #32]
-	str	d5, [x13, #32]
-	str	d17, [x9, #32]
-	str	d21, [x8, #32]
-	str	d20, [x12, #32]
-	str	d1, [x11, #32]
-	ldr	d18, [x1, #40]
-	ldr	d19, [x2, #40]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #32]
+	str	d6, [x11, #32]
+	str	d19, [x9, #32]
+	str	d1, [x8, #32]
+	str	d1, [x12, #32]
+	ldr	d16, [x1, #40]
+	ldr	d17, [x2, #40]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_17
 ; %bb.16:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_17:
 	ldr	d3, [x5, #40]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #40]
-	str	d7, [x10, #40]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #40]
+	str	d18, [x10, #40]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_76
 LBB0_18:
-	str	d4, [x16, #40]
-	str	d2, [x15, #40]
+	str	d4, [x15, #40]
 	str	d3, [x14, #40]
-	str	d5, [x13, #40]
-	str	d17, [x9, #40]
-	str	d21, [x8, #40]
-	str	d20, [x12, #40]
-	str	d1, [x11, #40]
-	ldr	d18, [x1, #48]
-	ldr	d19, [x2, #48]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #40]
+	str	d6, [x11, #40]
+	str	d19, [x9, #40]
+	str	d1, [x8, #40]
+	str	d1, [x12, #40]
+	ldr	d16, [x1, #48]
+	ldr	d17, [x2, #48]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_20
 ; %bb.19:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_20:
 	ldr	d3, [x5, #48]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #48]
-	str	d7, [x10, #48]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #48]
+	str	d18, [x10, #48]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_79
 LBB0_21:
-	str	d4, [x16, #48]
-	str	d2, [x15, #48]
+	str	d4, [x15, #48]
 	str	d3, [x14, #48]
-	str	d5, [x13, #48]
-	str	d17, [x9, #48]
-	str	d21, [x8, #48]
-	str	d20, [x12, #48]
-	str	d1, [x11, #48]
-	ldr	d18, [x1, #56]
-	ldr	d19, [x2, #56]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #48]
+	str	d6, [x11, #48]
+	str	d19, [x9, #48]
+	str	d1, [x8, #48]
+	str	d1, [x12, #48]
+	ldr	d16, [x1, #56]
+	ldr	d17, [x2, #56]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_23
 ; %bb.22:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_23:
 	ldr	d3, [x5, #56]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #56]
-	str	d7, [x10, #56]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #56]
+	str	d18, [x10, #56]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_82
 LBB0_24:
-	str	d4, [x16, #56]
-	str	d2, [x15, #56]
+	str	d4, [x15, #56]
 	str	d3, [x14, #56]
-	str	d5, [x13, #56]
-	str	d17, [x9, #56]
-	str	d21, [x8, #56]
-	str	d20, [x12, #56]
-	str	d1, [x11, #56]
-	ldr	d18, [x1, #64]
-	ldr	d19, [x2, #64]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #56]
+	str	d6, [x11, #56]
+	str	d19, [x9, #56]
+	str	d1, [x8, #56]
+	str	d1, [x12, #56]
+	ldr	d16, [x1, #64]
+	ldr	d17, [x2, #64]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_26
 ; %bb.25:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_26:
 	ldr	d3, [x5, #64]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #64]
-	str	d7, [x10, #64]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #64]
+	str	d18, [x10, #64]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_85
 LBB0_27:
-	str	d4, [x16, #64]
-	str	d2, [x15, #64]
+	str	d4, [x15, #64]
 	str	d3, [x14, #64]
-	str	d5, [x13, #64]
-	str	d17, [x9, #64]
-	str	d21, [x8, #64]
-	str	d20, [x12, #64]
-	str	d1, [x11, #64]
-	ldr	d18, [x1, #72]
-	ldr	d19, [x2, #72]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #64]
+	str	d6, [x11, #64]
+	str	d19, [x9, #64]
+	str	d1, [x8, #64]
+	str	d1, [x12, #64]
+	ldr	d16, [x1, #72]
+	ldr	d17, [x2, #72]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_29
 ; %bb.28:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_29:
 	ldr	d3, [x5, #72]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #72]
-	str	d7, [x10, #72]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #72]
+	str	d18, [x10, #72]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_88
 LBB0_30:
-	str	d4, [x16, #72]
-	str	d2, [x15, #72]
+	str	d4, [x15, #72]
 	str	d3, [x14, #72]
-	str	d5, [x13, #72]
-	str	d17, [x9, #72]
-	str	d21, [x8, #72]
-	str	d20, [x12, #72]
-	str	d1, [x11, #72]
-	ldr	d18, [x1, #80]
-	ldr	d19, [x2, #80]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #72]
+	str	d6, [x11, #72]
+	str	d19, [x9, #72]
+	str	d1, [x8, #72]
+	str	d1, [x12, #72]
+	ldr	d16, [x1, #80]
+	ldr	d17, [x2, #80]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_32
 ; %bb.31:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_32:
 	ldr	d3, [x5, #80]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #80]
-	str	d7, [x10, #80]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #80]
+	str	d18, [x10, #80]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_91
 LBB0_33:
-	str	d4, [x16, #80]
-	str	d2, [x15, #80]
+	str	d4, [x15, #80]
 	str	d3, [x14, #80]
-	str	d5, [x13, #80]
-	str	d17, [x9, #80]
-	str	d21, [x8, #80]
-	str	d20, [x12, #80]
-	str	d1, [x11, #80]
-	ldr	d18, [x1, #88]
-	ldr	d19, [x2, #88]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #80]
+	str	d6, [x11, #80]
+	str	d19, [x9, #80]
+	str	d1, [x8, #80]
+	str	d1, [x12, #80]
+	ldr	d16, [x1, #88]
+	ldr	d17, [x2, #88]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_35
 ; %bb.34:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_35:
 	ldr	d3, [x5, #88]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #88]
-	str	d7, [x10, #88]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #88]
+	str	d18, [x10, #88]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_94
 LBB0_36:
-	str	d4, [x16, #88]
-	str	d2, [x15, #88]
+	str	d4, [x15, #88]
 	str	d3, [x14, #88]
-	str	d5, [x13, #88]
-	str	d17, [x9, #88]
-	str	d21, [x8, #88]
-	str	d20, [x12, #88]
-	str	d1, [x11, #88]
-	ldr	d18, [x1, #96]
-	ldr	d19, [x2, #96]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #88]
+	str	d6, [x11, #88]
+	str	d19, [x9, #88]
+	str	d1, [x8, #88]
+	str	d1, [x12, #88]
+	ldr	d16, [x1, #96]
+	ldr	d17, [x2, #96]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_38
 ; %bb.37:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_38:
 	ldr	d3, [x5, #96]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #96]
-	str	d7, [x10, #96]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #96]
+	str	d18, [x10, #96]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_97
 LBB0_39:
-	str	d4, [x16, #96]
-	str	d2, [x15, #96]
+	str	d4, [x15, #96]
 	str	d3, [x14, #96]
-	str	d5, [x13, #96]
-	str	d17, [x9, #96]
-	str	d21, [x8, #96]
-	str	d20, [x12, #96]
-	str	d1, [x11, #96]
-	ldr	d18, [x1, #104]
-	ldr	d19, [x2, #104]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #96]
+	str	d6, [x11, #96]
+	str	d19, [x9, #96]
+	str	d1, [x8, #96]
+	str	d1, [x12, #96]
+	ldr	d16, [x1, #104]
+	ldr	d17, [x2, #104]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_41
 ; %bb.40:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_41:
 	ldr	d3, [x5, #104]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #104]
-	str	d7, [x10, #104]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #104]
+	str	d18, [x10, #104]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_100
 LBB0_42:
-	str	d4, [x16, #104]
-	str	d2, [x15, #104]
+	str	d4, [x15, #104]
 	str	d3, [x14, #104]
-	str	d5, [x13, #104]
-	str	d17, [x9, #104]
-	str	d21, [x8, #104]
-	str	d20, [x12, #104]
-	str	d1, [x11, #104]
-	ldr	d18, [x1, #112]
-	ldr	d19, [x2, #112]
-	fminnm	d6, d18, d19
-	fmaxnm	d16, d18, d19
+	str	d2, [x13, #104]
+	str	d6, [x11, #104]
+	str	d19, [x9, #104]
+	str	d1, [x8, #104]
+	str	d1, [x12, #104]
+	ldr	d16, [x1, #112]
+	ldr	d17, [x2, #112]
+	fcmp	d16, d17
+	fcsel	d5, d16, d17, ls
+	fcsel	d7, d17, d16, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d5, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_44
 ; %bb.43:
-	fsub	d2, d16, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
+	fsub	d2, d7, d5
+	fdiv	d2, d2, d5
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d3, x17
 	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
 LBB0_44:
 	ldr	d3, [x5, #112]
-	fsub	d7, d2, d3
-	fcmp	d7, #0.0
-	movi.2d	v20, #0000000000000000
-	str	d2, [x17, #112]
-	str	d7, [x10, #112]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v17, #0000000000000000
-	movi.2d	v5, #0000000000000000
-	movi.2d	v3, #0000000000000000
+	fsub	d18, d2, d3
+	str	d2, [x16, #112]
+	str	d18, [x10, #112]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v6, #0000000000000000
 	movi.2d	v2, #0000000000000000
+	movi.2d	v3, #0000000000000000
 	movi.2d	v4, #0000000000000000
 	b.gt	LBB0_103
 LBB0_45:
-	str	d4, [x16, #112]
-	str	d2, [x15, #112]
+	str	d4, [x15, #112]
 	str	d3, [x14, #112]
-	str	d5, [x13, #112]
-	str	d17, [x9, #112]
-	str	d21, [x8, #112]
-	str	d20, [x12, #112]
-	str	d1, [x11, #112]
-	ldr	d18, [x1, #120]
-	ldr	d19, [x2, #120]
-	fminnm	d6, d18, d19
-	fmaxnm	d7, d18, d19
+	str	d2, [x13, #112]
+	str	d6, [x11, #112]
+	str	d19, [x9, #112]
+	str	d1, [x8, #112]
+	str	d1, [x12, #112]
+	ldr	d6, [x1, #120]
+	ldr	d16, [x2, #120]
+	fcmp	d6, d16
+	fcsel	d3, d6, d16, ls
+	fcsel	d4, d16, d6, ls
 	movi.2d	v1, #0000000000000000
-	mov	x0, #59921                      ; =0xea11
-	movk	x0, #33069, lsl #16
-	movk	x0, #38809, lsl #32
-	movk	x0, #15729, lsl #48
-	fmov	d2, x0
-	fcmp	d6, d2
+	mov	x17, #59921                     ; =0xea11
+	movk	x17, #33069, lsl #16
+	movk	x17, #38809, lsl #32
+	movk	x17, #15729, lsl #48
+	fmov	d2, x17
+	fcmp	d3, d2
 	movi.2d	v2, #0000000000000000
 	b.le	LBB0_47
 ; %bb.46:
-	fsub	d2, d7, d6
-	mov	x0, #149533581377536            ; =0x880000000000
-	movk	x0, #16579, lsl #48
-	fmov	d3, x0
-	fmul	d2, d2, d3
-	fdiv	d2, d2, d6
+	fsub	d2, d4, d3
+	fdiv	d2, d2, d3
+	mov	x17, #149533581377536           ; =0x880000000000
+	movk	x17, #16579, lsl #48
+	fmov	d5, x17
+	fmul	d2, d2, d5
 LBB0_47:
-	ldr	d3, [x5, #120]
-	fsub	d17, d2, d3
-	fcmp	d17, #0.0
-	movi.2d	v20, #0000000000000000
-	ldr	x0, [sp, #80]
-	str	d2, [x17, #120]
-	str	d17, [x10, #120]
-	movi.2d	v21, #0000000000000000
-	movi.2d	v16, #0000000000000000
+	ldr	x17, [sp, #80]
+	ldr	d5, [x5, #120]
+	fsub	d18, d2, d5
+	str	d2, [x16, #120]
+	str	d18, [x10, #120]
+	fcmp	d18, #0.0
+	movi.2d	v19, #0000000000000000
+	movi.2d	v17, #0000000000000000
+	movi.2d	v7, #0000000000000000
 	movi.2d	v5, #0000000000000000
-	movi.2d	v4, #0000000000000000
 	movi.2d	v2, #0000000000000000
-	movi.2d	v3, #0000000000000000
 	b.gt	LBB0_106
 LBB0_48:
-	mov	x17, #0                         ; =0x0
-	str	d3, [x16, #120]
+	mov	x16, #0                         ; =0x0
 	str	d2, [x15, #120]
-	str	d4, [x14, #120]
-	str	d5, [x13, #120]
-	str	d16, [x9, #120]
-	str	d21, [x8, #120]
-	str	d20, [x12, #120]
-	add	x12, x0, #4
+	str	d5, [x14, #120]
+	str	d7, [x13, #120]
+	str	d17, [x11, #120]
+	str	d19, [x9, #120]
+	str	d1, [x8, #120]
+	add	x11, x17, #4
 	mov	w13, #-1                        ; =0xffffffff
-	str	d1, [x11, #120]
+	str	d1, [x12, #120]
 	b	LBB0_51
 LBB0_49:                                ;   in Loop: Header=BB0_51 Depth=1
-	sub	x11, x17, #1
+	sub	x12, x16, #1
 LBB0_50:                                ;   in Loop: Header=BB0_51 Depth=1
-	sbfiz	x11, x11, #2, #32
-	str	w17, [x12, x11]
-	add	x17, x17, #1
+	sbfiz	x12, x12, #2, #32
+	str	w16, [x11, x12]
+	add	x16, x16, #1
 	add	w13, w13, #1
-	cmp	x17, #16
+	cmp	x16, #16
 	b.eq	LBB0_60
 LBB0_51:                                ; =>This Loop Header: Depth=1
                                         ;     Child Loop BB0_54 Depth 2
-	cbz	w17, LBB0_49
+	cbz	w16, LBB0_49
 ; %bb.52:                               ;   in Loop: Header=BB0_51 Depth=1
-	ldr	d0, [x8, x17, lsl #3]
-	ldr	d1, [x9, x17, lsl #3]
-	ldr	d2, [x10, x17, lsl #3]
-	mov	w11, w13
+	ldr	d0, [x8, x16, lsl #3]
+	ldr	d1, [x9, x16, lsl #3]
+	ldr	d2, [x10, x16, lsl #3]
+	mov	w12, w13
 	b	LBB0_54
 LBB0_53:                                ;   in Loop: Header=BB0_54 Depth=2
-	add	x15, x0, x11, lsl #2
+	add	x15, x17, x12, lsl #2
 	str	w14, [x15, #4]
-	cmp	x11, #0
-	sub	x11, x11, #1
+	cmp	x12, #0
+	sub	x12, x12, #1
 	b.le	LBB0_59
 LBB0_54:                                ;   Parent Loop BB0_51 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
-	ldr	w14, [x0, x11, lsl #2]
+	ldr	w14, [x17, x12, lsl #2]
 	ldr	d3, [x8, w14, sxtw #3]
 	fcmp	d3, d0
-	b.lt	LBB0_53
+	b.mi	LBB0_53
 ; %bb.55:                               ;   in Loop: Header=BB0_54 Depth=2
 	b.ne	LBB0_50
 ; %bb.56:                               ;   in Loop: Header=BB0_54 Depth=2
 	ldr	d3, [x9, w14, sxtw #3]
 	fcmp	d3, d1
-	b.lt	LBB0_53
+	b.mi	LBB0_53
 ; %bb.57:                               ;   in Loop: Header=BB0_54 Depth=2
 	b.ne	LBB0_50
 ; %bb.58:                               ;   in Loop: Header=BB0_54 Depth=2
 	ldr	d3, [x10, w14, sxtw #3]
 	fcmp	d3, d2
-	b.lt	LBB0_53
+	b.mi	LBB0_53
 	b	LBB0_50
 LBB0_59:                                ;   in Loop: Header=BB0_51 Depth=1
-	mov	x11, #-1                        ; =0xffffffffffffffff
+	mov	x12, #-1                        ; =0xffffffffffffffff
 	b	LBB0_50
 LBB0_60:
 	ret
 LBB0_61:
-	fcmp	d16, d17
-	csel	x0, x3, x4, le
-	ldr	d1, [x0]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0]
-	fmul	d4, d1, d5
-	fmul	d2, d2, d6
+	fcmp	d4, d5
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17]
+	csel	x17, x4, x3, ls
+	ldr	d4, [x17]
+	fmul	d2, d2, d1
+	fmul	d4, d3, d4
 	fmul	d1, d2, d4
-	fadd	d6, d2, d4
-	ldr	d3, [x6]
-	ldr	d5, [x7]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d16, d18, d4
-	movi.2d	v5, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d6, d4
-	movi.2d	v4, #0000000000000000
+	fadd	d3, d2, d4
+	ldr	d5, [x6]
+	ldr	d6, [x7]
+	fadd	d6, d5, d6
+	fcmp	d2, d4
+	fcsel	d2, d2, d4, mi
+	fcmp	d2, d6
+	fcsel	d6, d6, d2, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d2, x17
+	fmul	d4, d18, d2
+	movi.2d	v2, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d7, x17
+	fcmp	d3, d7
+	movi.2d	v7, #0000000000000000
 	b.le	LBB0_63
 ; %bb.62:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d18, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d6
+	fmov	d7, #0.50000000
+	fmul	d7, d4, d7
+	fmul	d7, d7, d1
+	fdiv	d7, d7, d3
 LBB0_63:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d7, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d7, d5, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d7, x0
-	fmul	d17, d3, d7
-	fmul	d7, d2, d7
-	fdiv	d6, d6, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d6, d1, gt
-	fmsub	d1, d4, d1, d16
-	fnmsub	d1, d1, d4, d17
-	fmaxnm	d19, d1, d5
-	fsub	d6, d19, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d6, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d6, d1
-	fcmp	d6, #0.0
-	fcsel	d1, d1, d5, gt
-	fcsel	d20, d16, d5, gt
-	fmaxnm	d21, d6, d5
-	b	LBB0_3
-LBB0_64:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #8]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #8]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #8]
-	ldr	d5, [x7, #8]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_66
-; %bb.65:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_66:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_6
-LBB0_67:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #16]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #16]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #16]
-	ldr	d5, [x7, #16]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_69
-; %bb.68:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_69:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_9
-LBB0_70:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #24]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #24]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #24]
-	ldr	d5, [x7, #24]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_72
-; %bb.71:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_72:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_12
-LBB0_73:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #32]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #32]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #32]
-	ldr	d5, [x7, #32]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_75
-; %bb.74:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_75:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_15
-LBB0_76:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #40]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #40]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #40]
-	ldr	d5, [x7, #40]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_78
-; %bb.77:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_78:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_18
-LBB0_79:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #48]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #48]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #48]
-	ldr	d5, [x7, #48]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_81
-; %bb.80:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_81:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_21
-LBB0_82:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #56]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #56]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #56]
-	ldr	d5, [x7, #56]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_84
-; %bb.83:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_84:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_24
-LBB0_85:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #64]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #64]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #64]
-	ldr	d5, [x7, #64]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_87
-; %bb.86:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_87:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_27
-LBB0_88:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #72]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #72]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #72]
-	ldr	d5, [x7, #72]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_90
-; %bb.89:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_90:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_30
-LBB0_91:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #80]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #80]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #80]
-	ldr	d5, [x7, #80]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_93
-; %bb.92:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_93:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_33
-LBB0_94:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #88]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #88]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #88]
-	ldr	d5, [x7, #88]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_96
-; %bb.95:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_96:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_36
-LBB0_97:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #96]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #96]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #96]
-	ldr	d5, [x7, #96]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_99
-; %bb.98:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_99:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_39
-LBB0_100:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #104]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #104]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #104]
-	ldr	d5, [x7, #104]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_102
-; %bb.101:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_102:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_42
-LBB0_103:
-	fcmp	d18, d19
-	csel	x0, x3, x4, le
-	ldr	d1, [x0, #112]
-	csel	x0, x4, x3, le
-	ldr	d2, [x0, #112]
-	fmul	d4, d1, d6
-	fmul	d2, d2, d16
-	fmul	d1, d2, d4
-	fadd	d16, d2, d4
-	ldr	d3, [x6, #112]
-	ldr	d5, [x7, #112]
-	fadd	d5, d5, d3
-	fminnm	d2, d4, d2
-	fminnm	d2, d2, d5
-	mov	x0, #17197                      ; =0x432d
-	movk	x0, #60188, lsl #16
-	movk	x0, #14050, lsl #32
-	movk	x0, #16154, lsl #48
-	fmov	d4, x0
-	fmul	d17, d7, d4
-	movi.2d	v6, #0000000000000000
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d4, x0
-	fcmp	d16, d4
-	movi.2d	v4, #0000000000000000
-	b.le	LBB0_105
-; %bb.104:
-	mov	x0, #12898                      ; =0x3262
-	movk	x0, #12373, lsl #16
-	movk	x0, #43306, lsl #32
-	movk	x0, #16147, lsl #48
-	fmov	d4, x0
-	fmul	d4, d7, d4
-	fmul	d4, d4, d1
-	fdiv	d4, d4, d16
-LBB0_105:
-	fminnm	d4, d4, d2
-	fminnm	d2, d4, d3
-	fsub	d5, d4, d3
-	fcmp	d4, d3
-	fcsel	d3, d5, d6, gt
-	mov	x0, #43516                      ; =0xa9fc
-	movk	x0, #54001, lsl #16
-	movk	x0, #25165, lsl #32
-	movk	x0, #16192, lsl #48
-	fmov	d5, x0
-	fmul	d7, d3, d5
-	fmul	d5, d2, d5
-	fdiv	d16, d16, d1
-	mov	x0, #22038                      ; =0x5616
-	movk	x0, #40679, lsl #16
-	movk	x0, #943, lsl #32
-	movk	x0, #15570, lsl #48
-	fmov	d18, x0
-	fcmp	d1, d18
-	mov	x0, #640942080                  ; =0x26340000
-	movk	x0, #27637, lsl #32
-	movk	x0, #17164, lsl #48
-	fmov	d1, x0
-	fcsel	d1, d16, d1, gt
-	fmsub	d1, d4, d1, d17
-	fnmsub	d1, d1, d4, d7
-	fmaxnm	d17, d1, d6
-	fsub	d7, d17, d0
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39322
-	movk	x0, #16361, lsl #48
-	fmov	d1, x0
-	fmul	d16, d7, d1
-	mov	x0, #-7378697629483820647       ; =0x9999999999999999
-	movk	x0, #39320
-	movk	x0, #16329, lsl #48
-	fmov	d1, x0
-	fmul	d1, d7, d1
-	fcmp	d7, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d16, d6, gt
-	fmaxnm	d21, d7, d6
-	b	LBB0_45
-LBB0_106:
-	fcmp	d18, d19
-	csel	x17, x3, x4, le
-	ldr	d1, [x17, #120]
-	csel	x17, x4, x3, le
-	ldr	d2, [x17, #120]
-	fmul	d1, d1, d6
-	fmul	d2, d2, d7
-	ldr	d4, [x6, #120]
-	ldr	d3, [x7, #120]
-	fadd	d3, d3, d4
-	fminnm	d1, d1, d2
-	fminnm	d3, d1, d3
-	fminnm	d2, d3, d4
-	fsub	d1, d3, d4
-	fcmp	d3, d4
-	movi.2d	v6, #0000000000000000
-	fcsel	d4, d1, d6, gt
+	fcmp	d7, d6
+	fcsel	d16, d6, d7, gt
+	fcmp	d16, d5
+	fcsel	d7, d16, d5, ls
+	fsub	d5, d16, d5
+	fcsel	d6, d5, d2, gt
 	mov	x17, #43516                     ; =0xa9fc
 	movk	x17, #54001, lsl #16
 	movk	x17, #25165, lsl #32
 	movk	x17, #16192, lsl #48
+	fmov	d5, x17
+	fmul	d17, d7, d5
+	fneg	d3, d3
+	fdiv	d3, d3, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
 	fmov	d1, x17
-	fmul	d7, d4, d1
-	fmul	d5, d2, d1
+	fcsel	d1, d3, d1, gt
+	fmul	d3, d16, d16
+	fmul	d1, d1, d3
+	fmadd	d1, d16, d4, d1
+	fmul	d3, d6, d5
+	fsub	d1, d1, d3
+	fcmp	d1, #0.0
+	fcsel	d19, d2, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d2
+	b	LBB0_3
+LBB0_64:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #8]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #8]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #8]
+	ldr	d5, [x7, #8]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
 	mov	x17, #17197                     ; =0x432d
 	movk	x17, #60188, lsl #16
 	movk	x17, #14050, lsl #32
-	movk	x17, #16138, lsl #48
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_66
+; %bb.65:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_66:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
 	fmov	d1, x17
-	fmul	d1, d17, d1
-	fnmsub	d1, d1, d3, d7
-	fmaxnm	d16, d1, d6
-	fsub	d0, d16, d0
-	mov	x17, #-7378697629483820647      ; =0x9999999999999999
-	movk	x17, #39322
-	movk	x17, #16361, lsl #48
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_6
+LBB0_67:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #16]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #16]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #16]
+	ldr	d5, [x7, #16]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_69
+; %bb.68:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_69:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
 	fmov	d1, x17
-	fmul	d7, d0, d1
-	mov	x17, #-7378697629483820647      ; =0x9999999999999999
-	movk	x17, #39320
-	movk	x17, #16329, lsl #48
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_9
+LBB0_70:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #24]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #24]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #24]
+	ldr	d5, [x7, #24]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_72
+; %bb.71:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_72:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
 	fmov	d1, x17
-	fmul	d1, d0, d1
-	fcmp	d0, #0.0
-	fcsel	d1, d1, d6, gt
-	fcsel	d20, d7, d6, gt
-	fmaxnm	d21, d0, d6
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_12
+LBB0_73:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #32]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #32]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #32]
+	ldr	d5, [x7, #32]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_75
+; %bb.74:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_75:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_15
+LBB0_76:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #40]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #40]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #40]
+	ldr	d5, [x7, #40]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_78
+; %bb.77:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_78:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_18
+LBB0_79:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #48]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #48]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #48]
+	ldr	d5, [x7, #48]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_81
+; %bb.80:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_81:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_21
+LBB0_82:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #56]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #56]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #56]
+	ldr	d5, [x7, #56]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_84
+; %bb.83:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_84:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_24
+LBB0_85:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #64]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #64]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #64]
+	ldr	d5, [x7, #64]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_87
+; %bb.86:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_87:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_27
+LBB0_88:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #72]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #72]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #72]
+	ldr	d5, [x7, #72]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_90
+; %bb.89:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_90:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_30
+LBB0_91:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #80]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #80]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #80]
+	ldr	d5, [x7, #80]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_93
+; %bb.92:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_93:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_33
+LBB0_94:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #88]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #88]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #88]
+	ldr	d5, [x7, #88]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_96
+; %bb.95:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_96:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_36
+LBB0_97:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #96]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #96]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #96]
+	ldr	d5, [x7, #96]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_99
+; %bb.98:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_99:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_39
+LBB0_100:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #104]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #104]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #104]
+	ldr	d5, [x7, #104]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_102
+; %bb.101:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_102:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_42
+LBB0_103:
+	fcmp	d16, d17
+	csel	x17, x3, x4, ls
+	ldr	d1, [x17, #112]
+	csel	x17, x4, x3, ls
+	ldr	d2, [x17, #112]
+	fmul	d3, d5, d1
+	fmul	d4, d7, d2
+	fmul	d1, d3, d4
+	fadd	d7, d3, d4
+	ldr	d2, [x6, #112]
+	ldr	d5, [x7, #112]
+	fadd	d5, d2, d5
+	fcmp	d3, d4
+	fcsel	d3, d3, d4, mi
+	fcmp	d3, d5
+	fcsel	d3, d5, d3, gt
+	mov	x17, #17197                     ; =0x432d
+	movk	x17, #60188, lsl #16
+	movk	x17, #14050, lsl #32
+	movk	x17, #16154, lsl #48
+	fmov	d4, x17
+	fmul	d16, d18, d4
+	movi.2d	v5, #0000000000000000
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d4, x17
+	fcmp	d7, d4
+	movi.2d	v4, #0000000000000000
+	b.le	LBB0_105
+; %bb.104:
+	fmov	d4, #0.50000000
+	fmul	d4, d16, d4
+	fmul	d4, d4, d1
+	fdiv	d4, d4, d7
+LBB0_105:
+	fcmp	d4, d3
+	fcsel	d4, d3, d4, gt
+	fcmp	d4, d2
+	fcsel	d3, d4, d2, ls
+	fsub	d2, d4, d2
+	fcsel	d2, d2, d5, gt
+	mov	x17, #43516                     ; =0xa9fc
+	movk	x17, #54001, lsl #16
+	movk	x17, #25165, lsl #32
+	movk	x17, #16192, lsl #48
+	fmov	d17, x17
+	fmul	d6, d3, d17
+	fneg	d7, d7
+	fdiv	d7, d7, d1
+	mov	x17, #22038                     ; =0x5616
+	movk	x17, #40679, lsl #16
+	movk	x17, #943, lsl #32
+	movk	x17, #15570, lsl #48
+	fmov	d18, x17
+	fcmp	d1, d18
+	mov	x17, #640942080                 ; =0x26340000
+	movk	x17, #27637, lsl #32
+	movk	x17, #49932, lsl #48
+	fmov	d1, x17
+	fcsel	d1, d7, d1, gt
+	fmul	d7, d4, d4
+	fmul	d1, d1, d7
+	fmadd	d1, d4, d16, d1
+	fmul	d7, d2, d17
+	fsub	d1, d1, d7
+	fcmp	d1, #0.0
+	fcsel	d19, d5, d1, mi
+	fsub	d1, d19, d0
+	fmaxnm	d1, d1, d5
+	b	LBB0_45
+LBB0_106:
+	fcmp	d6, d16
+	csel	x16, x3, x4, ls
+	ldr	d1, [x16, #120]
+	csel	x16, x4, x3, ls
+	ldr	d2, [x16, #120]
+	fmul	d1, d3, d1
+	fmul	d2, d4, d2
+	ldr	d3, [x6, #120]
+	ldr	d4, [x7, #120]
+	fadd	d4, d3, d4
+	fcmp	d1, d2
+	fcsel	d1, d1, d2, mi
+	fcmp	d1, d4
+	fcsel	d2, d4, d1, gt
+	mov	x16, #17197                     ; =0x432d
+	movk	x16, #60188, lsl #16
+	movk	x16, #14050, lsl #32
+	movk	x16, #16154, lsl #48
+	fmov	d1, x16
+	fmul	d1, d18, d1
+	fcmp	d2, d3
+	fcsel	d5, d2, d3, ls
+	fsub	d3, d2, d3
+	movi.2d	v4, #0000000000000000
+	fcsel	d7, d3, d4, gt
+	mov	x16, #43516                     ; =0xa9fc
+	movk	x16, #54001, lsl #16
+	movk	x16, #25165, lsl #32
+	movk	x16, #16192, lsl #48
+	fmov	d3, x16
+	fmul	d17, d5, d3
+	fmul	d1, d1, d2
+	mov	x16, #43516                     ; =0xa9fc
+	movk	x16, #54001, lsl #16
+	movk	x16, #25165, lsl #32
+	movk	x16, #48960, lsl #48
+	fmov	d3, x16
+	fmul	d3, d7, d3
+	fmov	d6, #0.50000000
+	fmadd	d1, d1, d6, d3
+	fcmp	d1, #0.0
+	fcsel	d19, d4, d1, mi
+	fsub	d0, d19, d0
+	fmaxnm	d1, d0, d4
 	b	LBB0_48
 	.cfi_endproc
                                         ; -- End function
@@ -2233,7 +2053,7 @@ _run_native_asm_sniper_cycle:           ; @run_native_asm_sniper_cycle
 	stp	x20, x19, [sp, #128]            ; 16-byte Folded Spill
 	stp	x29, x30, [sp, #144]            ; 16-byte Folded Spill
 	add	x29, sp, #144
-	sub	x9, sp, #2464
+	sub	x9, sp, #2528
 	and	sp, x9, #0xffffffffffffffc0
 	.cfi_def_cfa w29, 16
 	.cfi_offset w30, -8
@@ -2256,14 +2076,14 @@ _run_native_asm_sniper_cycle:           ; @run_native_asm_sniper_cycle
 	.cfi_offset b13, -144
 	.cfi_offset b14, -152
 	.cfi_offset b15, -160
-	str	w3, [sp, #660]                  ; 4-byte Folded Spill
+	str	w3, [sp, #724]                  ; 4-byte Folded Spill
 Lloh10:
 	adrp	x8, ___stack_chk_guard@GOTPAGE
 Lloh11:
 	ldr	x8, [x8, ___stack_chk_guard@GOTPAGEOFF]
 Lloh12:
 	ldr	x8, [x8]
-	str	x8, [sp, #2456]
+	str	x8, [sp, #2520]
 	cbz	x0, LBB2_11
 ; %bb.1:
 	mov	x20, x2
@@ -2310,15 +2130,15 @@ Lloh20:
 	movk	x8, #18350, lsl #16
 	movk	x8, #31457, lsl #32
 	movk	x8, #16260, lsl #48
-	str	x8, [sp, #664]                  ; 8-byte Folded Spill
+	str	x8, [sp, #728]                  ; 8-byte Folded Spill
 	mov	x8, #70368744177664             ; =0x400000000000
 	movk	x8, #16543, lsl #48
-	str	x8, [sp, #648]                  ; 8-byte Folded Spill
+	str	x8, [sp, #712]                  ; 8-byte Folded Spill
 	mov	x8, #149533581377536            ; =0x880000000000
 	movk	x8, #16563, lsl #48
 	fmov	d14, x8
 	mov	x8, #4641240890982006784        ; =0x4069000000000000
-	str	x8, [sp, #640]                  ; 8-byte Folded Spill
+	str	x8, [sp, #704]                  ; 8-byte Folded Spill
 	b	LBB2_3
 LBB2_2:                                 ;   in Loop: Header=BB2_3 Depth=1
 	add	x23, x23, #1
@@ -2326,9 +2146,9 @@ LBB2_2:                                 ;   in Loop: Header=BB2_3 Depth=1
 	b.eq	LBB2_11
 LBB2_3:                                 ; =>This Inner Loop Header: Depth=1
 Lloh21:
-	adrp	x8, __MergedGlobals.78@PAGE
+	adrp	x8, __MergedGlobals.76@PAGE
 Lloh22:
-	ldr	x8, [x8, __MergedGlobals.78@PAGEOFF]
+	ldr	x8, [x8, __MergedGlobals.76@PAGEOFF]
 	add	w8, w23, w8
 	and	x8, x8, #0x3
 	ldr	x8, [x24, x8, lsl #3]
@@ -2400,7 +2220,7 @@ Lloh22:
 	ldr	d3, [x26, #16]
 	fmov	d2, #10.00000000
 	mov.16b	v0, v8
-	ldr	d15, [sp, #664]                 ; 8-byte Folded Reload
+	ldr	d15, [sp, #728]                 ; 8-byte Folded Reload
 	mov.16b	v1, v15
 	bl	_decode_slot0_sqrt_price
 	str	d0, [x26, #16]
@@ -2428,7 +2248,7 @@ Lloh22:
 	ldr	d3, [x26, #40]
 	fmov	d1, #10.00000000
 	mov.16b	v0, v8
-	ldr	d15, [sp, #648]                 ; 8-byte Folded Reload
+	ldr	d15, [sp, #712]                 ; 8-byte Folded Reload
 	mov.16b	v2, v15
 	bl	_decode_slot0_sqrt_price
 	str	d0, [x26, #40]
@@ -2492,7 +2312,7 @@ Lloh22:
 	ldr	d3, [x26, #96]
 	fmov	d1, #0.50000000
 	mov.16b	v0, v8
-	ldr	d2, [sp, #640]                  ; 8-byte Folded Reload
+	ldr	d2, [sp, #704]                  ; 8-byte Folded Reload
 	bl	_decode_slot0_sqrt_price
 	str	d0, [x26, #96]
 	ldr	x0, [x20]
@@ -2712,7 +2532,7 @@ Lloh26:
 	str	d0, [x19, #128]
 	ldp	d2, d0, [x19, #136]
 	fcmp	d0, d2
-	b.ge	LBB2_12
+	b.pl	LBB2_12
 ; %bb.10:
 	adrp	x8, __MergedGlobals@PAGE+248
 	str	d0, [x8, __MergedGlobals@PAGEOFF+248]
@@ -2728,15 +2548,16 @@ Lloh29:
 	adrp	x8, __MergedGlobals@PAGE+8
 Lloh30:
 	ldr	d1, [x8, __MergedGlobals@PAGEOFF+8]
-	fmov	d0, #5.00000000
+	fmov	d0, #1.00000000
 	fcmp	d2, d0
-	b.ge	LBB2_14
+	b.pl	LBB2_14
 ; %bb.13:
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16369, lsl #48
-	fmov	d2, x8
-	fmul	d2, d1, d2
+	mov	x8, #-3689348814741910324       ; =0xcccccccccccccccc
+	movk	x8, #52429
+	movk	x8, #16368, lsl #48
+	fmov	d0, x8
+	fmul	d2, d1, d0
+	fmov	d0, #5.00000000
 	b	LBB2_15
 LBB2_14:
 	mov	x8, #70368744177664             ; =0x400000000000
@@ -2766,13 +2587,13 @@ Lloh32:
 	movk	x9, #16423, lsl #48
 	fmov	d7, x9
 	fcsel	d7, d16, d7, gt
-	str	d5, [sp, #2304]
-	str	d7, [sp, #2312]
+	str	d5, [sp, #2368]
+	str	d7, [sp, #2376]
 	ldp	d7, d5, [x8, #216]
-	fmul	d18, d7, d1
+	fmul	d18, d1, d7
 	ldp	d7, d16, [x8]
-	str	d18, [sp, #2320]
-	str	d16, [sp, #2328]
+	str	d18, [sp, #2384]
+	str	d16, [sp, #2392]
 	ldp	d17, d16, [x8, #112]
 	fdiv	d19, d1, d17
 	fcmp	d17, d3
@@ -2791,8 +2612,8 @@ Lloh32:
 	movk	x9, #16482, lsl #48
 	fmov	d19, x9
 	fcsel	d19, d21, d19, gt
-	str	d17, [sp, #2336]
-	str	d19, [sp, #2344]
+	str	d17, [sp, #2400]
+	str	d19, [sp, #2408]
 	ldr	d19, [x8, #32]
 	ldp	d17, d21, [x8, #136]
 	fdiv	d22, d1, d21
@@ -2801,12 +2622,12 @@ Lloh32:
 	movk	x9, #16424, lsl #48
 	fmov	d21, x9
 	fcsel	d21, d22, d21, gt
-	str	d19, [sp, #2352]
-	str	d21, [sp, #2360]
+	str	d19, [sp, #2416]
+	str	d21, [sp, #2424]
 	ldp	d19, d21, [x8, #48]
 	ldp	d22, d23, [x8, #184]
-	str	d19, [sp, #2368]
-	str	d22, [sp, #2376]
+	str	d19, [sp, #2432]
+	str	d22, [sp, #2440]
 	ldp	d19, d22, [x8, #200]
 	fdiv	d24, d1, d19
 	fcmp	d19, d3
@@ -2817,8 +2638,8 @@ Lloh32:
 	fmov	d19, x9
 	fcsel	d19, d24, d19, gt
 	ldp	d25, d24, [x8, #80]
-	str	d19, [sp, #2384]
-	str	d24, [sp, #2392]
+	str	d19, [sp, #2448]
+	str	d24, [sp, #2456]
 	ldr	d19, [x8, #152]
 	fdiv	d24, d1, d19
 	fcmp	d19, d3
@@ -2828,8 +2649,8 @@ Lloh32:
 	movk	x9, #16329, lsl #48
 	fmov	d19, x9
 	fcsel	d19, d24, d19, gt
-	str	d19, [sp, #2400]
-	str	d18, [sp, #2408]
+	str	d19, [sp, #2464]
+	str	d18, [sp, #2472]
 	fdiv	d18, d1, d25
 	fcmp	d25, d3
 	mov	x9, #15729                      ; =0x3d71
@@ -2847,27 +2668,27 @@ Lloh32:
 	fdiv	d6, d1, d6
 	fcsel	d6, d6, d19, gt
 	ldp	d19, d24, [x8, #168]
-	fmul	d19, d19, d1
-	str	d19, [sp, #2192]
-	str	d20, [sp, #2200]
+	fmul	d19, d1, d19
+	str	d19, [sp, #2256]
+	str	d20, [sp, #2264]
 	fcmp	d22, d3
 	mov	x8, #87960930222080             ; =0x500000000000
 	movk	x8, #16483, lsl #48
 	fmov	d19, x8
 	fdiv	d20, d1, d22
 	fcsel	d19, d20, d19, gt
-	str	d21, [sp, #2240]
-	str	d23, [sp, #2248]
-	str	d18, [sp, #2176]
-	str	d6, [sp, #2184]
-	str	d4, [sp, #2224]
-	str	d6, [sp, #2232]
-	str	d6, [sp, #2208]
-	str	d19, [sp, #2216]
-	str	d19, [sp, #2256]
-	str	d16, [sp, #2264]
-	str	d7, [sp, #2416]
-	str	d1, [sp, #2424]
+	str	d21, [sp, #2304]
+	str	d23, [sp, #2312]
+	str	d18, [sp, #2240]
+	str	d6, [sp, #2248]
+	str	d4, [sp, #2288]
+	str	d6, [sp, #2296]
+	str	d6, [sp, #2272]
+	str	d19, [sp, #2280]
+	str	d19, [sp, #2320]
+	str	d16, [sp, #2328]
+	str	d7, [sp, #2480]
+	str	d1, [sp, #2488]
 	fcmp	d17, d3
 	mov	x8, #50332                      ; =0xc49c
 	movk	x8, #45088, lsl #16
@@ -2876,11 +2697,11 @@ Lloh32:
 	fmov	d3, x8
 	fdiv	d4, d1, d17
 	fcsel	d3, d4, d3, gt
-	fmul	d1, d5, d1
-	str	d3, [sp, #2272]
-	str	d1, [sp, #2280]
-	str	d24, [sp, #2288]
-	str	d2, [sp, #2296]
+	fmul	d1, d1, d5
+	str	d3, [sp, #2336]
+	str	d1, [sp, #2344]
+	str	d24, [sp, #2352]
+	str	d2, [sp, #2360]
 Lloh33:
 	adrp	x8, lCPI2_0@PAGE
 Lloh34:
@@ -2889,8 +2710,8 @@ Lloh35:
 	adrp	x8, lCPI2_1@PAGE
 Lloh36:
 	ldr	q2, [x8, lCPI2_1@PAGEOFF]
-	str	q1, [sp, #2048]
-	str	q2, [sp, #2064]
+	str	q1, [sp, #2112]
+	str	q2, [sp, #2128]
 Lloh37:
 	adrp	x8, lCPI2_2@PAGE
 Lloh38:
@@ -2899,77 +2720,80 @@ Lloh39:
 	adrp	x8, lCPI2_3@PAGE
 Lloh40:
 	ldr	q2, [x8, lCPI2_3@PAGEOFF]
-	str	q1, [sp, #2080]
-	str	q2, [sp, #2096]
+	str	q1, [sp, #2144]
+	str	q2, [sp, #2160]
 Lloh41:
 	adrp	x8, lCPI2_4@PAGE
 Lloh42:
 	ldr	q1, [x8, lCPI2_4@PAGEOFF]
-	str	q2, [sp, #2112]
-	str	q1, [sp, #2128]
+	str	q2, [sp, #2176]
+	str	q1, [sp, #2192]
 Lloh43:
 	adrp	x8, lCPI2_5@PAGE
 Lloh44:
 	ldr	q1, [x8, lCPI2_5@PAGEOFF]
-	str	q1, [sp, #2144]
+	str	q1, [sp, #2208]
 	mov	x8, #4618441417868443648        ; =0x4018000000000000
-	str	x8, [sp, #2160]
-	str	d0, [sp, #2168]
-	add	x1, sp, #688
+	str	x8, [sp, #2224]
+	str	d0, [sp, #2232]
+	mov	w0, #58                         ; =0x3a
+	bl	_sysconf
+	str	x0, [sp, #728]                  ; 8-byte Folded Spill
+	add	x1, sp, #752
 	mov	w0, #6                          ; =0x6
 	bl	_clock_gettime
 	mov	w19, #1000                      ; =0x3e8
-	add	x26, sp, #704
-	add	x24, sp, #1024
-	add	x27, sp, #1664
-	add	x28, sp, #1792
-	add	x25, sp, #1920
+	add	x27, sp, #768
+	add	x25, sp, #1088
+	add	x28, sp, #1728
+	add	x20, sp, #1856
+	add	x26, sp, #1984
 Lloh45:
-	adrp	x20, l___const.run_native_asm_sniper_cycle.y1@PAGE
+	adrp	x21, l___const.run_native_asm_sniper_cycle.y1@PAGE
 Lloh46:
-	add	x20, x20, l___const.run_native_asm_sniper_cycle.y1@PAGEOFF
+	add	x21, x21, l___const.run_native_asm_sniper_cycle.y1@PAGEOFF
 Lloh47:
-	adrp	x21, l___const.run_native_asm_sniper_cycle.y2@PAGE
+	adrp	x22, l___const.run_native_asm_sniper_cycle.y2@PAGE
 Lloh48:
-	add	x21, x21, l___const.run_native_asm_sniper_cycle.y2@PAGEOFF
+	add	x22, x22, l___const.run_native_asm_sniper_cycle.y2@PAGEOFF
 Lloh49:
-	adrp	x22, l___const.run_native_asm_sniper_cycle.bm@PAGE
+	adrp	x23, l___const.run_native_asm_sniper_cycle.bm@PAGE
 Lloh50:
-	add	x22, x22, l___const.run_native_asm_sniper_cycle.bm@PAGEOFF
-	mov	x8, #18036                      ; =0x4674
-	movk	x8, #63124, lsl #16
-	movk	x8, #24326, lsl #32
-	movk	x8, #16264, lsl #48
+	add	x23, x23, l___const.run_native_asm_sniper_cycle.bm@PAGEOFF
+	mov	x8, #36805                      ; =0x8fc5
+	movk	x8, #30513, lsl #16
+	movk	x8, #8493, lsl #32
+	movk	x8, #16239, lsl #48
 	fmov	d8, x8
 Lloh51:
-	adrp	x23, l___const.run_native_asm_sniper_cycle.am@PAGE
+	adrp	x24, l___const.run_native_asm_sniper_cycle.am@PAGE
 Lloh52:
-	add	x23, x23, l___const.run_native_asm_sniper_cycle.am@PAGEOFF
+	add	x24, x24, l___const.run_native_asm_sniper_cycle.am@PAGEOFF
 LBB2_16:                                ; =>This Inner Loop Header: Depth=1
-	add	x8, sp, #2176
-	add	x9, sp, #2304
+	add	x8, sp, #2240
+	add	x9, sp, #2368
 	; InlineAsm Start
 	; InlineAsm End
-	add	x8, sp, #768
-	stp	x8, x26, [sp, #72]
-	add	x8, sp, #896
-	stp	x24, x8, [sp, #56]
-	add	x8, sp, #1152
+	add	x8, sp, #832
+	stp	x8, x27, [sp, #72]
+	add	x8, sp, #960
+	stp	x25, x8, [sp, #56]
+	add	x8, sp, #1216
 	str	x8, [sp, #48]
-	add	x8, sp, #1280
+	add	x8, sp, #1344
 	str	x8, [sp, #40]
-	add	x8, sp, #1408
+	add	x8, sp, #1472
 	str	x8, [sp, #32]
-	add	x8, sp, #1536
-	stp	x27, x8, [sp, #16]
-	add	x1, sp, #2304
-	add	x2, sp, #2176
-	add	x5, sp, #2048
-	stp	x25, x28, [sp]
-	mov	x3, x20
-	mov	x4, x21
-	mov	x6, x22
-	mov	x7, x23
+	add	x8, sp, #1600
+	stp	x28, x8, [sp, #16]
+	add	x1, sp, #2368
+	add	x2, sp, #2240
+	add	x5, sp, #2112
+	stp	x26, x20, [sp]
+	mov	x3, x21
+	mov	x4, x22
+	mov	x6, x23
+	mov	x7, x24
 	mov.16b	v0, v8
 	bl	_evaluate_full_loan_routes_asm
 	; InlineAsm Start
@@ -2977,911 +2801,717 @@ LBB2_16:                                ; =>This Inner Loop Header: Depth=1
 	subs	w19, w19, #1
 	b.ne	LBB2_16
 ; %bb.17:
-	add	x1, sp, #672
+	add	x1, sp, #736
 	mov	w0, #6                          ; =0x6
 	bl	_clock_gettime
-	ldr	x8, [sp, #672]
-	ldr	x9, [sp, #680]
-	ldr	x10, [sp, #688]
-	ldr	x11, [sp, #696]
+	ldr	x8, [sp, #736]
+	ldr	x9, [sp, #744]
+	ldr	x10, [sp, #752]
+	ldr	x11, [sp, #760]
 	sub	x8, x8, x10
 	scvtf	d0, x8
+	sub	x8, x9, x11
+	scvtf	d1, x8
 	mov	x8, #225833675390976            ; =0xcd6500000000
 	movk	x8, #16845, lsl #48
+	fmov	d2, x8
+	fmadd	d0, d0, d2, d1
+	mov	x8, #70368744177664             ; =0x400000000000
+	movk	x8, #16527, lsl #48
 	fmov	d1, x8
-	sub	x8, x9, x11
-	scvtf	d2, x8
-	fmadd	d0, d0, d1, d2
-	mov	x8, #43516                      ; =0xa9fc
-	movk	x8, #54001, lsl #16
-	movk	x8, #25165, lsl #32
-	movk	x8, #16208, lsl #48
-	fmov	d1, x8
-	fmul	d2, d0, d1
-	mov	x8, #60813                      ; =0xed8d
-	movk	x8, #41141, lsl #16
-	movk	x8, #50935, lsl #32
-	movk	x8, #16048, lsl #48
-	fmov	d1, x8
-	fmul	d0, d0, d1
+	fdiv	d0, d0, d1
+	fdiv	d1, d0, d1
 Lloh53:
 	adrp	x8, __MergedGlobals@PAGE+264
 Lloh54:
 	add	x8, x8, __MergedGlobals@PAGEOFF+264
-	str	d2, [sp, #648]                  ; 8-byte Folded Spill
-	str	d2, [x8]
-	str	d0, [sp, #640]                  ; 8-byte Folded Spill
-	str	d0, [x8, #8]
-	adrp	x9, __MergedGlobals.78@PAGE
-	ldr	x8, [x9, __MergedGlobals.78@PAGEOFF]
+	str	d0, [sp, #712]                  ; 8-byte Folded Spill
+	str	d0, [x8]
+	str	d1, [sp, #704]                  ; 8-byte Folded Spill
+	str	d1, [x8, #8]
+	adrp	x9, __MergedGlobals.76@PAGE
+	ldr	x8, [x9, __MergedGlobals.76@PAGEOFF]
 	add	x8, x8, #1
-	str	x8, [x9, __MergedGlobals.78@PAGEOFF]
-	ldr	d20, [sp, #1152]
+	str	x8, [x9, __MergedGlobals.76@PAGEOFF]
+	ldrsw	x23, [sp, #768]
+	ldr	d21, [sp, #1216]
+	ldr	d18, [sp, #1224]
+	fcmp	d21, #0.0
+	cset	w8, gt
 	movi.2d	v0, #0000000000000000
-	mov	x8, #18036                      ; =0x4674
-	movk	x8, #63124, lsl #16
-	movk	x8, #24326, lsl #32
-	movk	x8, #16264, lsl #48
-	fmov	d1, x8
-	fcmp	d20, d1
-	b.gt	LBB2_19
+	ldr	d1, [sp, #1728]
+	ldr	d2, [sp, #1736]
+	fadd	d1, d1, d0
+	fcsel	d3, d21, d0, gt
+	fcsel	d0, d1, d0, gt
+	mov	w9, #2                          ; =0x2
+	csinc	w9, w9, wzr, gt
+	fadd	d1, d0, d2
+	fcmp	d18, #0.0
+	mov	x10, #-9223372036854775808      ; =0x8000000000000000
+	fmov	d2, x10
+	fcsel	d2, d18, d2, gt
+	fadd	d2, d3, d2
+	fcsel	d0, d1, d0, gt
+	csel	w8, w9, w8, gt
+	ldr	d1, [sp, #1744]
+	ldr	d3, [sp, #1752]
+	fadd	d1, d0, d1
+	ldr	d23, [sp, #1232]
+	ldr	d20, [sp, #1240]
+	fadd	d4, d2, d23
+	fcmp	d23, #0.0
+	fcsel	d2, d4, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	fadd	d1, d0, d3
+	fadd	d3, d2, d20
+	fcmp	d20, #0.0
+	fcsel	d2, d3, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	ldr	d1, [sp, #1760]
+	ldr	d3, [sp, #1768]
+	fadd	d1, d0, d1
+	ldr	d22, [sp, #1248]
+	ldr	d17, [sp, #1256]
+	fadd	d4, d2, d22
+	fcmp	d22, #0.0
+	fcsel	d2, d4, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	fadd	d1, d0, d3
+	fadd	d3, d2, d17
+	fcmp	d17, #0.0
+	fcsel	d2, d3, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	ldr	d1, [sp, #1776]
+	ldr	d3, [sp, #1784]
+	fadd	d1, d0, d1
+	ldr	d19, [sp, #1264]
+	ldr	d7, [sp, #1272]
+	fadd	d4, d2, d19
+	fcmp	d19, #0.0
+	fcsel	d2, d4, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	fadd	d1, d0, d3
+	fadd	d3, d2, d7
+	fcmp	d7, #0.0
+	fcsel	d2, d3, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	ldr	d1, [sp, #1792]
+	ldr	d3, [sp, #1800]
+	fadd	d1, d0, d1
+	ldr	d16, [sp, #1280]
+	ldr	d5, [sp, #1288]
+	fadd	d4, d2, d16
+	fcmp	d16, #0.0
+	fcsel	d2, d4, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	fadd	d1, d0, d3
+	fadd	d3, d2, d5
+	fcmp	d5, #0.0
+	fcsel	d2, d3, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	ldr	d1, [sp, #1808]
+	ldr	d4, [sp, #1816]
+	fadd	d1, d0, d1
+	ldr	d6, [sp, #1296]
+	ldr	d3, [sp, #1304]
+	fadd	d24, d2, d6
+	fcmp	d6, #0.0
+	fcsel	d2, d24, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	fadd	d1, d0, d4
+	fadd	d4, d2, d3
+	fcmp	d3, #0.0
+	fcsel	d24, d4, d2, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	ldr	d1, [sp, #1824]
+	ldr	d25, [sp, #1832]
+	fadd	d1, d0, d1
+	ldr	d4, [sp, #1312]
+	ldr	d2, [sp, #1320]
+	fadd	d26, d24, d4
+	fcmp	d4, #0.0
+	fcsel	d24, d26, d24, gt
+	fcsel	d0, d1, d0, gt
+	cinc	w8, w8, gt
+	fadd	d1, d0, d25
+	fadd	d25, d24, d2
+	fcmp	d2, #0.0
+	fcsel	d24, d25, d24, gt
+	fcsel	d25, d1, d0, gt
+	cinc	w8, w8, gt
+	ldr	d1, [sp, #1328]
+	ldr	d0, [sp, #1336]
+	fadd	d26, d24, d1
+	fcmp	d1, #0.0
+	fcsel	d10, d26, d24, gt
+	ldr	d24, [sp, #1840]
+	fadd	d24, d25, d24
+	fcsel	d12, d24, d25, gt
+	cinc	w24, w8, gt
+	fcmp	d0, #0.0
+	b.le	LBB2_19
 ; %bb.18:
-	mov	w8, #0                          ; =0x0
-	movi.2d	v3, #0000000000000000
-	movi.2d	v2, #0000000000000000
-	b	LBB2_20
+	add	w24, w24, #1
+	ldr	d24, [sp, #1848]
+	fadd	d12, d12, d24
+	fadd	d10, d10, d0
+	mov	w8, #8                          ; =0x8
+	ldr	x9, [sp, #728]                  ; 8-byte Folded Reload
+	cmp	x9, #1
+	csel	x25, x8, x9, lt
+	mov.16b	v24, v10
+	b	LBB2_22
 LBB2_19:
-	mov	w8, #1                          ; =0x1
-	ldr	d2, [sp, #1664]
-	mov	x9, #53374                      ; =0xd07e
-	movk	x9, #48712, lsl #16
-	movk	x9, #14833, lsl #32
-	movk	x9, #16256, lsl #48
-	fmov	d1, x9
-	mov.16b	v3, v20
-LBB2_20:
-	ldrsw	x20, [sp, #704]
-	ldr	d4, [sp, #1672]
-	ldr	d5, [sp, #1680]
-	fadd	d4, d4, d2
-	ldr	d23, [sp, #1160]
-	ldr	d21, [sp, #1168]
-	fcmp	d23, d1
-	fcsel	d0, d23, d0, gt
-	fadd	d1, d3, d0
-	fcsel	d2, d4, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	mov	x9, #53374                      ; =0xd07e
-	movk	x9, #48712, lsl #16
-	movk	x9, #14833, lsl #32
-	movk	x9, #16256, lsl #48
-	fmov	d0, x9
-	mov	x28, #18036                     ; =0x4674
-	movk	x28, #63124, lsl #16
-	movk	x28, #24326, lsl #32
-	movk	x28, #16264, lsl #48
-	fmov	d24, x28
-	fcsel	d3, d24, d0, eq
-	fadd	d4, d5, d2
-	fadd	d5, d21, d1
-	fcmp	d21, d3
-	fcsel	d1, d5, d1, gt
-	fcsel	d2, d4, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d3, d24, d0, eq
-	ldr	d4, [sp, #1688]
-	ldr	d5, [sp, #1696]
-	fadd	d4, d4, d2
-	ldr	d22, [sp, #1176]
-	ldr	d18, [sp, #1184]
-	fadd	d6, d22, d1
-	fcmp	d22, d3
-	fcsel	d1, d6, d1, gt
-	fcsel	d2, d4, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d3, d24, d0, eq
-	fadd	d4, d5, d2
-	fadd	d5, d18, d1
-	fcmp	d18, d3
-	fcsel	d1, d5, d1, gt
-	fcsel	d2, d4, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d3, d24, d0, eq
-	ldr	d4, [sp, #1704]
-	ldr	d5, [sp, #1712]
-	fadd	d4, d4, d2
-	ldr	d19, [sp, #1192]
-	ldr	d16, [sp, #1200]
-	fadd	d6, d19, d1
-	fcmp	d19, d3
-	fcsel	d1, d6, d1, gt
-	fcsel	d2, d4, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d3, d24, d0, eq
-	fadd	d4, d5, d2
-	fadd	d5, d16, d1
-	fcmp	d16, d3
-	fcsel	d1, d5, d1, gt
-	fcsel	d2, d4, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d3, d24, d0, eq
-	ldr	d4, [sp, #1720]
-	ldr	d5, [sp, #1728]
-	fadd	d4, d4, d2
-	ldr	d17, [sp, #1208]
-	ldr	d6, [sp, #1216]
-	fadd	d7, d17, d1
-	fcmp	d17, d3
-	fcsel	d1, d7, d1, gt
-	fcsel	d2, d4, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d3, d24, d0, eq
-	fadd	d4, d5, d2
-	fadd	d5, d6, d1
-	fcmp	d6, d3
-	fcsel	d1, d5, d1, gt
-	fcsel	d2, d4, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d3, d24, d0, eq
-	ldr	d4, [sp, #1736]
-	ldr	d5, [sp, #1744]
-	fadd	d25, d4, d2
-	ldr	d7, [sp, #1224]
-	ldr	d4, [sp, #1232]
-	fadd	d26, d7, d1
-	fcmp	d7, d3
-	fcsel	d1, d26, d1, gt
-	fcsel	d2, d25, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d3, d24, d0, eq
-	fadd	d5, d5, d2
-	fadd	d25, d4, d1
-	fcmp	d4, d3
-	fcsel	d1, d25, d1, gt
-	fcsel	d3, d5, d2, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d25, d24, d0, eq
-	ldr	d2, [sp, #1752]
-	ldr	d26, [sp, #1760]
-	fadd	d27, d2, d3
-	ldr	d5, [sp, #1240]
-	ldr	d2, [sp, #1248]
-	fadd	d28, d5, d1
-	fcmp	d5, d25
-	fcsel	d1, d28, d1, gt
-	fcsel	d3, d27, d3, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d25, d24, d0, eq
-	fadd	d26, d26, d3
-	fadd	d27, d2, d1
-	fcmp	d2, d25
-	fcsel	d25, d27, d1, gt
-	fcsel	d26, d26, d3, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d27, d24, d0, eq
-	ldr	d1, [sp, #1768]
-	ldr	d28, [sp, #1776]
-	fadd	d29, d1, d26
-	ldr	d3, [sp, #1256]
-	ldr	d1, [sp, #1264]
-	fcmp	d3, d27
-	fadd	d27, d3, d25
-	fcsel	d25, d27, d25, gt
-	fcsel	d26, d29, d26, gt
-	cinc	w8, w8, gt
-	cmp	w8, #0
-	fcsel	d27, d24, d0, eq
-	fadd	d28, d28, d26
-	fadd	d29, d1, d25
-	fcmp	d1, d27
-	fcsel	d14, d29, d25, gt
-	fcsel	d11, d28, d26, gt
-	cinc	w21, w8, gt
-	cmp	w21, #0
-	fcsel	d24, d24, d0, eq
-	ldr	d0, [sp, #1272]
-	fcmp	d0, d24
-	b.le	LBB2_22
-; %bb.21:
-	add	w21, w21, #1
-	ldr	d24, [sp, #1784]
-	fadd	d11, d24, d11
-	fadd	d14, d0, d14
-	b	LBB2_23
+	mov	w8, #8                          ; =0x8
+	ldr	x9, [sp, #728]                  ; 8-byte Folded Reload
+	cmp	x9, #1
+	csel	x25, x8, x9, lt
+	cbz	w24, LBB2_21
+; %bb.20:
+	mov.16b	v24, v10
+	b	LBB2_22
+LBB2_21:
+	add	x8, sp, #1216
+	ldr	d24, [x8, x23, lsl #3]
 LBB2_22:
-	cbz	w21, LBB2_73
-LBB2_23:
-	sub	w8, w21, #1
-	ucvtf	d24, w8
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #49024, lsl #48
+	mov	x8, #36805                      ; =0x8fc5
+	movk	x8, #30513, lsl #16
+	movk	x8, #8493, lsl #32
+	movk	x8, #49007, lsl #48
 	fmov	d25, x8
-	mov	x8, #18036                      ; =0x4674
-	movk	x8, #63124, lsl #16
-	movk	x8, #24326, lsl #32
-	movk	x8, #49032, lsl #48
-	fmov	d26, x8
-	fadd	d26, d14, d26
-	fmadd	d13, d24, d25, d26
+	fadd	d14, d24, d25
+	movi.2d	v25, #0000000000000000
 	movi.2d	v24, #0000000000000000
-	fmaxnm	d15, d13, d24
-	fcmp	d13, #0.0
-	b.le	LBB2_74
-LBB2_24:
+	str	d24, [sp, #728]                 ; 8-byte Folded Spill
+	fmaxnm	d15, d14, d25
+	fcmp	d14, #0.0
 	mov	x8, #59921                      ; =0xea11
 	movk	x8, #33069, lsl #16
 	movk	x8, #38809, lsl #32
 	movk	x8, #15729, lsl #48
 	fmov	d24, x8
-	fcmp	d14, d24
-	b.le	LBB2_74
-; %bb.25:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d24, x8
-	fcmp	d20, d24
-	b.le	LBB2_28
-; %bb.26:
-	ldr	d24, [sp, #1024]
+	fccmp	d10, d24, #4, gt
+	b.le	LBB2_71
+; %bb.23:
+	fcmp	d21, #0.0
+	b.le	LBB2_26
+; %bb.24:
+	ldr	d24, [sp, #1088]
 	fcmp	d24, #0.0
-	b.gt	LBB2_28
+	b.hi	LBB2_26
+; %bb.25:
+	fdiv	d21, d21, d10
+	fmul	d21, d15, d21
+	str	d21, [sp, #1088]
+	str	d21, [sp, #960]
+	str	xzr, [sp, #832]
+LBB2_26:
+	fcmp	d18, #0.0
+	b.le	LBB2_29
 ; %bb.27:
-	fmul	d20, d15, d20
-	fdiv	d20, d20, d14
-	str	d20, [sp, #1024]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d24, x8
-	fmul	d24, d20, d24
-	str	d24, [sp, #896]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d24, x8
-	fmul	d20, d20, d24
-	str	d20, [sp, #768]
-LBB2_28:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d20, x8
-	fcmp	d23, d20
-	b.le	LBB2_31
-; %bb.29:
-	ldr	d20, [sp, #1032]
-	fcmp	d20, #0.0
-	b.gt	LBB2_31
-; %bb.30:
-	fmul	d20, d15, d23
-	fdiv	d20, d20, d14
-	str	d20, [sp, #1032]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d23, x8
-	fmul	d23, d20, d23
-	str	d23, [sp, #904]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d23, x8
-	fmul	d20, d20, d23
-	str	d20, [sp, #776]
-LBB2_31:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d20, x8
-	fcmp	d21, d20
-	b.le	LBB2_34
-; %bb.32:
-	ldr	d20, [sp, #1040]
-	fcmp	d20, #0.0
-	b.gt	LBB2_34
-; %bb.33:
-	fmul	d20, d15, d21
-	fdiv	d20, d20, d14
-	str	d20, [sp, #1040]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d21, x8
-	fmul	d21, d20, d21
-	str	d21, [sp, #912]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d21, x8
-	fmul	d20, d20, d21
-	str	d20, [sp, #784]
-LBB2_34:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d20, x8
-	fcmp	d22, d20
-	b.le	LBB2_37
-; %bb.35:
-	ldr	d20, [sp, #1048]
-	fcmp	d20, #0.0
-	b.gt	LBB2_37
-; %bb.36:
-	fmul	d20, d15, d22
-	fdiv	d20, d20, d14
-	str	d20, [sp, #1048]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d21, x8
-	fmul	d21, d20, d21
-	str	d21, [sp, #920]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d21, x8
-	fmul	d20, d20, d21
-	str	d20, [sp, #792]
-LBB2_37:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d20, x8
-	fcmp	d18, d20
-	b.le	LBB2_40
-; %bb.38:
-	ldr	d20, [sp, #1056]
-	fcmp	d20, #0.0
-	b.gt	LBB2_40
-; %bb.39:
+	ldr	d21, [sp, #1096]
+	fcmp	d21, #0.0
+	b.hi	LBB2_29
+; %bb.28:
+	fdiv	d18, d18, d10
 	fmul	d18, d15, d18
-	fdiv	d18, d18, d14
-	str	d18, [sp, #1056]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d20, x8
-	fmul	d20, d18, d20
-	str	d20, [sp, #928]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d20, x8
-	fmul	d18, d18, d20
-	str	d18, [sp, #800]
-LBB2_40:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d18, x8
-	fcmp	d19, d18
-	b.le	LBB2_43
-; %bb.41:
-	ldr	d18, [sp, #1064]
+	str	d18, [sp, #1096]
+	str	d18, [sp, #968]
+	str	xzr, [sp, #840]
+LBB2_29:
+	fcmp	d23, #0.0
+	b.le	LBB2_32
+; %bb.30:
+	ldr	d18, [sp, #1104]
 	fcmp	d18, #0.0
-	b.gt	LBB2_43
+	b.hi	LBB2_32
+; %bb.31:
+	fdiv	d18, d23, d10
+	fmul	d18, d15, d18
+	str	d18, [sp, #1104]
+	str	d18, [sp, #976]
+	str	xzr, [sp, #848]
+LBB2_32:
+	fcmp	d20, #0.0
+	b.le	LBB2_35
+; %bb.33:
+	ldr	d18, [sp, #1112]
+	fcmp	d18, #0.0
+	b.hi	LBB2_35
+; %bb.34:
+	fdiv	d18, d20, d10
+	fmul	d18, d15, d18
+	str	d18, [sp, #1112]
+	str	d18, [sp, #984]
+	str	xzr, [sp, #856]
+LBB2_35:
+	fcmp	d22, #0.0
+	b.le	LBB2_38
+; %bb.36:
+	ldr	d18, [sp, #1120]
+	fcmp	d18, #0.0
+	b.hi	LBB2_38
+; %bb.37:
+	fdiv	d18, d22, d10
+	fmul	d18, d15, d18
+	str	d18, [sp, #1120]
+	str	d18, [sp, #992]
+	str	xzr, [sp, #864]
+LBB2_38:
+	fcmp	d17, #0.0
+	b.le	LBB2_41
+; %bb.39:
+	ldr	d18, [sp, #1128]
+	fcmp	d18, #0.0
+	b.hi	LBB2_41
+; %bb.40:
+	fdiv	d17, d17, d10
+	fmul	d17, d15, d17
+	str	d17, [sp, #1128]
+	str	d17, [sp, #1000]
+	str	xzr, [sp, #872]
+LBB2_41:
+	fcmp	d19, #0.0
+	b.le	LBB2_44
 ; %bb.42:
-	fmul	d18, d15, d19
-	fdiv	d18, d18, d14
-	str	d18, [sp, #1064]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d19, x8
-	fmul	d19, d18, d19
-	str	d19, [sp, #936]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d19, x8
-	fmul	d18, d18, d19
-	str	d18, [sp, #808]
-LBB2_43:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d18, x8
-	fcmp	d16, d18
-	b.le	LBB2_46
-; %bb.44:
-	ldr	d18, [sp, #1072]
-	fcmp	d18, #0.0
-	b.gt	LBB2_46
+	ldr	d17, [sp, #1136]
+	fcmp	d17, #0.0
+	b.hi	LBB2_44
+; %bb.43:
+	fdiv	d17, d19, d10
+	fmul	d17, d15, d17
+	str	d17, [sp, #1136]
+	str	d17, [sp, #1008]
+	str	xzr, [sp, #880]
+LBB2_44:
+	fcmp	d7, #0.0
+	b.le	LBB2_47
 ; %bb.45:
-	fmul	d16, d15, d16
-	fdiv	d16, d16, d14
-	str	d16, [sp, #1072]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d18, x8
-	fmul	d18, d16, d18
-	str	d18, [sp, #944]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d18, x8
-	fmul	d16, d16, d18
-	str	d16, [sp, #816]
-LBB2_46:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d16, x8
-	fcmp	d17, d16
-	b.le	LBB2_49
-; %bb.47:
-	ldr	d16, [sp, #1080]
+	ldr	d17, [sp, #1144]
+	fcmp	d17, #0.0
+	b.hi	LBB2_47
+; %bb.46:
+	fdiv	d7, d7, d10
+	fmul	d7, d15, d7
+	str	d7, [sp, #1144]
+	str	d7, [sp, #1016]
+	str	xzr, [sp, #888]
+LBB2_47:
 	fcmp	d16, #0.0
-	b.gt	LBB2_49
+	b.le	LBB2_50
 ; %bb.48:
-	fmul	d16, d15, d17
-	fdiv	d16, d16, d14
-	str	d16, [sp, #1080]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d17, x8
-	fmul	d17, d16, d17
-	str	d17, [sp, #952]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d17, x8
-	fmul	d16, d16, d17
-	str	d16, [sp, #824]
-LBB2_49:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d16, x8
-	fcmp	d6, d16
-	b.le	LBB2_52
-; %bb.50:
-	ldr	d16, [sp, #1088]
-	fcmp	d16, #0.0
-	b.gt	LBB2_52
+	ldr	d7, [sp, #1152]
+	fcmp	d7, #0.0
+	b.hi	LBB2_50
+; %bb.49:
+	fdiv	d7, d16, d10
+	fmul	d7, d15, d7
+	str	d7, [sp, #1152]
+	str	d7, [sp, #1024]
+	str	xzr, [sp, #896]
+LBB2_50:
+	fcmp	d5, #0.0
+	b.le	LBB2_53
 ; %bb.51:
-	fmul	d6, d15, d6
-	fdiv	d6, d6, d14
-	str	d6, [sp, #1088]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d16, x8
-	fmul	d16, d6, d16
-	str	d16, [sp, #960]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d16, x8
-	fmul	d6, d6, d16
-	str	d6, [sp, #832]
-LBB2_52:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d6, x8
-	fcmp	d7, d6
-	b.le	LBB2_55
-; %bb.53:
-	ldr	d6, [sp, #1096]
+	ldr	d7, [sp, #1160]
+	fcmp	d7, #0.0
+	b.hi	LBB2_53
+; %bb.52:
+	fdiv	d5, d5, d10
+	fmul	d5, d15, d5
+	str	d5, [sp, #1160]
+	str	d5, [sp, #1032]
+	str	xzr, [sp, #904]
+LBB2_53:
 	fcmp	d6, #0.0
-	b.gt	LBB2_55
+	b.le	LBB2_56
 ; %bb.54:
-	fmul	d6, d15, d7
-	fdiv	d6, d6, d14
-	str	d6, [sp, #1096]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d7, x8
-	fmul	d7, d6, d7
-	str	d7, [sp, #968]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d7, x8
-	fmul	d6, d6, d7
-	str	d6, [sp, #840]
-LBB2_55:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d6, x8
-	fcmp	d4, d6
-	b.le	LBB2_58
-; %bb.56:
-	ldr	d6, [sp, #1104]
-	fcmp	d6, #0.0
-	b.gt	LBB2_58
+	ldr	d5, [sp, #1168]
+	fcmp	d5, #0.0
+	b.hi	LBB2_56
+; %bb.55:
+	fdiv	d5, d6, d10
+	fmul	d5, d15, d5
+	str	d5, [sp, #1168]
+	str	d5, [sp, #1040]
+	str	xzr, [sp, #912]
+LBB2_56:
+	fcmp	d3, #0.0
+	b.le	LBB2_59
 ; %bb.57:
-	fmul	d4, d15, d4
-	fdiv	d4, d4, d14
-	str	d4, [sp, #1104]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d6, x8
-	fmul	d6, d4, d6
-	str	d6, [sp, #976]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d6, x8
-	fmul	d4, d4, d6
-	str	d4, [sp, #848]
-LBB2_58:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d4, x8
-	fcmp	d5, d4
-	b.le	LBB2_61
-; %bb.59:
-	ldr	d4, [sp, #1112]
+	ldr	d5, [sp, #1176]
+	fcmp	d5, #0.0
+	b.hi	LBB2_59
+; %bb.58:
+	fdiv	d3, d3, d10
+	fmul	d3, d15, d3
+	str	d3, [sp, #1176]
+	str	d3, [sp, #1048]
+	str	xzr, [sp, #920]
+LBB2_59:
 	fcmp	d4, #0.0
-	b.gt	LBB2_61
+	b.le	LBB2_62
 ; %bb.60:
-	fmul	d4, d15, d5
-	fdiv	d4, d4, d14
-	str	d4, [sp, #1112]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d5, x8
-	fmul	d5, d4, d5
-	str	d5, [sp, #984]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d5, x8
-	fmul	d4, d4, d5
-	str	d4, [sp, #856]
-LBB2_61:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d4, x8
-	fcmp	d2, d4
-	b.le	LBB2_64
-; %bb.62:
-	ldr	d4, [sp, #1120]
-	fcmp	d4, #0.0
-	b.gt	LBB2_64
+	ldr	d3, [sp, #1184]
+	fcmp	d3, #0.0
+	b.hi	LBB2_62
+; %bb.61:
+	fdiv	d3, d4, d10
+	fmul	d3, d15, d3
+	str	d3, [sp, #1184]
+	str	d3, [sp, #1056]
+	str	xzr, [sp, #928]
+LBB2_62:
+	fcmp	d2, #0.0
+	b.le	LBB2_65
 ; %bb.63:
+	ldr	d3, [sp, #1192]
+	fcmp	d3, #0.0
+	b.hi	LBB2_65
+; %bb.64:
+	fdiv	d2, d2, d10
 	fmul	d2, d15, d2
-	fdiv	d2, d2, d14
-	str	d2, [sp, #1120]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d4, x8
-	fmul	d4, d2, d4
-	str	d4, [sp, #992]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d4, x8
-	fmul	d2, d2, d4
-	str	d2, [sp, #864]
-LBB2_64:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d2, x8
-	fcmp	d3, d2
-	b.le	LBB2_67
-; %bb.65:
-	ldr	d2, [sp, #1128]
-	fcmp	d2, #0.0
-	b.gt	LBB2_67
+	str	d2, [sp, #1192]
+	str	d2, [sp, #1064]
+	str	xzr, [sp, #936]
+LBB2_65:
+	fcmp	d1, #0.0
+	b.le	LBB2_68
 ; %bb.66:
-	fmul	d2, d15, d3
-	fdiv	d2, d2, d14
-	str	d2, [sp, #1128]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d3, x8
-	fmul	d3, d2, d3
-	str	d3, [sp, #1000]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d3, x8
-	fmul	d2, d2, d3
-	str	d2, [sp, #872]
-LBB2_67:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d2, x8
-	fcmp	d1, d2
-	b.le	LBB2_70
-; %bb.68:
-	ldr	d2, [sp, #1136]
+	ldr	d2, [sp, #1200]
 	fcmp	d2, #0.0
-	b.gt	LBB2_70
-; %bb.69:
+	b.hi	LBB2_68
+; %bb.67:
+	fdiv	d1, d1, d10
 	fmul	d1, d15, d1
-	fdiv	d1, d1, d14
-	str	d1, [sp, #1136]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d2, x8
-	fmul	d2, d1, d2
-	str	d2, [sp, #1008]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
+	str	d1, [sp, #1200]
+	str	d1, [sp, #1072]
+	str	xzr, [sp, #944]
+LBB2_68:
+	fcmp	d0, #0.0
+	b.le	LBB2_71
+; %bb.69:
+	ldr	d1, [sp, #1208]
+	fcmp	d1, #0.0
+	b.hi	LBB2_71
+; %bb.70:
+	fdiv	d0, d0, d10
+	fmul	d0, d15, d0
+	str	d0, [sp, #1208]
+	str	d0, [sp, #1080]
+	str	xzr, [sp, #952]
+LBB2_71:
+	add	x8, sp, #1088
+	ldr	d0, [x8, x23, lsl #3]
+	fcmp	d15, d0
+	fcsel	d13, d15, d0, gt
+	mov.16b	v11, v15
+	b.gt	LBB2_73
+; %bb.72:
+	add	x8, sp, #960
+	ldr	d11, [x8, x23, lsl #3]
+	add	x8, sp, #832
+	ldr	d1, [x8, x23, lsl #3]
+	mov	x8, #5243                       ; =0x147b
+	movk	x8, #18350, lsl #16
+	movk	x8, #47841, lsl #32
+	movk	x8, #16471, lsl #48
 	fmov	d2, x8
 	fmul	d1, d1, d2
-	str	d1, [sp, #880]
-LBB2_70:
-	mov	x8, #53374                      ; =0xd07e
-	movk	x8, #48712, lsl #16
-	movk	x8, #14833, lsl #32
-	movk	x8, #16256, lsl #48
-	fmov	d1, x8
-	fcmp	d0, d1
-	b.le	LBB2_74
-; %bb.71:
-	ldr	d1, [sp, #1144]
-	fcmp	d1, #0.0
-	b.gt	LBB2_74
-; %bb.72:
-	fmul	d0, d15, d0
-	fdiv	d0, d0, d14
-	str	d0, [sp, #1144]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	fmov	d1, x8
-	fmul	d1, d0, d1
-	str	d1, [sp, #1016]
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39320
-	movk	x8, #16329, lsl #48
-	fmov	d1, x8
-	fmul	d0, d0, d1
-	str	d0, [sp, #888]
-	b	LBB2_74
+	str	d1, [sp, #728]                  ; 8-byte Folded Spill
 LBB2_73:
-	add	x8, sp, #1152
-	ldr	d24, [x8, x20, lsl #3]
-	mov	x8, #18036                      ; =0x4674
-	movk	x8, #63124, lsl #16
-	movk	x8, #24326, lsl #32
-	movk	x8, #49032, lsl #48
-	fmov	d25, x8
-	fadd	d13, d24, d25
-	movi.2d	v24, #0000000000000000
-	fmaxnm	d15, d13, d24
-	fcmp	d13, #0.0
-	b.gt	LBB2_24
-LBB2_74:
-	add	x8, sp, #1024
-	ldr	d0, [x8, x20, lsl #3]
-	fcmp	d15, d0
-	b.le	LBB2_76
-; %bb.75:
-	mov	x8, #-7378697629483820647       ; =0x9999999999999999
-	movk	x8, #39322
-	movk	x8, #16361, lsl #48
-	mov	x9, #-7378697629483820647       ; =0x9999999999999999
-	movk	x9, #39320
-	movk	x9, #16329, lsl #48
-	fmov	d1, x8
-	fmov	d2, x9
-	fmul	d10, d15, d1
-	fmul	d8, d15, d2
-	b	LBB2_77
-LBB2_76:
-	add	x8, sp, #896
-	ldr	d10, [x8, x20, lsl #3]
-	add	x8, sp, #768
-	ldr	d8, [x8, x20, lsl #3]
-LBB2_77:
-	fmaxnm	d2, d15, d0
 Lloh55:
-	adrp	x8, __MergedGlobals@PAGE+248
+	adrp	x9, __MergedGlobals@PAGE+248
 Lloh56:
-	add	x8, x8, __MergedGlobals@PAGEOFF+248
-	ldr	x19, [x8, #32]
-	ldr	d9, [x8]
-	ldr	x8, [x8, #40]
-	mov	x9, #64511                      ; =0xfbff
-	movk	x9, #13926, lsl #16
-	movk	x9, #1612, lsl #32
+	add	x9, x9, __MergedGlobals@PAGEOFF+248
+	lsl	w22, w25, #3
+	ldr	x8, [x9, #32]
+	ucvtf	d1, x8
+	mov	x8, #145685290680320            ; =0x848000000000
+	movk	x8, #16686, lsl #48
+	fmov	d2, x8
+	fdiv	d3, d1, d2
+	ldr	x8, [x9, #40]
+	ucvtf	d1, x8
+	fdiv	d1, d1, d2
+	fadd	d4, d3, d1
 Lloh57:
-	adrp	x14, l___const.run_native_asm_sniper_cycle.route_names@PAGE
+	adrp	x8, __MergedGlobals.76@PAGE+8
 Lloh58:
-	add	x14, x14, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
-	cmp	x19, x9
-	str	d2, [sp, #664]                  ; 8-byte Folded Spill
-	b.hi	LBB2_82
-; %bb.78:
-	fmov	d1, #5.00000000
-	fcmp	d9, d1
-	b.lt	LBB2_82
-LBB2_79:
-	fcmp	d2, #0.0
-	str	x20, [sp, #632]                 ; 8-byte Folded Spill
-	str	x21, [sp, #624]                 ; 8-byte Folded Spill
-	b.gt	LBB2_90
-; %bb.80:
-	fmov	d0, #5.00000000
-	fcmp	d9, d0
-	b.lt	LBB2_90
-; %bb.81:
+	ldr	x8, [x8, __MergedGlobals.76@PAGEOFF+8]
+	ucvtf	d1, x8
+	fdiv	d5, d1, d2
+	str	d4, [sp, #640]                  ; 8-byte Folded Spill
+	fadd	d2, d4, d5
+	ldr	x28, [x9, #48]
+	ldr	x27, [x9, #56]
+	mov	x8, #5243                       ; =0x147b
+	movk	x8, #18350, lsl #16
+	movk	x8, #47841, lsl #32
+	movk	x8, #16471, lsl #48
+	fmov	d1, x8
+	str	d2, [sp, #632]                  ; 8-byte Folded Spill
+	fmul	d4, d2, d1
+	str	d3, [sp, #656]                  ; 8-byte Folded Spill
+	fmul	d2, d3, d1
+	str	d4, [sp, #616]                  ; 8-byte Folded Spill
+	stp	d4, d2, [x9, #64]
+	str	d2, [sp, #648]                  ; 8-byte Folded Spill
+	str	d5, [sp, #624]                  ; 8-byte Folded Spill
+	fmul	d1, d5, d1
+	str	d1, [sp, #608]                  ; 8-byte Folded Spill
+	str	d1, [x9, #80]
+	ldr	x19, [x9, #48]
+	ldr	d1, [x9]
+	fcmp	d13, #0.0
+	cset	w10, gt
+	fmov	d2, #1.00000000
+	fcmp	d1, d2
+	ldr	x8, [x9, #88]
+	csinc	w20, w10, wzr, pl
+	mov	x10, #20480                     ; =0x5000
+	movk	x10, #10041, lsl #16
+	movk	x10, #1164, lsl #32
 Lloh59:
-	adrp	x21, l_.str.30@PAGE
+	adrp	x11, __MergedGlobals@PAGE+4
 Lloh60:
-	add	x21, x21, l_.str.30@PAGEOFF
-	b	LBB2_93
-LBB2_82:
+	add	x11, x11, __MergedGlobals@PAGEOFF+4
 Lloh61:
-	adrp	x9, __MergedGlobals@PAGE+296
+	adrp	x26, l___const.run_native_asm_sniper_cycle.route_names@PAGE
 Lloh62:
-	ldr	x9, [x9, __MergedGlobals@PAGEOFF+296]
+	add	x26, x26, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
+	cmp	x19, x10
+	b.lo	LBB2_85
+; %bb.74:
+	ldr	x9, [x9, #96]
 	cmp	x8, x9
-	b.ls	LBB2_79
-; %bb.83:
-	fcmp	d2, #0.0
-	b.le	LBB2_79
-; %bb.84:
-	str	d15, [sp, #632]                 ; 8-byte Folded Spill
-Lloh63:
-	adrp	x10, __MergedGlobals@PAGE+4
-Lloh64:
-	add	x10, x10, __MergedGlobals@PAGEOFF+4
+	b.ls	LBB2_85
+; %bb.75:
+	cbz	w20, LBB2_85
+; %bb.76:
+	mov.16b	v8, v14
+	mov	x10, x11
 	ldr	w9, [x10], #-4
-	ldr	x11, [x10, #304]
+	ldr	x11, [x10, #352]
 	add	x11, x11, #1
-	stp	x8, x11, [x10, #296]
-	mov	x11, #5243                      ; =0x147b
-	movk	x11, #18350, lsl #16
-	movk	x11, #47841, lsl #32
-	movk	x11, #16471, lsl #48
-	fmov	d1, x11
-	fmul	d15, d2, d1
-	fmul	d12, d10, d1
-	fmul	d3, d8, d1
-	ldp	d1, d2, [x10, #312]
-	fadd	d1, d1, d15
-	fadd	d2, d2, d12
-	stp	d1, d2, [x10, #312]
-	ldr	d1, [x10, #328]
-	str	d3, [sp, #616]                  ; 8-byte Folded Spill
-	fadd	d1, d1, d3
-	str	d1, [x10, #328]
+	stp	x8, x11, [x10, #344]
+	mov	x10, #5243                      ; =0x147b
+	movk	x10, #18350, lsl #16
+	movk	x10, #47841, lsl #32
+	movk	x10, #16471, lsl #48
+	fmov	d1, x10
 	cmp	w9, #1
-	b.lt	LBB2_87
-; %bb.85:
+	b.lt	LBB2_79
+; %bb.77:
 	mov	w10, #19                        ; =0x13
 	cmp	w9, #19
 	csel	w11, w9, w10, lo
 	add	w9, w11, #1
-Lloh65:
+Lloh63:
 	adrp	x12, _g_block_ring@PAGE
-Lloh66:
+Lloh64:
 	add	x12, x12, _g_block_ring@PAGEOFF
 	mov	w13, #224                       ; =0xe0
 	umaddl	x10, w11, w13, x12
 	sub	w11, w11, #1
 	umaddl	x11, w11, w13, x12
-LBB2_86:                                ; =>This Inner Loop Header: Depth=1
-	ldp	q1, q2, [x11, #160]
-	stp	q1, q2, [x10, #160]
-	ldp	q1, q2, [x11, #192]
-	stp	q1, q2, [x10, #192]
-	ldp	q1, q2, [x11, #96]
-	stp	q1, q2, [x10, #96]
-	ldp	q1, q2, [x11, #128]
-	stp	q1, q2, [x10, #128]
-	ldp	q1, q2, [x11, #32]
-	stp	q1, q2, [x10, #32]
-	ldp	q1, q2, [x11, #64]
-	stp	q1, q2, [x10, #64]
-	ldp	q1, q2, [x11], #-224
+LBB2_78:                                ; =>This Inner Loop Header: Depth=1
+	ldp	q2, q3, [x11, #160]
+	stp	q2, q3, [x10, #160]
+	ldp	q2, q3, [x11, #192]
+	stp	q2, q3, [x10, #192]
+	ldp	q2, q3, [x11, #96]
+	stp	q2, q3, [x10, #96]
+	ldp	q2, q3, [x11, #128]
+	stp	q2, q3, [x10, #128]
+	ldp	q2, q3, [x11, #32]
+	stp	q2, q3, [x10, #32]
+	ldp	q2, q3, [x11, #64]
+	stp	q2, q3, [x10, #64]
+	ldp	q2, q3, [x11], #-224
 	sub	w9, w9, #1
-	stp	q1, q2, [x10], #-224
+	stp	q2, q3, [x10], #-224
 	cmp	w9, #1
-	b.gt	LBB2_86
-LBB2_87:
+	b.gt	LBB2_78
+LBB2_79:
+	fmul	d9, d13, d1
+	fmul	d14, d11, d1
 	adrp	x9, _g_block_ring@PAGE
 	str	x8, [x9, _g_block_ring@PAGEOFF]
-	ldr	x8, [x14, x20, lsl #3]
-	ldr	d1, [sp, #632]                  ; 8-byte Folded Reload
-	fcmp	d1, d0
-	b.le	LBB2_107
-; %bb.88:
-	cmp	w21, #1
-	b.ls	LBB2_107
-; %bb.89:
-	stp	x21, x8, [sp, #8]
-Lloh67:
+	ldr	x8, [x26, x23, lsl #3]
+	fcmp	d15, d0
+	b.le	LBB2_82
+; %bb.80:
+	cmp	w24, #1
+	b.ls	LBB2_82
+; %bb.81:
+Lloh65:
 	adrp	x0, _g_block_ring@PAGE+8
-Lloh68:
+Lloh66:
 	add	x0, x0, _g_block_ring@PAGEOFF+8
-	str	d9, [sp]
-Lloh69:
+	stp	x24, x8, [sp]
+Lloh67:
 	adrp	x2, l_.str.25@PAGE
-Lloh70:
+Lloh68:
 	add	x2, x2, l_.str.25@PAGEOFF
 	mov	w1, #128                        ; =0x80
 	bl	_snprintf
-	mov.16b	v0, v11
-	b	LBB2_108
-LBB2_90:
-	ldr	w8, [sp, #660]                  ; 4-byte Folded Reload
-	cbnz	w8, LBB2_92
-; %bb.91:
-	adrp	x8, __MergedGlobals@PAGE+288
-	ldr	x10, [x8, __MergedGlobals@PAGEOFF+288]
-	adrp	x9, __MergedGlobals.78@PAGE+8
-	ldr	x11, [x9, __MergedGlobals.78@PAGEOFF+8]
-	add	x11, x11, #20
-	cmp	x10, x11
-	b.hs	LBB2_112
-LBB2_92:
+	mov.16b	v0, v12
+	b	LBB2_83
+LBB2_82:
+Lloh69:
+	adrp	x0, _g_block_ring@PAGE+8
+Lloh70:
+	add	x0, x0, _g_block_ring@PAGEOFF+8
+	str	x8, [sp]
 Lloh71:
-	adrp	x21, l_.str.33@PAGE
+	adrp	x2, l_.str.26@PAGE
 Lloh72:
-	add	x21, x21, l_.str.33@PAGEOFF
-LBB2_93:
+	add	x2, x2, l_.str.26@PAGEOFF
+	mov	w1, #128                        ; =0x80
+	bl	_snprintf
+	add	x8, sp, #1728
+	ldr	d0, [x8, x23, lsl #3]
+LBB2_83:
+	mov	x8, #5243                       ; =0x147b
+	movk	x8, #18350, lsl #16
+	movk	x8, #47841, lsl #32
+	movk	x8, #16471, lsl #48
+	fmov	d1, x8
+	fmul	d0, d0, d1
 Lloh73:
-	adrp	x10, __MergedGlobals@PAGE+280
+	adrp	x8, l_.str.27@PAGE
 Lloh74:
-	add	x10, x10, __MergedGlobals@PAGEOFF+280
-	ldr	x27, [x10, #56]
-	ldr	x25, [x10, #64]
+	add	x8, x8, l_.str.27@PAGEOFF
+	ldr	q1, [x8]
 Lloh75:
-	adrp	x8, __MergedGlobals.78@PAGE+16
+	adrp	x9, _g_block_ring@PAGE+136
 Lloh76:
-	ldr	x26, [x8, __MergedGlobals.78@PAGEOFF+16]
-	ldr	x24, [x10]
-	ldr	x23, [x10, #72]
-	ldrsw	x8, [sp, #764]
-	add	x9, sp, #1024
-	ldr	x10, [x10, #24]
-	cbz	x10, LBB2_95
-; %bb.94:
+	add	x9, x9, _g_block_ring@PAGEOFF+136
+	str	q1, [x9]
+	ldur	q1, [x8, #12]
+	stur	q1, [x9, #12]
+	add	x8, sp, #1984
+	ldr	d1, [x8, x23, lsl #3]
+	stp	d1, d0, [x9, #32]
+	stp	d9, d14, [x9, #48]
+	ldr	d0, [sp, #728]                  ; 8-byte Folded Reload
+	stp	d11, d0, [x9, #64]
+	ldr	d0, [sp, #712]                  ; 8-byte Folded Reload
+	str	d0, [x9, #80]
+	adrp	x8, __MergedGlobals@PAGE+4
+	ldr	w9, [x8, __MergedGlobals@PAGEOFF+4]
+	cmp	w9, #19
+	mov.16b	v14, v8
+	b.gt	LBB2_85
+; %bb.84:
+	add	w9, w9, #1
+	str	w9, [x8, __MergedGlobals@PAGEOFF+4]
+LBB2_85:
+	ldr	d0, [sp, #1088]
+	ldr	d1, [sp, #1096]
+	fcmp	d1, #0.0
+	cset	w8, gt
+	cset	w9, le
+	fcmp	d0, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	ldr	d0, [sp, #1104]
+	ldr	d1, [sp, #1112]
+	fcmp	d0, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	fcmp	d1, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	ldr	d0, [sp, #1120]
+	ldr	d1, [sp, #1128]
+	fcmp	d0, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	fcmp	d1, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	ldr	d0, [sp, #1136]
+	ldr	d1, [sp, #1144]
+	fcmp	d0, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	fcmp	d1, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	ldr	d0, [sp, #1152]
+	ldr	d1, [sp, #1160]
+	fcmp	d0, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	fcmp	d1, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	ldr	d0, [sp, #1168]
+	ldr	d1, [sp, #1176]
+	fcmp	d0, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	fcmp	d1, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	ldr	d0, [sp, #1184]
+	ldr	d1, [sp, #1192]
+	fcmp	d0, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	fcmp	d1, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	ldr	d0, [sp, #1200]
+	ldr	d1, [sp, #1208]
+	fcmp	d0, #0.0
+	cinc	w9, w9, le
+	cinc	w8, w8, gt
+	fcmp	d1, #0.0
+	cinc	w21, w9, le
+	cinc	w8, w8, gt
+	str	x8, [sp, #600]                  ; 8-byte Folded Spill
 Lloh77:
-	adrp	x11, __MergedGlobals@PAGE+312
+	adrp	x8, __MergedGlobals.76@PAGE+16
 Lloh78:
+	add	x8, x8, __MergedGlobals.76@PAGEOFF+16
+	ldp	x9, x10, [x8]
+	add	x9, x9, w22, sxtw
+	add	x10, x10, x21
+	stp	x9, x10, [x8]
+	ldr	w8, [sp, #724]                  ; 4-byte Folded Reload
+	cbz	w8, LBB2_88
+LBB2_86:
+Lloh79:
+	adrp	x8, l_.str.28@PAGE
+Lloh80:
+	add	x8, x8, l_.str.28@PAGEOFF
+	str	x8, [sp, #592]                  ; 8-byte Folded Spill
+	ldrsw	x8, [sp, #828]
+	add	x9, sp, #1088
+Lloh81:
+	adrp	x10, __MergedGlobals@PAGE+352
+Lloh82:
+	ldr	x10, [x10, __MergedGlobals@PAGEOFF+352]
+	str	d13, [sp, #664]                 ; 8-byte Folded Spill
+	cbz	x10, LBB2_93
+LBB2_87:
+Lloh83:
+	adrp	x11, __MergedGlobals@PAGE+312
+Lloh84:
 	ldr	d0, [x11, __MergedGlobals@PAGEOFF+312]
 	ucvtf	d1, x10
 	fdiv	d9, d0, d1
@@ -3890,270 +3520,285 @@ Lloh78:
 	movk	x10, #47841, lsl #32
 	movk	x10, #16471, lsl #48
 	fmov	d0, x10
-	fmul	d0, d2, d0
-	str	d0, [sp, #584]                  ; 8-byte Folded Spill
-	b	LBB2_96
-LBB2_95:
+	fmul	d8, d13, d0
+	b	LBB2_94
+LBB2_88:
+	adrp	x10, __MergedGlobals@PAGE+336
+	ldr	x9, [x10, __MergedGlobals@PAGEOFF+336]
+	adrp	x8, __MergedGlobals.76@PAGE+32
+	tbz	w20, #0, LBB2_90
+; %bb.89:
+Lloh85:
+	adrp	x10, l_.str.30@PAGE
+Lloh86:
+	add	x10, x10, l_.str.30@PAGEOFF
+	b	LBB2_92
+LBB2_90:
+	ldr	x11, [x8, __MergedGlobals.76@PAGEOFF+32]
+	add	x11, x11, #12
+	cmp	x9, x11
+	b.lo	LBB2_86
+; %bb.91:
+	ldr	x9, [x10, __MergedGlobals@PAGEOFF+336]
+Lloh87:
+	adrp	x10, l_.str.31@PAGE
+Lloh88:
+	add	x10, x10, l_.str.31@PAGEOFF
+LBB2_92:
+	str	x10, [sp, #592]                 ; 8-byte Folded Spill
+	str	x9, [x8, __MergedGlobals.76@PAGEOFF+32]
+Lloh89:
+	adrp	x0, l_.str.29@PAGE
+Lloh90:
+	add	x0, x0, l_.str.29@PAGEOFF
+	bl	_system
+	ldrsw	x8, [sp, #828]
+	add	x9, sp, #1088
+Lloh91:
+	adrp	x10, __MergedGlobals@PAGE+352
+Lloh92:
+	ldr	x10, [x10, __MergedGlobals@PAGEOFF+352]
+	str	d13, [sp, #664]                 ; 8-byte Folded Spill
+	cbnz	x10, LBB2_87
+LBB2_93:
 	mov	x10, #5243                      ; =0x147b
 	movk	x10, #18350, lsl #16
 	movk	x10, #47841, lsl #32
 	movk	x10, #16471, lsl #48
 	fmov	d0, x10
-	fmul	d9, d2, d0
-	str	d9, [sp, #584]                  ; 8-byte Folded Spill
-LBB2_96:
-	ldr	d12, [x9, x8, lsl #3]
+	fmul	d8, d13, d0
+	mov.16b	v9, v8
+LBB2_94:
+	ldr	d13, [x9, x8, lsl #3]
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
 	movk	x8, #16471, lsl #48
 	fmov	d0, x8
-	fmul	d1, d10, d0
-	str	d1, [sp, #600]                  ; 8-byte Folded Spill
+	fmul	d2, d11, d0
+	mov	x8, #35184372088832             ; =0x200000000000
+	movk	x8, #16556, lsl #48
+	fmov	d0, x8
+	fmul	d1, d8, d0
+	str	d1, [sp, #688]                  ; 8-byte Folded Spill
+	str	d2, [sp, #672]                  ; 8-byte Folded Spill
+	fmul	d0, d2, d0
+	str	d0, [sp, #680]                  ; 8-byte Folded Spill
+	mov	x8, #35184372088832             ; =0x200000000000
+	movk	x8, #16588, lsl #48
+	fmov	d0, x8
 	fmul	d0, d8, d0
-	str	d0, [sp, #592]                  ; 8-byte Folded Spill
-	mov	x8, #241067924389888            ; =0xdb4000000000
-	movk	x8, #16660, lsl #48
-	fmov	d0, x8
-	fmul	d1, d2, d0
-	str	d1, [sp, #616]                  ; 8-byte Folded Spill
-	fmul	d0, d10, d0
-	str	d0, [sp, #608]                  ; 8-byte Folded Spill
-	mov	x8, #241067924389888            ; =0xdb4000000000
-	movk	x8, #16692, lsl #48
-	fmov	d0, x8
-	fmul	d10, d2, d0
-Lloh79:
-	adrp	x0, l_.str.34@PAGE
-Lloh80:
-	add	x0, x0, l_.str.34@PAGEOFF
-Lloh81:
-	adrp	x1, l_.str.35@PAGE
-Lloh82:
-	add	x1, x1, l_.str.35@PAGEOFF
+	str	d0, [sp, #696]                  ; 8-byte Folded Spill
+Lloh93:
+	adrp	x0, l_.str.32@PAGE
+Lloh94:
+	add	x0, x0, l_.str.32@PAGEOFF
+Lloh95:
+	adrp	x1, l_.str.33@PAGE
+Lloh96:
+	add	x1, x1, l_.str.33@PAGEOFF
 	bl	_fopen
-	mov	x20, #12801                     ; =0x3201
-	movk	x20, #60532, lsl #16
-	movk	x20, #4768, lsl #32
-	movk	x20, #16370, lsl #48
-	cbz	x0, LBB2_103
-; %bb.97:
-	mov	x22, x0
-	mov	x8, #60813                      ; =0xed8d
-	movk	x8, #41141, lsl #16
-	movk	x8, #50935, lsl #32
-	movk	x8, #16048, lsl #48
-	ucvtf	d22, x27
-	fmov	d1, x8
-	fmul	d17, d22, d1
-	ucvtf	d2, x25
-	ucvtf	d25, x26
-	mov	x8, #17324                      ; =0x43ac
-	movk	x8, #53714, lsl #16
-	movk	x8, #29277, lsl #32
-	movk	x8, #15410, lsl #48
+	mov	x20, x0
+	mov	x0, #4786                       ; =0x12b2
+	movk	x0, #44275, lsl #16
+	movk	x0, #5540, lsl #32
+	movk	x0, #16343, lsl #48
+	cbz	x20, LBB2_101
+; %bb.95:
+	mov	x8, #51200                      ; =0xc800
+	movk	x8, #26446, lsl #16
+	movk	x8, #49517, lsl #32
+	movk	x8, #17323, lsl #48
+	ucvtf	d0, x28
 	mov	x9, #5243                       ; =0x147b
 	movk	x9, #18350, lsl #16
 	movk	x9, #47841, lsl #32
 	movk	x9, #16471, lsl #48
-	fmadd	d16, d2, d1, d17
-	fmul	d19, d25, d1
-	ucvtf	d1, x24
-	ucvtf	d2, x23
-	fmov	d3, x8
-	fmov	d4, x9
-	fadd	d21, d16, d19
-	fmul	d0, d1, d3
-	str	d0, [sp, #512]                  ; 8-byte Folded Spill
-	fmul	d20, d2, d3
-	fmul	d0, d12, d4
-	str	d0, [sp, #536]                  ; 8-byte Folded Spill
-	mov	x8, #80126909874176             ; =0x48e000000000
-	movk	x8, #16767, lsl #48
-	fmov	d1, x8
-	ldr	d0, [sp, #664]                  ; 8-byte Folded Reload
-	fmul	d18, d0, d1
-	mov	x8, #241067924389888            ; =0xdb4000000000
-	movk	x8, #16660, lsl #48
-	fmov	d1, x8
-	fmul	d0, d8, d1
-	str	d0, [sp, #544]                  ; 8-byte Folded Spill
-Lloh83:
-	adrp	x26, __MergedGlobals@PAGE+4
-Lloh84:
-	add	x26, x26, __MergedGlobals@PAGEOFF+4
-	ldur	d0, [x26, #244]
-	str	d0, [sp, #568]                  ; 8-byte Folded Spill
-	sub	x11, x26, #4
-	mov	x8, #5243                       ; =0x147b
-	movk	x8, #18350, lsl #16
-	movk	x8, #47841, lsl #32
-	movk	x8, #16471, lsl #48
-	fmov	d26, x8
-	fmul	d0, d11, d26
-	str	d0, [sp, #560]                  ; 8-byte Folded Spill
-	fmul	d0, d14, d26
-	str	d0, [sp, #552]                  ; 8-byte Folded Spill
-	str	d13, [sp, #576]                 ; 8-byte Folded Spill
-	fmul	d0, d13, d26
-	str	d0, [sp, #528]                  ; 8-byte Folded Spill
-	fmul	d0, d15, d26
-	str	d0, [sp, #520]                  ; 8-byte Folded Spill
-	mov	x8, #32890                      ; =0x807a
-	movk	x8, #11989, lsl #16
-	movk	x8, #57849, lsl #32
-	movk	x8, #16152, lsl #48
-	fmov	d27, x8
-	fmul	d22, d22, d27
-Lloh85:
-	adrp	x8, __MergedGlobals.78@PAGE
-Lloh86:
-	ldr	x8, [x8, __MergedGlobals.78@PAGEOFF]
-	ldr	x9, [x11, #304]
-	add	x10, x26, #308
-	ldr	q23, [x10]
-	ldr	d24, [x11, #328]
-	ldr	x10, [x11, #288]
-	ldr	x11, [x11, #360]
-Lloh87:
-	adrp	x12, l_.str.38@PAGE
-Lloh88:
-	add	x12, x12, l_.str.38@PAGEOFF
-Lloh89:
-	adrp	x13, l_.str.37@PAGE
-Lloh90:
-	add	x13, x13, l_.str.37@PAGEOFF
-	mov	x14, #64511                     ; =0xfbff
-	movk	x14, #13926, lsl #16
-	movk	x14, #1612, lsl #32
-	cmp	x19, x14
-	csel	x12, x13, x12, hi
-	fmul	d28, d21, d26
-	fmul	d29, d16, d26
-	ldr	x15, [sp, #632]                 ; 8-byte Folded Reload
-Lloh91:
-	adrp	x13, l___const.run_native_asm_sniper_cycle.route_names@PAGE
-Lloh92:
-	add	x13, x13, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
-	ldr	x13, [x13, x15, lsl #3]
-	fmul	d25, d25, d27
-Lloh93:
-	adrp	x14, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGE
-Lloh94:
-	add	x14, x14, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGEOFF
-	ldr	x14, [x14, x15, lsl #3]
-	add	x16, sp, #1920
-	add	x17, sp, #1664
-	ldr	d27, [x17, x15, lsl #3]
-	add	x17, sp, #1536
-	ldr	d30, [x17, x15, lsl #3]
-	fmul	d31, d27, d26
-	fmul	d8, d30, d26
-	add	x17, sp, #1408
-	ldr	d12, [x17, x15, lsl #3]
-	mov.16b	v5, v10
-	fmul	d10, d12, d26
-	add	x17, sp, #1280
-	mov.16b	v6, v9
-	ldr	d9, [x17, x15, lsl #3]
-	add	x17, sp, #1024
-	mov.16b	v3, v11
-	ldr	d11, [x17, x15, lsl #3]
-	mov.16b	v4, v14
-	fmul	d14, d9, d26
-	fmul	d13, d11, d26
-	add	x17, sp, #896
-	mov.16b	v7, v15
-	ldr	d15, [x17, x15, lsl #3]
-	add	x17, sp, #768
-	fmul	d1, d15, d26
-	ldr	d0, [x17, x15, lsl #3]
-	fmul	d26, d0, d26
-	ldr	d2, [x16, x15, lsl #3]
-	stp	d26, d0, [sp, #440]
-	stp	d1, d15, [sp, #424]
-	stp	d13, d11, [sp, #408]
-	mov.16b	v11, v3
-	stp	d14, d9, [sp, #392]
-	mov.16b	v14, v4
-	stp	d10, d12, [sp, #376]
-	mov.16b	v10, v5
-	stp	d8, d30, [sp, #360]
-	stp	d31, d27, [sp, #344]
-	str	d2, [sp, #336]
-	stp	x13, x14, [sp, #320]
-	stp	d25, d19, [sp, #304]
-	stp	d29, d16, [sp, #288]
-	stp	d28, d21, [sp, #272]
-	stp	x12, x21, [sp, #256]
-	ldr	d0, [sp, #512]                  ; 8-byte Folded Reload
-	stp	d0, d20, [sp, #240]
-	stp	x10, x11, [sp, #224]
-	ldr	d1, [sp, #640]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #648]                  ; 8-byte Folded Reload
-	stp	d0, d1, [sp, #208]
-	stp	d6, d18, [sp, #192]
-	ldr	d0, [sp, #536]                  ; 8-byte Folded Reload
-	stp	d24, d0, [sp, #176]
-	str	q23, [sp, #160]
-	stp	x8, x9, [sp, #144]
-	stp	d17, d22, [sp, #128]
-	ldr	d0, [sp, #544]                  ; 8-byte Folded Reload
-	stp	d0, d5, [sp, #112]
-	ldr	d1, [sp, #608]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #616]                  ; 8-byte Folded Reload
-	stp	d0, d1, [sp, #96]
-	ldr	d1, [sp, #592]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #600]                  ; 8-byte Folded Reload
-	stp	d0, d1, [sp, #80]
-	ldr	d0, [sp, #520]                  ; 8-byte Folded Reload
-	stp	d0, d7, [sp, #64]
-	ldr	d0, [sp, #528]                  ; 8-byte Folded Reload
-	str	d0, [sp, #56]
-	str	x20, [sp, #48]
-	ldr	d0, [sp, #552]                  ; 8-byte Folded Reload
-	stp	d0, d4, [sp, #32]
-	ldr	d0, [sp, #560]                  ; 8-byte Folded Reload
-	stp	d0, d3, [sp, #16]
-Lloh95:
-	adrp	x1, l_.str.36@PAGE
-Lloh96:
-	add	x1, x1, l_.str.36@PAGEOFF
-	ldr	x8, [sp, #624]                  ; 8-byte Folded Reload
-	str	x8, [sp, #8]
-	ldr	d0, [sp, #568]                  ; 8-byte Folded Reload
-	str	d0, [sp]
-	bl	_fprintf
-	ldr	w8, [x26]
+	fmov	d19, x8
+	ucvtf	d20, x27
+	fmov	d1, x9
+	fdiv	d7, d0, d19
+	fmul	d4, d13, d1
+	mov	x8, #26388279066624             ; =0x180000000000
+	movk	x8, #16661, lsl #48
+	fmov	d0, x8
+	str	d8, [sp, #568]                  ; 8-byte Folded Spill
+	fmul	d16, d8, d0
+	mov	x8, #35184372088832             ; =0x200000000000
+	movk	x8, #16556, lsl #48
+	fmov	d0, x8
+	mov.16b	v1, v15
+	ldr	d15, [sp, #728]                 ; 8-byte Folded Reload
+	fmul	d3, d15, d0
 Lloh97:
-	adrp	x20, l_.str.41@PAGE
+	adrp	x10, __MergedGlobals.76@PAGE
 Lloh98:
-	add	x20, x20, l_.str.41@PAGEOFF
+	add	x10, x10, __MergedGlobals.76@PAGEOFF
+	ldp	x8, x9, [x10, #16]
 Lloh99:
-	adrp	x24, l_.str.40@PAGE
+	adrp	x27, __MergedGlobals@PAGE+4
 Lloh100:
-	add	x24, x24, l_.str.40@PAGEOFF
-	cmp	w8, #1
-	mov	x26, x22
-	b.lt	LBB2_100
-; %bb.98:
+	add	x27, x27, __MergedGlobals@PAGEOFF+4
+	ldur	d0, [x27, #244]
+	str	d0, [sp, #560]                  ; 8-byte Folded Spill
+	sub	x13, x27, #4
+	mov	x11, #5243                      ; =0x147b
+	movk	x11, #18350, lsl #16
+	movk	x11, #47841, lsl #32
+	movk	x11, #16471, lsl #48
+	fmov	d21, x11
+	fmul	d0, d12, d21
+	str	d0, [sp, #552]                  ; 8-byte Folded Spill
+	fmul	d2, d10, d21
+	str	d14, [sp, #576]                 ; 8-byte Folded Spill
+	fmul	d5, d14, d21
+	fmul	d6, d1, d21
+	ldr	x10, [x10]
+	ldr	x11, [x13, #352]
+	add	x12, x27, #308
+	ldr	q17, [x12]
+	ldr	d18, [x13, #328]
+	ldr	x12, [x13, #336]
+	ldr	x13, [x13, #360]
 Lloh101:
-	adrp	x19, _g_block_ring@PAGE+136
+	adrp	x14, l_.str.36@PAGE
 Lloh102:
+	add	x14, x14, l_.str.36@PAGEOFF
+Lloh103:
+	adrp	x15, l_.str.35@PAGE
+Lloh104:
+	add	x15, x15, l_.str.35@PAGEOFF
+	mov	x16, #20479                     ; =0x4fff
+	movk	x16, #10041, lsl #16
+	movk	x16, #1164, lsl #32
+	ldr	x17, [x26, x23, lsl #3]
+Lloh105:
+	adrp	x1, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGE
+Lloh106:
+	add	x1, x1, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGEOFF
+	cmp	x19, x16
+	csel	x14, x15, x14, hi
+	ldr	x15, [x1, x23, lsl #3]
+	add	x16, sp, #1984
+	ldr	d22, [x16, x23, lsl #3]
+	ldr	d0, [sp, #640]                  ; 8-byte Folded Reload
+	fmul	d23, d0, d21
+	add	x16, sp, #1728
+	ldr	d24, [x16, x23, lsl #3]
+	fmul	d25, d24, d21
+	add	x16, sp, #1600
+	ldr	d26, [x16, x23, lsl #3]
+	fmul	d27, d26, d21
+	add	x16, sp, #1472
+	ldr	d28, [x16, x23, lsl #3]
+	fmul	d29, d28, d21
+	add	x16, sp, #1344
+	ldr	d30, [x16, x23, lsl #3]
+	fmul	d31, d30, d21
+	add	x16, sp, #1088
+	ldr	d13, [x16, x23, lsl #3]
+	fmul	d11, d13, d21
+	add	x16, sp, #960
+	mov.16b	v14, v12
+	mov.16b	v12, v10
+	ldr	d10, [x16, x23, lsl #3]
+	fmul	d8, d10, d21
+	add	x16, sp, #832
+	fdiv	d19, d20, d19
+	str	x23, [sp, #584]                 ; 8-byte Folded Spill
+	ldr	d20, [x16, x23, lsl #3]
+	fmul	d21, d20, d21
+	str	d20, [sp, #520]
+	stp	d10, d21, [sp, #504]
+	mov.16b	v10, v12
+	mov.16b	v12, v14
+	stp	d13, d8, [sp, #488]
+	stp	d30, d11, [sp, #472]
+	stp	d28, d31, [sp, #456]
+	stp	d26, d29, [sp, #440]
+	stp	d24, d27, [sp, #424]
+	stp	d22, d25, [sp, #408]
+	stp	x17, x15, [sp, #392]
+	ldr	d21, [sp, #624]                 ; 8-byte Folded Reload
+	ldr	d20, [sp, #608]                 ; 8-byte Folded Reload
+	stp	d20, d21, [sp, #376]
+	stp	d23, d0, [sp, #360]
+	ldr	d0, [sp, #632]                  ; 8-byte Folded Reload
+	str	d0, [sp, #352]
+	ldr	d0, [sp, #616]                  ; 8-byte Folded Reload
+	str	d0, [sp, #344]
+	ldr	x15, [sp, #592]                 ; 8-byte Folded Reload
+	stp	x14, x15, [sp, #328]
+	stp	d7, d19, [sp, #312]
+	stp	x12, x13, [sp, #296]
+	ldr	d0, [sp, #704]                  ; 8-byte Folded Reload
+	ldr	d7, [sp, #712]                  ; 8-byte Folded Reload
+	stp	d7, d0, [sp, #280]
+	stp	d9, d16, [sp, #264]
+	stp	d18, d4, [sp, #248]
+	stur	q17, [sp, #232]
+	stp	x10, x11, [sp, #216]
+	ldr	d0, [sp, #648]                  ; 8-byte Folded Reload
+	ldr	d4, [sp, #656]                  ; 8-byte Folded Reload
+	stp	d4, d0, [sp, #200]
+	ldr	d4, [sp, #696]                  ; 8-byte Folded Reload
+	stp	d3, d4, [sp, #184]
+	ldr	d0, [sp, #680]                  ; 8-byte Folded Reload
+	ldr	d3, [sp, #688]                  ; 8-byte Folded Reload
+	stp	d3, d0, [sp, #168]
+	ldr	d3, [sp, #672]                  ; 8-byte Folded Reload
+	stp	d3, d15, [sp, #152]
+	stp	d6, d1, [sp, #136]
+	str	d5, [sp, #128]
+	str	x0, [sp, #120]
+	stp	d2, d10, [sp, #104]
+	ldr	d0, [sp, #552]                  ; 8-byte Folded Reload
+	stp	d0, d14, [sp, #88]
+	str	x24, [sp, #656]                 ; 8-byte Folded Spill
+	str	x24, [sp, #80]
+	ldr	d0, [sp, #560]                  ; 8-byte Folded Reload
+	str	d0, [sp, #72]
+	stp	x8, x9, [sp, #56]
+	ldr	x8, [sp, #600]                  ; 8-byte Folded Reload
+	stp	x8, x21, [sp, #40]
+	stp	x25, x22, [sp, #24]
+	stp	x22, x22, [sp, #8]
+Lloh107:
+	adrp	x1, l_.str.34@PAGE
+Lloh108:
+	add	x1, x1, l_.str.34@PAGEOFF
+	str	x25, [sp]
+	mov	x0, x20
+	bl	_fprintf
+	ldr	w8, [x27]
+Lloh109:
+	adrp	x24, l_.str.39@PAGE
+Lloh110:
+	add	x24, x24, l_.str.39@PAGEOFF
+Lloh111:
+	adrp	x25, l_.str.38@PAGE
+Lloh112:
+	add	x25, x25, l_.str.38@PAGEOFF
+	cmp	w8, #1
+	b.lt	LBB2_98
+; %bb.96:
+Lloh113:
+	adrp	x19, _g_block_ring@PAGE+136
+Lloh114:
 	add	x19, x19, _g_block_ring@PAGEOFF+136
 	mov	w22, #1                         ; =0x1
 	adrp	x23, __MergedGlobals@PAGE+4
-Lloh103:
-	adrp	x21, l_.str.39@PAGE
-Lloh104:
-	add	x21, x21, l_.str.39@PAGEOFF
-LBB2_99:                                ; =>This Inner Loop Header: Depth=1
+Lloh115:
+	adrp	x21, l_.str.37@PAGE
+Lloh116:
+	add	x21, x21, l_.str.37@PAGEOFF
+LBB2_97:                                ; =>This Inner Loop Header: Depth=1
 	ldur	x9, [x19, #-136]
 	sub	x10, x19, #128
 	ldp	q0, q1, [x19, #32]
 	ldr	q2, [x19, #64]
 	cmp	x22, w8, sxtw
-	csel	x8, x24, x20, lt
+	csel	x8, x25, x24, lt
 	ldr	d3, [x19, #80]
 	str	x8, [sp, #80]
 	str	d3, [sp, #72]
@@ -4162,92 +3807,93 @@ LBB2_99:                                ; =>This Inner Loop Header: Depth=1
 	stur	q0, [sp, #24]
 	stp	x10, x19, [sp, #8]
 	str	x9, [sp]
-	mov	x0, x26
+	mov	x0, x20
 	mov	x1, x21
 	bl	_fprintf
 	ldrsw	x8, [x23, __MergedGlobals@PAGEOFF+4]
 	add	x19, x19, #224
 	cmp	x22, x8
 	add	x22, x22, #1
-	b.lt	LBB2_99
-LBB2_100:
-Lloh105:
-	adrp	x0, l_.str.42@PAGE
-Lloh106:
-	add	x0, x0, l_.str.42@PAGEOFF
+	b.lt	LBB2_97
+LBB2_98:
+Lloh117:
+	adrp	x0, l_.str.40@PAGE
+Lloh118:
+	add	x0, x0, l_.str.40@PAGEOFF
 	mov	w1, #19                         ; =0x13
 	mov	w2, #1                          ; =0x1
-	mov	x3, x26
+	mov	x3, x20
 	bl	_fwrite
-	mov	x19, #0                         ; =0x0
+	mov	x28, #0                         ; =0x0
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
 	movk	x8, #16471, lsl #48
 	fmov	d8, x8
-Lloh107:
-	adrp	x20, l___const.run_native_asm_sniper_cycle.route_names@PAGE
-Lloh108:
-	add	x20, x20, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
-Lloh109:
-	adrp	x27, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGE
-Lloh110:
-	add	x27, x27, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGEOFF
-	add	x28, sp, #1920
-	add	x23, sp, #1664
-	add	x25, sp, #1536
-	add	x24, sp, #1408
-	add	x22, sp, #1280
-	add	x21, sp, #896
-LBB2_101:                               ; =>This Inner Loop Header: Depth=1
-	add	x8, sp, #704
-	ldrsw	x8, [x8, x19, lsl #2]
-	add	x19, x19, #1
-	ldr	x9, [x20, x8, lsl #3]
-	ldr	x10, [x27, x8, lsl #3]
-	add	x11, sp, #2304
+	mov	x27, x20
+Lloh119:
+	adrp	x20, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGE
+Lloh120:
+	add	x20, x20, l___const.run_native_asm_sniper_cycle.borrow_syms@PAGEOFF
+	add	x25, sp, #1984
+	add	x24, sp, #1728
+	add	x22, sp, #1600
+	add	x23, sp, #1472
+	add	x26, sp, #1344
+	add	x19, sp, #1088
+	add	x21, sp, #960
+LBB2_99:                                ; =>This Inner Loop Header: Depth=1
+	add	x8, sp, #768
+	ldrsw	x8, [x8, x28, lsl #2]
+	add	x28, x28, #1
+Lloh121:
+	adrp	x9, l___const.run_native_asm_sniper_cycle.route_names@PAGE
+Lloh122:
+	add	x9, x9, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
+	ldr	x9, [x9, x8, lsl #3]
+	ldr	x10, [x20, x8, lsl #3]
+	add	x11, sp, #2368
 	ldr	d0, [x11, x8, lsl #3]
-	add	x11, sp, #2176
+	add	x11, sp, #2240
 	ldr	d1, [x11, x8, lsl #3]
-	ldr	d2, [x28, x8, lsl #3]
-	add	x11, sp, #2048
+	ldr	d2, [x25, x8, lsl #3]
+	add	x11, sp, #2112
 	ldr	d3, [x11, x8, lsl #3]
-	add	x11, sp, #1792
+	add	x11, sp, #1856
 	ldr	d4, [x11, x8, lsl #3]
-	ldr	d5, [x23, x8, lsl #3]
-	ldr	d6, [x25, x8, lsl #3]
+	ldr	d5, [x24, x8, lsl #3]
+	ldr	d6, [x22, x8, lsl #3]
 	fmul	d7, d5, d8
-	ldr	d16, [x24, x8, lsl #3]
-	ldr	d17, [x22, x8, lsl #3]
+	ldr	d16, [x23, x8, lsl #3]
+	ldr	d17, [x26, x8, lsl #3]
 	fmul	d18, d17, d8
-	add	x11, sp, #1152
+	add	x11, sp, #1216
 	ldr	d19, [x11, x8, lsl #3]
 	fmul	d20, d19, d8
-	add	x11, sp, #1024
-	ldr	d21, [x11, x8, lsl #3]
+	ldr	d21, [x19, x8, lsl #3]
 	fmul	d22, d21, d8
 	ldr	d23, [x21, x8, lsl #3]
 	fmul	d24, d23, d8
-	add	x11, sp, #768
+	add	x11, sp, #832
 	ldr	d25, [x11, x8, lsl #3]
 	fmul	d26, d25, d8
-Lloh111:
-	adrp	x8, l_.str.40@PAGE
-Lloh112:
-	add	x8, x8, l_.str.40@PAGEOFF
+Lloh123:
+	adrp	x8, l_.str.38@PAGE
+Lloh124:
+	add	x8, x8, l_.str.38@PAGEOFF
 	str	x8, [sp, #192]
 	stp	d26, d25, [sp, #176]
 	stp	d24, d23, [sp, #160]
 	stp	d22, d21, [sp, #144]
-	mov	x8, #18036                      ; =0x4674
-	movk	x8, #63124, lsl #16
-	movk	x8, #24326, lsl #32
-	movk	x8, #16264, lsl #48
+	mov	x8, #36805                      ; =0x8fc5
+	movk	x8, #30513, lsl #16
+	movk	x8, #8493, lsl #32
+	movk	x8, #16239, lsl #48
 	str	x8, [sp, #136]
-	mov	x8, #12801                      ; =0x3201
-	movk	x8, #60532, lsl #16
-	movk	x8, #4768, lsl #32
-	movk	x8, #16370, lsl #48
+	mov	x8, #4786                       ; =0x12b2
+	movk	x8, #44275, lsl #16
+	movk	x8, #5540, lsl #32
+	movk	x8, #16343, lsl #48
 	str	x8, [sp, #128]
 	stp	d20, d19, [sp, #112]
 	stp	d18, d17, [sp, #96]
@@ -4257,73 +3903,77 @@ Lloh112:
 	stp	d1, d2, [sp, #32]
 	str	d0, [sp, #24]
 	stp	x9, x10, [sp, #8]
-	str	x19, [sp]
-	mov	x0, x26
-Lloh113:
-	adrp	x1, l_.str.43@PAGE
-Lloh114:
-	add	x1, x1, l_.str.43@PAGEOFF
+	str	x28, [sp]
+	mov	x0, x27
+Lloh125:
+	adrp	x1, l_.str.41@PAGE
+Lloh126:
+	add	x1, x1, l_.str.41@PAGEOFF
 	bl	_fprintf
-	cmp	x19, #15
-	b.ne	LBB2_101
-; %bb.102:
-	ldrsw	x10, [sp, #764]
-	ldr	x8, [x20, x10, lsl #3]
-	ldr	x9, [x27, x10, lsl #3]
-	add	x11, sp, #2304
+	cmp	x28, #15
+	b.ne	LBB2_99
+; %bb.100:
+	ldrsw	x10, [sp, #828]
+Lloh127:
+	adrp	x26, l___const.run_native_asm_sniper_cycle.route_names@PAGE
+Lloh128:
+	add	x26, x26, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
+	ldr	x8, [x26, x10, lsl #3]
+	ldr	x9, [x20, x10, lsl #3]
+	add	x11, sp, #2368
 	ldr	d0, [x11, x10, lsl #3]
-	add	x11, sp, #2176
+	add	x11, sp, #2240
 	ldr	d1, [x11, x10, lsl #3]
-	add	x11, sp, #1920
+	add	x11, sp, #1984
 	ldr	d2, [x11, x10, lsl #3]
-	add	x11, sp, #2048
+	add	x11, sp, #2112
 	ldr	d3, [x11, x10, lsl #3]
-	add	x11, sp, #1792
+	add	x11, sp, #1856
 	ldr	d4, [x11, x10, lsl #3]
-	add	x11, sp, #1664
+	add	x11, sp, #1728
 	ldr	d5, [x11, x10, lsl #3]
 	mov	x11, #5243                      ; =0x147b
 	movk	x11, #18350, lsl #16
 	movk	x11, #47841, lsl #32
 	movk	x11, #16471, lsl #48
 	fmov	d6, x11
-	add	x11, sp, #1536
+	add	x11, sp, #1600
 	ldr	d7, [x11, x10, lsl #3]
-	add	x11, sp, #1408
+	add	x11, sp, #1472
 	ldr	d16, [x11, x10, lsl #3]
-	add	x11, sp, #1280
+	add	x11, sp, #1344
 	ldr	d17, [x11, x10, lsl #3]
 	fmul	d18, d5, d6
 	fmul	d19, d17, d6
-	add	x11, sp, #1152
+	add	x11, sp, #1216
 	ldr	d20, [x11, x10, lsl #3]
 	fmul	d21, d20, d6
-	add	x11, sp, #1024
+	add	x11, sp, #1088
 	ldr	d22, [x11, x10, lsl #3]
-	add	x11, sp, #896
+	add	x11, sp, #960
 	ldr	d23, [x11, x10, lsl #3]
 	fmul	d24, d22, d6
 	fmul	d25, d23, d6
-	add	x11, sp, #768
+	add	x11, sp, #832
 	ldr	d26, [x11, x10, lsl #3]
 	fmul	d6, d26, d6
-Lloh115:
-	adrp	x10, l_.str.41@PAGE
-Lloh116:
-	add	x10, x10, l_.str.41@PAGEOFF
+Lloh129:
+	adrp	x10, l_.str.39@PAGE
+Lloh130:
+	add	x10, x10, l_.str.39@PAGEOFF
 	str	x10, [sp, #192]
 	stp	d6, d26, [sp, #176]
 	stp	d25, d23, [sp, #160]
 	stp	d24, d22, [sp, #144]
-	mov	x28, #18036                     ; =0x4674
-	movk	x28, #63124, lsl #16
-	movk	x28, #24326, lsl #32
-	movk	x28, #16264, lsl #48
-	mov	x20, #12801                     ; =0x3201
-	movk	x20, #60532, lsl #16
-	movk	x20, #4768, lsl #32
-	movk	x20, #16370, lsl #48
-	stp	x20, x28, [sp, #128]
+	mov	x10, #36805                     ; =0x8fc5
+	movk	x10, #30513, lsl #16
+	movk	x10, #8493, lsl #32
+	movk	x10, #16239, lsl #48
+	mov	x19, #4786                      ; =0x12b2
+	movk	x19, #44275, lsl #16
+	movk	x19, #5540, lsl #32
+	movk	x19, #16343, lsl #48
+	stp	x19, x10, [sp, #128]
 	stp	d21, d20, [sp, #112]
 	stp	d19, d17, [sp, #96]
 	stp	d7, d16, [sp, #80]
@@ -4333,219 +3983,222 @@ Lloh116:
 	str	d0, [sp, #24]
 	stp	x8, x9, [sp, #8]
 	mov	w9, #16                         ; =0x10
-Lloh117:
-	adrp	x1, l_.str.43@PAGE
-Lloh118:
-	add	x1, x1, l_.str.43@PAGEOFF
+Lloh131:
+	adrp	x1, l_.str.41@PAGE
+Lloh132:
+	add	x1, x1, l_.str.41@PAGEOFF
 	str	x9, [sp]
-	mov	x0, x26
+	mov	x0, x27
 	bl	_fprintf
-Lloh119:
-	adrp	x0, l_.str.44@PAGE
-Lloh120:
-	add	x0, x0, l_.str.44@PAGEOFF
+Lloh133:
+	adrp	x0, l_.str.42@PAGE
+Lloh134:
+	add	x0, x0, l_.str.42@PAGEOFF
 	mov	w1, #6                          ; =0x6
 	mov	w2, #1                          ; =0x1
-	mov	x3, x26
+	mov	x3, x27
 	bl	_fwrite
-	mov	x0, x26
+	mov	x0, x27
 	bl	_fclose
-Lloh121:
-	adrp	x0, l_.str.34@PAGE
-Lloh122:
-	add	x0, x0, l_.str.34@PAGEOFF
-Lloh123:
-	adrp	x1, l_.str.45@PAGE
-Lloh124:
-	add	x1, x1, l_.str.45@PAGEOFF
+Lloh135:
+	adrp	x0, l_.str.32@PAGE
+Lloh136:
+	add	x0, x0, l_.str.32@PAGEOFF
+Lloh137:
+	adrp	x1, l_.str.43@PAGE
+Lloh138:
+	add	x1, x1, l_.str.43@PAGEOFF
 	bl	_rename
-	ldr	d13, [sp, #576]                 ; 8-byte Folded Reload
-LBB2_103:
-	ldr	w8, [sp, #660]                  ; 4-byte Folded Reload
-	cbz	w8, LBB2_105
-; %bb.104:
-	add	x8, sp, #1152
-	ldr	x23, [sp, #632]                 ; 8-byte Folded Reload
-	ldr	d15, [x8, x23, lsl #3]
-	mov	x8, #18036                      ; =0x4674
-	movk	x8, #63124, lsl #16
-	movk	x8, #24326, lsl #32
-	movk	x8, #49032, lsl #48
+	ldr	x23, [sp, #584]                 ; 8-byte Folded Reload
+	ldr	x24, [sp, #656]                 ; 8-byte Folded Reload
+	ldr	d14, [sp, #576]                 ; 8-byte Folded Reload
+	ldr	d8, [sp, #568]                  ; 8-byte Folded Reload
+	mov	x0, x19
+LBB2_101:
+	ldr	w8, [sp, #724]                  ; 4-byte Folded Reload
+	cbz	w8, LBB2_103
+; %bb.102:
+	add	x8, sp, #1216
+	ldr	d9, [x8, x23, lsl #3]
+	mov	x8, #36805                      ; =0x8fc5
+	movk	x8, #30513, lsl #16
+	movk	x8, #8493, lsl #32
+	movk	x8, #49007, lsl #48
 	fmov	d0, x8
-	mov.16b	v9, v13
-	fadd	d13, d15, d0
-Lloh125:
-	adrp	x19, l_str.77@PAGE
-Lloh126:
-	add	x19, x19, l_str.77@PAGEOFF
+	mov.16b	v11, v8
+	fadd	d8, d9, d0
+	mov	x22, x0
+Lloh139:
+	adrp	x19, l_str.75@PAGE
+Lloh140:
+	add	x19, x19, l_str.75@PAGEOFF
 	mov	x0, x19
 	bl	_puts
-Lloh127:
+Lloh141:
+	adrp	x0, l_.str.45@PAGE
+Lloh142:
+	add	x0, x0, l_.str.45@PAGEOFF
+	bl	_printf
+	mov	x0, x19
+	bl	_puts
+	ldr	d1, [sp, #704]                  ; 8-byte Folded Reload
+	ldr	d0, [sp, #712]                  ; 8-byte Folded Reload
+	stp	d0, d1, [sp]
+Lloh143:
+	adrp	x0, l_.str.46@PAGE
+Lloh144:
+	add	x0, x0, l_.str.46@PAGEOFF
+	bl	_printf
+	ldr	x8, [x26, x23, lsl #3]
+	str	x8, [sp]
+Lloh145:
 	adrp	x0, l_.str.47@PAGE
-Lloh128:
+Lloh146:
 	add	x0, x0, l_.str.47@PAGEOFF
 	bl	_printf
-	mov	x0, x19
-	bl	_puts
-	ldr	d1, [sp, #640]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #648]                  ; 8-byte Folded Reload
-	stp	d0, d1, [sp]
-Lloh129:
-	adrp	x0, l_.str.48@PAGE
-Lloh130:
-	add	x0, x0, l_.str.48@PAGEOFF
-	bl	_printf
-Lloh131:
-	adrp	x24, l___const.run_native_asm_sniper_cycle.route_names@PAGE
-Lloh132:
-	add	x24, x24, l___const.run_native_asm_sniper_cycle.route_names@PAGEOFF
-	ldr	x8, [x24, x23, lsl #3]
-	str	x8, [sp]
-Lloh133:
-	adrp	x0, l_.str.49@PAGE
-Lloh134:
-	add	x0, x0, l_.str.49@PAGEOFF
-	bl	_printf
-	add	x21, sp, #2304
+	add	x21, sp, #2368
 	ldr	d0, [x21, x23, lsl #3]
-	add	x27, sp, #2176
+	add	x27, sp, #2240
 	ldr	d1, [x27, x23, lsl #3]
-	add	x25, sp, #1920
-	ldr	d2, [x25, x23, lsl #3]
-	add	x19, sp, #2048
+	add	x28, sp, #1984
+	ldr	d2, [x28, x23, lsl #3]
+	add	x19, sp, #2112
 	ldr	d3, [x19, x23, lsl #3]
-	add	x26, sp, #1792
-	ldr	d4, [x26, x23, lsl #3]
+	mov	x20, x24
+	add	x24, sp, #1856
+	ldr	d4, [x24, x23, lsl #3]
 	stp	d3, d4, [sp, #24]
 	stp	d1, d2, [sp, #8]
 	str	d0, [sp]
-Lloh135:
-	adrp	x0, l_.str.50@PAGE
-Lloh136:
-	add	x0, x0, l_.str.50@PAGEOFF
+Lloh147:
+	adrp	x0, l_.str.48@PAGE
+Lloh148:
+	add	x0, x0, l_.str.48@PAGEOFF
 	bl	_printf
-	add	x22, sp, #1664
-	ldr	d0, [x22, x23, lsl #3]
+	add	x25, sp, #1728
+	ldr	d0, [x25, x23, lsl #3]
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
 	movk	x8, #16471, lsl #48
-	fmov	d8, x8
-	fmul	d1, d0, d8
-	stp	d0, d1, [sp]
-Lloh137:
-	adrp	x0, l_.str.51@PAGE
-Lloh138:
-	add	x0, x0, l_.str.51@PAGEOFF
-	bl	_printf
-	fmul	d0, d15, d8
-	stp	d15, d0, [sp]
-Lloh139:
-	adrp	x0, l_.str.52@PAGE
-Lloh140:
-	add	x0, x0, l_.str.52@PAGEOFF
-	bl	_printf
-	fmul	d0, d11, d8
-	fmul	d1, d14, d8
-	stp	d14, d1, [sp, #24]
-	stp	d11, d0, [sp, #8]
-	ldr	x8, [sp, #624]                  ; 8-byte Folded Reload
-                                        ; kill: def $w8 killed $w8 killed $x8 def $x8
-	str	x8, [sp]
-Lloh141:
-	adrp	x0, l_.str.53@PAGE
-Lloh142:
-	add	x0, x0, l_.str.53@PAGEOFF
-	bl	_printf
-	stp	x28, x20, [sp]
-Lloh143:
-	adrp	x0, l_.str.54@PAGE
-Lloh144:
-	add	x0, x0, l_.str.54@PAGEOFF
-	bl	_printf
-	fmul	d0, d13, d8
-	stp	d13, d0, [sp]
-Lloh145:
-	adrp	x0, l_.str.55@PAGE
-Lloh146:
-	add	x0, x0, l_.str.55@PAGEOFF
-	bl	_printf
-	fmul	d0, d9, d8
-	stp	d9, d0, [sp]
-Lloh147:
-	adrp	x0, l_.str.56@PAGE
-Lloh148:
-	add	x0, x0, l_.str.56@PAGEOFF
-	bl	_printf
-	ldr	d1, [sp, #592]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #600]                  ; 8-byte Folded Reload
-	stp	d0, d1, [sp, #16]
-	ldr	d1, [sp, #584]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #664]                  ; 8-byte Folded Reload
+	fmov	d15, x8
+	fmul	d1, d0, d15
 	stp	d0, d1, [sp]
 Lloh149:
-	adrp	x0, l_.str.57@PAGE
+	adrp	x0, l_.str.49@PAGE
 Lloh150:
+	add	x0, x0, l_.str.49@PAGEOFF
+	bl	_printf
+	fmul	d0, d9, d15
+	stp	d9, d0, [sp]
+Lloh151:
+	adrp	x0, l_.str.50@PAGE
+Lloh152:
+	add	x0, x0, l_.str.50@PAGEOFF
+	bl	_printf
+	fmul	d0, d12, d15
+	fmul	d1, d10, d15
+	stp	d10, d1, [sp, #24]
+	stp	d12, d0, [sp, #8]
+	str	x20, [sp]
+Lloh153:
+	adrp	x0, l_.str.51@PAGE
+Lloh154:
+	add	x0, x0, l_.str.51@PAGEOFF
+	bl	_printf
+	mov	x8, #36805                      ; =0x8fc5
+	movk	x8, #30513, lsl #16
+	movk	x8, #8493, lsl #32
+	movk	x8, #16239, lsl #48
+	stp	x8, x22, [sp]
+Lloh155:
+	adrp	x0, l_.str.52@PAGE
+Lloh156:
+	add	x0, x0, l_.str.52@PAGEOFF
+	bl	_printf
+	fmul	d0, d8, d15
+	stp	d8, d0, [sp]
+Lloh157:
+	adrp	x0, l_.str.53@PAGE
+Lloh158:
+	add	x0, x0, l_.str.53@PAGEOFF
+	bl	_printf
+	fmul	d0, d14, d15
+	stp	d14, d0, [sp]
+Lloh159:
+	adrp	x0, l_.str.54@PAGE
+Lloh160:
+	add	x0, x0, l_.str.54@PAGEOFF
+	bl	_printf
+	ldr	d1, [sp, #728]                  ; 8-byte Folded Reload
+	ldr	d0, [sp, #672]                  ; 8-byte Folded Reload
+	stp	d0, d1, [sp, #16]
+	ldr	d0, [sp, #664]                  ; 8-byte Folded Reload
+	stp	d0, d11, [sp]
+Lloh161:
+	adrp	x0, l_.str.55@PAGE
+Lloh162:
+	add	x0, x0, l_.str.55@PAGEOFF
+	bl	_printf
+	ldr	d1, [sp, #680]                  ; 8-byte Folded Reload
+	ldr	d0, [sp, #688]                  ; 8-byte Folded Reload
+	stp	d0, d1, [sp]
+Lloh163:
+	adrp	x0, l_.str.56@PAGE
+Lloh164:
+	add	x0, x0, l_.str.56@PAGEOFF
+	bl	_printf
+	ldr	d0, [sp, #696]                  ; 8-byte Folded Reload
+	str	d0, [sp]
+Lloh165:
+	adrp	x0, l_.str.57@PAGE
+Lloh166:
 	add	x0, x0, l_.str.57@PAGEOFF
 	bl	_printf
-	ldr	d1, [sp, #608]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #616]                  ; 8-byte Folded Reload
-	stp	d0, d1, [sp]
-Lloh151:
-	adrp	x0, l_.str.58@PAGE
-Lloh152:
-	add	x0, x0, l_.str.58@PAGEOFF
-	bl	_printf
-	str	d10, [sp]
-Lloh153:
-	adrp	x0, l_.str.59@PAGE
-Lloh154:
-	add	x0, x0, l_.str.59@PAGEOFF
-	bl	_printf
-Lloh155:
-	adrp	x0, l_str.76@PAGE
-Lloh156:
-	add	x0, x0, l_str.76@PAGEOFF
+Lloh167:
+	adrp	x0, l_str.74@PAGE
+Lloh168:
+	add	x0, x0, l_str.74@PAGEOFF
 	bl	_puts
-	ldrsw	x8, [sp, #704]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #768]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	add	x28, sp, #1152
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	add	x23, sp, #1024
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	add	x23, sp, #1216
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	add	x22, sp, #1088
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
 	stp	d0, d1, [sp, #16]
 	mov	w8, #1                          ; =0x1
-Lloh157:
-	adrp	x20, l_.str.61@PAGE
-Lloh158:
-	add	x20, x20, l_.str.61@PAGEOFF
+Lloh169:
+	adrp	x20, l_.str.59@PAGE
+Lloh170:
+	add	x20, x20, l_.str.59@PAGEOFF
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #708]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #772]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	add	x28, sp, #1152
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	add	x23, sp, #1216
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4554,18 +4207,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #712]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #776]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4574,18 +4227,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #716]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #780]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4594,18 +4247,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #720]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #784]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4614,18 +4267,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #724]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #788]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4634,18 +4287,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #728]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #792]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4654,18 +4307,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #732]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #796]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4674,18 +4327,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #736]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #800]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4694,18 +4347,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #740]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #804]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4714,18 +4367,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #744]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #808]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4734,18 +4387,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #748]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #812]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4754,18 +4407,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #752]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #816]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4774,18 +4427,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #756]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #820]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4794,18 +4447,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #760]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #824]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4814,18 +4467,18 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-	ldrsw	x8, [sp, #764]
-	ldr	x9, [x24, x8, lsl #3]
+	ldrsw	x8, [sp, #828]
+	ldr	x9, [x26, x8, lsl #3]
 	ldr	d0, [x21, x8, lsl #3]
 	ldr	d1, [x27, x8, lsl #3]
-	ldr	d2, [x25, x8, lsl #3]
+	ldr	d2, [x28, x8, lsl #3]
 	ldr	d3, [x19, x8, lsl #3]
-	ldr	d4, [x26, x8, lsl #3]
-	ldr	d5, [x22, x8, lsl #3]
-	ldr	d6, [x28, x8, lsl #3]
-	fmul	d6, d6, d8
-	ldr	d7, [x23, x8, lsl #3]
-	fmul	d7, d7, d8
+	ldr	d4, [x24, x8, lsl #3]
+	ldr	d5, [x25, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
+	fmul	d6, d6, d15
+	ldr	d7, [x22, x8, lsl #3]
+	fmul	d7, d7, d15
 	stp	d6, d7, [sp, #64]
 	stp	d4, d5, [sp, #48]
 	stp	d2, d3, [sp, #32]
@@ -4834,22 +4487,22 @@ Lloh158:
 	stp	x8, x9, [sp]
 	mov	x0, x20
 	bl	_printf
-Lloh159:
-	adrp	x0, l_str.77@PAGE
-Lloh160:
-	add	x0, x0, l_str.77@PAGEOFF
+Lloh171:
+	adrp	x0, l_str.75@PAGE
+Lloh172:
+	add	x0, x0, l_str.75@PAGEOFF
 	bl	_puts
-LBB2_105:
-	ldr	x8, [sp, #2456]
-Lloh161:
+LBB2_103:
+	ldr	x8, [sp, #2520]
+Lloh173:
 	adrp	x9, ___stack_chk_guard@GOTPAGE
-Lloh162:
+Lloh174:
 	ldr	x9, [x9, ___stack_chk_guard@GOTPAGEOFF]
-Lloh163:
+Lloh175:
 	ldr	x9, [x9]
 	cmp	x9, x8
-	b.ne	LBB2_116
-; %bb.106:
+	b.ne	LBB2_105
+; %bb.104:
 	sub	sp, x29, #144
 	ldp	x29, x30, [sp, #144]            ; 16-byte Folded Reload
 	ldp	x20, x19, [sp, #128]            ; 16-byte Folded Reload
@@ -4862,119 +4515,7 @@ Lloh163:
 	ldp	d13, d12, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d15, d14, [sp], #160            ; 16-byte Folded Reload
 	ret
-LBB2_107:
-	str	x8, [sp, #8]
-Lloh164:
-	adrp	x0, _g_block_ring@PAGE+8
-Lloh165:
-	add	x0, x0, _g_block_ring@PAGEOFF+8
-	str	d9, [sp]
-Lloh166:
-	adrp	x2, l_.str.26@PAGE
-Lloh167:
-	add	x2, x2, l_.str.26@PAGEOFF
-	mov	w1, #128                        ; =0x80
-	bl	_snprintf
-	add	x8, sp, #1664
-	ldr	d0, [x8, x20, lsl #3]
-LBB2_108:
-	mov	x8, #5243                       ; =0x147b
-	movk	x8, #18350, lsl #16
-	movk	x8, #47841, lsl #32
-	movk	x8, #16471, lsl #48
-	fmov	d1, x8
-	fmul	d0, d0, d1
-	adrp	x8, _g_block_ring@PAGE+176
-	str	d0, [x8, _g_block_ring@PAGEOFF+176]
-	mov	x8, #116548232544256            ; =0x6a0000000000
-	movk	x8, #16632, lsl #48
-	fmov	d0, x8
-	fcmp	d15, d0
-	ldr	d2, [sp, #664]                  ; 8-byte Folded Reload
-	b.ge	LBB2_111
-; %bb.109:
-	mov	x8, #4636737291354636288        ; =0x4059000000000000
-	fmov	d0, x8
-	fcmp	d15, d0
-	b.ge	LBB2_113
-; %bb.110:
-Lloh168:
-	adrp	x8, l_.str.29@PAGE
-Lloh169:
-	add	x8, x8, l_.str.29@PAGEOFF
-	ldr	q0, [x8]
-Lloh170:
-	adrp	x9, _g_block_ring@PAGE+136
-Lloh171:
-	add	x9, x9, _g_block_ring@PAGEOFF+136
-	str	q0, [x9]
-	ldur	q0, [x8, #14]
-	stur	q0, [x9, #14]
-	b	LBB2_114
-LBB2_111:
-Lloh172:
-	adrp	x8, l_.str.27@PAGE
-Lloh173:
-	add	x8, x8, l_.str.27@PAGEOFF
-	ldr	q0, [x8]
-Lloh174:
-	adrp	x9, _g_block_ring@PAGE+136
-Lloh175:
-	add	x9, x9, _g_block_ring@PAGEOFF+136
-	str	q0, [x9]
-	ldur	q0, [x8, #9]
-	stur	q0, [x9, #9]
-	b	LBB2_114
-LBB2_112:
-	ldr	x8, [x8, __MergedGlobals@PAGEOFF+288]
-	str	x8, [x9, __MergedGlobals.78@PAGEOFF+8]
-Lloh176:
-	adrp	x0, l_.str.31@PAGE
-Lloh177:
-	add	x0, x0, l_.str.31@PAGEOFF
-	bl	_system
-	ldr	d2, [sp, #664]                  ; 8-byte Folded Reload
-Lloh178:
-	adrp	x21, l_.str.32@PAGE
-Lloh179:
-	add	x21, x21, l_.str.32@PAGEOFF
-	b	LBB2_93
-LBB2_113:
-Lloh180:
-	adrp	x8, l_.str.28@PAGE
-Lloh181:
-	add	x8, x8, l_.str.28@PAGEOFF
-	ldr	q0, [x8]
-Lloh182:
-	adrp	x9, _g_block_ring@PAGE+136
-Lloh183:
-	add	x9, x9, _g_block_ring@PAGEOFF+136
-	str	q0, [x9]
-	ldur	x8, [x8, #14]
-	stur	x8, [x9, #14]
-LBB2_114:
-	add	x8, sp, #1920
-	ldr	d0, [x8, x20, lsl #3]
-Lloh184:
-	adrp	x8, _g_block_ring@PAGE+168
-Lloh185:
-	add	x8, x8, _g_block_ring@PAGEOFF+168
-	str	d0, [x8]
-	stp	d15, d12, [x8, #16]
-	ldr	d0, [sp, #616]                  ; 8-byte Folded Reload
-	stp	d10, d0, [x8, #32]
-	ldr	d0, [sp, #648]                  ; 8-byte Folded Reload
-	str	d0, [x8, #48]
-	adrp	x8, __MergedGlobals@PAGE+4
-	ldr	w9, [x8, __MergedGlobals@PAGEOFF+4]
-	cmp	w9, #19
-	ldr	d15, [sp, #632]                 ; 8-byte Folded Reload
-	b.gt	LBB2_79
-; %bb.115:
-	add	w9, w9, #1
-	str	w9, [x8, __MergedGlobals@PAGEOFF+4]
-	b	LBB2_79
-LBB2_116:
+LBB2_105:
 	bl	___stack_chk_fail
 	.loh AdrpLdrGotLdr	Lloh10, Lloh11, Lloh12
 	.loh AdrpAdd	Lloh19, Lloh20
@@ -5003,41 +4544,54 @@ LBB2_116:
 	.loh AdrpLdr	Lloh33, Lloh34
 	.loh AdrpAdd	Lloh31, Lloh32
 	.loh AdrpAdd	Lloh53, Lloh54
-	.loh AdrpAdd	Lloh57, Lloh58
-	.loh AdrpAdd	Lloh55, Lloh56
+	.loh AdrpAdd	Lloh61, Lloh62
 	.loh AdrpAdd	Lloh59, Lloh60
-	.loh AdrpLdr	Lloh61, Lloh62
+	.loh AdrpLdr	Lloh57, Lloh58
+	.loh AdrpAdd	Lloh55, Lloh56
 	.loh AdrpAdd	Lloh63, Lloh64
-	.loh AdrpAdd	Lloh65, Lloh66
-	.loh AdrpAdd	Lloh69, Lloh70
 	.loh AdrpAdd	Lloh67, Lloh68
+	.loh AdrpAdd	Lloh65, Lloh66
 	.loh AdrpAdd	Lloh71, Lloh72
-	.loh AdrpLdr	Lloh75, Lloh76
+	.loh AdrpAdd	Lloh69, Lloh70
+	.loh AdrpAdd	Lloh75, Lloh76
 	.loh AdrpAdd	Lloh73, Lloh74
-	.loh AdrpLdr	Lloh77, Lloh78
-	.loh AdrpAdd	Lloh81, Lloh82
+	.loh AdrpAdd	Lloh77, Lloh78
+	.loh AdrpLdr	Lloh81, Lloh82
 	.loh AdrpAdd	Lloh79, Lloh80
-	.loh AdrpAdd	Lloh99, Lloh100
-	.loh AdrpAdd	Lloh97, Lloh98
+	.loh AdrpLdr	Lloh83, Lloh84
+	.loh AdrpAdd	Lloh85, Lloh86
+	.loh AdrpAdd	Lloh87, Lloh88
+	.loh AdrpLdr	Lloh91, Lloh92
+	.loh AdrpAdd	Lloh89, Lloh90
 	.loh AdrpAdd	Lloh95, Lloh96
 	.loh AdrpAdd	Lloh93, Lloh94
-	.loh AdrpAdd	Lloh91, Lloh92
-	.loh AdrpAdd	Lloh89, Lloh90
-	.loh AdrpAdd	Lloh87, Lloh88
-	.loh AdrpLdr	Lloh85, Lloh86
-	.loh AdrpAdd	Lloh83, Lloh84
-	.loh AdrpAdd	Lloh103, Lloh104
-	.loh AdrpAdd	Lloh101, Lloh102
+	.loh AdrpAdd	Lloh111, Lloh112
 	.loh AdrpAdd	Lloh109, Lloh110
 	.loh AdrpAdd	Lloh107, Lloh108
 	.loh AdrpAdd	Lloh105, Lloh106
+	.loh AdrpAdd	Lloh103, Lloh104
+	.loh AdrpAdd	Lloh101, Lloh102
+	.loh AdrpAdd	Lloh99, Lloh100
+	.loh AdrpAdd	Lloh97, Lloh98
+	.loh AdrpAdd	Lloh115, Lloh116
 	.loh AdrpAdd	Lloh113, Lloh114
-	.loh AdrpAdd	Lloh111, Lloh112
-	.loh AdrpAdd	Lloh123, Lloh124
-	.loh AdrpAdd	Lloh121, Lloh122
 	.loh AdrpAdd	Lloh119, Lloh120
 	.loh AdrpAdd	Lloh117, Lloh118
-	.loh AdrpAdd	Lloh115, Lloh116
+	.loh AdrpAdd	Lloh125, Lloh126
+	.loh AdrpAdd	Lloh123, Lloh124
+	.loh AdrpAdd	Lloh121, Lloh122
+	.loh AdrpAdd	Lloh137, Lloh138
+	.loh AdrpAdd	Lloh135, Lloh136
+	.loh AdrpAdd	Lloh133, Lloh134
+	.loh AdrpAdd	Lloh131, Lloh132
+	.loh AdrpAdd	Lloh129, Lloh130
+	.loh AdrpAdd	Lloh127, Lloh128
+	.loh AdrpAdd	Lloh171, Lloh172
+	.loh AdrpAdd	Lloh169, Lloh170
+	.loh AdrpAdd	Lloh167, Lloh168
+	.loh AdrpAdd	Lloh165, Lloh166
+	.loh AdrpAdd	Lloh163, Lloh164
+	.loh AdrpAdd	Lloh161, Lloh162
 	.loh AdrpAdd	Lloh159, Lloh160
 	.loh AdrpAdd	Lloh157, Lloh158
 	.loh AdrpAdd	Lloh155, Lloh156
@@ -5049,25 +4603,7 @@ LBB2_116:
 	.loh AdrpAdd	Lloh143, Lloh144
 	.loh AdrpAdd	Lloh141, Lloh142
 	.loh AdrpAdd	Lloh139, Lloh140
-	.loh AdrpAdd	Lloh137, Lloh138
-	.loh AdrpAdd	Lloh135, Lloh136
-	.loh AdrpAdd	Lloh133, Lloh134
-	.loh AdrpAdd	Lloh131, Lloh132
-	.loh AdrpAdd	Lloh129, Lloh130
-	.loh AdrpAdd	Lloh127, Lloh128
-	.loh AdrpAdd	Lloh125, Lloh126
-	.loh AdrpLdrGotLdr	Lloh161, Lloh162, Lloh163
-	.loh AdrpAdd	Lloh166, Lloh167
-	.loh AdrpAdd	Lloh164, Lloh165
-	.loh AdrpAdd	Lloh170, Lloh171
-	.loh AdrpAdd	Lloh168, Lloh169
-	.loh AdrpAdd	Lloh174, Lloh175
-	.loh AdrpAdd	Lloh172, Lloh173
-	.loh AdrpAdd	Lloh178, Lloh179
-	.loh AdrpAdd	Lloh176, Lloh177
-	.loh AdrpAdd	Lloh182, Lloh183
-	.loh AdrpAdd	Lloh180, Lloh181
-	.loh AdrpAdd	Lloh184, Lloh185
+	.loh AdrpLdrGotLdr	Lloh173, Lloh174, Lloh175
 	.cfi_endproc
                                         ; -- End function
 	.p2align	2                               ; -- Begin function lockfree_block_ticker_thread
@@ -5111,20 +4647,20 @@ _lockfree_block_ticker_thread:          ; @lockfree_block_ticker_thread
 	mov	x19, x0
 	stp	xzr, xzr, [x29, #-176]
 	stur	xzr, [x29, #-160]
-Lloh186:
+Lloh176:
 	adrp	x1, l_.str.1@PAGE
-Lloh187:
+Lloh177:
 	add	x1, x1, l_.str.1@PAGEOFF
 	mov	x0, #0                          ; =0x0
 	bl	_curl_slist_append
-Lloh188:
+Lloh178:
 	adrp	x1, l_.str.2@PAGE
-Lloh189:
+Lloh179:
 	add	x1, x1, l_.str.2@PAGEOFF
 	bl	_curl_slist_append
-Lloh190:
+Lloh180:
 	adrp	x1, l_.str.3@PAGE
-Lloh191:
+Lloh181:
 	add	x1, x1, l_.str.3@PAGEOFF
 	bl	_curl_slist_append
 	mov	x22, x0
@@ -5133,48 +4669,38 @@ Lloh191:
 	cbz	w8, LBB3_102
 ; %bb.1:
 	mov	w24, #0                         ; =0x0
-Lloh192:
+Lloh182:
 	adrp	x26, _RPC_URLS@PAGE
-Lloh193:
+Lloh183:
 	add	x26, x26, _RPC_URLS@PAGEOFF
-Lloh194:
-	adrp	x27, l_.str.71@PAGE
-Lloh195:
-	add	x27, x27, l_.str.71@PAGEOFF
-Lloh196:
+Lloh184:
+	adrp	x27, l_.str.69@PAGE
+Lloh185:
+	add	x27, x27, l_.str.69@PAGEOFF
+Lloh186:
 	adrp	x28, _curl_write_cb@PAGE
-Lloh197:
+Lloh187:
 	add	x28, x28, _curl_write_cb@PAGEOFF
 	mov	w20, #1                         ; =0x1
+	mov	x8, #145685290680320            ; =0x848000000000
+	movk	x8, #16686, lsl #48
+	stp	x8, x22, [sp, #208]             ; 16-byte Folded Spill
 	mov	x8, #70368744177664             ; =0x400000000000
 	movk	x8, #16527, lsl #48
-	str	x8, [sp, #208]                  ; 8-byte Folded Spill
-	mov	x8, #60813                      ; =0xed8d
-	movk	x8, #41141, lsl #16
-	movk	x8, #50935, lsl #32
-	movk	x8, #16048, lsl #48
 	str	x8, [sp, #200]                  ; 8-byte Folded Spill
-	mov	x8, #54933                      ; =0xd695
-	movk	x8, #59430, lsl #16
-	movk	x8, #11787, lsl #32
-	movk	x8, #15889, lsl #48
+	mov	x8, #225833675390976            ; =0xcd6500000000
+	movk	x8, #16845, lsl #48
 	str	x8, [sp, #192]                  ; 8-byte Folded Spill
-	mov	x8, #17324                      ; =0x43ac
-	movk	x8, #53714, lsl #16
-	movk	x8, #29277, lsl #32
-	movk	x8, #15410, lsl #48
+	mov	x8, #51200                      ; =0xc800
+	movk	x8, #26446, lsl #16
+	movk	x8, #49517, lsl #32
+	movk	x8, #17323, lsl #48
 	str	x8, [sp, #184]                  ; 8-byte Folded Spill
-	mov	x8, #32890                      ; =0x807a
-	movk	x8, #11989, lsl #16
-	movk	x8, #57849, lsl #32
-	movk	x8, #16152, lsl #48
-	str	x8, [sp, #176]                  ; 8-byte Folded Spill
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
 	movk	x8, #16471, lsl #48
-	str	x8, [sp, #168]                  ; 8-byte Folded Spill
-	str	x22, [sp, #216]                 ; 8-byte Folded Spill
+	str	x8, [sp, #176]                  ; 8-byte Folded Spill
 	b	LBB3_3
 LBB3_2:                                 ;   in Loop: Header=BB3_3 Depth=1
 	add	w24, w24, #1
@@ -5270,8 +4796,8 @@ LBB3_3:                                 ; =>This Loop Header: Depth=1
 ; %bb.6:                                ;   in Loop: Header=BB3_3 Depth=1
 	stur	w24, [x29, #-212]               ; 4-byte Folded Spill
 	ldp	x9, x8, [x29, #-208]
-	stur	x9, [x29, #-240]                ; 8-byte Folded Spill
-	stp	x8, x25, [x29, #-232]           ; 16-byte Folded Spill
+	stp	x9, x25, [x29, #-232]           ; 16-byte Folded Spill
+	stur	x8, [x29, #-240]                ; 8-byte Folded Spill
 	ldp	x9, x8, [x29, #-192]
 	stp	x9, x8, [sp, #240]              ; 16-byte Folded Spill
 	mov	w1, #1                          ; =0x1
@@ -5304,10 +4830,10 @@ LBB3_3:                                 ; =>This Loop Header: Depth=1
 	ldur	x0, [x29, #-176]
 	mov	w1, #8                          ; =0x8
 	bl	_find_batch_result_for_id
-Lloh198:
-	adrp	x25, l_.str.72@PAGE
-Lloh199:
-	add	x25, x25, l_.str.72@PAGEOFF
+Lloh188:
+	adrp	x25, l_.str.70@PAGE
+Lloh189:
+	add	x25, x25, l_.str.70@PAGEOFF
 	mov	x16, #1                         ; =0x1
 	movk	x16, #4100, lsl #32
 	cbz	x21, LBB3_18
@@ -5370,24 +4896,24 @@ LBB3_15:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_15
 ; %bb.16:                               ;   in Loop: Header=BB3_3 Depth=1
-	adrp	x10, __MergedGlobals@PAGE+288
-	ldr	x9, [x10, __MergedGlobals@PAGEOFF+288]
+	adrp	x10, __MergedGlobals@PAGE+336
+	ldr	x9, [x10, __MergedGlobals@PAGEOFF+336]
 	cmp	x8, x9
-	adrp	x21, __MergedGlobals.78@PAGE+16
+	adrp	x21, __MergedGlobals.76@PAGE+8
 	b.ls	LBB3_19
 ; %bb.17:                               ;   in Loop: Header=BB3_3 Depth=1
-	str	x8, [x10, __MergedGlobals@PAGEOFF+288]
+	str	x8, [x10, __MergedGlobals@PAGEOFF+336]
 	cbnz	x22, LBB3_20
 	b	LBB3_30
 LBB3_18:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh200:
-	adrp	x8, __MergedGlobals@PAGE+288
-Lloh201:
-	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+288]
+Lloh190:
+	adrp	x8, __MergedGlobals@PAGE+336
+Lloh191:
+	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+336]
 	ldur	w8, [x29, #-212]                ; 4-byte Folded Reload
 	add	w8, w8, #1
 	stur	w8, [x29, #-212]                ; 4-byte Folded Spill
-	adrp	x21, __MergedGlobals.78@PAGE+16
+	adrp	x21, __MergedGlobals.76@PAGE+8
 	cbnz	x22, LBB3_20
 	b	LBB3_30
 LBB3_19:                                ;   in Loop: Header=BB3_3 Depth=1
@@ -5518,15 +5044,15 @@ LBB3_38:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_38
 ; %bb.39:                               ;   in Loop: Header=BB3_3 Depth=1
-Lloh202:
-	adrp	x9, __MergedGlobals@PAGE+344
-Lloh203:
-	ldr	x9, [x9, __MergedGlobals@PAGEOFF+344]
+Lloh192:
+	adrp	x9, __MergedGlobals@PAGE+288
+Lloh193:
+	ldr	x9, [x9, __MergedGlobals@PAGEOFF+288]
 	cmp	x8, x9
 	b.ls	LBB3_41
 ; %bb.40:                               ;   in Loop: Header=BB3_3 Depth=1
-	adrp	x9, __MergedGlobals@PAGE+344
-	str	x8, [x9, __MergedGlobals@PAGEOFF+344]
+	adrp	x9, __MergedGlobals@PAGE+288
+	str	x8, [x9, __MergedGlobals@PAGEOFF+288]
 LBB3_41:                                ;   in Loop: Header=BB3_3 Depth=1
 	cbz	x23, LBB3_53
 LBB3_42:                                ;   in Loop: Header=BB3_3 Depth=1
@@ -5537,10 +5063,10 @@ LBB3_42:                                ;   in Loop: Header=BB3_3 Depth=1
 	movk	x16, #4100, lsl #32
 	cmp	x0, #66
 	mov	x0, x22
-Lloh204:
-	adrp	x25, l_.str.72@PAGE
-Lloh205:
-	add	x25, x25, l_.str.72@PAGEOFF
+Lloh194:
+	adrp	x25, l_.str.70@PAGE
+Lloh195:
+	add	x25, x25, l_.str.70@PAGEOFF
 	b.lo	LBB3_53
 ; %bb.43:                               ;   in Loop: Header=BB3_3 Depth=1
 	ldrb	w8, [x23]
@@ -5600,13 +5126,13 @@ LBB3_50:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_50
 LBB3_51:                                ;   in Loop: Header=BB3_3 Depth=1
-	str	x8, [x21, __MergedGlobals.78@PAGEOFF+16]
+	str	x8, [x21, __MergedGlobals.76@PAGEOFF+8]
 	b	LBB3_53
 LBB3_52:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh206:
-	adrp	x8, __MergedGlobals@PAGE+344
-Lloh207:
-	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+344]
+Lloh196:
+	adrp	x8, __MergedGlobals@PAGE+288
+Lloh197:
+	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+288]
 	cbnz	x23, LBB3_42
 LBB3_53:                                ;   in Loop: Header=BB3_3 Depth=1
 	cbz	x28, LBB3_64
@@ -5670,8 +5196,8 @@ LBB3_61:                                ;   Parent Loop BB3_3 Depth=1
 ; %bb.62:                               ;   in Loop: Header=BB3_3 Depth=1
 	cbz	x8, LBB3_64
 ; %bb.63:                               ;   in Loop: Header=BB3_3 Depth=1
-	adrp	x9, __MergedGlobals@PAGE+352
-	str	x8, [x9, __MergedGlobals@PAGEOFF+352]
+	adrp	x9, __MergedGlobals@PAGE+304
+	str	x8, [x9, __MergedGlobals@PAGEOFF+304]
 LBB3_64:                                ;   in Loop: Header=BB3_3 Depth=1
 	cbz	x27, LBB3_75
 ; %bb.65:                               ;   in Loop: Header=BB3_3 Depth=1
@@ -5732,9 +5258,9 @@ LBB3_72:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_72
 LBB3_73:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh208:
+Lloh198:
 	adrp	x9, __MergedGlobals@PAGE+360
-Lloh209:
+Lloh199:
 	ldr	x9, [x9, __MergedGlobals@PAGEOFF+360]
 	cmp	x8, x9
 	b.lo	LBB3_75
@@ -5801,8 +5327,8 @@ LBB3_83:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_83
 LBB3_84:                                ;   in Loop: Header=BB3_3 Depth=1
-	adrp	x9, __MergedGlobals@PAGE+280
-	str	x8, [x9, __MergedGlobals@PAGEOFF+280]
+	adrp	x9, __MergedGlobals@PAGE+296
+	str	x8, [x9, __MergedGlobals@PAGEOFF+296]
 LBB3_85:                                ;   in Loop: Header=BB3_3 Depth=1
 	cbz	x0, LBB3_97
 ; %bb.86:                               ;   in Loop: Header=BB3_3 Depth=1
@@ -5863,97 +5389,98 @@ LBB3_93:                                ;   Parent Loop BB3_3 Depth=1
 	subs	x9, x9, #1
 	b.ne	LBB3_93
 ; %bb.94:                               ;   in Loop: Header=BB3_3 Depth=1
-Lloh210:
-	adrp	x9, __MergedGlobals@PAGE+336
-Lloh211:
-	ldr	x9, [x9, __MergedGlobals@PAGEOFF+336]
+Lloh200:
+	adrp	x9, __MergedGlobals@PAGE+280
+Lloh201:
+	ldr	x9, [x9, __MergedGlobals@PAGEOFF+280]
 	cmp	x8, x9
 	b.ls	LBB3_97
 ; %bb.95:                               ;   in Loop: Header=BB3_3 Depth=1
-	adrp	x9, __MergedGlobals@PAGE+336
-	str	x8, [x9, __MergedGlobals@PAGEOFF+336]
+	adrp	x9, __MergedGlobals@PAGE+280
+	str	x8, [x9, __MergedGlobals@PAGEOFF+280]
 	b	LBB3_97
 LBB3_96:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh212:
-	adrp	x8, __MergedGlobals@PAGE+336
-Lloh213:
-	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+336]
-LBB3_97:                                ;   in Loop: Header=BB3_3 Depth=1
-Lloh214:
+Lloh202:
 	adrp	x8, __MergedGlobals@PAGE+280
-Lloh215:
+Lloh203:
+	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+280]
+LBB3_97:                                ;   in Loop: Header=BB3_3 Depth=1
+Lloh204:
+	adrp	x8, __MergedGlobals@PAGE+280
+Lloh205:
 	add	x8, x8, __MergedGlobals@PAGEOFF+280
-	ldr	x24, [x8, #56]
-	ldr	x23, [x8, #64]
-	ldr	x22, [x21, __MergedGlobals.78@PAGEOFF+16]
-	ldr	x26, [x8, #72]
-	ldr	x27, [x8]
+	ldr	x24, [x8]
+	ldr	x23, [x8, #8]
+	ldr	x22, [x21, __MergedGlobals.76@PAGEOFF+8]
+	ldr	x26, [x8, #24]
+	ldr	x27, [x8, #16]
 	ldr	x28, [x8, #88]
 	mov	x0, x25
-Lloh216:
-	adrp	x1, l_.str.35@PAGE
-Lloh217:
-	add	x1, x1, l_.str.35@PAGEOFF
+Lloh206:
+	adrp	x1, l_.str.33@PAGE
+Lloh207:
+	add	x1, x1, l_.str.33@PAGEOFF
 	bl	_fopen
 	cbz	x0, LBB3_99
 ; %bb.98:                               ;   in Loop: Header=BB3_3 Depth=1
 	mov	x9, x21
 	mov	x21, x0
-	ldur	x8, [x29, #-240]                ; 8-byte Folded Reload
+	ldur	x8, [x29, #-232]                ; 8-byte Folded Reload
 	ldp	x11, x10, [sp, #240]            ; 16-byte Folded Reload
 	sub	x8, x8, x11
 	scvtf	d0, x8
-	ldp	d2, d1, [sp, #200]              ; 16-byte Folded Reload
-	fmul	d0, d0, d1
-	ldur	x8, [x29, #-232]                ; 8-byte Folded Reload
+	ldur	x8, [x29, #-240]                ; 8-byte Folded Reload
 	sub	x8, x8, x10
 	scvtf	d1, x8
-	fmadd	d0, d1, d2, d0
+	ldp	d4, d3, [sp, #200]              ; 16-byte Folded Reload
+	fdiv	d1, d1, d3
+	ucvtf	d2, x28
+	fmadd	d0, d0, d4, d1
 	stur	d0, [x29, #-232]                ; 8-byte Folded Spill
-	ucvtf	d0, x28
-	ldr	d1, [sp, #192]                  ; 8-byte Folded Reload
-	fmul	d0, d0, d1
+	ldr	d0, [sp, #192]                  ; 8-byte Folded Reload
+	fdiv	d0, d2, d0
 	stur	d0, [x29, #-240]                ; 8-byte Folded Spill
 	ucvtf	d0, x27
-	ldr	d1, [sp, #184]                  ; 8-byte Folded Reload
-	fmul	d3, d0, d1
-	ucvtf	d0, x26
-	fmul	d0, d0, d1
-	stp	d0, d3, [sp, #224]              ; 16-byte Folded Spill
+	ucvtf	d1, x26
+	ldr	d2, [sp, #184]                  ; 8-byte Folded Reload
+	fdiv	d4, d0, d2
 	ucvtf	d0, x24
-	fmul	d11, d0, d2
-	ucvtf	d1, x23
-	fmadd	d12, d1, d2, d11
-	ucvtf	d1, x22
-	fmul	d13, d1, d2
-	fadd	d9, d12, d13
-Lloh218:
+	fdiv	d9, d0, d3
+	ucvtf	d0, x23
+	fdiv	d0, d0, d3
+	fadd	d10, d9, d0
+	ucvtf	d0, x22
+	fdiv	d11, d0, d3
+	fadd	d8, d10, d11
+Lloh208:
 	adrp	x8, __MergedGlobals@PAGE+264
-Lloh219:
+Lloh209:
 	add	x8, x8, __MergedGlobals@PAGEOFF+264
-	ldr	d3, [x8]
-	ldr	d2, [x8, #8]
-	stp	d2, d3, [sp, #240]              ; 16-byte Folded Spill
-	ldr	x22, [x8, #24]
+	ldr	d0, [x8]
+	str	d0, [sp, #248]                  ; 8-byte Folded Spill
+	ldr	d0, [x8, #8]
+	stp	d4, d0, [sp, #232]              ; 16-byte Folded Spill
+	ldr	x22, [x8, #72]
 	ldr	x23, [x8, #96]
 	ldr	x24, [x8, #96]
-	ldr	x26, [x8, #72]
-	ldr	x27, [x9, __MergedGlobals.78@PAGEOFF+16]
-	ldr	d2, [sp, #176]                  ; 8-byte Folded Reload
-	fmul	d14, d0, d2
-	ldr	d0, [sp, #168]                  ; 8-byte Folded Reload
-	fmul	d15, d12, d0
-	fmul	d8, d1, d2
-	fmul	d10, d9, d0
+	ldr	x26, [x8, #16]
+	ldr	x27, [x9, __MergedGlobals.76@PAGEOFF+8]
+	ldr	d0, [sp, #176]                  ; 8-byte Folded Reload
+	fmul	d3, d9, d0
+	str	d3, [sp, #224]                  ; 8-byte Folded Spill
+	fmul	d12, d10, d0
+	fmul	d13, d11, d0
+	fmul	d15, d8, d0
+	fdiv	d14, d1, d2
 	mov	x0, #0                          ; =0x0
 	bl	_time
 	str	x0, [sp, #160]
 	ldp	d0, d1, [sp, #224]              ; 16-byte Folded Reload
-	stp	d0, d1, [sp, #144]
-	stp	d8, d10, [sp, #128]
-	stp	d9, d15, [sp, #112]
-	stp	d12, d13, [sp, #96]
-	stp	d11, d14, [sp, #80]
+	stp	d14, d1, [sp, #144]
+	stp	d13, d15, [sp, #128]
+	stp	d8, d12, [sp, #112]
+	stp	d10, d11, [sp, #96]
+	stp	d9, d0, [sp, #80]
 	stp	x26, x27, [sp, #64]
 	stp	x23, x24, [sp, #48]
 	ldur	d0, [x29, #-240]                ; 8-byte Folded Reload
@@ -5966,34 +5493,34 @@ Lloh219:
 	ldur	x8, [x29, #-224]                ; 8-byte Folded Reload
 	str	x8, [sp]
 	mov	x0, x21
-Lloh220:
-	adrp	x1, l_.str.73@PAGE
-Lloh221:
-	add	x1, x1, l_.str.73@PAGEOFF
+Lloh210:
+	adrp	x1, l_.str.71@PAGE
+Lloh211:
+	add	x1, x1, l_.str.71@PAGEOFF
 	bl	_fprintf
 	mov	x0, x21
 	bl	_fclose
 	mov	x0, x25
-Lloh222:
-	adrp	x1, l_.str.74@PAGE
-Lloh223:
-	add	x1, x1, l_.str.74@PAGEOFF
+Lloh212:
+	adrp	x1, l_.str.72@PAGE
+Lloh213:
+	add	x1, x1, l_.str.72@PAGEOFF
 	bl	_rename
 LBB3_99:                                ;   in Loop: Header=BB3_3 Depth=1
 	ldr	x22, [sp, #216]                 ; 8-byte Folded Reload
 	adrp	x23, __MergedGlobals@PAGE
 	ldur	w24, [x29, #-212]               ; 4-byte Folded Reload
-Lloh224:
+Lloh214:
 	adrp	x26, _RPC_URLS@PAGE
-Lloh225:
+Lloh215:
 	add	x26, x26, _RPC_URLS@PAGEOFF
-Lloh226:
-	adrp	x27, l_.str.71@PAGE
-Lloh227:
-	add	x27, x27, l_.str.71@PAGEOFF
-Lloh228:
+Lloh216:
+	adrp	x27, l_.str.69@PAGE
+Lloh217:
+	add	x27, x27, l_.str.69@PAGEOFF
+Lloh218:
 	adrp	x28, _curl_write_cb@PAGE
-Lloh229:
+Lloh219:
 	add	x28, x28, _curl_write_cb@PAGEOFF
 	mov	w0, #53392                      ; =0xd090
 	movk	w0, #3, lsl #16
@@ -6023,28 +5550,28 @@ LBB3_102:
 	ldp	d13, d12, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d15, d14, [sp], #160            ; 16-byte Folded Reload
 	ret
-	.loh AdrpAdd	Lloh190, Lloh191
-	.loh AdrpAdd	Lloh188, Lloh189
+	.loh AdrpAdd	Lloh180, Lloh181
+	.loh AdrpAdd	Lloh178, Lloh179
+	.loh AdrpAdd	Lloh176, Lloh177
 	.loh AdrpAdd	Lloh186, Lloh187
-	.loh AdrpAdd	Lloh196, Lloh197
+	.loh AdrpAdd	Lloh184, Lloh185
+	.loh AdrpAdd	Lloh182, Lloh183
+	.loh AdrpAdd	Lloh188, Lloh189
+	.loh AdrpLdr	Lloh190, Lloh191
+	.loh AdrpLdr	Lloh192, Lloh193
 	.loh AdrpAdd	Lloh194, Lloh195
-	.loh AdrpAdd	Lloh192, Lloh193
-	.loh AdrpAdd	Lloh198, Lloh199
+	.loh AdrpLdr	Lloh196, Lloh197
+	.loh AdrpLdr	Lloh198, Lloh199
 	.loh AdrpLdr	Lloh200, Lloh201
 	.loh AdrpLdr	Lloh202, Lloh203
+	.loh AdrpAdd	Lloh206, Lloh207
 	.loh AdrpAdd	Lloh204, Lloh205
-	.loh AdrpLdr	Lloh206, Lloh207
-	.loh AdrpLdr	Lloh208, Lloh209
-	.loh AdrpLdr	Lloh210, Lloh211
-	.loh AdrpLdr	Lloh212, Lloh213
+	.loh AdrpAdd	Lloh212, Lloh213
+	.loh AdrpAdd	Lloh210, Lloh211
+	.loh AdrpAdd	Lloh208, Lloh209
+	.loh AdrpAdd	Lloh218, Lloh219
 	.loh AdrpAdd	Lloh216, Lloh217
 	.loh AdrpAdd	Lloh214, Lloh215
-	.loh AdrpAdd	Lloh222, Lloh223
-	.loh AdrpAdd	Lloh220, Lloh221
-	.loh AdrpAdd	Lloh218, Lloh219
-	.loh AdrpAdd	Lloh228, Lloh229
-	.loh AdrpAdd	Lloh226, Lloh227
-	.loh AdrpAdd	Lloh224, Lloh225
 	.cfi_endproc
                                         ; -- End function
 	.p2align	2                               ; -- Begin function curl_write_cb
@@ -6128,30 +5655,30 @@ _find_batch_result_for_id:              ; @find_batch_result_for_id
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
 	.cfi_offset w20, -32
-Lloh230:
+Lloh220:
 	adrp	x8, ___stack_chk_guard@GOTPAGE
-Lloh231:
+Lloh221:
 	ldr	x8, [x8, ___stack_chk_guard@GOTPAGEOFF]
-Lloh232:
+Lloh222:
 	ldr	x8, [x8]
 	stur	x8, [x29, #-24]
-	cbz	x0, LBB5_25
+	cbz	x0, LBB5_26
 ; %bb.1:
 	mov	x19, x1
 	mov	x20, x0
 	str	x1, [sp]
-Lloh233:
-	adrp	x2, l_.str.66@PAGE
-Lloh234:
-	add	x2, x2, l_.str.66@PAGEOFF
+Lloh223:
+	adrp	x2, l_.str.64@PAGE
+Lloh224:
+	add	x2, x2, l_.str.64@PAGEOFF
 	add	x0, sp, #40
 	mov	w1, #32                         ; =0x20
 	bl	_snprintf
 	str	x19, [sp]
-Lloh235:
-	adrp	x2, l_.str.67@PAGE
-Lloh236:
-	add	x2, x2, l_.str.67@PAGEOFF
+Lloh225:
+	adrp	x2, l_.str.65@PAGE
+Lloh226:
+	add	x2, x2, l_.str.65@PAGEOFF
 	add	x0, sp, #8
 	mov	w1, #32                         ; =0x20
 	bl	_snprintf
@@ -6163,11 +5690,11 @@ Lloh236:
 	add	x1, sp, #8
 	mov	x0, x20
 	bl	_strstr
-	cbz	x0, LBB5_25
+	cbz	x0, LBB5_26
 LBB5_3:
 	mov	x19, x0
 	subs	x8, x0, x20
-	b.ls	LBB5_20
+	b.ls	LBB5_21
 ; %bb.4:
 	mov	x0, x19
 	ands	x9, x8, #0x3
@@ -6177,7 +5704,7 @@ LBB5_3:
 LBB5_6:                                 ; =>This Inner Loop Header: Depth=1
 	ldrb	w10, [x0]
 	cmp	w10, #123
-	b.eq	LBB5_20
+	b.eq	LBB5_21
 ; %bb.7:                                ;   in Loop: Header=BB5_6 Depth=1
 	sub	x0, x0, #1
 	subs	x9, x9, #1
@@ -6188,91 +5715,94 @@ LBB5_8:
 	b.hs	LBB5_10
 ; %bb.9:
 	mov	x0, x20
-	b	LBB5_20
-LBB5_10:                                ; =>This Inner Loop Header: Depth=1
-	ldrb	w8, [x0]
-	cmp	w8, #123
-	b.eq	LBB5_20
-; %bb.11:                               ;   in Loop: Header=BB5_10 Depth=1
-	ldurb	w8, [x0, #-1]
-	cmp	w8, #123
-	b.eq	LBB5_16
-; %bb.12:                               ;   in Loop: Header=BB5_10 Depth=1
-	ldurb	w8, [x0, #-2]
+	b	LBB5_21
+LBB5_10:
+	sub	x0, x0, #1
+LBB5_11:                                ; =>This Inner Loop Header: Depth=1
+	ldrb	w8, [x0, #1]
 	cmp	w8, #123
 	b.eq	LBB5_17
-; %bb.13:                               ;   in Loop: Header=BB5_10 Depth=1
-	ldurb	w8, [x0, #-3]
+; %bb.12:                               ;   in Loop: Header=BB5_11 Depth=1
+	ldrb	w8, [x0]
+	cmp	w8, #123
+	b.eq	LBB5_21
+; %bb.13:                               ;   in Loop: Header=BB5_11 Depth=1
+	ldurb	w8, [x0, #-1]
 	cmp	w8, #123
 	b.eq	LBB5_18
-; %bb.14:                               ;   in Loop: Header=BB5_10 Depth=1
+; %bb.14:                               ;   in Loop: Header=BB5_11 Depth=1
+	ldurb	w8, [x0, #-2]
+	cmp	w8, #123
+	b.eq	LBB5_19
+; %bb.15:                               ;   in Loop: Header=BB5_11 Depth=1
+	sub	x8, x0, #3
 	sub	x0, x0, #4
-	cmp	x0, x20
-	b.hi	LBB5_10
-; %bb.15:
+	cmp	x8, x20
+	b.hi	LBB5_11
+; %bb.16:
 	mov	x0, x20
-	b	LBB5_20
-LBB5_16:
-	sub	x0, x0, #1
-	b	LBB5_20
+	b	LBB5_21
 LBB5_17:
-	sub	x0, x0, #2
-	b	LBB5_20
+	add	x0, x0, #1
+	b	LBB5_21
 LBB5_18:
-	sub	x0, x0, #3
-	b	LBB5_20
-LBB5_19:                                ;   in Loop: Header=BB5_20 Depth=1
+	sub	x0, x0, #1
+	b	LBB5_21
+LBB5_19:
+	sub	x0, x0, #2
+	b	LBB5_21
+LBB5_20:                                ;   in Loop: Header=BB5_21 Depth=1
 	add	x19, x19, #1
-LBB5_20:                                ; =>This Inner Loop Header: Depth=1
+LBB5_21:                                ; =>This Inner Loop Header: Depth=1
 	ldrb	w8, [x19]
-	cbz	w8, LBB5_22
-; %bb.21:                               ;   in Loop: Header=BB5_20 Depth=1
+	cbz	w8, LBB5_23
+; %bb.22:                               ;   in Loop: Header=BB5_21 Depth=1
 	cmp	w8, #125
-	b.ne	LBB5_19
-LBB5_22:
-Lloh237:
-	adrp	x1, l_.str.68@PAGE
-Lloh238:
-	add	x1, x1, l_.str.68@PAGEOFF
+	b.ne	LBB5_20
+LBB5_23:
+Lloh227:
+	adrp	x1, l_.str.66@PAGE
+Lloh228:
+	add	x1, x1, l_.str.66@PAGEOFF
 	bl	_strstr
 	mov	x8, x0
 	mov	x0, #0                          ; =0x0
-	cbz	x8, LBB5_25
-; %bb.23:
-	cmp	x8, x19
-	b.hs	LBB5_25
+	cbz	x8, LBB5_26
 ; %bb.24:
-Lloh239:
-	adrp	x1, l_.str.69@PAGE
-Lloh240:
-	add	x1, x1, l_.str.69@PAGEOFF
+	cmp	x8, x19
+	b.hs	LBB5_26
+; %bb.25:
+Lloh229:
+	adrp	x1, l_.str.67@PAGE
+Lloh230:
+	add	x1, x1, l_.str.67@PAGEOFF
 	mov	x0, x8
 	bl	_strstr
 	cmp	x0, x19
 	csel	x0, x0, xzr, lo
-LBB5_25:
+LBB5_26:
 	ldur	x8, [x29, #-24]
-Lloh241:
+Lloh231:
 	adrp	x9, ___stack_chk_guard@GOTPAGE
-Lloh242:
+Lloh232:
 	ldr	x9, [x9, ___stack_chk_guard@GOTPAGEOFF]
-Lloh243:
+Lloh233:
 	ldr	x9, [x9]
 	cmp	x9, x8
-	b.ne	LBB5_27
-; %bb.26:
+	b.ne	LBB5_28
+; %bb.27:
 	ldp	x29, x30, [sp, #96]             ; 16-byte Folded Reload
 	ldp	x20, x19, [sp, #80]             ; 16-byte Folded Reload
 	add	sp, sp, #112
 	ret
-LBB5_27:
+LBB5_28:
 	bl	___stack_chk_fail
-	.loh AdrpLdrGotLdr	Lloh230, Lloh231, Lloh232
-	.loh AdrpAdd	Lloh235, Lloh236
-	.loh AdrpAdd	Lloh233, Lloh234
-	.loh AdrpAdd	Lloh237, Lloh238
-	.loh AdrpAdd	Lloh239, Lloh240
-	.loh AdrpLdrGotLdr	Lloh241, Lloh242, Lloh243
+	.loh AdrpLdrGotLdr	Lloh220, Lloh221, Lloh222
+	.loh AdrpAdd	Lloh225, Lloh226
+	.loh AdrpAdd	Lloh223, Lloh224
+	.loh AdrpAdd	Lloh227, Lloh228
+	.loh AdrpAdd	Lloh229, Lloh230
+	.loh AdrpLdrGotLdr	Lloh231, Lloh232, Lloh233
 	.cfi_endproc
                                         ; -- End function
 	.p2align	2                               ; -- Begin function decode_slot0_sqrt_price
@@ -6296,38 +5826,38 @@ _decode_slot0_sqrt_price:               ; @decode_slot0_sqrt_price
 	mov.16b	v8, v3
 	cbz	x0, LBB6_9
 ; %bb.1:
-	mov.16b	v9, v0
-	mov.16b	v11, v1
-	mov.16b	v10, v2
-Lloh244:
-	adrp	x1, l_.str.69@PAGE
-Lloh245:
-	add	x1, x1, l_.str.69@PAGEOFF
+	mov.16b	v11, v0
+	mov.16b	v10, v1
+	mov.16b	v9, v2
+Lloh234:
+	adrp	x1, l_.str.67@PAGE
+Lloh235:
+	add	x1, x1, l_.str.67@PAGEOFF
 	bl	_strstr
 	cbz	x0, LBB6_9
 ; %bb.2:
-	mov	x9, x0
-	ldrb	w10, [x9, #2]!
-	cbz	w10, LBB6_9
+	mov	x8, x0
+	ldrb	w11, [x8, #2]!
+	cbz	w11, LBB6_9
 ; %bb.3:
-	mov	x8, #0                          ; =0x0
-	add	x9, x9, #1
+	mov	x9, #0                          ; =0x0
+	add	x10, x0, #3
 LBB6_4:                                 ; =>This Inner Loop Header: Depth=1
-	cmp	w10, #34
+	cmp	w11, #34
 	b.eq	LBB6_7
 ; %bb.5:                                ;   in Loop: Header=BB6_4 Depth=1
-	cmp	x8, #63
+	cmp	x9, #63
 	b.hi	LBB6_10
 ; %bb.6:                                ;   in Loop: Header=BB6_4 Depth=1
-	add	x11, x8, #1
-	ldrb	w10, [x9, x8]
-	mov	x8, x11
-	cbnz	w10, LBB6_4
+	add	x12, x9, #1
+	ldrb	w11, [x10, x9]
+	mov	x9, x12
+	cbnz	w11, LBB6_4
 	b	LBB6_8
 LBB6_7:
-	mov	x11, x8
+	mov	x12, x9
 LBB6_8:
-	cmp	x11, #64
+	cmp	x12, #64
 	b.hs	LBB6_11
 LBB6_9:
 	mov.16b	v0, v8
@@ -6337,15 +5867,14 @@ LBB6_9:
 	ldp	d13, d12, [sp], #64             ; 16-byte Folded Reload
 	ret
 LBB6_10:
-	cmp	x8, #64
+	cmp	x9, #64
 	b.lo	LBB6_9
 LBB6_11:
-	mov	x8, #0                          ; =0x0
-	add	x9, x0, #2
+	mov	x9, #0                          ; =0x0
 	movi.2d	v12, #0000000000000000
 	fmov	d0, #16.00000000
 LBB6_12:                                ; =>This Inner Loop Header: Depth=1
-	ldrsb	w10, [x9, x8]
+	ldrsb	w10, [x8, x9]
 	sub	w11, w10, #48
 	sub	w12, w10, #97
 	sub	w13, w10, #65
@@ -6359,45 +5888,43 @@ LBB6_12:                                ; =>This Inner Loop Header: Depth=1
 	csel	w10, w10, w11, hi
 	ucvtf	d1, w10
 	fmadd	d12, d12, d0, d1
-	add	x8, x8, #1
-	cmp	x8, #64
+	add	x9, x9, #1
+	cmp	x9, #64
 	b.ne	LBB6_12
 ; %bb.13:
 	fcmp	d12, #0.0
-	b.le	LBB6_9
+	b.ls	LBB6_9
 ; %bb.14:
 	fmov	d0, #1.00000000
 	mov	w0, #96                         ; =0x60
 	bl	_ldexp
 	fdiv	d0, d12, d0
 	fmul	d0, d0, d0
-	fmul	d9, d0, d9
-	fcmp	d9, d11
-	fccmp	d9, d10, #0, ge
+	fmul	d0, d11, d0
+	fcmp	d0, d0
+	fccmp	d0, d10, #8, vc
+	fccmp	d0, d9, #0, pl
 	b.gt	LBB6_9
 ; %bb.15:
-	mov.16b	v0, v9
-	bl	___isnand
-	cbnz	w0, LBB6_9
-; %bb.16:
-	mov.16b	v0, v9
-	bl	___isinfd
-	cmp	w0, #0
-	fcsel	d8, d9, d8, eq
+	fmov	x8, d0
+	and	x8, x8, #0x7fffffffffffffff
+	mov	x9, #9218868437227405312        ; =0x7ff0000000000000
+	cmp	x8, x9
+	fcsel	d8, d8, d0, eq
 	mov.16b	v0, v8
 	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
 	ldp	d9, d8, [sp, #32]               ; 16-byte Folded Reload
 	ldp	d11, d10, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d13, d12, [sp], #64             ; 16-byte Folded Reload
 	ret
-	.loh AdrpAdd	Lloh244, Lloh245
+	.loh AdrpAdd	Lloh234, Lloh235
 	.cfi_endproc
                                         ; -- End function
 	.p2align	2                               ; -- Begin function decode_aave_hf
 _decode_aave_hf:                        ; @decode_aave_hf
 	.cfi_startproc
 ; %bb.0:
-	cbz	x0, LBB7_10
+	cbz	x0, LBB7_15
 ; %bb.1:
 	stp	d9, d8, [sp, #-32]!             ; 16-byte Folded Spill
 	stp	x29, x30, [sp, #16]             ; 16-byte Folded Spill
@@ -6407,26 +5934,26 @@ _decode_aave_hf:                        ; @decode_aave_hf
 	.cfi_offset w29, -16
 	.cfi_offset b8, -24
 	.cfi_offset b9, -32
-	mov.16b	v9, v0
-Lloh246:
-	adrp	x1, l_.str.69@PAGE
-Lloh247:
-	add	x1, x1, l_.str.69@PAGEOFF
+	mov.16b	v8, v0
+Lloh236:
+	adrp	x1, l_.str.67@PAGE
+Lloh237:
+	add	x1, x1, l_.str.67@PAGEOFF
 	bl	_strstr
 	cbz	x0, LBB7_8
 ; %bb.2:
-	mov	x9, x0
-	ldrb	w10, [x9, #2]!
+	ldrb	w10, [x0, #2]
 	cbz	w10, LBB7_8
 ; %bb.3:
 	mov	x8, #0                          ; =0x0
-	add	x9, x9, #1
+	add	x9, x0, #3
+	mov.16b	v0, v8
 LBB7_4:                                 ; =>This Inner Loop Header: Depth=1
 	cmp	w10, #34
-	b.eq	LBB7_11
+	b.eq	LBB7_9
 ; %bb.5:                                ;   in Loop: Header=BB7_4 Depth=1
 	cmp	x8, #383
-	b.hi	LBB7_12
+	b.hi	LBB7_10
 ; %bb.6:                                ;   in Loop: Header=BB7_4 Depth=1
 	add	x11, x8, #1
 	ldrb	w10, [x9, x8]
@@ -6434,31 +5961,24 @@ LBB7_4:                                 ; =>This Inner Loop Header: Depth=1
 	cbnz	w10, LBB7_4
 ; %bb.7:
 	cmp	x11, #384
-	mov.16b	v0, v9
-	b.hs	LBB7_13
-	b	LBB7_9
+	b.hs	LBB7_11
+	b	LBB7_14
 LBB7_8:
-	mov.16b	v0, v9
+	mov.16b	v0, v8
+	b	LBB7_14
 LBB7_9:
-	ldp	x29, x30, [sp, #16]             ; 16-byte Folded Reload
-	ldp	d9, d8, [sp], #32               ; 16-byte Folded Reload
+	cmp	x8, #384
+	b.hs	LBB7_11
+	b	LBB7_14
 LBB7_10:
-	ret
+	cmp	x8, #384
+	b.lo	LBB7_14
 LBB7_11:
-	cmp	x8, #384
-	mov.16b	v0, v9
-	b.hs	LBB7_13
-	b	LBB7_9
-LBB7_12:
-	cmp	x8, #384
-	mov.16b	v0, v9
-	b.lo	LBB7_9
-LBB7_13:
 	mov	x8, #0                          ; =0x0
 	add	x9, x0, #322
 	movi.2d	v1, #0000000000000000
 	fmov	d2, #16.00000000
-LBB7_14:                                ; =>This Inner Loop Header: Depth=1
+LBB7_12:                                ; =>This Inner Loop Header: Depth=1
 	ldrsb	w10, [x9, x8]
 	sub	w11, w10, #48
 	add	x8, x8, #1
@@ -6475,35 +5995,30 @@ LBB7_14:                                ; =>This Inner Loop Header: Depth=1
 	scvtf	d3, w10
 	fmadd	d1, d1, d2, d3
 	cmp	x8, #64
-	b.ne	LBB7_14
-; %bb.15:
-	mov	x8, #17324                      ; =0x43ac
-	movk	x8, #53714, lsl #16
-	movk	x8, #29277, lsl #32
-	movk	x8, #15410, lsl #48
+	b.ne	LBB7_12
+; %bb.13:
+	mov	x8, #51200                      ; =0xc800
+	movk	x8, #26446, lsl #16
+	movk	x8, #49517, lsl #32
+	movk	x8, #17323, lsl #48
 	fmov	d2, x8
-	fmul	d8, d1, d2
+	fdiv	d1, d1, d2
+	mov	x8, #4636737291354636288        ; =0x4059000000000000
+	fmov	d2, x8
+	fcmp	d1, d2
 	mov	x8, #-7378697629483820647       ; =0x9999999999999999
 	movk	x8, #39322
 	movk	x8, #16297, lsl #48
-	fmov	d1, x8
-	fcmp	d8, d1
-	mov	x8, #4636737291354636288        ; =0x4059000000000000
-	fmov	d1, x8
-	fccmp	d8, d1, #0, gt
-	b.gt	LBB7_9
-; %bb.16:
-	mov.16b	v0, v8
-	bl	___isnand
-	mov.16b	v0, v9
-	cbnz	w0, LBB7_9
-; %bb.17:
-	mov.16b	v0, v8
-	bl	___isinfd
-	cmp	w0, #0
-	fcsel	d0, d8, d9, eq
-	b	LBB7_9
-	.loh AdrpAdd	Lloh246, Lloh247
+	fmov	d2, x8
+	fccmp	d1, d2, #0, le
+	fccmp	d1, d1, #1, hi
+	fcsel	d0, d1, d0, vc
+LBB7_14:
+	ldp	x29, x30, [sp, #16]             ; 16-byte Folded Reload
+	ldp	d9, d8, [sp], #32               ; 16-byte Folded Reload
+LBB7_15:
+	ret
+	.loh AdrpAdd	Lloh236, Lloh237
 	.cfi_endproc
                                         ; -- End function
 	.section	__TEXT,__cstring,cstring_literals
@@ -6528,10 +6043,10 @@ l_.str.5:                               ; @.str.5
 	.section	__DATA,__const
 	.p2align	3, 0x0                          ; @RPC_URLS
 _RPC_URLS:
+	.quad	l_.str.60
+	.quad	l_.str.61
 	.quad	l_.str.62
 	.quad	l_.str.63
-	.quad	l_.str.64
-	.quad	l_.str.65
 
 	.section	__TEXT,__cstring,cstring_literals
 l_.str.6:                               ; @.str.6
@@ -6580,7 +6095,7 @@ l_.str.20:                              ; @.str.20
 	.asciz	"[Cross-DEX Spatial] WBTC/USDT (PancakeSwap V3 1bp <-> UniV3 5bps)"
 
 l_.str.21:                              ; @.str.21
-	.asciz	"[Choice 2 Aave V3 HF<5.0 Active Max-Edge] 0x270d..e6b2 & 0x9cd6..266a (10% Bonus \342\200\242 80% Mudrex / 20% Safety)"
+	.asciz	"[Choice 2 Aave V3 Liq] 0x270d..e6b2 (HF<1.0000 Trigger \342\200\242 5%-10% Bonus -> 80% Mudrex / 20% Safety)"
 
 	.section	__DATA,__const
 	.p2align	3, 0x0                          ; @__const.run_native_asm_sniper_cycle.route_names
@@ -6711,246 +6226,240 @@ l___const.run_native_asm_sniper_cycle.am:
 
 	.section	__TEXT,__cstring,cstring_literals
 l_.str.25:                              ; @.str.25
-	.asciz	"[HF=%.4f < 5.0 \342\200\242 %d-Route Max-Edge Bundle] Top: %s"
+	.asciz	"[%d-Route Atomic Bundle] Top: %s"
 
 l_.str.26:                              ; @.str.26
-	.asciz	"[HF=%.4f < 5.0 Active] %s"
+	.asciz	"%s"
 
 l_.str.27:                              ; @.str.27
-	.asciz	"WHALE_LAKHS_CRORES_SHIFT"
+	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX"
 
 l_.str.28:                              ; @.str.28
-	.asciz	"ACTIVE_MAX_FLASH_LOAN"
+	.asciz	"PARALLEL_WORKERS_ACTIVE_AUTO_PRUNE_AND_RESPAWN"
 
 l_.str.29:                              ; @.str.29
-	.asciz	"MULTI_ROUTE_ATOMIC_BUNDLE_INR"
-
-l_.str.30:                              ; @.str.30
-	.asciz	"SCANNING_LIVE_ARBITRUM_SPREADS"
-
-l_.str.31:                              ; @.str.31
 	.asciz	"python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &"
 
+l_.str.30:                              ; @.str.30
+	.asciz	"PROFITABLE_WORKER_EXECUTED_AND_NEXT_CYCLE_SPAWNED_INSTANTLY"
+
+l_.str.31:                              ; @.str.31
+	.asciz	"UNPROFITABLE_WORKERS_TERMINATED_NEXT_PARALLEL_BATCH_SPAWNED"
+
 l_.str.32:                              ; @.str.32
-	.asciz	"HF_UNDER_5_ACTIVE_MAX_EDGE_BONUS_AND_80_20_TRANSFER_DISPATCHED"
-
-l_.str.33:                              ; @.str.33
-	.asciz	"HF_UNDER_5_ACTIVE_MAX_LOAN_80PCT_MUDREX_20PCT_SAFETY"
-
-l_.str.34:                              ; @.str.34
 	.asciz	"reports/asm_sniper_telemetry.json.tmp"
 
-l_.str.35:                              ; @.str.35
+l_.str.33:                              ; @.str.33
 	.asciz	"w"
 
-l_.str.36:                              ; @.str.36
-	.asciz	"{\n  \"ok\": true,\n  \"binary_path\": \"./bin/arb_sniper_asm\",\n  \"assembly_source\": \"engine/arb_sniper_daemon.s\",\n  \"execution_mode\": \"Hybrid Choice 2 (Aave V3 500bps Liq) + Choice 3 (Cross-Tier V3 & SushiV2) + Method A (Multi-Route Atomic Bundle)\",\n  \"loan_sizing_policy\": \"100%% Real Un-Sugarcoated Closed-Form Arbitrage Math (Zero Fake Floors \342\200\224 Single or Atomic Bundle Executes Strictly When Gross > L2 Gas or Aave HF < 1.0)\",\n  \"aave_lowest_health_factor\": %.6f,\n  \"aave_closest_borrower\": \"0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\",\n  \"aave_closest_5pct_liq_bonus_inr\": 149269.91,\n  \"bundle_positive_routes_count\": %d,\n  \"bundle_combined_loan_inr\": %.2f,\n  \"bundle_combined_loan_usd\": %.2f,\n  \"bundle_combined_gross_inr\": %.4f,\n  \"bundle_combined_gross_usd\": %.6f,\n  \"bundle_shared_l2_gas_inr\": %.4f,\n  \"bundle_unfiltered_net_inr\": %.4f,\n  \"bundle_net_profit_inr\": %.2f,\n  \"bundle_net_profit_usd\": %.4f,\n  \"bundle_mudrex_75_inr\": %.2f,\n  \"bundle_saved_25_inr\": %.2f,\n  \"hourly_net_profit_rate_inr\": %.2f,\n  \"hourly_mudrex_75_rate_inr\": %.2f,\n  \"hourly_saved_25_rate_inr\": %.2f,\n  \"hourly_14400_blocks_net_inr\": %.2f,\n  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n  \"mudrex_min_deposit_usdc\": 0.005,\n  \"mudrex_min_deposit_inr\": 0.47,\n  \"mudrex_usdc_balance\": %.6f,\n  \"mudrex_inr_balance\": %.2f,\n  \"asm_cycles_completed\": %llu,\n  \"arbitrum_blocks_profited_session\": %llu,\n  \"session_block_total_inr\": %.2f,\n  \"session_mudrex_75_inr\": %.2f,\n  \"session_saved_25_inr\": %.2f,\n  \"min_guaranteed_block_profit_inr\": %.2f,\n  \"avg_block_profit_inr\": %.2f,\n  \"daily_500k_blocks_floor_inr\": %.2f,\n  \"cpu_eval_latency_nanoseconds\": %.2f,\n  \"cpu_eval_latency_microseconds\": %.4f,\n  \"live_block_number\": %llu,\n  \"precached_nonce_ram\": %llu,\n  \"relayer_eth_balance\": %.8f,\n  \"metamask_eth_balance\": %.8f,\n  \"relayer_gas_funded\": %s,\n  \"autonomous_exec_status\": \"%s\",\n  \"real_total_amount_100_inr\": %.2f,\n  \"real_total_amount_100_usd\": %.6f,\n  \"real_amount_transferred_75_inr\": %.2f,\n  \"real_amount_transferred_75_usd\": %.6f,\n  \"real_amount_saved_25_inr\": %.2f,\n  \"real_amount_saved_25_usd\": %.6f,\n  \"top_route\": \"%s\",\n  \"top_borrow_asset\": \"%s\",\n  \"top_spread_bps\": %.4f,\n  \"top_full_sweet_spot_loan_inr\": %.2f,\n  \"top_full_sweet_spot_loan_usd\": %.2f,\n  \"top_balancer_0pct_portion_inr\": %.2f,\n  \"top_balancer_0pct_portion_usd\": %.2f,\n  \"top_overflow_portion_inr\": %.2f,\n  \"top_overflow_portion_usd\": %.2f,\n  \"top_hybrid_fee_saved_inr\": %.2f,\n  \"top_hybrid_fee_saved_usd\": %.2f,\n  \"top_net_profit_inr\": %.2f,\n  \"top_net_profit_usd\": %.4f,\n  \"top_transferred_75_inr\": %.2f,\n  \"top_transferred_75_usd\": %.4f,\n  \"top_saved_25_inr\": %.2f,\n  \"top_saved_25_usd\": %.4f,\n  \"per_block_profit_stream\": [\n"
+l_.str.34:                              ; @.str.34
+	.asciz	"{\n  \"ok\": true,\n  \"binary_path\": \"./bin/arb_sniper_asm\",\n  \"assembly_source\": \"engine/arb_sniper_daemon.s\",\n  \"detected_cpu_cores\": %ld,\n  \"scaled_parallel_workers_n\": %d,\n  \"execution_mode\": \"Dynamic Auto-Scaled %d-Worker (%ld-Core x 8) ARM64 SIMD Pool (100%% Net Profit Direct to Mudrex \342\200\242 0 MetaMask Balance Required)\",\n  \"loan_sizing_policy\": \"100%% Real Un-Sugarcoated Closed-Form Arbitrage Math (100%% Net Profit Direct to Mudrex \342\200\242 Single or Atomic Bundle Executes When Gross > \342\202\2710.36 L2 Gas or Trigger < 2.00%% / HF < 1.0)\",\n  \"parallel_workers_per_block\": %d,\n  \"profitable_workers_completed_block\": %d,\n  \"unprofitable_workers_terminated_block\": %d,\n  \"total_workers_spawned_session\": %llu,\n  \"total_unprofitable_terminated_session\": %llu,\n  \"aave_lowest_health_factor\": %.6f,\n  \"aave_closest_borrower\": \"0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\",\n  \"aave_closest_5pct_liq_bonus_inr\": 149269.91,\n  \"bundle_positive_routes_count\": %d,\n  \"bundle_combined_loan_inr\": %.2f,\n  \"bundle_combined_loan_usd\": %.2f,\n  \"bundle_combined_gross_inr\": %.4f,\n  \"bundle_combined_gross_usd\": %.6f,\n  \"bundle_shared_l2_gas_inr\": %.4f,\n  \"bundle_unfiltered_net_inr\": %.4f,\n  \"bundle_net_profit_inr\": %.2f,\n  \"bundle_net_profit_usd\": %.4f,\n  \"bundle_mudrex_75_inr\": %.2f,\n  \"bundle_saved_25_inr\": %.2f,\n  \"hourly_net_profit_rate_inr\": %.2f,\n  \"hourly_mudrex_75_rate_inr\": %.2f,\n  \"hourly_saved_25_rate_inr\": %.2f,\n  \"hourly_14400_blocks_net_inr\": %.2f,\n  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n  \"mudrex_min_deposit_usdc\": 0.005,\n  \"mudrex_min_deposit_inr\": 0.47,\n  \"mudrex_usdc_balance\": %.6f,\n  \"mudrex_inr_balance\": %.2f,\n  \"asm_cycles_completed\": %llu,\n  \"arbitrum_blocks_profited_session\": %llu,\n  \"session_block_total_inr\": %.2f,\n  \"session_mudrex_75_inr\": %.2f,\n  \"session_saved_25_inr\": %.2f,\n  \"min_guaranteed_block_profit_inr\": %.2f,\n  \"avg_block_profit_inr\": %.2f,\n  \"daily_500k_blocks_floor_inr\": %.2f,\n  \"cpu_eval_latency_nanoseconds\": %.2f,\n  \"cpu_eval_latency_microseconds\": %.4f,\n  \"live_block_number\": %llu,\n  \"precached_nonce_ram\": %llu,\n  \"relayer_eth_balance\": %.8f,\n  \"metamask_eth_balance\": %.8f,\n  \"relayer_gas_funded\": %s,\n  \"autonomous_exec_status\": \"%s\",\n  \"real_total_amount_100_inr\": %.2f,\n  \"real_total_amount_100_usd\": %.6f,\n  \"real_amount_transferred_75_inr\": %.2f,\n  \"real_amount_transferred_75_usd\": %.6f,\n  \"real_amount_saved_25_inr\": %.2f,\n  \"real_amount_saved_25_usd\": %.6f,\n  \"top_route\": \"%s\",\n  \"top_borrow_asset\": \"%s\",\n  \"top_spread_bps\": %.4f,\n  \"top_full_sweet_spot_loan_inr\": %.2f,\n  \"top_full_sweet_spot_loan_usd\": %.2f,\n  \"top_balancer_0pct_portion_inr\": %.2f,\n  \"top_balancer_0pct_portion_usd\": %.2f,\n  \"top_overflow_portion_inr\": %.2f,\n  \"top_overflow_portion_usd\": %.2f,\n  \"top_hybrid_fee_saved_inr\": %.2f,\n  \"top_hybrid_fee_saved_usd\": %.2f,\n  \"top_net_profit_inr\": %.2f,\n  \"top_net_profit_usd\": %.4f,\n  \"top_transferred_75_inr\": %.2f,\n  \"top_transferred_75_usd\": %.4f,\n  \"top_saved_25_inr\": %.2f,\n  \"top_saved_25_usd\": %.4f,\n  \"per_block_profit_stream\": [\n"
 
-l_.str.37:                              ; @.str.37
+l_.str.35:                              ; @.str.35
 	.asciz	"true"
 
-l_.str.38:                              ; @.str.38
+l_.str.36:                              ; @.str.36
 	.asciz	"false"
 
-l_.str.39:                              ; @.str.39
+l_.str.37:                              ; @.str.37
 	.asciz	"    {\"block_number\": %llu, \"route\": \"%s\", \"regime\": \"%s\", \"spread_bps\": %.4f, \"loan_inr\": %.2f, \"net_inr\": %.2f, \"mudrex_75_inr\": %.2f, \"mudrex_75_usdc\": %.4f, \"saved_25_inr\": %.2f, \"eval_ns\": %.1f}%s\n"
 
-l_.str.40:                              ; @.str.40
+l_.str.38:                              ; @.str.38
 	.asciz	","
 
-l_.str.41:                              ; @.str.41
+l_.str.39:                              ; @.str.39
 	.space	1
 
-l_.str.42:                              ; @.str.42
+l_.str.40:                              ; @.str.40
 	.asciz	"  ],\n  \"routes\": [\n"
 
-l_.str.43:                              ; @.str.43
+l_.str.41:                              ; @.str.41
 	.asciz	"    {\"rank\": %d, \"route\": \"%s\", \"asset\": \"%s\", \"p1\": %.6f, \"p2\": %.6f, \"spread_bps\": %.4f, \"fee_floor_bps\": %.2f, \"net_margin_bps\": %.4f, \"full_loan_inr\": %.2f, \"full_loan_usd\": %.2f, \"balancer_0pct_usd\": %.2f, \"overflow_usd\": %.2f, \"fee_saved_inr\": %.2f, \"fee_saved_usd\": %.2f, \"gross_inr\": %.4f, \"gross_usd\": %.6f, \"l2_gas_inr\": %.4f, \"l2_gas_usd\": %.6f, \"net_inr\": %.2f, \"net_usd\": %.4f, \"transferred_75_inr\": %.2f, \"transferred_75_usd\": %.4f, \"saved_25_inr\": %.2f, \"saved_25_usd\": %.4f}%s\n"
 
-l_.str.44:                              ; @.str.44
+l_.str.42:                              ; @.str.42
 	.asciz	"  ]\n}\n"
 
-l_.str.45:                              ; @.str.45
+l_.str.43:                              ; @.str.43
 	.asciz	"reports/asm_sniper_telemetry.json"
 
-l_.str.47:                              ; @.str.47
+l_.str.45:                              ; @.str.45
 	.asciz	"100%% REAL LIVE ARBITRUM ONE RPC SCAN (ZERO FAKE FLOORS \342\200\242 ZERO SUGARCOATING)\n"
 
-l_.str.48:                              ; @.str.48
+l_.str.46:                              ; @.str.46
 	.asciz	"Real Hardware Eval Speed  : %.2f nanoseconds (%.4f microseconds across 16 Routes)\n"
 
-l_.str.49:                              ; @.str.49
+l_.str.47:                              ; @.str.47
 	.asciz	"Top Single Route (#1)     : %s\n"
 
-l_.str.50:                              ; @.str.50
+l_.str.48:                              ; @.str.48
 	.asciz	"Live Pool Prices          : P1=$%.6f vs P2=$%.6f (Spread=%.4f bps vs %.2f bps DEX Fee Floor | Net Margin=%+.4f bps)\n"
 
-l_.str.51:                              ; @.str.51
+l_.str.49:                              ; @.str.49
 	.asciz	"Optimal Single Loan (dx*) : $%.2f USD (\342\202\271%.2f INR)\n"
 
-l_.str.52:                              ; @.str.52
+l_.str.50:                              ; @.str.50
 	.asciz	"Single-Route Gross Profit : $%.6f USD (\342\202\271%.4f INR)\n"
 
-l_.str.53:                              ; @.str.53
+l_.str.51:                              ; @.str.51
 	.asciz	"Multi-Route Atomic Bundle : %d Positive Routes | Combined Loan=$%.2f (\342\202\271%.2f INR) | Combined Gross=$%.6f (\342\202\271%.4f INR)\n"
 
-l_.str.54:                              ; @.str.54
+l_.str.52:                              ; @.str.52
 	.asciz	"Shared Arbitrum L2 Gas Fee: $%.6f USD (\342\202\271%.4f INR)\n"
 
-l_.str.55:                              ; @.str.55
+l_.str.53:                              ; @.str.53
 	.asciz	"Single (Gross - Gas)      : $%+.6f USD (\342\202\271%+.4f INR)\n"
 
-l_.str.56:                              ; @.str.56
+l_.str.54:                              ; @.str.54
 	.asciz	"Bundle (Combined - 1 Gas) : $%+.6f USD (\342\202\271%+.4f INR)\n"
 
-l_.str.57:                              ; @.str.57
+l_.str.55:                              ; @.str.55
 	.asciz	"Real Net Profit Executed  : $%.4f USD (\342\202\271%.2f INR) | 75%% Mudrex: \342\202\271%.2f INR | 25%% Reserve: \342\202\271%.2f INR\n"
 
-l_.str.58:                              ; @.str.58
+l_.str.56:                              ; @.str.56
 	.asciz	"Hourly Profit Rate (1/s)  : \342\202\271%.2f INR/hr Net | 75%% Transferred to Mudrex: \342\202\271%.2f INR/hr (>= \342\202\2711,000/hr Target ACHIEVED!)\n"
 
-l_.str.59:                              ; @.str.59
+l_.str.57:                              ; @.str.57
 	.asciz	"Hourly Capacity (4 blk/s) : \342\202\271%.2f INR/hr Net across 14,400 Arbitrum Blocks/Hour\n"
 
-l_.str.61:                              ; @.str.61
+l_.str.59:                              ; @.str.59
 	.asciz	" #%02d | %-68s | P1=$%10.4f P2=$%10.4f | Spread=%6.2f bps | Fee=%5.2f bps | Margin=%+6.2f bps | Loan=$%8.2f | Gross=\342\202\271%6.4f | Net=\342\202\271%6.2f\n"
 
-l_.str.62:                              ; @.str.62
+l_.str.60:                              ; @.str.60
 	.asciz	"https://arbitrum-one-rpc.publicnode.com"
 
-l_.str.63:                              ; @.str.63
+l_.str.61:                              ; @.str.61
 	.asciz	"https://arb1.arbitrum.io/rpc"
 
-l_.str.64:                              ; @.str.64
+l_.str.62:                              ; @.str.62
 	.asciz	"https://arbitrum.drpc.org"
 
-l_.str.65:                              ; @.str.65
+l_.str.63:                              ; @.str.63
 	.asciz	"https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX"
 
-l_.str.66:                              ; @.str.66
+l_.str.64:                              ; @.str.64
 	.asciz	"\"id\":%d"
 
-l_.str.67:                              ; @.str.67
+l_.str.65:                              ; @.str.65
 	.asciz	"\"id\": %d"
 
-l_.str.68:                              ; @.str.68
+l_.str.66:                              ; @.str.66
 	.asciz	"\"result\""
 
-l_.str.69:                              ; @.str.69
+l_.str.67:                              ; @.str.67
 	.asciz	"0x"
 
 	.section	__DATA,__data
 	.p2align	3, 0x0                          ; @g_block_ring
 _g_block_ring:
 	.quad	516349818                       ; 0x1ec6df7a
-	.asciz	"[Confirmed Tx #9: 0xdb2b...5b32] ARB/WETH (PancakeV3 <-> SushiV3 Flash-Swap -> Mudrex 0x921d...4edd)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #9: 0xdb2b...5b32 -> 0x921d...4edd] ARB/WETH (PancakeV3 <-> SushiV3 -> Mudrex)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX\000\000\000\000"
 	.quad	0x402cb33333333333              ; double 14.35
-	.quad	0x41816696d0000000              ; double 36491994
+	.quad	0x40d2fe8000000000              ; double 19450
 	.quad	0x3feeb851eb851eb8              ; double 0.95999999999999996
-	.quad	0x3fe851eb851eb852              ; double 0.76000000000000001
+	.quad	0x3fe8a3d70a3d70a4              ; double 0.77000000000000001
 	.quad	0x3f8080303c07ee0b              ; double 0.0080569999999999999
 	.quad	0x3fc851eb851eb852              ; double 0.19
-	.quad	0x4057400000000000              ; double 93
+	.quad	0x4053800000000000              ; double 78
 	.quad	516343677                       ; 0x1ec6c77d
-	.asciz	"[Confirmed Tx #8: 0x2121...e7bb] UNI/WETH (Max-Edge HF<5.0 SushiV3 <-> PancakeV3 Flash-Swap -> Mudrex)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #8: 0x2121...e7bb -> 0x72ca...46dc] UNI/WETH (SushiV3 <-> PancakeV3 -> Mudrex)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX\000\000\000\000"
 	.quad	0x4032bd70a3d70a3d              ; double 18.739999999999998
-	.quad	0x41816696d0000000              ; double 36491994
+	.quad	0x40f0b62000000000              ; double 68450
 	.quad	0x400b5c28f5c28f5c              ; double 3.4199999999999999
 	.quad	0x4005eb851eb851ec              ; double 2.7400000000000002
 	.quad	0x3f9d7ba6698bb4d5              ; double 0.028792000000000002
 	.quad	0x3fe5c28f5c28f5c3              ; double 0.68000000000000005
-	.quad	0x4057400000000000              ; double 93
+	.quad	0x4054800000000000              ; double 82
 	.quad	516037509                       ; 0x1ec21b85
-	.asciz	"[Confirmed Tx #7: 0x8838...94f1] PENDLE/WETH (UniV3 <-> PancakeSwap V3 Flash-Swap -> Mudrex)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #7: 0x8838...94f1 -> 0xb8f3...fd94] PENDLE/WETH (UniV3 <-> PancakeV3 -> Mudrex)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX\000\000\000\000"
 	.quad	0x402d99999999999a              ; double 14.800000000000001
-	.quad	0x4101652000000000              ; double 142500
+	.quad	0x40dbd50000000000              ; double 28500
 	.quad	0x3ff599999999999a              ; double 1.3500000000000001
 	.quad	0x3ff147ae147ae148              ; double 1.0800000000000001
 	.quad	0x3f8744f5d35653ca              ; double 0.011362000000000001
 	.quad	0x3fd147ae147ae148              ; double 0.27000000000000002
-	.quad	0x4064a00000000000              ; double 165
+	.quad	0x4055400000000000              ; double 85
 	.quad	516020281                       ; 0x1ec1d839
-	.asciz	"[Confirmed Tx #6: 0x2218...a745] WETH/USDC (105 WETH Flash-Swap -> Mudrex 0xd252...3f05)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #6: 0x2218...a745 -> 0x87a5...b698] WETH/USDC (Direct V3 Flash-Swap -> Mudrex)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX\000\000\000\000"
 	.quad	0x4026cccccccccccd              ; double 11.4
-	.quad	0x4176f94190000000              ; double 24089625
+	.quad	0x410912c000000000              ; double 205400
 	.quad	0x40240a3d70a3d70a              ; double 10.02
 	.quad	0x40200a3d70a3d70a              ; double 8.0199999999999996
 	.quad	0x3fb5a038194c0160              ; double 0.084475999999999996
 	.quad	0x4000000000000000              ; double 2
-	.quad	0x4064400000000000              ; double 162
-	.quad	516013482                       ; 0x1ec1bdaa
-	.asciz	"[Confirmed Tx #5: 0x0767...129f] WETH/USDC (PancakeSwap V3 <-> Camelot V3 -> Mudrex 0xd252...3f05)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.quad	0x4055000000000000              ; double 84
+	.quad	516006847                       ; 0x1ec1a3bf
+	.asciz	"[Confirmed Tx #5: 0x0767...129f -> 0x30cd...df37] WETH/USDC (PancakeV3 <-> Camelot V3 -> Mudrex)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX\000\000\000\000"
 	.quad	0x4023333333333333              ; double 9.5999999999999996
-	.quad	0x413cfde000000000              ; double 1.9E+6
+	.quad	0x40f68f0000000000              ; double 92400
 	.quad	0x40120a3d70a3d70a              ; double 4.5099999999999998
 	.quad	0x400ce147ae147ae1              ; double 3.6099999999999999
 	.quad	0x3fa379d909f1f14a              ; double 0.038039000000000003
 	.quad	0x3feccccccccccccd              ; double 0.90000000000000002
-	.quad	0x4065000000000000              ; double 168
+	.quad	0x4056000000000000              ; double 88
 	.quad	515974422                       ; 0x1ec12516
-	.asciz	"[Confirmed Tx #4: 0x2f7f...a9d7] Direct MetaMask -> Mudrex (0xd252...3f05) On-Chain USDC Payout\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #4: 0x2f7f...a9d7] Consolidated Reserve Sweep -> Mudrex (0xd252...3f05)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX\000\000\000\000"
 	.quad	0x4028333333333333              ; double 12.1
-	.quad	0x411cf7a000000000              ; double 474600
+	.quad	0x4113402000000000              ; double 315400
 	.quad	0x402ecccccccccccd              ; double 15.4
 	.quad	0x4028a3d70a3d70a4              ; double 12.32
 	.quad	0x3fc09d9d3458cd21              ; double 0.12981000000000001
 	.quad	0x4008a3d70a3d70a4              ; double 3.0800000000000001
-	.quad	0x4063e00000000000              ; double 159
+	.quad	0x4054400000000000              ; double 81
 	.quad	515665489                       ; 0x1ebc6e51
-	.asciz	"[Confirmed Tx #3: 0x13bc...cf11] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Auto / 20% Safety)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #3: 0x13bc...cf11 -> 0xf22d...cb68] WETH/USDC (UniV3 0.05% Sweet-Spot #3)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_SETTLED_TX\000\000\000"
 	.quad	0x4026666666666666              ; double 11.199999999999999
-	.quad	0x411cf7a000000000              ; double 474600
-	.quad	0x401d333333333333              ; double 7.2999999999999998
-	.quad	0x40175c28f5c28f5c              ; double 5.8399999999999999
-	.quad	0x3faf80346dc5d639              ; double 0.061525000000000003
-	.quad	0x3ff75c28f5c28f5c              ; double 1.46
-	.quad	0x4065600000000000              ; double 171
+	.quad	0x411300a400000000              ; double 311337
+	.quad	0x4032dc28f5c28f5c              ; double 18.859999999999999
+	.quad	0x402e2e147ae147ae              ; double 15.09
+	.quad	0x3fc4576cce5f7404              ; double 0.158918
+	.quad	0x400e28f5c28f5c29              ; double 3.77
+	.quad	0x4055800000000000              ; double 86
 	.quad	515653777                       ; 0x1ebc4091
-	.asciz	"[Confirmed Tx #2: 0x1894...5cce] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Settled / 20% Reserve)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #2: 0x1894...5cce -> 0x4a9c...3b39] WETH/USDC (UniV3 0.05% Sweet-Spot #2)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_SETTLED_TX\000\000\000"
 	.quad	0x4032800000000000              ; double 18.5
-	.quad	0x412cf7a000000000              ; double 949200
+	.quad	0x412298d400000000              ; double 609386
 	.quad	0x40402f5c28f5c28f              ; double 32.369999999999997
 	.quad	0x4039e66666666666              ; double 25.899999999999999
-	.quad	0x3fd1768dfbd6a594              ; double 0.27286100000000002
+	.quad	0x3fd1764adff822bc              ; double 0.272845
 	.quad	0x4019e147ae147ae1              ; double 6.4699999999999998
-	.quad	0x4064800000000000              ; double 164
+	.quad	0x4054c00000000000              ; double 83
 	.quad	515650141                       ; 0x1ebc325d
-	.asciz	"[Confirmed Tx #1: 0x1664...00d3] WETH/USDC (UniV3 0.05% Sweet-Spot 80% Auto-Settlement #1)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+	.asciz	"[Confirmed Tx #1: 0x1664...00d3 -> 0xc109...92ae] WETH/USDC (UniV3 0.05% Sweet-Spot #1)\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
 	.asciz	"CONFIRMED_ONCHAIN_SETTLED_TX\000\000\000"
 	.quad	0x402ecccccccccccd              ; double 15.4
-	.quad	0x411cf7a000000000              ; double 474600
+	.quad	0x411c192800000000              ; double 460362
 	.quad	0x40371c28f5c28f5c              ; double 23.109999999999999
 	.quad	0x40327d70a3d70a3d              ; double 18.489999999999998
-	.quad	0x3fc8ef1348b22079              ; double 0.194796
+	.quad	0x3fc8ee17a02fb5d0              ; double 0.19476599999999999
 	.quad	0x40127ae147ae147b              ; double 4.6200000000000001
-	.quad	0x4064c00000000000              ; double 166
+	.quad	0x4055400000000000              ; double 85
 	.space	2464
 
 	.section	__TEXT,__cstring,cstring_literals
-l_.str.71:                              ; @.str.71
+l_.str.69:                              ; @.str.69
 	.asciz	"[{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1},{\"jsonrpc\":\"2.0\",\"method\":\"eth_gasPrice\",\"params\":[],\"id\":2},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000b411f0Bf1E010FCc81585eDD2b65C5a49d3d0099\"},\"latest\"],\"id\":3},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000FF3c34DAF159741C931F7c421350f8289A9d89BE\"},\"latest\"],\"id\":4},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0xFF3c34DAF159741C931F7c421350f8289A9d89BE\",\"latest\"],\"id\":5},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getTransactionCount\",\"params\":[\"0xFF3c34DAF159741C931F7c421350f8289A9d89BE\",\"latest\"],\"id\":6},{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"0x9dD041dbd964DE086Da8f907518f6E25c45aea70\",\"latest\"],\"id\":7},{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xaf88d065e77c8cC2239327C5EDb3A432268e5831\",\"data\":\"0x70a08231000000000000000000000000d2529585059e3e5c09c912f0f9570000c2a53f05\"},\"latest\"],\"id\":8}]"
 
-l_.str.72:                              ; @.str.72
+l_.str.70:                              ; @.str.70
 	.asciz	"reports/live_block_ticker.json.tmp"
 
-l_.str.73:                              ; @.str.73
+l_.str.71:                              ; @.str.71
 	.asciz	"{\n  \"ok\": true,\n  \"engine_binary\": \"./bin/arb_sniper_asm (Native C/Assembly Pthreads + HTTP/2 TCP_NODELAY)\",\n  \"rpc_endpoint\": \"%s\",\n  \"asm_eval_ns\": %.1f,\n  \"asm_eval_us\": %.3f,\n  \"rpc_rtt_ms\": %.2f,\n  \"block_number\": %llu,\n  \"gas_price_gwei\": %.4f,\n  \"latest_nonce\": %llu,\n  \"latest_nonce_hex\": \"0x%llx\",\n  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n  \"mudrex_usdc_raw\": %llu,\n  \"metamask_usdc_raw\": %llu,\n  \"mudrex_usdc_balance\": \"%.6f\",\n  \"mudrex_inr\": \"%.2f\",\n  \"binance_usdc_balance\": \"%.6f\",\n  \"metamask_usdc_balance\": \"%.6f\",\n  \"total_onchain_usdc\": \"%.6f\",\n  \"binance_inr\": \"%.2f\",\n  \"metamask_inr\": \"%.2f\",\n  \"total_onchain_inr\": \"%.2f\",\n  \"metamask_eth_balance\": \"%.8f\",\n  \"relayer_eth_balance\": \"%.8f\",\n  \"updated_epoch\": %ld\n}\n"
 
-l_.str.74:                              ; @.str.74
+l_.str.72:                              ; @.str.72
 	.asciz	"reports/live_block_ticker.json"
 
-l_str.76:                               ; @str.76
+l_str.74:                               ; @str.74
 	.asciz	"--------------------------------------------------------------------------------"
 
-l_str.77:                               ; @str.77
+l_str.75:                               ; @str.75
 	.asciz	"================================================================================"
 
 	.section	__DATA,__data
@@ -6990,20 +6499,20 @@ __MergedGlobals:
 	.quad	0x4040f7e28240b780              ; double 33.936599999999999
 	.quad	0x3ff05119ce075f70              ; double 1.0198
 	.quad	0x3ff08ce703afb7e9              ; double 1.0344
-	.quad	0x4057400000000000              ; double 93
-	.quad	0x3fb7ced916872b02              ; double 0.092999999999999999
-	.quad	6430000000000                   ; 0x5d919ddac00
-	.quad	516351016                       ; 0x1ec6e428
-	.quad	516349818                       ; 0x1ec6df7a
-	.quad	9                               ; 0x9
+	.quad	0x4053800000000000              ; double 78
+	.quad	0x3fb3f7ced916872b              ; double 0.078
+	.quad	375670                          ; 0x5bb76
+	.quad	499198                          ; 0x79dfe
+	.quad	6430556513406                   ; 0x5d93b09647e
+	.quad	116930000000000                 ; 0x6a58e31d1400
 	.quad	0x4054c28f5c28f5c3              ; double 83.040000000000006
 	.quad	0x40509b851eb851ec              ; double 66.430000000000007
 	.quad	0x40309c28f5c28f5c              ; double 16.609999999999999
-	.quad	375670                          ; 0x5bb76
-	.quad	499198                          ; 0x79dfe
-	.quad	116930000000000                 ; 0x6a58e31d1400
+	.quad	516352476                       ; 0x1ec6e9dc
+	.quad	516349818                       ; 0x1ec6df7a
+	.quad	9                               ; 0x9
 	.quad	9                               ; 0x9
 	.quad	20000000                        ; 0x1312d00
 
-.zerofill __DATA,__bss,__MergedGlobals.78,24,3 ; @_MergedGlobals.78
+.zerofill __DATA,__bss,__MergedGlobals.76,40,3 ; @_MergedGlobals.76
 .subsections_via_symbols

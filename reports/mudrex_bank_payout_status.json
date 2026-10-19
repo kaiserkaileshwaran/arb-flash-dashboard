@@ -1,0 +1,11 @@
+{
+  "policy_min_inr": 100.0,
+  "real_mudrex_usdc": 0.37567,
+  "real_mudrex_inr": 35.66,
+  "remaining_to_min_inr": 64.34,
+  "progress_pct": 35.66,
+  "eligible_for_bank_withdrawal": false,
+  "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_64.34_MORE",
+  "metamask_min_balance_required": 0.0,
+  "ts": 1792447799.154449
+}
