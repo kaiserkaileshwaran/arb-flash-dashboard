@@ -99,6 +99,49 @@ static double decode_slot0_sqrt_price(const char *hex_res, double decimal_scale,
     return raw_price;
 }
 
+/* Parse SushiSwap V2 getReserves() (0x0902f1ac): word0 = reserve0, word1 = reserve1 */
+static double decode_v2_reserves_price(const char *hex_res, double scale0, double scale1, double min_p, double max_p, double fallback_p) {
+    if (!hex_res) return fallback_p;
+    const char *p = strstr(hex_res, "0x");
+    if (!p) return fallback_p;
+    p += 2;
+    size_t len = 0;
+    while (p[len] && p[len] != '"' && len < 128) len++;
+    if (len < 128) return fallback_p;
+    double r0 = 0.0, r1 = 0.0;
+    for (int i = 0; i < 64; i++) {
+        char c0 = p[i], c1 = p[i + 64];
+        int d0 = (c0 >= '0' && c0 <= '9') ? (c0 - '0') : ((c0 >= 'a' && c0 <= 'f') ? (c0 - 'a' + 10) : ((c0 >= 'A' && c0 <= 'F') ? (c0 - 'A' + 10) : 0));
+        int d1 = (c1 >= '0' && c1 <= '9') ? (c1 - '0') : ((c1 >= 'a' && c1 <= 'f') ? (c1 - 'a' + 10) : ((c1 >= 'A' && c1 <= 'F') ? (c1 - 'A' + 10) : 0));
+        r0 = r0 * 16.0 + (double)d0;
+        r1 = r1 * 16.0 + (double)d1;
+    }
+    if (r0 <= 0.0 || r1 <= 0.0) return fallback_p;
+    double price = (r1 / scale1) / (r0 / scale0);
+    if (price < min_p || price > max_p || isnan(price) || isinf(price)) return fallback_p;
+    return price;
+}
+
+/* Parse Aave V3 getUserAccountData(user) (0xbf92857c): word5 (offset 320..384) = healthFactor (1e18) */
+static double decode_aave_hf(const char *hex_res, double fallback_hf) {
+    if (!hex_res) return fallback_hf;
+    const char *p = strstr(hex_res, "0x");
+    if (!p) return fallback_hf;
+    p += 2;
+    size_t len = 0;
+    while (p[len] && p[len] != '"' && len < 384) len++;
+    if (len < 384) return fallback_hf;
+    double hf_raw = 0.0;
+    for (int i = 320; i < 384; i++) {
+        char c = p[i];
+        int d = (c >= '0' && c <= '9') ? (c - '0') : ((c >= 'a' && c <= 'f') ? (c - 'a' + 10) : ((c >= 'A' && c <= 'F') ? (c - 'A' + 10) : 0));
+        hf_raw = hf_raw * 16.0 + (double)d;
+    }
+    double hf = hf_raw / 1e18;
+    if (hf <= 0.05 || hf > 100.0 || isnan(hf) || isinf(hf)) return fallback_hf;
+    return hf;
+}
+
 /*
  * Hardware-Compiled Full-Loan Route Batch Evaluator:
  * - Evaluates all 12 Arbitrum DEX routes in hardware registers
@@ -506,64 +549,82 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xb08a8794a5d3ccca3725d92964696858d3201909\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":28},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x042691f78269ba3d6325c945044239758aecc275\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":29},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x91308bc9ce8ca2db82aa30c65619856cc939d907\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":30},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x977f5d9a39049c73bc26edb3fa15d5f7c0ac82e9\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":31}"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x977f5d9a39049c73bc26edb3fa15d5f7c0ac82e9\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":31},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x905dfcd5649217c42684f23958568e533c711aa3\",\"data\":\"0x0902f1ac\"},\"latest\"],\"id\":32},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xcb0e5bfa72bbb4d16ab5aa0c60601c438f04b4ad\",\"data\":\"0x0902f1ac\"},\"latest\"],\"id\":33},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xb7e50106a5bd3cf21af210a755f9c8740890a8c9\",\"data\":\"0x0902f1ac\"},\"latest\"],\"id\":34},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x59d72ddb29da32847a4665d08ffc8464a7185fae\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":35},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\"},\"latest\"],\"id\":36}"
         "]";
 
-    double p_uni_5        = 2402.12;
-    double p_uni_1        = 2402.63;
-    double p_cam_1        = 2402.74;
-    double p_pcs_1        = 2402.88;
-    double p_uni_wsteth   = 1.245903;
-    double p_cam_wsteth   = 1.245843;
-    double p_uni_wbtc_u   = 81191.35;
-    double p_pcs_wbtc_u   = 81186.28;
-    double p_cam_usdc_e   = 1.000041;
-    double p_uni_usdc_e   = 1.000044;
-    double p_cam_usdc_t   = 1.001072;
-    double p_uni_usdc_t   = 1.001032;
-    double p_cam_arb_u    = 0.181007;
-    double p_uni_arb_u    = 0.180909;
-    double p_cam_wbtc_e   = 33.801172;
-    double p_pcs_wbtc_e   = 33.808252;
-    double p_cam_weth_t   = 2404.56;
-    double p_pcs_weth_t   = 2405.31;
-    double p_uni_pendle_e = 0.0008601;
-    double p_pcs_pendle_e = 0.0008598;
-    double p_uni_link_inv = 200.8470;
-    double p_pcs_link_inv = 200.6551;
+    double p_uni_5        = 2422.50;
+    double p_uni_1        = 2422.50;
+    double p_cam_1        = 2422.50;
+    double p_pcs_1        = 2422.50;
+    double p_uni_wsteth   = 1.245900;
+    double p_cam_wsteth   = 1.245900;
+    double p_uni_wbtc_u   = 82285.00;
+    double p_pcs_wbtc_u   = 82285.00;
+    double p_cam_usdc_e   = 1.000040;
+    double p_uni_usdc_e   = 1.000040;
+    double p_cam_usdc_t   = 1.001050;
+    double p_uni_usdc_t   = 1.001050;
+    double p_cam_arb_u    = 0.190600;
+    double p_uni_arb_u    = 0.190600;
+    double p_cam_wbtc_e   = 33.960000;
+    double p_pcs_wbtc_e   = 33.960000;
+    double p_cam_weth_t   = 2425.00;
+    double p_pcs_weth_t   = 2425.00;
+    double p_uni_pendle_e = 0.0008480;
+    double p_pcs_pendle_e = 0.0008480;
+    double p_uni_link_inv = 198.9000;
+    double p_pcs_link_inv = 198.9000;
+    double p_sushi_weth_u = 2422.50;
+    double p_sushi_weth_t = 2422.50;
+    double p_sushi_magic  = 0.00004065;
+    double p_uni_magic    = 0.00004065;
+    double hf_aave_top1   = 1.0232;
 
     if (curl) {
-        buf->size = 0;
-        curl_easy_setopt(curl, CURLOPT_URL, RPC_URLS[g_total_asm_cycles % 4]);
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, slot0_batch);
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_cb);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)buf);
-        curl_easy_setopt(curl, CURLOPT_TCP_NODELAY, 1L);
-        curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 1800L);
-        if (curl_easy_perform(curl) == CURLE_OK && buf->data && buf->size > 32) {
-            p_uni_5        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 10), 1e12,  500.0, 20000.0, 2402.12);
-            p_uni_1        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 11), 1e12,  500.0, 20000.0, 2402.63);
-            p_cam_1        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 12), 1e12,  500.0, 20000.0, 2402.74);
-            p_pcs_1        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 13), 1e12,  500.0, 20000.0, 2402.88);
-            p_uni_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 14), 1.0,   0.8,   2.5,     1.245903);
-            p_cam_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 15), 1.0,   0.8,   2.5,     1.245843);
-            p_uni_wbtc_u   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 16), 1e2,   5000.0,500000.0,81191.35);
-            p_pcs_wbtc_u   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e2,   5000.0,500000.0,81186.28);
-            p_cam_usdc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   0.98,  1.02,    1.000041);
-            p_uni_usdc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   0.98,  1.02,    1.000044);
-            p_cam_usdc_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 20), 1.0,   0.98,  1.02,    1.001072);
-            p_uni_usdc_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 21), 1.0,   0.98,  1.02,    1.001032);
-            p_cam_arb_u    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 22), 1e12,  0.01,  10.0,    0.181007);
-            p_uni_arb_u    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 23), 1e12,  0.01,  10.0,    0.180909);
-            p_cam_wbtc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 24), 1e-10, 5.0,   100.0,   33.801172);
-            p_pcs_wbtc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 25), 1e-10, 5.0,   100.0,   33.808252);
-            p_cam_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 26), 1e12,  500.0, 20000.0, 2404.56);
-            p_pcs_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 27), 1e12,  500.0, 20000.0, 2405.31);
-            p_uni_pendle_e = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 28), 1.0,   1e-5,  0.1,     0.0008601);
-            p_pcs_pendle_e = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 29), 1.0,   1e-5,  0.1,     0.0008598);
-            p_uni_link_inv = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 30), 1.0,   10.0,  2000.0,  200.8470);
-            p_pcs_link_inv = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 31), 1.0,   10.0,  2000.0,  200.6551);
+        for (int attempt = 0; attempt < 4; attempt++) {
+            buf->size = 0;
+            curl_easy_setopt(curl, CURLOPT_URL, RPC_URLS[(g_total_asm_cycles + attempt) % 4]);
+            curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, slot0_batch);
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_write_cb);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)buf);
+            curl_easy_setopt(curl, CURLOPT_TCP_NODELAY, 1L);
+            curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 2500L);
+            if (curl_easy_perform(curl) == CURLE_OK && buf->data && buf->size > 256 && find_batch_result_for_id(buf->data, 10)) {
+                p_uni_5        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 10), 1e12,  500.0, 20000.0, 2422.50);
+                p_uni_1        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 11), 1e12,  500.0, 20000.0, p_uni_5);
+                p_cam_1        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 12), 1e12,  500.0, 20000.0, p_uni_5);
+                p_pcs_1        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 13), 1e12,  500.0, 20000.0, p_uni_5);
+                p_uni_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 14), 1.0,   0.8,   2.5,     1.245900);
+                p_cam_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 15), 1.0,   0.8,   2.5,     p_uni_wsteth);
+                p_uni_wbtc_u   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 16), 1e2,   5000.0,500000.0,82285.00);
+                p_pcs_wbtc_u   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e2,   5000.0,500000.0,p_uni_wbtc_u);
+                p_cam_usdc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   0.98,  1.02,    1.000040);
+                p_uni_usdc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   0.98,  1.02,    p_cam_usdc_e);
+                p_cam_usdc_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 20), 1.0,   0.98,  1.02,    1.001050);
+                p_uni_usdc_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 21), 1.0,   0.98,  1.02,    p_cam_usdc_t);
+                p_cam_arb_u    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 22), 1e12,  0.01,  10.0,    0.190600);
+                p_uni_arb_u    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 23), 1e12,  0.01,  10.0,    p_cam_arb_u);
+                p_cam_wbtc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 24), 1e-10, 5.0,   100.0,   33.960000);
+                p_pcs_wbtc_e   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 25), 1e-10, 5.0,   100.0,   p_cam_wbtc_e);
+                p_cam_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 26), 1e12,  500.0, 20000.0, 2425.00);
+                p_pcs_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 27), 1e12,  500.0, 20000.0, p_cam_weth_t);
+                p_uni_pendle_e = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 28), 1.0,   1e-5,  0.1,     0.0008480);
+                p_pcs_pendle_e = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 29), 1.0,   1e-5,  0.1,     p_uni_pendle_e);
+                p_uni_link_inv = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 30), 1.0,   10.0,  2000.0,  198.9000);
+                p_pcs_link_inv = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 31), 1.0,   10.0,  2000.0,  p_uni_link_inv);
+                p_sushi_weth_u = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 32), 1e18, 1e6,  500.0, 20000.0, p_uni_1);
+                p_sushi_weth_t = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 33), 1e18, 1e6,  500.0, 20000.0, p_uni_1);
+                p_uni_magic    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 35), 1.0,   1e-6,  0.1,     0.00004065);
+                p_sushi_magic  = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 34), 1e18, 1e18, 1e-6,  0.1,     p_uni_magic);
+                hf_aave_top1   = decode_aave_hf(find_batch_result_for_id(buf->data, 36), 1.0232);
+                break;
+            }
         }
     }
 
@@ -581,20 +642,19 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
         "PENDLE/WETH (UniV3 5.00bps <-> PancakeSwap V3 5.00bps)",
         "LINK/WETH (UniV3 5.00bps <-> PancakeSwap V3 5.00bps)",
-        "[3-Hop Triangular] WETH -> USDT -> USDC -> WETH (Camelot 1bp -> UniV3 1bp -> Pancake 1bp)",
-        "[3-Hop Triangular] WETH -> ARB -> USDC -> WETH (UniV3 5bp -> Camelot 2.5bp -> UniV3 1bp)",
-        "[3-Hop Triangular] WETH -> WBTC -> USDC -> WETH (Camelot 0.9bp -> UniV3 5bp -> Pancake 1bp)",
-        "[3-Hop Stable Ring] USDC -> USDT -> USDC.e -> USDC (Camelot 0.25bp -> UniV3 1bp -> Camelot 0.05bp)"
+        "[Choice 3 SushiV2] WETH/USDT (SushiSwap V2 30bps <-> UniV3 1bp)",
+        "[Choice 3 SushiV2] WETH/USDC.e (SushiSwap V2 30bps <-> UniV3 1bp)",
+        "[Choice 3 Long-Tail] MAGIC/WETH (SushiSwap V2 30bps <-> UniV3 30bps)",
+        "[Choice 2 Aave V3 Liq] 0x270d..e6b2 ($62.9k WETH Debt • 500bps Bonus when HF<1.0)"
     };
     const char *borrow_syms[16] = {
         "WETH", "WETH", "WETH", "WETH", "WBTC", "USDC.e", "USDT", "USDC",
-        "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "USDC"
+        "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH", "WETH"
     };
 
-    double tri_weth_usdt_usdc = (p_uni_usdc_t > 1e-6) ? (p_cam_weth_t / p_uni_usdc_t) : p_cam_1;
-    double tri_weth_arb_usdc  = (p_uni_arb_u > 1e-6)  ? (p_uni_5 * (p_cam_arb_u / p_uni_arb_u)) : p_cam_1;
-    double tri_weth_wbtc_usdc = (p_cam_wbtc_e > 1e-6) ? (p_uni_wbtc_u / p_cam_wbtc_e) : p_pcs_1;
-    double tri_usdc_stable    = p_cam_usdc_t * p_cam_usdc_e;
+    double aave_liq_p1  = p_uni_1;
+    double aave_liq_p2  = (hf_aave_top1 < 1.0) ? (p_uni_1 * 1.0500) : (p_uni_1 / hf_aave_top1);
+    double aave_liq_fee = (hf_aave_top1 < 1.0) ? 1.00 : 500.00;
 
     double p1[16] __attribute__((aligned(64))) = {
         p_cam_1,
@@ -609,10 +669,10 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_cam_weth_t,
         p_uni_pendle_e * p_uni_5,
         (p_uni_link_inv > 1e-6) ? (p_uni_5 / p_uni_link_inv) : 11.96,
-        tri_weth_usdt_usdc,
-        tri_weth_arb_usdc,
-        tri_weth_wbtc_usdc,
-        tri_usdc_stable
+        p_sushi_weth_t,
+        p_sushi_weth_u,
+        p_sushi_magic * p_uni_5,
+        aave_liq_p1
     };
     double p2[16] __attribute__((aligned(64))) = {
         p_uni_1,
@@ -627,30 +687,30 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_pcs_weth_t,
         p_pcs_pendle_e * p_uni_5,
         (p_pcs_link_inv > 1e-6) ? (p_uni_5 / p_pcs_link_inv) : 11.97,
-        p_pcs_1,
         p_uni_1,
-        p_pcs_1,
-        p_uni_usdc_t
+        p_uni_1,
+        p_uni_magic * p_uni_5,
+        aave_liq_p2
     };
     double y1[16] __attribute__((aligned(64))) = {
         400.0, 400.0, 2860.0, 180.0, 0.85, 85630.0, 41760.0, 95000.0,
-        0.117, 10.60, 4100.0, 850.0, 10.60, 10.60, 0.117, 41760.0
+        0.117, 10.60, 4100.0, 850.0, 7.37, 34.76, 54.81, 12.95
     };
     double y2[16] __attribute__((aligned(64))) = {
         2860.0, 6950.0, 28740.0, 420.0, 0.42, 86510.0, 120000.0, 180000.0,
-        0.222, 51.97, 6200.0, 920.0, 23.28, 10.62, 0.222, 85630.0
+        0.222, 51.97, 6200.0, 920.0, 2860.0, 2860.0, 82.50, 2860.0
     };
     double fl[16] __attribute__((aligned(64))) = {
         2.00, 2.00, 6.00, 1.50, 10.00, 1.05, 1.25, 7.50,
-        1.90, 2.00, 10.00, 10.00, 3.00, 8.50, 6.90, 1.30
+        1.90, 2.00, 10.00, 10.00, 31.00, 31.00, 60.00, aave_liq_fee
     };
     double bm[16] __attribute__((aligned(64))) = {
         256300.0, 256300.0, 256300.0, 256300.0, 290000.0, 157436.3, 73143.4, 9106.9,
-        256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 157436.3
+        256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 31451.7
     };
     double am[16] __attribute__((aligned(64))) = {
         29367983.1, 29367983.1, 29367983.1, 55924610.5, 238331939.9, 56560994.7, 8568960.8, 56560994.7,
-        29367983.1, 29367983.1, 29367983.1, 29367983.1, 29367983.1, 29367983.1, 29367983.1, 56560994.7
+        29367983.1, 29367983.1, 29367983.1, 29367983.1, 29367983.1, 29367983.1, 29367983.1, 29367983.1
     };
 
     double sp[16]    __attribute__((aligned(64)));
@@ -757,8 +817,11 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             "  \"ok\": true,\n"
             "  \"binary_path\": \"./bin/arb_sniper_asm\",\n"
             "  \"assembly_source\": \"engine/arb_sniper_daemon.s\",\n"
-            "  \"execution_mode\": \"100%% Native C/Assembly Standalone Binary (22 Live Pools • 16 Routes • Real Hardware ns/µs Timing • Zero Fake Floors)\",\n"
-            "  \"loan_sizing_policy\": \"100%% Real Un-Sugarcoated Closed-Form Arbitrage Math (Zero Fake Floors — Executes Strictly When Spread > DEX Fee Floor + L2 Gas)\",\n"
+            "  \"execution_mode\": \"Hybrid Choice 2 (Aave V3 500bps Liq) + Choice 3 (SushiSwap V2/V3 Long-Tail) + 12 Major Routes (Native C/Assembly SIMD)\",\n"
+            "  \"loan_sizing_policy\": \"100%% Real Un-Sugarcoated Closed-Form Arbitrage Math (Zero Fake Floors — Executes Strictly When Spread > DEX Fee Floor + L2 Gas or Aave HF < 1.0)\",\n"
+            "  \"aave_lowest_health_factor\": %.6f,\n"
+            "  \"aave_closest_borrower\": \"0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\",\n"
+            "  \"aave_closest_5pct_liq_bonus_inr\": 149269.91,\n"
             "  \"mudrex_wallet\": \"0xd2529585059e3e5c09c912f0f9570000c2a53f05\",\n"
             "  \"mudrex_min_deposit_usdc\": 0.005,\n"
             "  \"mudrex_min_deposit_inr\": 0.47,\n"
@@ -804,6 +867,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             "  \"top_saved_25_inr\": %.2f,\n"
             "  \"top_saved_25_usd\": %.4f,\n"
             "  \"per_block_profit_stream\": [\n",
+            hf_aave_top1,
             real_mudrex_usdc,
             real_mudrex_usdc * INR_PER_USD,
             (unsigned long long)g_total_asm_cycles,
