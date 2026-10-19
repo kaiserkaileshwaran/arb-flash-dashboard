@@ -30,14 +30,15 @@ DEPLOYED_CONTRACT = "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
 
 
 def _load_local_relayer_env() -> tuple:
+    import os
     env_path = Path.home() / ".arb_flash_local_relayer.env"
-    addr = "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
-    pk = ""
+    addr = os.environ.get("LOCAL_RELAYER_ADDRESS", "0x9dD041dbd964DE086Da8f907518f6E25c45aea70").strip()
+    pk = os.environ.get("LOCAL_RELAYER_PRIVATE_KEY", "").strip()
     if env_path.exists():
         for line in env_path.read_text(encoding="utf-8").splitlines():
             if line.startswith("LOCAL_RELAYER_ADDRESS="):
                 addr = line.split("=", 1)[1].strip()
-            elif line.startswith("LOCAL_RELAYER_PRIVATE_KEY="):
+            elif line.startswith("LOCAL_RELAYER_PRIVATE_KEY=") and not pk:
                 pk = line.split("=", 1)[1].strip()
     return addr, pk
 
@@ -50,7 +51,7 @@ RPC_URLS = [
     "https://arbitrum.drpc.org",
 ]
 RPC_URL = RPC_URLS[0]
-MIN_GAS_RESERVE_WEI = 5_000_000_000_000  # Keep 0.0000050 ETH in relayer gas reserve; settle surplus directly to Mudrex
+MIN_GAS_RESERVE_WEI = 12_000_000_000_000  # Keep 0.000012 ETH (~2 full 290k-gas Flash-Swap txs) in relayer gas reserve
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
@@ -89,7 +90,7 @@ def main() -> int:
         BROADCAST_LOG_JSON.write_text(json.dumps({"ok": False, "error": str(e), "ts": time.time()}, indent=2))
         return 1
 
-    if rel_wei < 3_500_000_000_000 or not is_authorized:
+    if rel_wei < 6_000_000_000_000 or not is_authorized:
         BROADCAST_LOG_JSON.write_text(
             json.dumps(
                 {
@@ -99,7 +100,7 @@ def main() -> int:
                     "relayer_authorized_on_contract": is_authorized,
                     "relayer_eth_wei": rel_wei,
                     "relayer_eth": round(rel_wei / 1e18, 8),
-                    "required_min_eth": 0.0000035,
+                    "required_min_eth": 0.0000060,
                     "recommended_revolving_float_eth": 0.00005,
                     "ts": time.time(),
                 },

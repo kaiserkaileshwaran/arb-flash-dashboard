@@ -28,19 +28,40 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install Foundry (cast) for On-Chain Flash-Swap Broadcasts
+        uses: foundry-rs/foundry-toolchain@v1
+
       - name: Compile Native C/Assembly Uncapped Flash Sniper Daemon
         run: |
           sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev
           mkdir -p bin reports
           gcc -O3 -ffast-math engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
 
-      - name: Run 24/7 Cloud Arbitrum One Uncapped Assembly Sniper & Auto-Mudrex Verifier
+      - name: Run 24/7 Cloud Arbitrum One Uncapped Assembly Sniper & Auto-Mudrex Broadcaster
         env:
-          OWNER_PROFIT_WALLET: 0xFF3c34DAF159741C931F7c421350f8289A9d89BE
-          MUDREX_DEPOSIT_WALLET: 0xd2529585059e3e5c09c912f0f9570000c2a53f05
-          DEPLOYED_CONTRACT_ADDRESS: 0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3
+          OWNER_PROFIT_WALLET: "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
+          MUDREX_DEPOSIT_WALLET: "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
+          DEPLOYED_CONTRACT_ADDRESS: "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
+          LOCAL_RELAYER_ADDRESS: "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
+          LOCAL_RELAYER_PRIVATE_KEY: ${{ secrets.LOCAL_RELAYER_PRIVATE_KEY }}
         run: |
+          if [ -n "$LOCAL_RELAYER_PRIVATE_KEY" ]; then
+            printf "LOCAL_RELAYER_ADDRESS=0x9dD041dbd964DE086Da8f907518f6E25c45aea70\nLOCAL_RELAYER_PRIVATE_KEY=%s\n" "$LOCAL_RELAYER_PRIVATE_KEY" > ~/.arb_flash_local_relayer.env
+            chmod 600 ~/.arb_flash_local_relayer.env
+          fi
           python3 scripts/verify_real_onchain_proofs.py || true
-          timeout 810 ./bin/arb_sniper_asm || true
+          python3 scripts/autonomous_asm_broadcaster.py || true
+          timeout 480 ./bin/arb_sniper_asm || true
           python3 scripts/verify_real_onchain_proofs.py || true
+          python3 -c 'import sys; sys.path.insert(0, "scripts"); import serve_metamask_portal as m; from pathlib import Path; Path("index.html").write_text(m.HTML_PAGE, encoding="utf-8")' || true
 
+      - name: Commit & Push Updated On-Chain Telemetry to GitHub Pages
+        run: |
+          git config user.name "arb-sniper-bot"
+          git config user.email "arb-sniper-bot@users.noreply.github.com"
+          git add index.html reports/two_hour_test_summary.json reports/verified_onchain_proofs.json reports/asm_sniper_telemetry.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(cloud-sniper): auto-sync verified Arbitrum One on-chain proofs [skip ci]"
+            git pull --rebase origin main || true
+            git push origin main || true
+          fi
