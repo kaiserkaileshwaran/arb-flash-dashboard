@@ -468,43 +468,47 @@ def main() -> int:
     import concurrent.futures
 
     def _post_single_chunk_parallel(args):
-        url, chunk_bytes = args
-        parsed = urlparse(url)
-        conn = http.client.HTTPSConnection(parsed.netloc, timeout=3.5)
-        try:
-            conn.connect()
-            if conn.sock is not None:
-                conn.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-            conn.request(
-                "POST",
-                parsed.path or "/",
-                body=chunk_bytes,
-                headers={
-                    "Content-Type": "application/json",
-                    "User-Agent": "Mozilla/5.0",
-                    "Connection": "keep-alive",
-                },
-            )
-            resp = conn.getresponse()
-            raw = resp.read()
-            if resp.status != 200:
-                raise RuntimeError(f"HTTP {resp.status}")
-            part = json.loads(raw.decode("utf-8"))
-            if not isinstance(part, list):
-                raise RuntimeError("Non-list batch response")
-            return part
-        finally:
+        chunk_idx, chunk_bytes = args
+        for attempt in range(len(RPC_URLS)):
+            cand_url = RPC_URLS[(chunk_idx + attempt) % len(RPC_URLS)]
+            parsed = urlparse(cand_url)
+            conn = http.client.HTTPSConnection(parsed.netloc, timeout=3.5)
             try:
-                conn.close()
+                conn.connect()
+                if conn.sock is not None:
+                    conn.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                conn.request(
+                    "POST",
+                    parsed.path or "/",
+                    body=chunk_bytes,
+                    headers={
+                        "Content-Type": "application/json",
+                        "User-Agent": "Mozilla/5.0",
+                        "Connection": "keep-alive",
+                    },
+                )
+                resp = conn.getresponse()
+                raw = resp.read()
+                if resp.status != 200:
+                    continue
+                part = json.loads(raw.decode("utf-8"))
+                if isinstance(part, list) and any(isinstance(x, dict) and "result" in x for x in part):
+                    return part
             except Exception:
-                pass
+                continue
+            finally:
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+        raise RuntimeError("All RPCs failed for chunk")
 
-    def _fast_keepalive_batch_chunks(url: str):
+    def _fast_keepalive_batch_chunks(_url: str):
         merged = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=len(batch_chunks_bytes)) as pool:
-            futures = [pool.submit(_post_single_chunk_parallel, (url, cb)) for cb in batch_chunks_bytes]
+            futures = [pool.submit(_post_single_chunk_parallel, (idx, cb)) for idx, cb in enumerate(batch_chunks_bytes)]
             for fut in futures:
-                merged.extend(fut.result(timeout=4.5))
+                merged.extend(fut.result(timeout=6.0))
         return merged
 
     winning_meta = None
