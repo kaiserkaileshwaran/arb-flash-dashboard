@@ -278,62 +278,26 @@ def main() -> int:
     # =========================================================================
     sushiv2_spatial_tiers = [
         # (borrow_tok, target_tok, borrow_amt, min_net, fee1, buy_uni_first, rel_fee, is_weth, label)
-        (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 100, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDC.e (BuyUni)"),
         (weth, usdc_e, 250_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDC.e (BuySushi)"),
-        (weth, usdt, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDT (BuyUni)"),
-        (weth, usdt, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDT (BuySushi)"),
-        (weth, arb, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/ARB (BuyUni)"),
-        (weth, arb, 150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/ARB (BuySushi)"),
-        (weth, wbtc, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 500, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/WBTC (BuyUni)"),
-        (weth, wbtc, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 500, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/WBTC (BuySushi)"),
-        (weth, link, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 3000, True, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/LINK (BuyUni)"),
-        (weth, link, 100_000_000_000_000_000, MIN_NET_WETH_WEI, 3000, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3 WETH/LINK (BuySushi)"),
+        (weth, usdt,   150_000_000_000_000_000, MIN_NET_WETH_WEI, 100, False, RELAYER_REIMB_WEI, True, "SushiV2<->UniV3_1bp WETH/USDT (BuySushi)"),
     ]
 
     # =========================================================================
     # PRIORITY #2B & #3: Direct Pool Flash-Swap Tiers (Mid-Caps + Majors)
     # =========================================================================
     raw_tiers = [
-        (pcs_weth_usdc, uni5_weth_usdc, weth, usdc, 2 * 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni5_weth_usdc, pcs_weth_usdc, weth, usdc, 2 * 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (cam_weth_usdc, pcs_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (cam_weth_usdc, uni1_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni1_weth_usdc, cam_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (pcs_weth_usdt, cam_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni1_weth_usdt, cam_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (cam_weth_usdt, uni1_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni1_weth_usdt, uni5_weth_usdt, weth, usdt, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni5_weth_usdt, uni1_weth_usdt, weth, usdt, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
+        (cam_weth_usdt, pcs_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (pcs1_weth_arb, uni5_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni5_weth_arb, pcs1_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (uni1_weth_arb, uni5_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni5_weth_arb, uni1_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (pcs5_weth_arb, uni5_weth_arb, weth, arb, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (pcs1_weth_usdce, uni5_weth_usdce, weth, usdc_e, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni1_weth_usdce, uni5_weth_usdce, weth, usdc_e, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (uni_wsteth_weth, cam_wsteth_weth, weth, wsteth, 200_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (cam_wsteth_weth, uni_wsteth_weth, weth, wsteth, 200_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (pcs_wbtc_weth, cam_wbtc_weth, weth, wbtc, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (cam_wbtc_weth, pcs_wbtc_weth, weth, wbtc, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (uni_link_weth, pcs_link_weth, weth, link, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni_pendle_weth, pcs_pendle_weth, weth, pendle, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        # Mid-cap high-volatility Arbitrum pools (GMX, MAGIC, RDNT, PEPE)
         (cam_gmx_weth, uni30_gmx_weth, weth, gmx, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (uni30_gmx_weth, cam_gmx_weth, weth, gmx, 100_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (pcs5_gmx_weth, uni30_gmx_weth, weth, gmx, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
-        (cam_magic_weth, uni30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (uni30_magic_weth, cam_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (sushi30_magic_weth, uni30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (uni30_magic_weth, sushi30_magic_weth, weth, magic, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (cam_rdnt_weth, uni30_rdnt_weth, weth, rdnt, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (uni30_rdnt_weth, cam_rdnt_weth, weth, rdnt, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
         (cam_pepe_weth, uni30_pepe_weth, weth, pepe, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (uni30_pepe_weth, cam_pepe_weth, weth, pepe, 20_000_000_000_000_000, MIN_GROSS_WETH_WEI, False, True, RELAYER_REIMB_WEI, True),
-        (cam_arb_usdc, uni_arb_usdc, usdc, arb, 100 * 10**6, MIN_GROSS_USDC_RAW, False, True, 0, False),
-        (cam_usdc_usdce, uni_usdc_usdce, usdc, usdc_e, 200 * 10**6, MIN_GROSS_USDC_RAW, True, False, 0, False),
-        (cam_usdc_usdt, uni_usdc_usdt, usdc, usdt, 200 * 10**6, MIN_GROSS_USDC_RAW, True, False, 12000, False),
     ]
 
     batch_rpc = []
@@ -366,9 +330,9 @@ def main() -> int:
         })
         candidate_meta.append(("SUSHIV2_SPATIAL_ARB", call_tuple, min_n + rf, rf, is_w, b_amt, "executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256)"))
 
-    # 3. Add Choice 2 Aave V3 Liquidation Execution Tiers for Top 4 Closest Borrowers (Selector 0x1034ef63, Strategy 3)
+    # 3. Add Choice 2 Aave V3 Liquidation Execution Tiers for Top 2 Closest Borrowers (Selector 0x1034ef63, Strategy 3)
     aave_exec_start_id = len(batch_rpc) + 1
-    for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist[:4]:
+    for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist[:2]:
         req_id = len(batch_rpc) + 1
         cd_hex = _encode_gasless_arb_calldata(3, d_tok, c_tok, zero_addr, d_amt, min_n, 500, 0, True, b_addr, rf)
         call_tuple = f"(3,{d_tok},{c_tok},{zero_addr},{d_amt},{min_n},500,0,true,{b_addr})"
@@ -394,10 +358,9 @@ def main() -> int:
         })
     aave_hf_end_id = len(batch_rpc)
 
-    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at sweet-spot sizes)
+    # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at sweet-spot sizes; exact 38 total RPC calls = 2x19 chunks)
     probe_defs = [
         ("ARB_PCS5_UNI5",    pcs5_weth_arb,    uni5_weth_arb,   weth, arb,     500_000_000_000_000, True,  False),
-        ("ARB_PCS5_UNI5_10", pcs5_weth_arb,    uni5_weth_arb,   weth, arb,   1_000_000_000_000_000, True,  False),
         ("ARB_PCS1_UNI5",    pcs1_weth_arb,    uni5_weth_arb,   weth, arb,     600_000_000_000_000, True,  False),
         ("ARB_PCS1_UNI5_12", pcs1_weth_arb,    uni5_weth_arb,   weth, arb,   1_200_000_000_000_000, True,  False),
         ("ARB_UNI1_UNI5",    uni1_weth_arb,    uni5_weth_arb,   weth, arb,     200_000_000_000_000, True,  False),
@@ -411,9 +374,6 @@ def main() -> int:
         ("USDT_PCS1_CAM",    pcs_weth_usdt,    cam_weth_usdt,   weth, usdt,    500_000_000_000_000, True,  False),
         ("WSTETH_UNI5_UNI1", uni5_wsteth_weth, uni_wsteth_weth, weth, wsteth,  100_000_000_000_000, False, True),
         ("WEETH_UNI1_UNI5",  uni1_weeth_weth,  uni5_weeth_weth, weth, weeth,    20_000_000_000_000, False, True),
-        ("WBTC_PCS_CAM",     pcs_wbtc_weth,    cam_wbtc_weth,   weth, wbtc,    200_000_000_000_000, False, True),
-        ("GMX_CAM_UNI30",    cam_gmx_weth,     uni30_gmx_weth,  weth, gmx,     500_000_000_000_000, True,  False),
-        ("MAGIC_SUSHI_UNI",  sushi30_magic_weth,uni30_magic_weth,weth, magic,  500_000_000_000_000, False, True),
     ]
     probe_start_id = len(batch_rpc) + 1
     for p_idx, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in enumerate(probe_defs):

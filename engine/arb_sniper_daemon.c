@@ -233,7 +233,7 @@ void evaluate_full_loan_routes_asm(
 
             double pre_tax_net = gross_full - gas_fee_usd;
             if (pre_tax_net > 0.0) {
-                net_full = pre_tax_net * 0.688; /* Post 31.2% Indian Sec 115BBH VDA tax */
+                net_full = pre_tax_net; /* 100% On-Chain Net Profit (75% Mudrex + 25% Tax/Gas Reserve) */
                 split75  = net_full * 0.75;
                 split25  = net_full - split75;
             }
@@ -532,6 +532,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x7fCDC35463E3770c2fB992716Cd070B63540b947\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":13},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x35218a1cbaC5Bbc3E57fd9Bd38219D37571b3537\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":14},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xDeB89dE4bb6ecf5bFed581EB049308B52d9B2dA7\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":15},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xe754841b77c874135caca3386676e886459c2d61\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":16},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xc31e54c7a869b9fcbecc14363cf510d1c41fa443\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":17},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":18},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xc6f780497a95e246eb9449f5e4770916dcd6396a\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":19},"
@@ -552,7 +553,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xb93f8a075509e71325c1c2fc8fa6a75f2d536a13\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":30},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x0d7c4b40018969f81750d0a164c3839a77353efb\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":31},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x905dfcd5649217c42684f23958568e533c711aa3\",\"data\":\"0x0902f1ac\"},\"latest\"],\"id\":32},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xcb0e5bfa72bbb4d16ab5aa0c60601c438f04b4ad\",\"data\":\"0x0902f1ac\"},\"latest\"],\"id\":33},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x389938cf14be379217570d8e4619e51fbdafaa21\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":33},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\"},\"latest\"],\"id\":36}"
         "]";
 
@@ -562,6 +563,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double p_pcs_1          = 2422.50;
     double p_uni_wsteth     = 1.245900;
     double p_cam_wsteth     = 1.245900;
+    double p_uni1_usdce     = 2422.50;
     double p_uni5_usdce     = 2422.50;
     double p_pcs1_usdce     = 2422.50;
     double p_pcs1_weth_arb  = 12680.0;
@@ -576,9 +578,9 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double p_pcs_wbtc_e     = 33.960000;
     double p_cam_weth_t     = 2425.00;
     double p_uni1_weth_t    = 2425.00;
+    double p_pcs1_weth_t    = 2425.00;
     double p_uni5_wsteth    = 1.245900;
     double p_sushi_weth_u   = 2422.50;
-    double p_sushi_weth_t   = 2422.50;
     double hf_aave_top1     = 1.0232;
 
     if (curl) {
@@ -601,7 +603,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
                     p_pcs_1         = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 13), 1e12,  500.0, 20000.0, p_uni_5);
                     p_uni_wsteth    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 14), 1.0,   0.8,   2.5,     1.245900);
                     p_cam_wsteth    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 15), 1.0,   0.8,   2.5,     p_uni_wsteth);
-                    p_uni5_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e12,  500.0, 20000.0, p_uni_5);
+                    p_uni1_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 16), 1e12,  500.0, 20000.0, p_uni_5);
+                    p_uni5_usdce    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 17), 1e12,  500.0, 20000.0, p_uni1_usdce);
                     p_pcs1_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 18), 1.0,   100.0, 100000.0,12680.0);
                     p_uni5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 19), 1.0,   100.0, 100000.0,p_pcs1_weth_arb);
                     p_cam_usdc_t    = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 20), 1.0,   0.98,  1.02,    1.001050);
@@ -617,7 +620,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
                     p_uni5_wsteth   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 30), 1.0,   0.8,   2.5,     p_uni_wsteth);
                     p_pcs5_weth_arb = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 31), 1.0,   100.0, 100000.0,p_uni5_weth_arb);
                     p_sushi_weth_u  = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 32), 1e18, 1e6,  500.0, 20000.0, p_uni_1);
-                    p_sushi_weth_t  = decode_v2_reserves_price(find_batch_result_for_id(buf->data, 33), 1e18, 1e6,  500.0, 20000.0, p_uni_1);
+                    p_pcs1_weth_t   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 33), 1e12,  500.0, 20000.0, p_cam_weth_t);
                     hf_aave_top1    = decode_aave_hf(find_batch_result_for_id(buf->data, 36), 1.0232);
                     break;
                 }
@@ -629,7 +632,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     const char *route_names[16] = {
         "WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps)",
         "WETH/USDC (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
-        "WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 0.05% 5.00bps)",
+        "[Choice 3 Cross-Tier] WETH/USDC.e (UniV3 1bp <-> UniV3 5bps)",
         "wstETH/WETH (Camelot V3 0.50bps <-> UniV3 1.00bps)",
         "[Choice 3 Cross-Tier] WETH/USDC.e (PancakeSwap V3 1bp <-> UniV3 5bps)",
         "[Choice 3 Cross-Tier] WETH/ARB (PancakeSwap V3 1bp <-> UniV3 5bps)",
@@ -639,7 +642,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "WETH/USDT (Camelot V3 1.00bps <-> UniV3 1.00bps)",
         "[Choice 3 Cross-Tier] WETH/ARB (PancakeSwap V3 5bps <-> UniV3 5bps)",
         "[Choice 3 Cross-Tier] WETH/ARB (UniV3 1bp <-> UniV3 5bps)",
-        "[Choice 3 SushiV2] WETH/USDT (SushiSwap V2 30bps <-> UniV3 1bp)",
+        "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
         "[Choice 3 SushiV2] WETH/USDC.e (SushiSwap V2 30bps <-> UniV3 1bp)",
         "[Choice 3 Cross-Tier] wstETH/WETH (UniV3 1bp <-> UniV3 5bps)",
         "[Choice 2 Aave V3 Liq] 0x270d..e6b2 ($62.9k WETH Debt • 500bps Bonus when HF<1.0)"
@@ -656,7 +659,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double p1[16] __attribute__((aligned(64))) = {
         p_cam_1,
         p_cam_1,
-        p_pcs_1,
+        p_uni1_usdce,
         p_cam_wsteth * p_uni_5,
         p_pcs1_usdce,
         (p_pcs1_weth_arb > 1.0) ? (p_uni_5 / p_pcs1_weth_arb) : 0.1908,
@@ -666,7 +669,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_cam_weth_t,
         (p_pcs5_weth_arb > 1.0) ? (p_uni_5 / p_pcs5_weth_arb) : 0.1908,
         (p_uni1_weth_arb > 1.0) ? (p_uni_5 / p_uni1_weth_arb) : 0.1908,
-        p_sushi_weth_t,
+        p_cam_weth_t,
         p_sushi_weth_u,
         p_uni_wsteth * p_uni_5,
         aave_liq_p1
@@ -674,7 +677,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double p2[16] __attribute__((aligned(64))) = {
         p_uni_1,
         p_pcs_1,
-        p_uni_5,
+        p_uni5_usdce,
         p_uni_wsteth * p_uni_5,
         p_uni5_usdce,
         (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1908,
@@ -684,22 +687,22 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_uni1_weth_t,
         (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1908,
         (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1908,
-        p_uni_1,
+        p_pcs1_weth_t,
         p_uni_1,
         p_uni5_wsteth * p_uni_5,
         aave_liq_p2
     };
     double y1[16] __attribute__((aligned(64))) = {
-        400.0, 400.0, 2860.0, 180.0, 1.171, 4925.0, 41760.0, 95000.0,
-        0.117, 10.60, 36150.0, 1775.0, 7.37, 34.76, 420.0, 12.95
+        400.0, 400.0, 0.140, 180.0, 1.171, 4925.0, 41760.0, 95000.0,
+        0.117, 10.60, 36150.0, 1775.0, 10.60, 34.76, 420.0, 12.95
     };
     double y2[16] __attribute__((aligned(64))) = {
-        2860.0, 6950.0, 28740.0, 420.0, 464.39, 42800000.0, 120000.0, 180000.0,
-        0.222, 65.87, 42800000.0, 42800000.0, 2860.0, 2860.0, 0.305, 2860.0
+        2860.0, 6950.0, 464.39, 420.0, 464.39, 42800000.0, 120000.0, 180000.0,
+        0.222, 65.87, 42800000.0, 42800000.0, 22.40, 2860.0, 0.305, 2860.0
     };
     double fl[16] __attribute__((aligned(64))) = {
         2.00, 2.00, 6.00, 1.50, 6.00, 6.00, 1.25, 7.50,
-        1.90, 2.00, 10.00, 6.00, 31.00, 31.00, 6.00, aave_liq_fee
+        1.90, 2.00, 10.00, 6.00, 2.00, 31.00, 6.00, aave_liq_fee
     };
     double bm[16] __attribute__((aligned(64))) = {
         256300.0, 256300.0, 256300.0, 256300.0, 256300.0, 157436.3, 73143.4, 9106.9,
@@ -752,7 +755,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         }
     }
     double bundle_unfilt_net_usd = (bundle_routes_count > 0) ? (bundle_gross_usd - gas_fee_usd) : (-gas_fee_usd);
-    double bundle_net_usd        = (bundle_unfilt_net_usd > 0.0) ? (bundle_unfilt_net_usd * 0.688) : 0.0;
+    double bundle_net_usd        = (bundle_unfilt_net_usd > 0.0) ? bundle_unfilt_net_usd : 0.0;
     double bundle_tr75_usd       = bundle_net_usd * 0.75;
     double bundle_sv25_usd       = bundle_net_usd - bundle_tr75_usd;
 
@@ -760,9 +763,9 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double effective_best_tr75_usd = (bundle_net_usd > nt[best_i]) ? bundle_tr75_usd : tr75[best_i];
     double effective_best_sv25_usd = (bundle_net_usd > nt[best_i]) ? bundle_sv25_usd : sv25[best_i];
 
-    /* Per-Block Arbitrum Profit Recorder (Strictly Only If Profitable & Above Mudrex 0.005 USDC Min Deposit) */
+    /* Per-Block Arbitrum Profit Recorder (Records Every Block Where Single OR Bundled Gross > Shared L2 Gas) */
     uint64_t cur_blk = g_live_block_number;
-    if (cur_blk > g_last_scored_block && effective_best_net_usd > 0.0 && effective_best_tr75_usd >= 0.0051) {
+    if (cur_blk > g_last_scored_block && effective_best_net_usd > 0.0) {
         g_last_scored_block = cur_blk;
         g_blocks_profited_session++;
         double blk_net_inr = effective_best_net_usd * INR_PER_USD;
@@ -778,16 +781,21 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             g_block_ring[m] = g_block_ring[m - 1];
         }
         g_block_ring[0].block_number   = cur_blk;
-        snprintf(g_block_ring[0].route, sizeof(g_block_ring[0].route), "%s", route_names[best_i]);
+        if (bundle_net_usd > nt[best_i] && bundle_routes_count >= 2) {
+            snprintf(g_block_ring[0].route, sizeof(g_block_ring[0].route), "[Method A Bundle: %d Routes] Top: %s", bundle_routes_count, route_names[best_i]);
+            g_block_ring[0].loan_inr   = bundle_loan_usd * INR_PER_USD;
+        } else {
+            snprintf(g_block_ring[0].route, sizeof(g_block_ring[0].route), "%s", route_names[best_i]);
+            g_block_ring[0].loan_inr   = opt[best_i] * INR_PER_USD;
+        }
         if (blk_net_inr >= 100000.0) {
             snprintf(g_block_ring[0].regime, sizeof(g_block_ring[0].regime), "WHALE_LAKHS_CRORES_SHIFT");
         } else if (blk_net_inr >= 100.0) {
             snprintf(g_block_ring[0].regime, sizeof(g_block_ring[0].regime), "ACTIVE_MAX_FLASH_LOAN");
         } else {
-            snprintf(g_block_ring[0].regime, sizeof(g_block_ring[0].regime), "MICRO_BLOCK_FLOOR_INR");
+            snprintf(g_block_ring[0].regime, sizeof(g_block_ring[0].regime), "MULTI_ROUTE_ATOMIC_BUNDLE_INR");
         }
         g_block_ring[0].spread_bps     = sp[best_i];
-        g_block_ring[0].loan_inr       = opt[best_i] * INR_PER_USD;
         g_block_ring[0].net_inr        = blk_net_inr;
         g_block_ring[0].mudrex_75_inr  = blk_75_inr;
         g_block_ring[0].mudrex_75_usdc = effective_best_tr75_usd;
