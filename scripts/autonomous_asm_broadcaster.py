@@ -393,49 +393,9 @@ def main() -> int:
         except Exception:
             pass
 
-    # 100% Zero-Interaction Automatic Settlement Directly to Mudrex (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
-    # Whenever surplus ETH above MIN_GAS_RESERVE_WEI (0.0000050 ETH) is available, settle directly into Mudrex USDC!
-    surplus_wei = rel_wei - MIN_GAS_RESERVE_WEI - 3_800_000_000_000
-    if surplus_wei >= 5_500_000_000_000:
-        swap_cmd = [
-            cast_bin,
-            "send",
-            "0xE592427A0AEce92De3Edee1F18E0157C05861564",
-            "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))(uint256)",
-            f"(0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xaf88d065e77c8cC2239327C5EDb3A432268e5831,500,{MUDREX_WALLET},2000000000,{surplus_wei},{MIN_MUDREX_USDC_UNITS},0)",
-            "--value",
-            str(surplus_wei),
-            "--gas-limit",
-            "180000",
-            "--gas-price",
-            "20500000",
-            "--private-key",
-            RELAYER_PK,
-            "--rpc-url",
-            RPC_URL,
-            "--json",
-        ]
-        try:
-            out = json.loads(subprocess.check_output(swap_cmd, timeout=20).decode("utf-8"))
-            if out.get("transactionHash"):
-                subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
-                BROADCAST_LOG_JSON.write_text(
-                    json.dumps(
-                        {
-                            "ok": True,
-                            "mode": "ZERO_CLICK_AUTO_SETTLEMENT_DIRECT_TO_MUDREX",
-                            "mudrex_wallet": MUDREX_WALLET,
-                            "tx_hash": out["transactionHash"],
-                            "block_number": out.get("blockNumber"),
-                            "retained_gas_reserve_wei": MIN_GAS_RESERVE_WEI,
-                            "ts": time.time(),
-                        },
-                        indent=2,
-                    )
-                )
-        except Exception:
-            pass
-
+    # 100% of Relayer ETH is strictly preserved as permanent revolving gas float for executeDirectPoolFlashSwap.
+    # Deployed contract 0x2B98c4481366957138b836b19930187250d2717a automatically routes 75% of net profit to Mudrex
+    # (0xd2529585059e3e5c09c912f0f9570000c2a53f05) and 25% to MetaMask (0xFF3c34DAF159741C931F7c421350f8289A9d89BE).
     return 0
 
 

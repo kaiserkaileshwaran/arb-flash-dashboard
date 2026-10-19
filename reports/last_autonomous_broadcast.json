@@ -1,5 +1,19 @@
 {
-  "ok": false,
-  "error": "All Arbitrum RPCs failed: <urlopen error [Errno 8] nodename nor servname provided, or not known>",
-  "ts": 1792346838.698272
+  "ok": true,
+  "status": "SCAN_COMPLETE_NO_SPREAD_ABOVE_L2_GAS_THRESHOLD",
+  "coins_monitored": 13,
+  "tiers_tested_per_cycle": 27,
+  "cycles_scanned": 2,
+  "scan_duration_sec": 10.55,
+  "rpc_latency_min_ms": 884.17,
+  "rpc_latency_avg_ms": 1150.45,
+  "best_pre_gas_gross_wei": 204282482133,
+  "best_pre_gas_gross_inr": 0.0468,
+  "l2_gas_cost_inr": 1.1295,
+  "net_if_forced_inr": -1.0827,
+  "real_net_profit_executed_inr": 0.0,
+  "relayer_wallet": "0x9dD041dbd964DE086Da8f907518f6E25c45aea70",
+  "relayer_eth_wei": 298452355518,
+  "relayer_eth": 3e-07,
+  "ts": 1792378119.009255
 }
