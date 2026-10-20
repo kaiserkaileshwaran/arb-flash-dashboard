@@ -1392,11 +1392,14 @@ function renderDashboard(payload) {
     `${t3MatrixPct.toFixed(1)}% (${posRoutesCount}/16 Positive Gross Routes)`,
     `<b>${posRoutesCount}/16 routes (${t3MatrixPct.toFixed(1)}%)</b> have positive live spreads via dynamic candidate pool rotation + 3-hop triangular cycles in <b>${(asmNs / 16.0).toFixed(1)} ns/route</b>.`
   );
+  const relInrNow = relEthLive * 2415.0 * 94.92;
+  const recTopUpEth = 0.00002000;
+  const recTopUpInr = recTopUpEth * 2415.0 * 94.92;
   updateSingleProgressBar(
     'progSecurityGuard', 'progSecurityGuardVal', 'progSecurityGuardDesc',
     authorizedGasPoolPct,
-    `100.0% Authorized Gas Pool (8,148% Floor | Relayer Alone: ${relayerBroadcastFuelPct.toFixed(1)}%)`,
-    `<b>Dual-Signer Authorized Gas Pool = ${combinedExecEth.toFixed(8)} ETH (8,148% of 0.00000145 ETH floor = 81x funded!):</b> Owner MetaMask <code>0xFF3c...89BE</code> holds <b>0.00011772 ETH (8,119%)</b> + Relayer <code>0x9dD0...ea70</code> holds <b>${relEthLive.toFixed(8)} ETH (${relayerBroadcastFuelPct.toFixed(1)}%)</b>. <button onclick="fundAuthorizedRelayerGas()" style="margin-left:6px;padding:2px 8px;border-radius:4px;background:#10b981;color:#022c22;font-weight:700;border:none;cursor:pointer;">⚡ 1-Click Sync 0.00002 ETH to Relayer</button>`
+    `Relayer Holds: ${relEthLive.toFixed(8)} ETH (₹${relInrNow.toFixed(2)} INR) • 1-Time Top-Up: 0.00002 ETH (₹${recTopUpInr.toFixed(2)} INR)`,
+    `<b>Relayer Wallet (<code>0x9dD041dbd964DE086Da8f907518f6E25c45aea70</code>) Holds Right Now: ${relEthLive.toFixed(8)} ETH = ₹${relInrNow.toFixed(2)} INR (${relayerBroadcastFuelPct.toFixed(1)}% of 0.01gwei floor).</b> Usual 1-Trade Gas Hold: <b>0.00000275–0.00000550 ETH (₹0.63–₹1.26 INR)</b> | Recommended 1-Time Self-Sustaining Buffer: <b>0.00002000 ETH (₹${recTopUpInr.toFixed(2)} INR)</b>. <button onclick="copyRelayerAddressForManualSend()" style="margin-left:6px;padding:2px 8px;border-radius:4px;background:#10b981;color:#022c22;font-weight:700;border:none;cursor:pointer;">⛽ Copy Relayer Address (Top Up 0.00002 ETH = ₹${recTopUpInr.toFixed(2)})</button>`
   );
   updateSingleProgressBar(
     'progMudrexDailyCap', 'progMudrexDailyCapVal', 'progMudrexDailyCapDesc',
@@ -1902,8 +1905,9 @@ async function refreshRelayerAuthBanner() {
   }
   const titleEl = document.getElementById('relayerActionTitle');
   if (titleEl) {
+    const curInr = _latestRelayerEth * 2415.0 * 94.92;
     titleEl.style.color = '#34d399';
-    titleEl.innerText = `🇮🇳 100% Automatic Profit Transfer to Mudrex (0xd252...3f05) — Zero Buttons & Zero Interaction Needed (24/7 Relayer Gas: ${_latestRelayerEth.toFixed(8)} ETH ≥ 0.00000040 ETH Floor • 0 Errors)`;
+    titleEl.innerText = `🇮🇳 100% Automatic Profit Transfer to Mudrex (0xd252...3f05) | Relayer (0x9dD0...ea70) Holds Now: ${_latestRelayerEth.toFixed(8)} ETH (₹${curInr.toFixed(2)} INR) • Recommended Top-Up: 0.00002 ETH (₹4.59 INR)`;
   }
 }
 

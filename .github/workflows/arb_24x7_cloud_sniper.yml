@@ -10,7 +10,7 @@ on:
 
 concurrency:
   group: arb-sniper-24x7-cloud
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 
 permissions:
   contents: write
