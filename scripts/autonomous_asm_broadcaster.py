@@ -594,8 +594,8 @@ def main() -> int:
         ("ARB_PCS1_SUSHI5",    pcs1_weth_arb,     sushi5_weth_arb,  weth,   arb,      150_000_000_000_000, True,  False),
         ("ARB_PCS5_SUSHI5",    pcs5_weth_arb,     sushi5_weth_arb,  weth,   arb,      180_000_000_000_000, True,  False),
         ("ARB_UNI5_SUSHI5",    uni5_weth_arb,     sushi5_weth_arb,  weth,   arb,      200_000_000_000_000, True,  False),
-        ("ARB_USDT_S30_U5",    "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    550_000, False, True),
-        ("ARB_USDT_S30_U5_S",  "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    250_000, False, True),
+        ("ARB_USDT_S30_U5",    "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    250_000, False, True),
+        ("ARB_USDT_S30_U5_S",  "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    100_000, False, True),
         ("ARB_USDC_S30_U5",    "0x14716a16ef9eeaada7e266bcf023b71d2c9adbf3", "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", usdc,   arb,                    300_000, False, True),
         ("ARB_USDC_U1_U5",     u1_arb_usdc,       "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", usdc,   arb,                    250_000, False, True),
         ("USDT_UNI_U5_U30",    u5_uni_usdt,       u30_uni_usdt,     usdt,   uni_tok,               60_000, False, True),
@@ -1056,7 +1056,7 @@ def main() -> int:
                                         except Exception:
                                             continue
                                 if len(verified_loans) >= 2:
-                                    marginal_gas_wei = int(RELAYER_REIMB_WEI * (1.0 + 0.15 * (len(verified_loans) - 1)))
+                                    marginal_gas_wei = RELAYER_REIMB_WEI
                                     if verified_equiv_wei > marginal_gas_wei + MIN_NET_WETH_WEI:
                                         b_score = int((verified_equiv_wei / 1e18) * 2415.0 * 1e6)
                                         fees_100pct_mudrex = [max(0, r - 2) for r in verified_raws]
