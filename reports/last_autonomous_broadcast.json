@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792535481.924358
+    "ts": 1792535489.798132
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -57,8 +57,8 @@
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_UNI5_SUSHI5",
-      "gross_inr": 0.1484,
-      "net_inr": -0.2123,
+      "gross_inr": 0.1535,
+      "net_inr": -0.2072,
       "status": "ABORTED_NET_UNDER_1_INR_TRYING_NEW_ROUTE"
     },
     {
@@ -121,10 +121,10 @@
   "aave_v3_borrowers_monitored": 16,
   "multi_route_bundle_probes": 49,
   "total_rpc_checks_per_cycle": 82,
-  "cycles_scanned": 139,
-  "scan_duration_sec": 180.72,
-  "rpc_latency_min_ms": 131.72,
-  "rpc_latency_avg_ms": 627.59,
+  "cycles_scanned": 1,
+  "scan_duration_sec": 3.39,
+  "rpc_latency_min_ms": 2372.57,
+  "rpc_latency_avg_ms": 2372.57,
   "aave_lowest_health_factor": 1.022888,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
   "aave_closest_borrower_debt_usd": 125484.57,
@@ -146,7 +146,7 @@
   "bundled_routes_count": 13,
   "bundled_route_labels": [
     "USDT_UNI_U5_U30(2288uUSD)",
-    "ARB_UNI5_SUSHI5(647371708498wei)",
+    "ARB_UNI5_SUSHI5(669662079301wei)",
     "UNI_SUSHI30_PCS5(508754723704wei)",
     "USDT_AAVE_U1_P5(1063uUSD)",
     "USDCE_WETH_S5_S1(431747523519wei)",
@@ -159,12 +159,12 @@
     "WETH_USDT_U1_P1(17174721621wei)",
     "WSTETH_WETH_U5_U1(3381018854wei)"
   ],
-  "bundled_multi_route_gross_wei": 4014751274304,
-  "bundled_multi_route_gross_inr": 0.9203,
+  "bundled_multi_route_gross_wei": 4037041645107,
+  "bundled_multi_route_gross_inr": 0.9254,
   "l2_gas_cost_inr": 0.3607,
   "single_net_if_forced_inr": -0.1435,
-  "bundled_net_if_forced_inr": 0.5596,
-  "real_net_profit_executed_inr": 0.5596,
+  "bundled_net_if_forced_inr": 0.5647,
+  "real_net_profit_executed_inr": 0.5647,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
   "mudrex_level0_crypto_deposit_limit": 500000.0,
   "mudrex_level0_crypto_withdraw_limit": 0.0,
@@ -179,10 +179,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 23997,
-    "per_route_ns": 1499.81,
+    "latency_ns": 21813,
+    "per_route_ns": 1363.31,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 2871600.0
   },
-  "ts": 1792535481.924852
+  "ts": 1792535489.7986035
 }
