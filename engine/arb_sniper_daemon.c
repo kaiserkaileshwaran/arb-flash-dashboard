@@ -221,7 +221,7 @@ void evaluate_full_loan_routes_asm(
             if (safe_pool_cap > total_vault_cap) safe_pool_cap = total_vault_cap;
 
             double edge_frac = edge_bps * 0.0001;
-            if (i == 15) {
+            if (i == 15 && fee_floor <= 5.01) {
                 /* Choice 2 Aave V3 HF < 1.0000 Ultimate Limit: Full ₹4.85 Crore ($511,000 USD) Multi-Whale Batch Flash Loan */
                 d_star_full = safe_pool_cap;
             } else {
@@ -236,7 +236,7 @@ void evaluate_full_loan_routes_asm(
             double aave_fee_usd = ovf_part * 0.0005;
             fee_saved = bal_part * 0.0005;
 
-            if (i == 15) {
+            if (i == 15 && fee_floor <= 5.01) {
                 gross_full = (d_star_full * edge_frac * 0.5) - aave_fee_usd;
             } else {
                 gross_full = (d_star_full * edge_frac) - (d_star_full * d_star_full * slip_coeff) - aave_fee_usd;
@@ -737,82 +737,88 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     const int N = 16;
     const char *route_names[16] = {
         "[Cross-DEX Spatial] UNI/WETH (SushiSwap V3 30bps <-> PancakeSwap V3 5bps)",
-        "[Cross-DEX Spatial] LINK/WETH (PancakeSwap V3 25bps <-> SushiSwap V3 30bps)",
+        "[3-Hop Triangular] WETH->UNI->USDT->WETH (SushiV3 30bps <-> UniV3 30bps)",
         "[Cross-DEX Spatial] WBTC/WETH (PancakeSwap V3 25bps <-> UniV3 5bps)",
         "[Cross-DEX Spatial] ARB/USDT (SushiSwap V3 30bps <-> UniV3 5bps)",
         "[Cross-DEX Spatial] LINK/WETH (UniV3 5bps <-> SushiSwap V3 30bps)",
-        "[Choice 3 Cross-Tier] AAVE/WETH (UniV3 5bps <-> UniV3 100bps)",
+        "[3-Hop Triangular] WETH->AAVE->USDT->WETH (UniV3 5bps <-> UniV3 1bp)",
         "[Cross-DEX Spatial] AAVE/USDT (UniV3 1bp <-> PancakeSwap V3 5bps)",
         "[Cross-DEX Spatial] LINK/WETH (PancakeSwap V3 5bps <-> SushiSwap V3 30bps)",
-        "[Cross-DEX Spatial] WBTC/USDC.e (PancakeSwap V3 1bp <-> UniV3 5bps)",
+        "[Cross-DEX Spatial] WBTC/USDT <-> WBTC/USDC.e (PancakeV3 1bp <-> PancakeV3 1bp)",
         "[Choice 3 Cross-Tier] WETH/LUSD (UniV3 5bps <-> UniV3 30bps)",
-        "[Cross-DEX Spatial] AAVE/WETH (PancakeSwap V3 5bps <-> UniV3 100bps)",
+        "[3-Hop Triangular] WETH->AAVE->USDT->WETH (PancakeV3 5bps <-> UniV3 1bp)",
         "[Choice 3 Cross-Tier] UNI/USDT (UniV3 5bps <-> UniV3 30bps)",
-        "[Cross-DEX Spatial] WETH/ARB (UniV3 5bps <-> SushiSwap V3 5bps)",
+        "[3-Hop Triangular] WETH->ARB->USDT->WETH (UniV3 5bps <-> SushiV3 30bps)",
         "[Cross-DEX Spatial] WBTC/WETH (PancakeSwap V3 25bps <-> UniV3 1bp)",
-        "[Cross-DEX Spatial] WBTC/USDT (PancakeSwap V3 1bp <-> UniV3 5bps)",
-        "[Choice 2 Aave V3 Liq] Multi-Whale Batch Pool (HF<1.0000 Trigger • ₹4.85 Cr Ultimate Loan • 5%-10% Bonus -> 100% Direct to Mudrex)"
+        "[3-Hop Triangular] WETH->ARB->USDT->WETH (PancakeV3 5bps <-> SushiV3 30bps)",
+        (hf_aave_top1 < 1.0000)
+            ? "[Choice 2 Aave V3 Liq] Multi-Whale Batch Pool (HF<1.0000 Trigger • ₹4.85 Cr Loan -> Mudrex)"
+            : "[3-Hop Triangular / Aave Standby] WETH->UNI->USDT->WETH (SushiV3 30bps <-> UniV3 5bps)"
     };
     const char *borrow_syms[16] = {
         "WETH", "WETH", "WETH", "USDT", "WETH", "WETH", "USDT", "WETH",
-        "USDC.e", "WETH", "WETH", "USDT", "WETH", "WETH", "USDT", "WETH"
+        "USDC.e", "WETH", "WETH", "USDT", "WETH", "WETH", "WETH", "WETH"
     };
 
-    double aave_liq_p1  = p_uni_5;
-    double aave_liq_p2  = (hf_aave_top1 < 1.0000) ? (p_uni_5 * 1.0500) : (p_uni_5 / hf_aave_top1);
-    double aave_liq_fee = (hf_aave_top1 < 1.0000) ? 5.00 : 500.00;
+    double aave_liq_p1  = (hf_aave_top1 < 1.0000) ? p_uni_5 : ((p_sushi30_uni > 1.0) ? (p_uni_5 / p_sushi30_uni) : 7.2020);
+    double aave_liq_p2  = (hf_aave_top1 < 1.0000) ? (p_uni_5 * 1.0500) : p_u5_uni_usdt;
+    double aave_liq_fee = (hf_aave_top1 < 1.0000) ? 5.00 : 40.00;
     (void)p_uni1_usdce;
     (void)p_sushi5_usdce;
-    (void)p_pcs5_weth_arb;
+    (void)p_pcs25_link;
+    (void)p_uni100_aave;
+    (void)p_uni5_wbtc_usdce;
+    (void)p_uni5_wbtc_usdt;
+    (void)p_sushi5_weth_arb;
 
     double p1[16] __attribute__((aligned(64))) = {
         (p_sushi30_uni > 1.0)   ? (p_uni_5 / p_sushi30_uni)   : 7.23,
-        (p_pcs25_link > 1.0)    ? (p_uni_5 / p_pcs25_link)    : 11.95,
+        (p_sushi30_uni > 1.0)   ? (p_uni_5 / p_sushi30_uni)   : 7.23,
         p_pcs25_wbtc * p_uni_5,
         p_sushi30_arb_usdt,
         (p_uni5_link > 1.0)     ? (p_uni_5 / p_uni5_link)     : 12.08,
         (p_uni5_aave > 1.0)     ? (p_uni_5 / p_uni5_aave)     : 150.88,
         p_u1_aave_usdt,
         (p_pcs5_link > 1.0)     ? (p_uni_5 / p_pcs5_link)     : 12.10,
-        p_pcs1_wbtc_usdce,
+        p_pcs1_wbtc_usdt,
         p_uni5_lusd,
         (p_pcs5_aave > 1.0)     ? (p_uni_5 / p_pcs5_aave)     : 151.12,
         p_u5_uni_usdt,
         (p_uni5_weth_arb > 1.0) ? (p_uni_5 / p_uni5_weth_arb) : 0.1981,
         p_pcs25_wbtc * p_uni_5,
-        p_pcs1_wbtc_usdt,
+        (p_pcs5_weth_arb > 1.0) ? (p_uni_5 / p_pcs5_weth_arb) : 0.1978,
         aave_liq_p1
     };
     double p2[16] __attribute__((aligned(64))) = {
         (p_pcs5_uni > 1.0)        ? (p_uni_5 / p_pcs5_uni)        : 7.36,
-        (p_sushi30_link > 1.0)    ? (p_uni_5 / p_sushi30_link)    : 12.17,
+        p_u30_uni_usdt,
         p_uni5_wbtc * p_uni_5,
         p_uni5_arb_usdt,
         (p_sushi30_link > 1.0)    ? (p_uni_5 / p_sushi30_link)    : 12.17,
-        (p_uni100_aave > 1.0)     ? (p_uni_5 / p_uni100_aave)     : 154.50,
+        p_u1_aave_usdt,
         p_p5_aave_usdt,
         (p_sushi30_link > 1.0)    ? (p_uni_5 / p_sushi30_link)    : 12.17,
-        p_uni5_wbtc_usdce,
+        p_pcs1_wbtc_usdce,
         p_uni30_lusd,
-        (p_uni100_aave > 1.0)     ? (p_uni_5 / p_uni100_aave)     : 154.50,
+        p_u1_aave_usdt,
         p_u30_uni_usdt,
-        (p_sushi5_weth_arb > 1.0) ? (p_uni_5 / p_sushi5_weth_arb) : 0.1985,
+        p_sushi30_arb_usdt,
         p_uni1_wbtc * p_uni_5,
-        p_uni5_wbtc_usdt,
+        p_sushi30_arb_usdt,
         aave_liq_p2
     };
     /* Exact On-Chain Virtual Liquidity Reserves y0_virt = (L / sqrtPriceX96) verified via 0x1a686502 & 0x3260f1cc */
     double y1[16] __attribute__((aligned(64))) = {
-        6.31,  5.44,  0.000011193, 198.04, 633.97, 239.7, 0.00078, 20.50,
-        0.008856, 0.0026, 1843.7, 0.2520, 311400.0, 0.000011193, 0.329553, 210.75
+        6.31,  6.31,  0.000011193, 198.04, 633.97, 0.00078, 0.00078, 20.50,
+        0.329553, 0.0026, 0.00078, 12.52, 311400.0, 0.000011193, 215000.0, 6.31
     };
     double y2[16] __attribute__((aligned(64))) = {
-        1300.0, 31.43, 3807.44, 97768.0, 31.43, 0.2057, 14.9706, 31.43,
-        2.6550, 0.0281, 0.2057, 869.20, 7107.0, 0.0049285, 360.80, 2860.0
+        1300.0, 869.20, 3807.44, 97768.0, 31.43, 239.7, 14.9706, 31.43,
+        0.08856, 0.0281, 1843.7, 869.20, 198.04, 0.0049285, 198.04, 869.20
     };
     double fl[16] __attribute__((aligned(64))) = {
-        35.00, 55.00, 30.00, 35.00, 35.00, 105.00, 6.00, 35.00,
-        6.00, 35.00, 105.00, 35.00, 10.00, 26.00, 6.00, aave_liq_fee
+        35.00, 65.00, 30.00, 35.00, 35.00, 11.00, 6.00, 35.00,
+        2.00, 35.00, 11.00, 35.00, 40.00, 26.00, 40.00, aave_liq_fee
     };
     double bm[16] __attribute__((aligned(64))) = {
         256300.0, 256300.0, 256300.0, 157436.3, 256300.0, 157436.3, 157436.3, 256300.0,

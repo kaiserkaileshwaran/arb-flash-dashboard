@@ -499,6 +499,7 @@ def main() -> int:
         ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, wbtc, 4500 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/WBTC_col (7.0% Bonus = ₹4.27L Flash Loan • +₹68.5k Bonus • 100% Direct to Mudrex)"),
         ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, arb, 1200 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/ARB_col (10.0% Bonus = 1,000 bps • 1,653 ARB Collateral • 100% Direct to Mudrex)"),
         ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", usdc, weth, 150 * 10**6, 1, RELAYER_REIMB_USDC, False, "RETAIL LOW-COMPETITION #4: USDC_debt/WETH_col (150 USDC = ₹14.2k Loan • Live HF 1.0409 PRE-WARMED • Verified +₹18,033 Profit)"),
+        ("0x4c2707ec572416256c939ca9cc653acbb1473145", usdc, weth, 5000 * 10**6, 1, RELAYER_REIMB_USDC, False, "LIVE LOGS DISCOVERED #6: USDC_debt/WETH_col (5,000 USDC = ₹4.75L Loan • Live HF 1.0499 round(HF,1)==1.0 PRE-WARMED)"),
     ]
 
     # =========================================================================
