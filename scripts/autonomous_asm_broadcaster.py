@@ -1353,7 +1353,7 @@ def main() -> int:
             continue
 
         if fn_sig == "RAW_CALLDATA":
-            target_gas_limit = min(max(250_000, int(exact_est_gas * 1.15)), max_affordable_gas)
+            target_gas_limit = min(max(135_000, int(exact_est_gas * 1.03)), max_affordable_gas)
             send_cmd = [
                 cast_bin,
                 "send",
