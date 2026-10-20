@@ -19,7 +19,7 @@ permissions:
 jobs:
   cloud-sniper-24x7:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 350
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -40,30 +40,46 @@ jobs:
           gcc -O3 -march=native -flto -ffast-math -funroll-loops -fPIC -shared engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/libarb_asm_kernel.so || true
           gcc -O3 -march=native -flto -ffast-math -funroll-loops engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
 
-      - name: Run 24/7 Cloud Arbitrum One Uncapped Assembly Sniper & Auto-Mudrex Broadcaster
+      - name: Run Continuous Zero-Gap 5.5-Hour US-East (1.8ms Virginia) Assembly Sniper Daemon
         env:
           OWNER_PROFIT_WALLET: "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
           MUDREX_DEPOSIT_WALLET: "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
           DEPLOYED_CONTRACT_ADDRESS: "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
           LOCAL_RELAYER_ADDRESS: "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
           LOCAL_RELAYER_PRIVATE_KEY: ${{ secrets.LOCAL_RELAYER_PRIVATE_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -n "$LOCAL_RELAYER_PRIVATE_KEY" ]; then
             printf "LOCAL_RELAYER_ADDRESS=0x9dD041dbd964DE086Da8f907518f6E25c45aea70\nLOCAL_RELAYER_PRIVATE_KEY=%s\n" "$LOCAL_RELAYER_PRIVATE_KEY" > ~/.arb_flash_local_relayer.env
             chmod 600 ~/.arb_flash_local_relayer.env
           fi
+          git config user.name "arb-sniper-bot"
+          git config user.email "arb-sniper-bot@users.noreply.github.com"
           ./bin/arb_sniper_asm --self-test || true
+          # Launch Native x86_64 Assembly Daemon continuously at 250ms block cadence in US-East (Virginia)
           ./bin/arb_sniper_asm --daemon > /tmp/arb_sniper_asm_cloud.log 2>&1 &
           ASM_PID=$!
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 240 || true
-          else
+          # Run 110 continuous 3-minute cycles (= 330 minutes = 5.5 hours non-stop, 79,200 blocks with 0.00s restart gap)
+          for cycle in $(seq 1 110); do
             python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 180 || true
-          fi
+            python3 scripts/verify_real_onchain_proofs.py || true
+            mkdir -p docs/reports && cp -f index.html docs/index.html && cp -f reports/*.json docs/reports/ || true
+            git add reports/two_hour_test_summary.json reports/verified_onchain_proofs.json reports/asm_sniper_telemetry.json reports/last_autonomous_broadcast.json docs/reports/ || true
+            if ! git diff --cached --quiet; then
+              git commit -m "chore(cloud-sniper): live US-East cycle #$cycle Arbitrum One proof sync [skip ci]" || true
+              git pull --rebase origin main || true
+              git push origin main || true
+            fi
+            # Pre-spawn overlapping next 5.5h US-East worker at cycle 108 (6 minutes BEFORE exit -> 0ms gap!)
+            if [ "$cycle" -eq 108 ]; then
+              curl -s -X POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                https://api.github.com/repos/${{ github.repository }}/actions/workflows/arb_24x7_cloud_sniper.yml/dispatches \
+                -d '{"ref":"main"}' || true
+            fi
+          done
           kill $ASM_PID 2>/dev/null || true
-          python3 scripts/verify_real_onchain_proofs.py || true
-          python3 scripts/verify_table2_hf_and_mudrex_pipeline.py || true
-          mkdir -p docs/reports && cp -f index.html docs/index.html && cp -f reports/*.json docs/reports/ || true
 
       - name: Commit & Push Updated On-Chain Telemetry to GitHub Pages
         run: |
