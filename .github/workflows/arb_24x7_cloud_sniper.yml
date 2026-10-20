@@ -32,7 +32,8 @@ jobs:
         run: |
           sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev
           mkdir -p bin reports
-          gcc -O3 -ffast-math engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
+          gcc -O3 -march=native -flto -ffast-math -funroll-loops -S engine/arb_sniper_daemon.c -o engine/arb_sniper_daemon_cloud_x86_64.s || true
+          gcc -O3 -march=native -flto -ffast-math -funroll-loops engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
 
       - name: Run 24/7 Cloud Arbitrum One Uncapped Assembly Sniper & Auto-Mudrex Broadcaster
         env:
