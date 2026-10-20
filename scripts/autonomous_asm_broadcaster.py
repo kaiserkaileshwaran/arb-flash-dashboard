@@ -1183,15 +1183,16 @@ def main() -> int:
         pass
 
     if winning_meta is None:
+        ge_1_inr_count = sum(1 for x in table2_under_2pct_fast_triggers if float(x.get("net_inr", 0.0)) >= 1.0)
         summary = {
             "ok": True,
-            "status": "PARALLEL_WORKERS_ACTIVE_100PCT_NET_TO_MUDREX_AUTO_PRUNE_AND_RESPAWN",
+            "status": "SMALL_TRADES_UNDER_1_INR_ABORTED_AND_RESPAWNED_WAITING_FOR_GE_1_INR_OR_HUGE_HF_LOAN",
             "engine_mode": f"DYNAMIC_AUTO_SCALED_{SCALED_PARALLEL_WORKERS}_WORKER_POOL ({DETECTED_CPU_CORES}_CORES_X_8)",
             "detected_cpu_cores": DETECTED_CPU_CORES,
             "scaled_parallel_workers_n": SCALED_PARALLEL_WORKERS,
             "scaled_rpc_threads": SCALED_RPC_THREADS,
-            "profit_split_policy": "100% Net Profit Direct EOA USDC.transfer to Mudrex (0xd252...3f05) + 0.00 MetaMask Balance Required + Relayer Gas Reimbursed",
-            "metamask_min_balance_required": "0.00 ETH / 0.00 USDC (Can trade at 0 balance 24/7 via Flash Loans + Separate Relayer)",
+            "profit_split_policy": "Small Trades: Abort if Net < ₹1.00 INR, Deposit 100% Immediately to Mudrex (0xd252...3f05) if >= ₹1.00 INR | Huge HF Loans: 100% Full-Server Preemption -> Mudrex up to ₹12,500/day + Excess Deposit-Only to MetaMask (0xFF3c...89BE) | 0.00 MetaMask Investment Used",
+            "metamask_min_balance_required": "0.00 ETH / 0.00 USDC (Deposit-Only Backup Vault — Never Used as Investment)",
             "bank_threshold_basis": "REAL_MUDREX_WALLET_ONLY_0xd2529585059e3e5c09c912f0f9570000c2a53f05 (Policy Min >= ₹100.00 INR)",
             "mudrex_min_bank_withdrawal_inr": MUDREX_MIN_BANK_WITHDRAWAL_INR,
             "real_mudrex_usdc_balance": real_mudrex_usdc,
@@ -1199,9 +1200,9 @@ def main() -> int:
             "mudrex_bank_payout_status": bank_payout_status,
             "table2_under_2pct_fast_triggers": table2_under_2pct_fast_triggers,
             "parallel_workers_launched": len(batch_rpc),
-            "unprofitable_workers_auto_terminated": max(0, len(batch_rpc) - bundled_routes_count),
-            "profitable_workers_completed": bundled_routes_count,
-            "never_stop_respawn_status": "IMMEDIATELY_SPAWNED_NEXT_PARALLEL_CYCLE",
+            "unprofitable_workers_auto_terminated": max(0, len(batch_rpc) - ge_1_inr_count),
+            "profitable_workers_completed": ge_1_inr_count,
+            "never_stop_respawn_status": "UNDER_1_INR_ABORTED_IMMEDIATELY_SPAWNED_NEW_PARALLEL_CYCLE",
             "coins_monitored": 19,
             "direct_flash_swap_tiers": len(raw_tiers),
             "sushiv2_spatial_tiers": len(sushiv2_spatial_tiers),
