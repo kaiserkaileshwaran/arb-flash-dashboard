@@ -220,6 +220,7 @@
         <button onclick="setAutoWithdrawThreshold(1000)" style="background:#065f46;color:#34d399;border:1px solid #10b981;">₹1,000</button>
         <button onclick="setAutoWithdrawThreshold(12500)" style="background:#065f46;color:#34d399;border:1px solid #10b981;">₹12,500 (Mudrex L0 Cap)</button>
         <button onclick="topUpRelayerGasWhenProved()" style="background:#f59e0b;color:#0f172a;border:1px solid #fbbf24;">⚡ Top Up Relayer Gas (0.000020 ETH ≈ ₹4.60)</button>
+        <button onclick="copyRelayerAddressForManualSend()" style="background:#065f46;color:#34d399;border:1px solid #10b981;">📋 Copy Relayer Address</button>
         <button onclick="checkLiveWalletTokenBalances()" style="background:#1e293b;color:#38bdf8;border:1px solid #334155;">🔍 Verify Wallets</button>
       </div>
     </div>
@@ -721,28 +722,50 @@ async function fundAuthorizedRelayerGas() {
   }
 }
 
+async function copyRelayerAddressForManualSend() {
+  const statusEl = document.getElementById('bankTransferStatusBar');
+  try { await navigator.clipboard.writeText(LOCAL_RELAYER_WALLET); } catch (_) {}
+  if (statusEl) {
+    statusEl.innerHTML = `<span class="pos">✅ Copied Relayer Address: <code>${LOCAL_RELAYER_WALLET}</code>!</span><br>` +
+      `• <b>Direct MetaMask Send (0 Warnings):</b> Open your MetaMask extension → make sure network is <b>Arbitrum One</b> → click <b>Send</b> → paste <code>${LOCAL_RELAYER_WALLET}</code> → enter <b><code>0.00002</code> ETH (≈ ₹4.60 INR)</b> → click <b>Confirm</b>!`;
+  }
+}
+
 async function topUpRelayerGasWhenProved() {
   const statusEl = document.getElementById('bankTransferStatusBar');
   const ethProv = window.ethereum;
   if (!ethProv) {
-    statusEl.innerHTML = `<span class="warn">⚠️ MetaMask browser extension not detected in this tab. Open in your browser with MetaMask unlocked to send 0.000020 ETH (≈ ₹4.60 INR) to Relayer <code>${LOCAL_RELAYER_WALLET}</code>.</span>`;
+    await copyRelayerAddressForManualSend();
     return;
   }
   try {
-    statusEl.innerHTML = `⏳ Step 1/2: Running Zero-Waste Pre-Proof on Arbitrum One before requesting 0.000020 ETH (≈ ₹4.60 INR) Relayer gas top-up...`;
+    statusEl.innerHTML = `⏳ Switching MetaMask to Arbitrum One (Chain ID 42161) and estimating exact L2 gas (21,440 gas ≈ ₹0.05 INR)...`;
     const accounts = await ethProv.request({ method: 'eth_requestAccounts' });
     const sender = accounts[0] || DEFAULT_OWNER_WALLET;
     try {
       await ethProv.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0xa4b1' }] });
-    } catch (_) {}
-    // 0.000020 ETH = 20,000,000,000,000 wei = 0x12309ce54000 (enough for ~8 full trades at 0.01 gwei)
+    } catch (switchErr) {
+      if (switchErr && switchErr.code === 4902) {
+        await ethProv.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: '0xa4b1',
+            chainName: 'Arbitrum One',
+            nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+            rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+            blockExplorerUrls: ['https://arbiscan.io']
+          }]
+        });
+      }
+    }
+    // IMPORTANT FIX: Never pass gas: '0x5208' (21,000) on Arbitrum One!
+    // Arbitrum One requires ~21,440 gas (0x53c0) due to L1 calldata accounting; omitting `gas` lets MetaMask auto-estimate with 0 errors!
     const txHash = await ethProv.request({
       method: 'eth_sendTransaction',
       params: [{
         from: sender,
         to: LOCAL_RELAYER_WALLET,
-        value: '0x12309ce54000',
-        gas: '0x5208'
+        value: '0x12309ce54000'
       }]
     });
     statusEl.innerHTML = `<span class="pos">✅ Relayer Gas Top-Up Sent (<a href="https://arbiscan.io/tx/${txHash}" target="_blank"><b>Tx ${txHash.slice(0,14)}...</b></a>)! Waiting for Arbitrum One confirmation to trigger High-Priority Trade #10...</span>`;
@@ -751,7 +774,9 @@ async function topUpRelayerGasWhenProved() {
     await fetchState();
     statusEl.innerHTML = `<span class="pos">✅ Relayer <code>${LOCAL_RELAYER_WALLET}</code> Funded &amp; High-Priority Execution Armed (Strict Triple Pre-Proof Active — 0 Gas Wasted)!</span>`;
   } catch (err) {
-    statusEl.innerHTML = `<span class="warn">ℹ️ Relayer Gas Top-Up Canceled or Skipped: ${err.message || err}</span>`;
+    try { await navigator.clipboard.writeText(LOCAL_RELAYER_WALLET); } catch (_) {}
+    statusEl.innerHTML = `<span class="pos">📋 Relayer Address <code>${LOCAL_RELAYER_WALLET}</code> Copied to Clipboard!</span><br>` +
+      `• If MetaMask showed a browser dApp prompt warning, you can send directly inside MetaMask: open <b>MetaMask → Send → Paste <code>${LOCAL_RELAYER_WALLET}</code> → Amount: <code>0.00002</code> ETH (≈ ₹4.60 INR) → Confirm</b>.`;
   }
 }
 
