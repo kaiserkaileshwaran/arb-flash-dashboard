@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792538700.712854
+    "ts": 1792538709.7692196
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -59,56 +59,56 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_PCS1_SUSHI5",
       "gross_inr": 0.0553,
-      "net_inr": -1.2074,
+      "net_inr": -1.2055,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_UNI5_SUSHI5",
-      "gross_inr": 0.0534,
-      "net_inr": -1.2093,
+      "gross_inr": 0.0575,
+      "net_inr": -1.2033,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_UNI_U5_U30",
       "gross_inr": 0.1995,
-      "net_inr": -1.0632,
+      "net_inr": -1.0613,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.1008,
-      "net_inr": -1.1619,
+      "net_inr": -1.16,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_PCS1_UNI1",
       "gross_inr": 0.0393,
-      "net_inr": -1.2234,
+      "net_inr": -1.2215,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_U5_U1",
       "gross_inr": 0.1747,
-      "net_inr": -1.088,
+      "net_inr": -1.0861,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDT_U5_S30",
       "gross_inr": 0.2121,
-      "net_inr": -1.0506,
+      "net_inr": -1.0487,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1",
       "gross_inr": 0.0398,
-      "net_inr": -1.2229,
+      "net_inr": -1.221,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -123,9 +123,9 @@
   "multi_route_bundle_probes": 49,
   "total_rpc_checks_per_cycle": 82,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.04,
-  "rpc_latency_min_ms": 257.53,
-  "rpc_latency_avg_ms": 257.53,
+  "scan_duration_sec": 1.05,
+  "rpc_latency_min_ms": 274.48,
+  "rpc_latency_avg_ms": 274.48,
   "aave_lowest_health_factor": 1.022872,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
   "aave_closest_borrower_debt_usd": 124918.74,
@@ -150,18 +150,18 @@
     "USDT_UNI_U5_U30(2102uUSD)",
     "ARB_USDCE_U5_U1(1841uUSD)",
     "USDT_AAVE_U1_P5(1062uUSD)",
+    "ARB_UNI5_SUSHI5(250789229274wei)",
     "ARB_PCS1_SUSHI5(241282454299wei)",
-    "ARB_UNI5_SUSHI5(232984079585wei)",
     "USDCE_WETH_S5_S1(173706861474wei)",
     "LUSD_WETH_U1_U5(140386069046wei)",
     "WSTETH_WETH_U5_U1(3386578912wei)"
   ],
-  "bundled_multi_route_gross_wei": 3789675649940,
-  "bundled_multi_route_gross_inr": 0.8687,
-  "l2_gas_cost_inr": 1.2627,
-  "bundled_total_gas_cost_inr": 6.8186,
-  "single_net_if_forced_inr": -1.0506,
-  "bundled_net_if_forced_inr": -5.9499,
+  "bundled_multi_route_gross_wei": 3807480799629,
+  "bundled_multi_route_gross_inr": 0.8728,
+  "l2_gas_cost_inr": 1.2608,
+  "bundled_total_gas_cost_inr": 6.8083,
+  "single_net_if_forced_inr": -1.0487,
+  "bundled_net_if_forced_inr": -5.9355,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -178,10 +178,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 31800,
-    "per_route_ns": 1987.5,
+    "latency_ns": 34284,
+    "per_route_ns": 2142.75,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 2871600.0
   },
-  "ts": 1792538700.7134273
+  "ts": 1792538709.7698317
 }
