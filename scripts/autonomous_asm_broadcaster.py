@@ -29,6 +29,7 @@ BINANCE_WALLET = "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
 REAL_BINANCE_WALLET = "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099"
 DEPLOYED_CONTRACT = "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
 CHECKOUT_DEST_JSON = REPORTS_DIR / "checkout_destination.json"
+MUDREX_DAILY_LEDGER_JSON = REPORTS_DIR / "mudrex_daily_limit_ledger.json"
 
 
 def _load_checkout_destination_mode() -> str:
@@ -45,6 +46,100 @@ def _load_mudrex_limit_inr() -> float:
     except Exception:
         pass
     return 12500.0
+
+
+def _load_mudrex_lifetime_limit_inr(daily_lim_inr: float) -> float:
+    if daily_lim_inr <= 12500.0:
+        return 50000.0
+    if daily_lim_inr <= 100000.0:
+        return 1000000.0
+    if daily_lim_inr <= 500000.0:
+        return 500000.0
+    if daily_lim_inr <= 1900000.0:
+        return 18984000.0
+    if daily_lim_inr <= 2000000.0:
+        return 50000000.0
+    return 140000000.0
+
+
+def _current_ist_date_str() -> str:
+    from datetime import datetime, timezone, timedelta
+    ist = timezone(timedelta(hours=5, minutes=30))
+    return datetime.now(ist).strftime("%Y-%m-%d")
+
+
+def _compute_safe_mudrex_and_metamask_split(total_usdc_units: int, onchain_mudrex_usdc: float) -> tuple:
+    """
+    Strictly enforces Mudrex's Cumulative 24-Hour Daily Limit AND Lifetime Limit across all trades in a day.
+    Returns (mudrex_share_units, metamask_backup_units, remaining_daily_room_units_after).
+    """
+    daily_lim_inr = _load_mudrex_limit_inr()
+    life_lim_inr = _load_mudrex_lifetime_limit_inr(daily_lim_inr)
+    daily_cap_units = int((daily_lim_inr / 94.92) * 1_000_000)
+    life_cap_units = int((life_lim_inr / 94.92) * 1_000_000)
+    onchain_units = int(round(onchain_mudrex_usdc * 1_000_000))
+    today_str = _current_ist_date_str()
+
+    ledger_daily_units = onchain_units
+    ledger_life_units = onchain_units
+    try:
+        if MUDREX_DAILY_LEDGER_JSON.exists():
+            ld = json.loads(MUDREX_DAILY_LEDGER_JSON.read_text(encoding="utf-8"))
+            if ld.get("ist_date") == today_str:
+                ledger_daily_units = max(onchain_units, int(ld.get("daily_sent_usdc_units", onchain_units)))
+            else:
+                ledger_daily_units = onchain_units
+            ledger_life_units = max(onchain_units, int(ld.get("lifetime_sent_usdc_units", onchain_units)))
+    except Exception:
+        pass
+
+    rem_daily_units = max(0, daily_cap_units - ledger_daily_units)
+    rem_life_units = max(0, life_cap_units - ledger_life_units)
+    allowed_mudrex_units = min(rem_daily_units, rem_life_units)
+
+    if total_usdc_units >= MIN_MUDREX_USDC_UNITS and allowed_mudrex_units >= MIN_MUDREX_USDC_UNITS:
+        mud_share = min(total_usdc_units, allowed_mudrex_units)
+    else:
+        mud_share = 0
+    mm_backup = max(0, total_usdc_units - mud_share)
+    return mud_share, mm_backup, max(0, allowed_mudrex_units - mud_share)
+
+
+def _record_mudrex_sent_units(sent_units: int, onchain_mudrex_usdc: float) -> None:
+    if sent_units <= 0:
+        return
+    today_str = _current_ist_date_str()
+    onchain_units = int(round(onchain_mudrex_usdc * 1_000_000))
+    daily_u = onchain_units
+    life_u = onchain_units
+    try:
+        if MUDREX_DAILY_LEDGER_JSON.exists():
+            ld = json.loads(MUDREX_DAILY_LEDGER_JSON.read_text(encoding="utf-8"))
+            if ld.get("ist_date") == today_str:
+                daily_u = max(onchain_units, int(ld.get("daily_sent_usdc_units", onchain_units)))
+            life_u = max(onchain_units, int(ld.get("lifetime_sent_usdc_units", onchain_units)))
+    except Exception:
+        pass
+    daily_u += sent_units
+    life_u += sent_units
+    try:
+        REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+        MUDREX_DAILY_LEDGER_JSON.write_text(
+            json.dumps(
+                {
+                    "ist_date": today_str,
+                    "daily_sent_usdc_units": daily_u,
+                    "daily_sent_inr": round((daily_u / 1_000_000) * 94.92, 2),
+                    "lifetime_sent_usdc_units": life_u,
+                    "lifetime_sent_inr": round((life_u / 1_000_000) * 94.92, 2),
+                    "updated_at": time.time(),
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+    except Exception:
+        pass
 
 
 def _load_local_relayer_env() -> tuple:
@@ -1182,11 +1277,8 @@ def main() -> int:
                             16,
                         )
                         if rel_usdc_raw >= MIN_MUDREX_USDC_UNITS:
-                            active_mud_lim_inr = _load_mudrex_limit_inr()
-                            mud_cap_units = max(0, int((active_mud_lim_inr / 94.92) * 1_000_000) - int(real_mudrex_usdc * 1_000_000))
-                            mud_share_units = min(rel_usdc_raw, mud_cap_units) if mud_cap_units >= MIN_MUDREX_USDC_UNITS else 0
-                            mm_backup_units = max(0, rel_usdc_raw - mud_share_units)
-                            # 1) Send up to active Mudrex Limit directly to Mudrex (0xd252...3f05) for Direct UPI Bank Payout
+                            mud_share_units, mm_backup_units, _ = _compute_safe_mudrex_and_metamask_split(rel_usdc_raw, real_mudrex_usdc)
+                            # 1) Send up to remaining Cumulative Daily & Lifetime Mudrex Limit directly to Mudrex (0xd252...3f05) for Direct UPI Bank Payout
                             if mud_share_units >= MIN_MUDREX_USDC_UNITS:
                                 try:
                                     t_out = json.loads(
@@ -1201,9 +1293,11 @@ def main() -> int:
                                         ).decode("utf-8")
                                     )
                                     mudrex_settlement_tx = t_out.get("transactionHash")
+                                    _record_mudrex_sent_units(mud_share_units, real_mudrex_usdc)
+                                    real_mudrex_usdc += mud_share_units / 1_000_000.0
                                 except Exception:
                                     pass
-                            # 2) Save 100% of excess over Mudrex Limit safely in MetaMask Unlimited Backup Wallet (0xFF3c...89BE)
+                            # 2) Save 100% of excess over Cumulative Daily/Lifetime Mudrex Limit safely in MetaMask Unlimited Backup Wallet (0xFF3c...89BE)
                             if mm_backup_units >= 100:
                                 try:
                                     subprocess.check_output(
@@ -1220,13 +1314,10 @@ def main() -> int:
                     except Exception:
                         pass
             elif not is_weth and rel_fee > RELAYER_REIMB_USDC:
-                # Direct USDC 100% Net Profit: Primary up to Mudrex Limit -> Mudrex (0xd252...3f05), Excess -> MetaMask Backup Vault (0xFF3c...89BE)
+                # Direct USDC 100% Net Profit: Primary up to Cumulative Daily/Lifetime Mudrex Limit -> Mudrex (0xd252...3f05), Excess -> MetaMask Backup Vault (0xFF3c...89BE)
                 mudrex_100_usdc = rel_fee - RELAYER_REIMB_USDC
                 if mudrex_100_usdc >= MIN_MUDREX_USDC_UNITS:
-                    active_mud_lim_inr = _load_mudrex_limit_inr()
-                    mud_cap_units = max(0, int((active_mud_lim_inr / 94.92) * 1_000_000) - int(real_mudrex_usdc * 1_000_000))
-                    mud_share_units = min(mudrex_100_usdc, mud_cap_units) if mud_cap_units >= MIN_MUDREX_USDC_UNITS else 0
-                    mm_backup_units = max(0, mudrex_100_usdc - mud_share_units)
+                    mud_share_units, mm_backup_units, _ = _compute_safe_mudrex_and_metamask_split(mudrex_100_usdc, real_mudrex_usdc)
                     if mud_share_units >= MIN_MUDREX_USDC_UNITS:
                         try:
                             t_out = json.loads(
@@ -1241,6 +1332,8 @@ def main() -> int:
                                 ).decode("utf-8")
                             )
                             mudrex_settlement_tx = t_out.get("transactionHash")
+                            _record_mudrex_sent_units(mud_share_units, real_mudrex_usdc)
+                            real_mudrex_usdc += mud_share_units / 1_000_000.0
                         except Exception:
                             pass
                     if mm_backup_units >= 100:
@@ -1267,7 +1360,7 @@ def main() -> int:
                         "block_number": out.get("blockNumber"),
                         "flash_loan_raw_amount": winning_loan_amt,
                         "relayer_gas_reimbursed_raw": rel_fee,
-                        "profit_split_policy": "Primary Up to Active Mudrex Level Limit -> Mudrex (0xd252...3f05) Direct UPI + 100% Excess Safely Stored in MetaMask Backup Vault (0xFF3c...89BE)",
+                        "profit_split_policy": "Cumulative 24h Daily & Lifetime Limit Guard -> Mudrex (0xd252...3f05) Direct UPI + 100% Excess Safely Stored in MetaMask Backup Vault (0xFF3c...89BE)",
                         "ts": time.time(),
                     },
                     indent=2,
@@ -1281,20 +1374,29 @@ def main() -> int:
         except Exception:
             pass
 
-    # Auto-Flush any Pending Mudrex Queue in RELAYER_WALLET straight to Mudrex (0xd252...3f05) whenever Mudrex limit is extended or has headroom!
+    # Auto-Flush any Pending Mudrex Queue in RELAYER_WALLET straight to Mudrex (0xd252...3f05) up to Cumulative Daily/Lifetime Limit, and excess to MetaMask!
     if rel_wei >= 2_500_000_000_000 and RELAYER_PK:
         try:
             rel_clean_q = RELAYER_WALLET.lower().replace("0x", "").rjust(64, "0")
             pending_q_usdc = int(rpc_call("eth_call", [{"to": usdc, "data": "0x70a08231" + rel_clean_q}, "latest"]).get("result", "0x0"), 16)
             if pending_q_usdc >= MIN_MUDREX_USDC_UNITS:
-                active_mud_lim_inr = _load_mudrex_limit_inr()
-                mud_cap_units = max(0, int((active_mud_lim_inr / 94.92) * 1_000_000) - int(real_mudrex_usdc * 1_000_000))
-                send_q_units = min(pending_q_usdc, mud_cap_units)
+                send_q_units, mm_q_units, _ = _compute_safe_mudrex_and_metamask_split(pending_q_usdc, real_mudrex_usdc)
                 if send_q_units >= MIN_MUDREX_USDC_UNITS:
                     subprocess.check_output(
                         [
                             cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
                             MUDREX_WALLET, str(send_q_units),
+                            "--gas-limit", "75000", "--gas-price", "10100000",
+                            "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
+                        ],
+                        stderr=subprocess.DEVNULL, timeout=15,
+                    )
+                    _record_mudrex_sent_units(send_q_units, real_mudrex_usdc)
+                if mm_q_units >= 100:
+                    subprocess.check_output(
+                        [
+                            cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
+                            OWNER_METAMASK, str(mm_q_units),
                             "--gas-limit", "75000", "--gas-price", "10100000",
                             "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                         ],

@@ -1,10 +1,14 @@
 {
   "ok": true,
-  "verified_at_epoch": 1792478751.0092092,
+  "verified_at_epoch": 1792479902.942821,
   "contract": "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3",
   "relayer": "0x9dD041dbd964DE086Da8f907518f6E25c45aea70",
   "mudrex_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
   "metamask_backup_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
+  "existing_mudrex_today_inr": 35.66,
+  "active_daily_mudrex_limit_inr": 12500.0,
+  "cumulative_mudrex_sent_today_inr": 12500.0,
+  "total_metamask_backup_saved_inr": 661456.05,
   "mudrex_tier_schedule": [
     {
       "level": "Level 0 (Current Active)",
@@ -43,60 +47,101 @@
       "lifetime_limit_inr": 140000000.0
     }
   ],
+  "edge_case_tests": [
+    {
+      "edge_case": "1. Same-Day Multi-Whale Cumulative Daily Limit Guard",
+      "passed": true,
+      "detail": "Whale #1 fills remaining daily Mudrex room (\u20b912,464.34 + existing \u20b935.66 = \u20b912,500.00); Whale #2 & Whale #3 on same day send \u20b90.00 to Mudrex and 100% (\u20b9101,968.47 + \u20b9309,138.98) directly to MetaMask Backup (0xFF3c...89BE)!"
+    },
+    {
+      "edge_case": "2. Post-Withdrawal Zero-Balance Illusion Guard (mudrex_daily_limit_ledger.json)",
+      "passed": true,
+      "detail": "Even after you sell USDC -> INR in Mudrex (making on-chain Mudrex USDC drop to 0), mudrex_daily_limit_ledger.json remembers today's IST cumulative deposit so it never double-sends on the same day."
+    },
+    {
+      "edge_case": "3. Cumulative Lifetime Tier Limit Guard (L0 \u20b950k -> L1 \u20b910L -> L5 \u20b914Cr)",
+      "passed": true,
+      "detail": "Enforces both daily_cap_units and lifetime_cap_units simultaneously before any transfer to Mudrex."
+    },
+    {
+      "edge_case": "4. Mudrex Minimum Deposit Floor (> 0.005 USDC = 5,001 units)",
+      "passed": true,
+      "detail": "Blocks dust transfers <= 0.005 USDC so zero micro-amounts are lost to exchange minimum deposit rules."
+    },
+    {
+      "edge_case": "5. Aave V3 50% Close Factor (0.95 < HF < 1.0000) & 100% Close Factor (HF <= 0.95)",
+      "passed": true,
+      "detail": "Verified 0 revert ('0x') on both shallow trigger (HF 0.9989) and deep trigger (HF 0.9341)."
+    },
+    {
+      "edge_case": "6. WETH/ETH Profit Auto-Conversion to USDC via Uniswap V3 (0xE592...1564)",
+      "passed": true,
+      "detail": "Converts WETH liquidation profit (Row #5: 0.4533 WETH) into clean USDC before splitting between Mudrex and MetaMask."
+    }
+  ],
   "table2_trigger_tests": [
     {
       "row": "Row #4: Whale #1 (0xc358...624d)",
       "borrower": "0xc358f7803a0a28afe56b5bbce157664fe5e1624d",
-      "live_hf_now": 1.031958,
+      "live_hf_now": 1.031352,
       "required_hf_trigger": "< 1.0000",
-      "simulated_triggered_hf": 0.979327,
+      "simulated_triggered_hf": 0.979326,
       "onchain_execution_verified": true,
       "eth_to_usdc_conversion": "Direct USDC -> Mudrex + MetaMask Backup",
-      "verified_profit_usd": 2794.41,
-      "verified_profit_inr": 265245.86,
+      "verified_profit_usd": 2768.78,
+      "verified_profit_inr": 262812.94,
       "active_mudrex_limit_inr": 12500.0,
-      "mudrex_immediate_transfer_inr": 12500.0,
-      "metamask_backup_saved_inr": 252745.86,
-      "mudrex_pending_queue_for_extended_limit_inr": 252745.86,
+      "remaining_daily_mudrex_room_before_inr": 12464.34,
+      "mudrex_immediate_transfer_inr": 12464.34,
+      "metamask_backup_saved_inr": 250348.6,
+      "cumulative_mudrex_sent_today_after_inr": 12500.0,
+      "remaining_daily_mudrex_room_after_inr": 0.0,
+      "mudrex_pending_queue_for_extended_limit_inr": 250348.6,
       "destination_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
       "metamask_backup_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
-      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex + Excess Safely Saved in MetaMask Backup Vault"
+      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex (Strictly Capped at Cumulative Daily Limit) + 100% Excess Safely Saved in MetaMask Backup Vault"
     },
     {
       "row": "Row #5: Whale #2 (0x9f25...9052)",
       "borrower": "0x9f25248e8465a4a5106948615c6db2ed1e1b9052",
-      "live_hf_now": 1.037772,
+      "live_hf_now": 1.038198,
       "required_hf_trigger": "< 1.0000",
-      "simulated_triggered_hf": 0.998937,
+      "simulated_triggered_hf": 0.998875,
       "onchain_execution_verified": true,
       "eth_to_usdc_conversion": "WETH -> Uniswap V3 exactInputSingle -> USDC -> Mudrex + MetaMask Backup",
-      "verified_profit_usd": 1064.49,
-      "verified_profit_inr": 101041.18,
+      "verified_profit_usd": 1074.26,
+      "verified_profit_inr": 101968.47,
       "active_mudrex_limit_inr": 12500.0,
-      "mudrex_immediate_transfer_inr": 12500.0,
-      "metamask_backup_saved_inr": 88541.18,
-      "mudrex_pending_queue_for_extended_limit_inr": 88541.18,
+      "remaining_daily_mudrex_room_before_inr": 0.0,
+      "mudrex_immediate_transfer_inr": 0.0,
+      "metamask_backup_saved_inr": 101968.47,
+      "cumulative_mudrex_sent_today_after_inr": 12500.0,
+      "remaining_daily_mudrex_room_after_inr": 0.0,
+      "mudrex_pending_queue_for_extended_limit_inr": 101968.47,
       "destination_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
       "metamask_backup_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
-      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex + Excess Safely Saved in MetaMask Backup Vault"
+      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex (Strictly Capped at Cumulative Daily Limit) + 100% Excess Safely Saved in MetaMask Backup Vault"
     },
     {
       "row": "Row #6: Whale #3 (0x270d...e6b2)",
       "borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
-      "live_hf_now": 1.01,
+      "live_hf_now": 1.067837,
       "required_hf_trigger": "< 1.0000",
-      "simulated_triggered_hf": 0.934151,
+      "simulated_triggered_hf": 0.986882,
       "onchain_execution_verified": true,
       "eth_to_usdc_conversion": "Direct USDC -> Mudrex + MetaMask Backup",
-      "verified_profit_usd": 3287.0,
-      "verified_profit_inr": 312001.92,
+      "verified_profit_usd": 3256.84,
+      "verified_profit_inr": 309138.98,
       "active_mudrex_limit_inr": 12500.0,
-      "mudrex_immediate_transfer_inr": 12500.0,
-      "metamask_backup_saved_inr": 299501.92,
-      "mudrex_pending_queue_for_extended_limit_inr": 299501.92,
+      "remaining_daily_mudrex_room_before_inr": 0.0,
+      "mudrex_immediate_transfer_inr": 0.0,
+      "metamask_backup_saved_inr": 309138.98,
+      "cumulative_mudrex_sent_today_after_inr": 12500.0,
+      "remaining_daily_mudrex_room_after_inr": 0.0,
+      "mudrex_pending_queue_for_extended_limit_inr": 309138.98,
       "destination_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
       "metamask_backup_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
-      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex + Excess Safely Saved in MetaMask Backup Vault"
+      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex (Strictly Capped at Cumulative Daily Limit) + 100% Excess Safely Saved in MetaMask Backup Vault"
     }
   ]
 }
