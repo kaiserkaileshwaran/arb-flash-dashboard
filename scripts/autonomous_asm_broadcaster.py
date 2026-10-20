@@ -925,7 +925,7 @@ def main() -> int:
         print(json.dumps(summary, indent=2))
         return 0
 
-    if rel_wei < 5_000_000_000_000 or not is_authorized:
+    if rel_wei < 2_500_000_000_000 or not is_authorized:
         net_b_inr = round(max(0.0, bundled_pre_gas_inr - l2_gas_inr), 4)
         total_rel_float_wei = rel_wei + 405_000_000_000
         summary = {
@@ -935,7 +935,7 @@ def main() -> int:
             "detected_cpu_cores": DETECTED_CPU_CORES,
             "scaled_parallel_workers_n": SCALED_PARALLEL_WORKERS,
             "scaled_rpc_threads": SCALED_RPC_THREADS,
-            "profit_split_policy": "100% Net Profit Direct to Mudrex (0xd252...3f05) + 0.00 MetaMask Balance Required",
+            "profit_split_policy": "100% Net Profit Direct to Mudrex (Up to 12.5k L0 Cap) + Overflow to MetaMask (0xFF3c...89BE)",
             "ultimate_flash_loan_limit_inr": 2500000000.0,
             "ultimate_flash_loan_limit_label": "Up to ₹250.00 Crore INR (100% Aave V3 + Balancer V2 + UniV3 Pool Depth)",
             "mudrex_min_bank_withdrawal_inr": MUDREX_MIN_BANK_WITHDRAWAL_INR,
@@ -972,8 +972,8 @@ def main() -> int:
 
     if winning_meta is not None:
         mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = winning_meta
-        gas_price_wei = 20_010_000
-        max_affordable_gas = max(285_000, int((rel_wei - 10_000_000_000) // gas_price_wei))
+        gas_price_wei = 10_100_000  # 0.0101 gwei minimum Arbitrum One L2 basefee (cuts gas needed by 50%)
+        max_affordable_gas = max(250_000, int((rel_wei - 5_000_000_000) // gas_price_wei))
         if fn_sig == "RAW_CALLDATA":
             target_gas_limit = min(1_800_000, max_affordable_gas)
             send_cmd = [
