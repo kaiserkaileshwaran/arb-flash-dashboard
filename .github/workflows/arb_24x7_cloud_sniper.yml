@@ -1,6 +1,9 @@
 name: Arbitrum One 24x7 Cloud Flash Loan Sniper & US-East Keep-Alive
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
@@ -50,13 +53,14 @@ jobs:
             chmod 600 ~/.arb_flash_local_relayer.env
           fi
           ./bin/arb_sniper_asm --self-test || true
+          ./bin/arb_sniper_asm --daemon > /tmp/arb_sniper_asm_cloud.log 2>&1 &
+          ASM_PID=$!
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 180 || true
-            timeout 60 ./bin/arb_sniper_asm --daemon || true
+            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 240 || true
           else
-            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 90 || true
-            timeout 30 ./bin/arb_sniper_asm --daemon || true
+            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 180 || true
           fi
+          kill $ASM_PID 2>/dev/null || true
           python3 scripts/verify_real_onchain_proofs.py || true
           python3 scripts/verify_table2_hf_and_mudrex_pipeline.py || true
           mkdir -p docs/reports && cp -f index.html docs/index.html && cp -f reports/*.json docs/reports/ || true
