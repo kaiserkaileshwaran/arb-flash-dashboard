@@ -470,12 +470,12 @@ def main() -> int:
     # REAL ARBITRUM ONE 0.01-0.015 GWEI GAS FILTER ($0.0038 USD = ₹0.36 INR = 1,550,000,000,000 wei)
     # 100% of Net Profit (Gross - ₹0.36 INR Gas Reimbursement) is routed directly to Mudrex (0xd252...3f05).
     # MetaMask (0xFF3c...89BE) requires 0.00 balance to trade!
-    MIN_GROSS_WETH_WEI = 1_700_000_000_000
-    RELAYER_REIMB_WEI  = 1_550_000_000_000
-    MIN_NET_WETH_WEI   = 150_000_000_000
-    MIN_GROSS_USDC_RAW = 4_200
-    RELAYER_REIMB_USDC = 3_800
-    MIN_NET_USDC_RAW   = 400
+    MIN_GROSS_WETH_WEI = 1_400_000_000_000
+    RELAYER_REIMB_WEI  = 1_360_000_000_000
+    MIN_NET_WETH_WEI   = 40_000_000_000
+    MIN_GROSS_USDC_RAW = 3_500
+    RELAYER_REIMB_USDC = 3_350
+    MIN_NET_USDC_RAW   = 150
     MUDREX_MIN_BANK_WITHDRAWAL_INR = 100.00
 
     import os as _os
@@ -1067,12 +1067,12 @@ def main() -> int:
                                 # Greedily verify routes using eth_estimateGas and ONLY append a route if its profit > marginal gas added
                                 for l_item, r_item, eq_item in zip(cand_loans, cand_raws, cand_equivs):
                                     test_l = verified_loans + [l_item]
-                                    test_f = [max(0, int(x * 0.90)) for x in (verified_raws + [r_item])]
+                                    test_f = [max(0, int(x) - 1) for x in (verified_raws + [r_item])]
                                     cd_step = _encode_multi_flash_swaps_calldata(test_l, test_f)
                                     try:
-                                        r_step = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_step, "gasPrice": "0x1406f40"}])
+                                        r_step = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_step}])
                                         if isinstance(r_step.get("result"), str) and r_step["result"].startswith("0x"):
-                                            new_gas_wei = int(r_step["result"], 16) * 20_054_000
+                                            new_gas_wei = int(r_step["result"], 16) * 10_500_000
                                             delta_gas_wei = new_gas_wei - verified_est_gas_wei
                                             if len(verified_loans) == 0 or eq_item > delta_gas_wei:
                                                 verified_loans = test_l
@@ -1082,10 +1082,10 @@ def main() -> int:
                                     except Exception:
                                         continue
                                 if len(verified_loans) >= 1:
-                                    marginal_gas_wei = max(RELAYER_REIMB_WEI, verified_est_gas_wei)
-                                    if verified_equiv_wei > marginal_gas_wei + MIN_NET_WETH_WEI:
+                                    marginal_gas_wei = max(1_350_000_000_000, verified_est_gas_wei)
+                                    if verified_equiv_wei > marginal_gas_wei:
                                         b_score = int((verified_equiv_wei / 1e18) * 2415.0 * 1e6)
-                                        fees_100pct_mudrex = [max(0, int(r * 0.90)) for r in verified_raws]
+                                        fees_100pct_mudrex = [max(0, int(r) - 1) for r in verified_raws]
                                         cd_multi_exec = _encode_multi_flash_swaps_calldata(verified_loans, fees_100pct_mudrex)
                                         weth_fees_only = sum(f for l_it, f in zip(verified_loans, fees_100pct_mudrex) if l_it[2].lower() == weth.lower())
                                         cand_bundle_meta = (
@@ -1234,7 +1234,7 @@ def main() -> int:
         print(json.dumps(summary, indent=2))
         return 0
 
-    if rel_wei < 1_450_000_000_000 or not is_authorized:
+    if rel_wei < 1_350_000_000_000 or not is_authorized:
         net_b_inr = round(max(0.0, bundled_pre_gas_inr - l2_gas_inr), 4)
         total_rel_float_wei = rel_wei + 405_000_000_000
         summary = {
@@ -1284,28 +1284,28 @@ def main() -> int:
     if not execution_queue and winning_meta is not None:
         execution_queue = [winning_meta[:7]]
 
-    live_gp_wei = 11_500_000
+    live_gp_wei = 10_050_000
     try:
         gp_hex = rpc_call("eth_gasPrice", []).get("result", "0x989680")
-        live_gp_wei = max(11_500_000, int(int(gp_hex, 16) * 1.15))
+        live_gp_wei = max(10_050_000, int(int(gp_hex, 16) * 1.01))
     except Exception:
-        live_gp_wei = 11_500_000
+        live_gp_wei = 10_050_000
 
     for active_cand_meta in execution_queue:
         mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = active_cand_meta[:7]
         gas_price_wei = live_gp_wei
-        max_affordable_gas = max(145_000, int((rel_wei - 5_000_000_000) // gas_price_wei))
+        max_affordable_gas = max(135_000, int((rel_wei - 2_000_000_000) // gas_price_wei))
 
         # STRICT ZERO-WASTE TRIPLE PRE-PROOF GUARD BEFORE 1 WEI OF GAS IS EVER SPENT:
         # Proof #1: Live `eth_call` state simulation must succeed at "latest" with positive profit.
         # Proof #2: Live `eth_estimateGas` must succeed without revert and return exact gas units.
-        # Proof #3: Proven profit must strictly exceed 1.15x the exact estimated L2 gas cost.
+        # Proof #3: Proven profit must strictly exceed the exact estimated L2 gas cost & fit in rel_wei.
         triple_proof_passed = False
         exact_est_gas = 300_000
         if fn_sig == "RAW_CALLDATA":
             try:
                 call_res = rpc_call("eth_call", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": call_tuple}, "latest"])
-                est_res = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": call_tuple, "gasPrice": hex(gas_price_wei)}])
+                est_res = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": call_tuple}])
                 c_hex = call_res.get("result", "")
                 g_hex = est_res.get("result", "")
                 if isinstance(c_hex, str) and c_hex.startswith("0x") and isinstance(g_hex, str) and g_hex.startswith("0x"):
@@ -1317,7 +1317,7 @@ def main() -> int:
                     else:
                         tot_raw = max(min_gross, ret_owner_raw + rel_fee)
                         proven_prof_wei = tot_raw if is_weth else int((tot_raw / 1e6) / 2415.0 * 1e18)
-                    if exact_est_gas > 21_000 and proven_prof_wei >= max(RELAYER_REIMB_WEI, int(est_gas_cost_wei * 1.15)):
+                    if exact_est_gas > 21_000 and est_gas_cost_wei <= rel_wei and proven_prof_wei >= int(est_gas_cost_wei * 1.05):
                         triple_proof_passed = True
             except Exception:
                 triple_proof_passed = False
