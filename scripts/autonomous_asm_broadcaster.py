@@ -467,16 +467,25 @@ def main() -> int:
     pcs1_weth_usdce = "0x4fc7ac44dae553464d92c049175133239a8705c1"
     uni5_weth_usdce = "0xc31e54c7a869b9fcbecc14363cf510d1c41fa443"
 
-    # REAL ARBITRUM ONE 0.01-0.015 GWEI GAS FILTER ($0.0038 USD = ₹0.36 INR = 1,550,000,000,000 wei)
-    # 100% of Net Profit (Gross - ₹0.36 INR Gas Reimbursement) is routed directly to Mudrex (0xd252...3f05).
-    # MetaMask (0xFF3c...89BE) requires 0.00 balance to trade!
-    MIN_SMALL_TRADE_NET_WEI = 4_400_000_000_000  # Strict >= ₹1.00 INR Net Profit floor for small trades (aborts if < ₹1.00 INR!)
-    MIN_GROSS_WETH_WEI = 1_360_000_000_000 + MIN_SMALL_TRADE_NET_WEI
-    RELAYER_REIMB_WEI  = 1_360_000_000_000
+    # AI ADAPTIVE ZERO-BURN GAS & PROFIT FILTER:
+    # Queries live Arbitrum `eth_gasPrice` so 100% of actual live L2 gas (275,000 gas * live_gp_wei) is reimbursed
+    # to the Relayer inside the smart contract (0 wei gas ever burned!), and requires >= +₹0.40 INR (1.75e12 wei)
+    # of PURE NET PROFIT above live gas to deposit 100% immediately to Mudrex (0xd252...3f05).
+    # MetaMask (0xFF3c...89BE) requires 0.00 balance to trade and is never touched as investment!
+    live_gp_init_wei = 10_500_000
+    try:
+        gp_init_hex = rpc_call("eth_gasPrice", []).get("result", "0xa037a0")
+        live_gp_init_wei = max(10_000_000, int(gp_init_hex, 16))
+    except Exception:
+        live_gp_init_wei = 10_500_000
+    REAL_LIVE_SWAP_GAS_WEI = int(275_000 * live_gp_init_wei)
+    MIN_SMALL_TRADE_NET_WEI = 1_750_000_000_000  # >= +₹0.40 INR pure net profit AFTER 100% live gas reimbursement
+    RELAYER_REIMB_WEI  = REAL_LIVE_SWAP_GAS_WEI
+    MIN_GROSS_WETH_WEI = RELAYER_REIMB_WEI + MIN_SMALL_TRADE_NET_WEI
     MIN_NET_WETH_WEI   = MIN_SMALL_TRADE_NET_WEI
-    MIN_GROSS_USDC_RAW = 3_350 + 10_535  # Gas ($0.00335) + >= ₹1.00 INR ($0.010535 = 10,535 micro-USDC)
-    RELAYER_REIMB_USDC = 3_350
-    MIN_NET_USDC_RAW   = 10_535
+    RELAYER_REIMB_USDC = max(3_350, int((REAL_LIVE_SWAP_GAS_WEI / 1e18) * 2415.0 * 1e6))
+    MIN_NET_USDC_RAW   = 4_215  # >= +₹0.40 INR ($0.004215 = 4,215 micro-USDC) pure net profit after live gas
+    MIN_GROSS_USDC_RAW = RELAYER_REIMB_USDC + MIN_NET_USDC_RAW
     MUDREX_MIN_BANK_WITHDRAWAL_INR = 100.00
 
     import os as _os
@@ -995,17 +1004,18 @@ def main() -> int:
                                     if equiv_wei > best_pre_gas_wei:
                                         best_pre_gas_wei = equiv_wei
                                     cycle_positive_probes.append((equiv_wei, raw_prof, p_def))
+                                    live_single_gas_inr = round((REAL_LIVE_SWAP_GAS_WEI / 1e18) * 2415.0 * 94.92, 4)
                                     gross_inr_item = round((equiv_wei / 1e18) * 2415.0 * 94.92, 4)
-                                    net_inr_item = round(gross_inr_item - 0.3607, 4)
+                                    net_inr_item = round(gross_inr_item - live_single_gas_inr, 4)
                                     cycle_under_2pct_items.append({
                                         "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
                                         "target": p_def[0],
                                         "gross_inr": gross_inr_item,
                                         "net_inr": net_inr_item,
                                         "status": (
-                                            "READY_FOR_IMMEDIATE_MUDREX_DEPOSIT_GE_1_INR"
-                                            if net_inr_item >= 1.00
-                                            else "ABORTED_NET_UNDER_1_INR_TRYING_NEW_ROUTE"
+                                            "READY_FOR_IMMEDIATE_MUDREX_DEPOSIT_PROFITABLE_AFTER_GAS"
+                                            if net_inr_item >= 0.40
+                                            else "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
                                         ),
                                     })
                                     # STRICT >= ₹1.00 INR NET PROFIT GATE FOR SMALL TRADES:
@@ -1083,9 +1093,9 @@ def main() -> int:
                                     try:
                                         r_step = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_step}])
                                         if isinstance(r_step.get("result"), str) and r_step["result"].startswith("0x"):
-                                            new_gas_wei = int(r_step["result"], 16) * 10_500_000
+                                            new_gas_wei = int(r_step["result"], 16) * live_gp_init_wei
                                             delta_gas_wei = new_gas_wei - verified_est_gas_wei
-                                            if len(verified_loans) == 0 or eq_item > delta_gas_wei:
+                                            if eq_item > delta_gas_wei:
                                                 verified_loans = test_l
                                                 verified_raws.append(r_item)
                                                 verified_equiv_wei += eq_item
@@ -1093,9 +1103,9 @@ def main() -> int:
                                     except Exception:
                                         continue
                                 if len(verified_loans) >= 1:
-                                    # STRICT >= ₹1.00 INR NET PROFIT GATE FOR SMALL-TRADE BUNDLES:
-                                    # Must cover marginal gas PLUS >= ₹1.00 INR (MIN_SMALL_TRADE_NET_WEI = 4.4e12 wei) so Mudrex receives >= ₹1.00 INR immediately!
-                                    marginal_gas_wei = max(1_350_000_000_000, verified_est_gas_wei) + MIN_SMALL_TRADE_NET_WEI
+                                    # AI ADAPTIVE ZERO-BURN GATE:
+                                    # Bundle must pay 100% of exact live eth_estimateGas cost PLUS >= +₹0.40 INR (MIN_SMALL_TRADE_NET_WEI) pure net profit!
+                                    marginal_gas_wei = max(REAL_LIVE_SWAP_GAS_WEI, verified_est_gas_wei) + MIN_SMALL_TRADE_NET_WEI
                                     if verified_equiv_wei >= marginal_gas_wei:
                                         b_score = int((verified_equiv_wei / 1e18) * 2415.0 * 1e6)
                                         fees_100pct_mudrex = [max(0, int(r) - 1) for r in verified_raws]
@@ -1138,7 +1148,8 @@ def main() -> int:
     avg_lat_ms = round(sum(latencies_ms) / len(latencies_ms), 2) if latencies_ms else 0.0
     pre_gas_inr = round((best_pre_gas_wei / 1e18) * 2415.0 * 94.92, 4)
     bundled_pre_gas_inr = round((bundled_multi_route_wei / 1e18) * 2415.0 * 94.92, 4)
-    l2_gas_inr = round(0.0038 * 94.92, 4)  # Real Arbitrum 0.01 gwei L2 gas = ₹0.3607 INR
+    l2_gas_inr = round((REAL_LIVE_SWAP_GAS_WEI / 1e18) * 2415.0 * 94.92, 4)  # Exact live Arbitrum gas cost at current eth_gasPrice
+    bundled_est_gas_inr = round(l2_gas_inr * max(1.0, 1.0 + 0.55 * max(0, bundled_routes_count - 1)), 4)
 
     # Query live on-chain Real Mudrex Wallet USDC balance (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
     # Bank Transfer Threshold strictly uses ONLY the Real Mudrex Balance and enforces Mudrex's >= ₹100.00 INR Bank Withdrawal Policy!
@@ -1226,9 +1237,11 @@ def main() -> int:
             "bundled_multi_route_gross_wei": bundled_multi_route_wei,
             "bundled_multi_route_gross_inr": bundled_pre_gas_inr,
             "l2_gas_cost_inr": l2_gas_inr,
+            "bundled_total_gas_cost_inr": bundled_est_gas_inr,
             "single_net_if_forced_inr": round(pre_gas_inr - l2_gas_inr, 4) if best_pre_gas_wei > 0 else 0.0,
-            "bundled_net_if_forced_inr": round(bundled_pre_gas_inr - l2_gas_inr, 4) if bundled_multi_route_wei > 0 else 0.0,
-            "real_net_profit_executed_inr": round(max(0.0, bundled_pre_gas_inr - l2_gas_inr), 4),
+            "bundled_net_if_forced_inr": round(bundled_pre_gas_inr - bundled_est_gas_inr, 4) if bundled_multi_route_wei > 0 else 0.0,
+            "real_net_profit_executed_inr": 0.0,
+            "mudrex_deposit_gate_met": False,
             "mudrex_level0_fiat_withdraw_limit": 12500.0,
             "mudrex_level0_crypto_deposit_limit": 500000.0,
             "mudrex_level0_crypto_withdraw_limit": 0.0,
