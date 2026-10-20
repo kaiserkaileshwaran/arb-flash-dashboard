@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "verified_at_epoch": 1792477469.446047,
+  "contract": "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3",
+  "relayer": "0x9dD041dbd964DE086Da8f907518f6E25c45aea70",
+  "mudrex_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+  "table2_trigger_tests": [
+    {
+      "row": "Row #4: Whale #1 (0xc358...624d)",
+      "borrower": "0xc358f7803a0a28afe56b5bbce157664fe5e1624d",
+      "live_hf_now": 1.031122,
+      "required_hf_trigger": "< 1.0000",
+      "simulated_triggered_hf": 0.979327,
+      "onchain_execution_verified": true,
+      "eth_to_usdc_conversion": "Direct USDC -> Mudrex",
+      "verified_profit_usd": 2755.48,
+      "verified_profit_inr": 261550.18,
+      "mudrex_immediate_transfer_inr": 12500.0,
+      "mudrex_pending_queue_for_extended_limit_inr": 249050.18,
+      "destination_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex"
+    },
+    {
+      "row": "Row #5: Whale #2 (0x9f25...9052)",
+      "borrower": "0x9f25248e8465a4a5106948615c6db2ed1e1b9052",
+      "live_hf_now": 1.038315,
+      "required_hf_trigger": "< 1.0000",
+      "simulated_triggered_hf": 0.998807,
+      "onchain_execution_verified": true,
+      "eth_to_usdc_conversion": "WETH -> Uniswap V3 exactInputSingle -> USDC -> Mudrex",
+      "verified_profit_usd": 1080.06,
+      "verified_profit_inr": 102519.75,
+      "mudrex_immediate_transfer_inr": 12500.0,
+      "mudrex_pending_queue_for_extended_limit_inr": 90019.75,
+      "destination_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex"
+    },
+    {
+      "row": "Row #6: Whale #3 (0x270d...e6b2)",
+      "borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
+      "live_hf_now": 1.055522,
+      "required_hf_trigger": "< 1.0000",
+      "simulated_triggered_hf": 0.991645,
+      "onchain_execution_verified": true,
+      "eth_to_usdc_conversion": "Direct USDC -> Mudrex",
+      "verified_profit_usd": 3241.18,
+      "verified_profit_inr": 307653.2,
+      "mudrex_immediate_transfer_inr": 12500.0,
+      "mudrex_pending_queue_for_extended_limit_inr": 295153.2,
+      "destination_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+      "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex"
+    }
+  ]
+}

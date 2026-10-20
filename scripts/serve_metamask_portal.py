@@ -2556,6 +2556,18 @@ class LivePortalHandler(http.server.BaseHTTPRequestHandler):
             except Exception as e:
                 self._send_json({"ok": False, "error": str(e)})
             return
+        if self.path.startswith("/api/set_destination"):
+            length = int(self.headers.get("Content-Length", "0"))
+            body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
+            try:
+                data = json.loads(body)
+                REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+                dest_file = REPORTS_DIR / "checkout_destination.json"
+                dest_file.write_text(json.dumps(data, indent=2), encoding="utf-8")
+                self._send_json({"ok": True, "destination": data})
+            except Exception as e:
+                self._send_json({"ok": False, "error": str(e)})
+            return
         if self.path.startswith("/api/save_deployed_contract"):
             length = int(self.headers.get("Content-Length", "0"))
             body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
