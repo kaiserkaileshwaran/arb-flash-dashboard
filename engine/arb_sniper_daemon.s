@@ -2476,7 +2476,7 @@ lCPI6_2:
 	.quad	0x3f498f1d3ed527e5              ; double 7.7999999999999999E-4
 	.quad	0x4034800000000000              ; double 20.5
 lCPI6_3:
-	.quad	0x3fd5176577531db4              ; double 0.32955299999999998
+	.quad	0x3f726e978d4fdf3b              ; double 0.0044999999999999997
 	.quad	0x3f654c985f06f694              ; double 0.0025999999999999999
 lCPI6_4:
 	.quad	0x3f498f1d3ed527e5              ; double 7.7999999999999999E-4
@@ -2486,7 +2486,7 @@ lCPI6_5:
 	.quad	0x3ee7793234ca50e0              ; double 1.1192999999999999E-5
 lCPI6_6:
 	.quad	0x410a3ec000000000              ; double 215000
-	.quad	0x40193d70a3d70a3d              ; double 6.3099999999999996
+	.quad	0x3fe199999999999a              ; double 0.55000000000000004
 lCPI6_7:
 	.quad	0x40adbee147ae147b              ; double 3807.4400000000001
 	.quad	0x40f7de8000000000              ; double 97768
@@ -2497,7 +2497,7 @@ lCPI6_9:
 	.quad	0x402df0f27bb2fec5              ; double 14.970599999999999
 	.quad	0x403f6e147ae147ae              ; double 31.43
 lCPI6_10:
-	.quad	0x3fb6abde3fbbd7b2              ; double 0.088559999999999999
+	.quad	0x3f726e978d4fdf3b              ; double 0.0044999999999999997
 	.quad	0x3f9cc63f141205bc              ; double 0.0281
 lCPI6_11:
 	.quad	0x409ccecccccccccd              ; double 1843.7
@@ -3391,10 +3391,9 @@ Lloh86:
 	cbz	w10, LBB6_27
 ; %bb.26:
 	ldr	d7, [x9, __MergedGlobals@PAGEOFF+136]
-	mov	x9, #2621                       ; =0xa3d
-	movk	x9, #41943, lsl #16
-	movk	x9, #15728, lsl #32
-	movk	x9, #16409, lsl #48
+	mov	x9, #-7378697629483820647       ; =0x9999999999999999
+	movk	x9, #39322
+	movk	x9, #16353, lsl #48
 	fmov	d6, x9
 	mov	x9, #39322                      ; =0x999a
 	movk	x9, #39321, lsl #16
