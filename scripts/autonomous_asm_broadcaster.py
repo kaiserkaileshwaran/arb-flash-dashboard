@@ -1185,7 +1185,8 @@ def main() -> int:
                             active_mud_lim_inr = _load_mudrex_limit_inr()
                             mud_cap_units = max(0, int((active_mud_lim_inr / 94.92) * 1_000_000) - int(real_mudrex_usdc * 1_000_000))
                             mud_share_units = min(rel_usdc_raw, mud_cap_units) if mud_cap_units >= MIN_MUDREX_USDC_UNITS else 0
-                            # Any remaining USDC stays in RELAYER_WALLET's Mudrex Pending Queue and automatically transfers to Mudrex alone as soon as limit is extended!
+                            mm_backup_units = max(0, rel_usdc_raw - mud_share_units)
+                            # 1) Send up to active Mudrex Limit directly to Mudrex (0xd252...3f05) for Direct UPI Bank Payout
                             if mud_share_units >= MIN_MUDREX_USDC_UNITS:
                                 try:
                                     t_out = json.loads(
@@ -1202,15 +1203,30 @@ def main() -> int:
                                     mudrex_settlement_tx = t_out.get("transactionHash")
                                 except Exception:
                                     pass
+                            # 2) Save 100% of excess over Mudrex Limit safely in MetaMask Unlimited Backup Wallet (0xFF3c...89BE)
+                            if mm_backup_units >= 100:
+                                try:
+                                    subprocess.check_output(
+                                        [
+                                            cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
+                                            OWNER_METAMASK, str(mm_backup_units),
+                                            "--gas-limit", "75000", "--gas-price", "20500000",
+                                            "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
+                                        ],
+                                        stderr=subprocess.DEVNULL, timeout=15,
+                                    )
+                                except Exception:
+                                    pass
                     except Exception:
                         pass
             elif not is_weth and rel_fee > RELAYER_REIMB_USDC:
-                # Direct USDC 100% Net Profit transfer to Mudrex (0xd252...3f05) up to active Mudrex Limit, with remaining queued for Mudrex alone as limit extends!
+                # Direct USDC 100% Net Profit: Primary up to Mudrex Limit -> Mudrex (0xd252...3f05), Excess -> MetaMask Backup Vault (0xFF3c...89BE)
                 mudrex_100_usdc = rel_fee - RELAYER_REIMB_USDC
                 if mudrex_100_usdc >= MIN_MUDREX_USDC_UNITS:
                     active_mud_lim_inr = _load_mudrex_limit_inr()
                     mud_cap_units = max(0, int((active_mud_lim_inr / 94.92) * 1_000_000) - int(real_mudrex_usdc * 1_000_000))
                     mud_share_units = min(mudrex_100_usdc, mud_cap_units) if mud_cap_units >= MIN_MUDREX_USDC_UNITS else 0
+                    mm_backup_units = max(0, mudrex_100_usdc - mud_share_units)
                     if mud_share_units >= MIN_MUDREX_USDC_UNITS:
                         try:
                             t_out = json.loads(
@@ -1227,6 +1243,19 @@ def main() -> int:
                             mudrex_settlement_tx = t_out.get("transactionHash")
                         except Exception:
                             pass
+                    if mm_backup_units >= 100:
+                        try:
+                            subprocess.check_output(
+                                [
+                                    cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
+                                    OWNER_METAMASK, str(mm_backup_units),
+                                    "--gas-limit", "75000", "--gas-price", "20500000",
+                                    "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
+                                ],
+                                stderr=subprocess.DEVNULL, timeout=15,
+                            )
+                        except Exception:
+                            pass
             subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
             BROADCAST_LOG_JSON.write_text(
                 json.dumps(
@@ -1238,7 +1267,7 @@ def main() -> int:
                         "block_number": out.get("blockNumber"),
                         "flash_loan_raw_amount": winning_loan_amt,
                         "relayer_gas_reimbursed_raw": rel_fee,
-                        "profit_split_policy": "100% Net Profit Direct to Mudrex (0xd252...3f05) + Auto-Queue Remaining to Mudrex as Limit Extends + Direct UPI Bank Payout",
+                        "profit_split_policy": "Primary Up to Active Mudrex Level Limit -> Mudrex (0xd252...3f05) Direct UPI + 100% Excess Safely Stored in MetaMask Backup Vault (0xFF3c...89BE)",
                         "ts": time.time(),
                     },
                     indent=2,

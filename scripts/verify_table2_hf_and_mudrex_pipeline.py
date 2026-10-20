@@ -140,8 +140,15 @@ def main() -> int:
 
         prof_usd = (gross / 1e18) * 2393.0 if is_w else (gross / 1e6)
         prof_inr = prof_usd * INR_PER_USD
-        mudrex_initial_inr = min(12500.0, prof_inr)
-        mudrex_queued_inr = max(0.0, prof_inr - mudrex_initial_inr)
+        active_lim_inr = 12500.0
+        try:
+            cd_json = REPORTS_DIR / "checkout_destination.json"
+            if cd_json.exists():
+                active_lim_inr = float(json.loads(cd_json.read_text(encoding="utf-8")).get("mudrex_limit_inr", 12500.0))
+        except Exception:
+            pass
+        mudrex_initial_inr = min(active_lim_inr, prof_inr)
+        metamask_backup_inr = max(0.0, prof_inr - mudrex_initial_inr)
 
         results.append({
             "row": lbl,
@@ -150,14 +157,26 @@ def main() -> int:
             "required_hf_trigger": "< 1.0000",
             "simulated_triggered_hf": round(trig_hf, 6),
             "onchain_execution_verified": passed,
-            "eth_to_usdc_conversion": "WETH -> Uniswap V3 exactInputSingle -> USDC -> Mudrex" if is_w else "Direct USDC -> Mudrex",
+            "eth_to_usdc_conversion": "WETH -> Uniswap V3 exactInputSingle -> USDC -> Mudrex + MetaMask Backup" if is_w else "Direct USDC -> Mudrex + MetaMask Backup",
             "verified_profit_usd": round(prof_usd, 2),
             "verified_profit_inr": round(prof_inr, 2),
+            "active_mudrex_limit_inr": round(active_lim_inr, 2),
             "mudrex_immediate_transfer_inr": round(mudrex_initial_inr, 2),
-            "mudrex_pending_queue_for_extended_limit_inr": round(mudrex_queued_inr, 2),
+            "metamask_backup_saved_inr": round(metamask_backup_inr, 2),
+            "mudrex_pending_queue_for_extended_limit_inr": round(metamask_backup_inr, 2),
             "destination_wallet": MUDREX,
-            "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex",
+            "metamask_backup_wallet": OWNER,
+            "bank_payout_mode": "Direct UPI / IMPS Bank Account Payout via Mudrex + Excess Safely Saved in MetaMask Backup Vault",
         })
+
+    mudrex_tiers = [
+        {"level": "Level 0 (Current Active)", "daily_crypto_deposit_inr": 12500.0, "daily_fiat_withdrawal_inr": 12500.0, "lifetime_limit_inr": 50000.0},
+        {"level": "Level 1 (Upgrade Tier 1)", "daily_crypto_deposit_inr": 500000.0, "daily_fiat_withdrawal_inr": 100000.0, "lifetime_limit_inr": 1000000.0},
+        {"level": "Level 2 (Upgrade Tier 2)", "daily_crypto_deposit_inr": 500000.0, "daily_fiat_withdrawal_inr": 50000.0, "lifetime_limit_inr": 500000.0},
+        {"level": "Level 3 (Upgrade Tier 3 - $20k)", "daily_crypto_deposit_inr": 1898400.0, "daily_fiat_withdrawal_inr": 1898400.0, "lifetime_limit_inr": 18984000.0},
+        {"level": "Level 4 (Upgrade Tier 4)", "daily_crypto_deposit_inr": 1000000.0, "daily_fiat_withdrawal_inr": 2000000.0, "lifetime_limit_inr": 50000000.0},
+        {"level": "Level 5 (Max Upgrade Tier 5)", "daily_crypto_deposit_inr": 4000000.0, "daily_fiat_withdrawal_inr": 4000000.0, "lifetime_limit_inr": 140000000.0},
+    ]
 
     payload = {
         "ok": True,
@@ -165,6 +184,8 @@ def main() -> int:
         "contract": CONTRACT,
         "relayer": RELAYER,
         "mudrex_wallet": MUDREX,
+        "metamask_backup_wallet": OWNER,
+        "mudrex_tier_schedule": mudrex_tiers,
         "table2_trigger_tests": results,
     }
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)

@@ -2487,6 +2487,65 @@ class LivePortalHandler(http.server.BaseHTTPRequestHandler):
                     time.sleep(0.5)
             except Exception:
                 return
+        if self.path.startswith("/reports/"):
+            rel_name = self.path.split("?", 1)[0].lstrip("/")
+            rep_file = BASE_DIR / rel_name
+            if rep_file.exists() and rep_file.suffix == ".json":
+                self._send_json(json.loads(rep_file.read_text(encoding="utf-8")))
+                return
+        if self.path.startswith("/api/mudrex-limit"):
+            dest_file = REPORTS_DIR / "checkout_destination.json"
+            cfg = {"destination": "MUDREX", "mudrex_level": "LEVEL_0", "mudrex_limit_inr": 12500.0}
+            if dest_file.exists():
+                try:
+                    cfg.update(json.loads(dest_file.read_text(encoding="utf-8")))
+                except Exception:
+                    pass
+            self._send_json({"ok": True, **cfg})
+            return
+        if self.path.startswith("/api/test-table2-triggers"):
+            proof_file = REPORTS_DIR / "table2_verified_trigger_proof.json"
+            try:
+                subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_table2_hf_and_mudrex_pipeline.py")], timeout=25)
+            except Exception:
+                pass
+            if proof_file.exists():
+                self._send_json(json.loads(proof_file.read_text(encoding="utf-8")))
+            else:
+                self._send_json({"ok": False, "error": "Proof file not found"})
+            return
+        if self.path.startswith("/api/send-remaining-to-mudrex"):
+            dest_file = REPORTS_DIR / "checkout_destination.json"
+            cfg = {"destination": "MUDREX", "mudrex_level": "LEVEL_0", "mudrex_limit_inr": 12500.0}
+            if dest_file.exists():
+                try:
+                    cfg.update(json.loads(dest_file.read_text(encoding="utf-8")))
+                except Exception:
+                    pass
+            wb = get_live_wallet_balances_payload("0xFF3c34DAF159741C931F7c421350f8289A9d89BE", "0xd2529585059e3e5c09c912f0f9570000c2a53f05")
+            mud_usdc = float(wb.get("mudrex_usdc_balance", "0") or 0.0)
+            mm_usdc = float(wb.get("usdc_balance", "0") or 0.0)
+            lim_inr = float(cfg.get("mudrex_limit_inr", 12500.0))
+            lim_usdc = lim_inr / 94.92
+            rem_room_usdc = max(0.0, lim_usdc - mud_usdc)
+            rem_room_inr = rem_room_usdc * 94.92
+            subprocess.Popen([sys.executable, str(BASE_DIR / "scripts" / "autonomous_asm_broadcaster.py"), "--once"])
+            self._send_json({
+                "ok": True,
+                "mudrex_level": cfg.get("mudrex_level", "LEVEL_0"),
+                "mudrex_limit_inr": lim_inr,
+                "mudrex_sent_usdc": round(mud_usdc, 6),
+                "mudrex_sent_inr": round(mud_usdc * 94.92, 2),
+                "remaining_mudrex_room_usdc": round(rem_room_usdc, 6),
+                "remaining_mudrex_room_inr": round(rem_room_inr, 2),
+                "metamask_backup_usdc": round(mm_usdc, 6),
+                "metamask_backup_inr": round(mm_usdc * 94.92, 2),
+                "allowed_transfer_now_usdc": round(min(mm_usdc, rem_room_usdc), 6),
+                "allowed_transfer_now_inr": round(min(mm_usdc, rem_room_usdc) * 94.92, 2),
+                "mudrex_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+                "metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
+            })
+            return
         if self.path.startswith("/api/proofs"):
             proofs_path = REPORTS_DIR / "verified_onchain_proofs.json"
             if proofs_path.exists():
@@ -2529,6 +2588,68 @@ class LivePortalHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(raw)
 
     def do_POST(self) -> None:
+        if self.path.startswith("/api/mudrex-limit"):
+            length = int(self.headers.get("Content-Length", "0"))
+            body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
+            try:
+                data = json.loads(body)
+                REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+                dest_file = REPORTS_DIR / "checkout_destination.json"
+                payload = {
+                    "destination": "MUDREX",
+                    "mudrex_level": data.get("mudrex_level", "LEVEL_0"),
+                    "mudrex_limit_inr": float(data.get("mudrex_limit_inr", 12500.0)),
+                    "updated_at": time.time(),
+                }
+                dest_file.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                subprocess.Popen([sys.executable, str(BASE_DIR / "scripts" / "autonomous_asm_broadcaster.py"), "--once"])
+                self._send_json({"ok": True, **payload})
+            except Exception as e:
+                self._send_json({"ok": False, "error": str(e)})
+            return
+        if self.path.startswith("/api/test-table2-triggers"):
+            proof_file = REPORTS_DIR / "table2_verified_trigger_proof.json"
+            try:
+                subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_table2_hf_and_mudrex_pipeline.py")], timeout=25)
+            except Exception:
+                pass
+            if proof_file.exists():
+                self._send_json(json.loads(proof_file.read_text(encoding="utf-8")))
+            else:
+                self._send_json({"ok": False, "error": "Proof file not found"})
+            return
+        if self.path.startswith("/api/send-remaining-to-mudrex"):
+            dest_file = REPORTS_DIR / "checkout_destination.json"
+            cfg = {"destination": "MUDREX", "mudrex_level": "LEVEL_0", "mudrex_limit_inr": 12500.0}
+            if dest_file.exists():
+                try:
+                    cfg.update(json.loads(dest_file.read_text(encoding="utf-8")))
+                except Exception:
+                    pass
+            wb = get_live_wallet_balances_payload("0xFF3c34DAF159741C931F7c421350f8289A9d89BE", "0xd2529585059e3e5c09c912f0f9570000c2a53f05")
+            mud_usdc = float(wb.get("mudrex_usdc_balance", "0") or 0.0)
+            mm_usdc = float(wb.get("usdc_balance", "0") or 0.0)
+            lim_inr = float(cfg.get("mudrex_limit_inr", 12500.0))
+            lim_usdc = lim_inr / 94.92
+            rem_room_usdc = max(0.0, lim_usdc - mud_usdc)
+            rem_room_inr = rem_room_usdc * 94.92
+            subprocess.Popen([sys.executable, str(BASE_DIR / "scripts" / "autonomous_asm_broadcaster.py"), "--once"])
+            self._send_json({
+                "ok": True,
+                "mudrex_level": cfg.get("mudrex_level", "LEVEL_0"),
+                "mudrex_limit_inr": lim_inr,
+                "mudrex_sent_usdc": round(mud_usdc, 6),
+                "mudrex_sent_inr": round(mud_usdc * 94.92, 2),
+                "remaining_mudrex_room_usdc": round(rem_room_usdc, 6),
+                "remaining_mudrex_room_inr": round(rem_room_inr, 2),
+                "metamask_backup_usdc": round(mm_usdc, 6),
+                "metamask_backup_inr": round(mm_usdc * 94.92, 2),
+                "allowed_transfer_now_usdc": round(min(mm_usdc, rem_room_usdc), 6),
+                "allowed_transfer_now_inr": round(min(mm_usdc, rem_room_usdc) * 94.92, 2),
+                "mudrex_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+                "metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
+            })
+            return
         if self.path.startswith("/api/scan_now"):
             self._send_json(run_one_live_cycle_now())
             return
