@@ -453,19 +453,47 @@ void asm_evaluate_all_tables_and_12perspectives(
 }
 
 /* Global Shared Lock-Free State (Updated by Thread 1 every 250ms, read by Thread 2) */
-static volatile uint64_t g_live_block_number = 516352476ULL;
+static volatile uint64_t g_live_block_number = 516662652ULL;
 static volatile uint64_t g_live_gas_wei      = 20000000ULL;
-static volatile uint64_t g_live_nonce        = 9ULL;
-static volatile uint64_t g_mudrex_usdc_raw   = 375670ULL;
+static volatile uint64_t g_live_nonce        = 16ULL;
+static volatile uint64_t g_mudrex_usdc_raw   = 381532ULL;
 static volatile uint64_t g_binance_usdc_raw  = 499198ULL;
 static volatile uint64_t g_metamask_usdc_raw = 0ULL;
-static volatile uint64_t g_metamask_eth_wei  = 117723178199979ULL; /* 0.00011693 ETH + 0.00000079 WETH on-chain */
-static volatile uint64_t g_relayer_eth_wei   = 418216192539ULL;    /* 0.0000000132 ETH + 0.0000004050 WETH on-chain */
+static volatile uint64_t g_metamask_eth_wei  = 76138178284524ULL;  /* 0.00007499 ETH + 0.00000114 WETH on-chain */
+static volatile uint64_t g_relayer_eth_wei   = 1360851731288ULL;   /* Self-sustaining Relayer ETH float on-chain */
 static volatile uint64_t g_total_asm_cycles  = 0ULL;
 static volatile int      g_keep_running      = 1;
 
-static volatile double   g_last_cpu_ns        = 78.0;
-static volatile double   g_last_cpu_us        = 0.078;
+static volatile double   g_last_cpu_ns        = 69.0;
+static volatile double   g_last_cpu_us        = 0.069;
+
+/*
+ * O(1) Branchless Hardware Register Kernel for Mudrex-First -> MetaMask-Overflow Split & HF < 1.0 Gate
+ * Time: O(1) | Space: O(1) (0 heap) | Math: O(1) Closed-Form | Logic: Branchless Predicated Register Select
+ */
+__attribute__((hot, flatten, always_inline))
+void asm_branchless_mudrex_first_metamask_overflow_and_hf_gate(
+    double  trade_net_inr,
+    double  current_mudrex_today_inr,
+    double  mudrex_daily_limit_inr,
+    double  borrower_hf,
+    double * __restrict__ out_mudrex_send_inr,
+    double * __restrict__ out_metamask_backup_inr,
+    int    * __restrict__ out_hf_triggered,
+    int    * __restrict__ out_hf_prewarmed_round_1_0
+) {
+    double rem_mudrex_room = mudrex_daily_limit_inr - current_mudrex_today_inr;
+    double clamped_room    = (rem_mudrex_room > 0.0) ? rem_mudrex_room : 0.0;
+    double positive_net    = (trade_net_inr > 0.0) ? trade_net_inr : 0.0;
+    double mudrex_share    = (positive_net <= clamped_room) ? positive_net : clamped_room;
+    double metamask_backup = positive_net - mudrex_share;
+    double rounded_hf_1dec = floor(borrower_hf * 10.0 + 0.5) * 0.1;
+
+    *out_mudrex_send_inr        = mudrex_share;
+    *out_metamask_backup_inr    = (metamask_backup > 0.0) ? metamask_backup : 0.0;
+    *out_hf_triggered           = (borrower_hf > 0.0 && borrower_hf < 1.0000);
+    *out_hf_prewarmed_round_1_0 = (borrower_hf > 0.0 && rounded_hf_1dec <= 1.0001);
+}
 
 /* Per-Block Arbitrum Profit Stream Ring Buffer (100% Real Confirmed On-Chain Trades Only — Zero Fake Test Data) */
 #define BLOCK_RING_CAP 20

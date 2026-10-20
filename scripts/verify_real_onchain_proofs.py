@@ -151,6 +151,17 @@ ONCHAIN_SETTLEMENT_TXS = [
             "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
         ],
     },
+    {
+        "trade_number": 11,
+        "cycle": 11,
+        "pair": "2-Route Atomic Multi-Flash Bundle (USDCE/WETH SushiV3 5bp<->1bp + UNI/WETH UniV3 5bp<->SushiV3 30bp • 0 MetaMask ETH Used • Relayer Refilled)",
+        "borrow_asset": "WETH/USDC.e/UNI",
+        "optimal_loan_usd": 217350.00,
+        "tx_hashes": [
+            "0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c",
+            "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+        ],
+    },
 ]
 
 

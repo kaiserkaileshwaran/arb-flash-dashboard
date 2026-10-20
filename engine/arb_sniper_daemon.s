@@ -2032,10 +2032,8 @@ Lloh1:
 	fmul	d1, d1, d2
 	fminnm	d1, d1, d17
 	stp	q7, q7, [x7]
-	str	d0, [x7, #32]
-	str	d5, [x7, #40]
-	str	d6, [x7, #48]
-	str	d3, [x7, #56]
+	stp	d0, d5, [x7, #32]
+	stp	d6, d3, [x7, #48]
 	str	d1, [x7, #72]
 	str	q7, [x7, #80]
 	mov	x9, #70368744177664             ; =0x400000000000
@@ -2059,6 +2057,48 @@ Lloh1:
 	.loh AdrpLdr	Lloh0, Lloh1
 	.cfi_endproc
                                         ; -- End function
+	.globl	_asm_branchless_mudrex_first_metamask_overflow_and_hf_gate ; -- Begin function asm_branchless_mudrex_first_metamask_overflow_and_hf_gate
+	.p2align	2
+_asm_branchless_mudrex_first_metamask_overflow_and_hf_gate: ; @asm_branchless_mudrex_first_metamask_overflow_and_hf_gate
+	.cfi_startproc
+; %bb.0:
+	fsub	d1, d2, d1
+	movi.2d	v2, #0000000000000000
+	fmaxnm	d1, d1, d2
+	fmaxnm	d0, d0, d2
+	fminnm	d1, d0, d1
+	fsub	d0, d0, d1
+	fmov	d4, #10.00000000
+	fmov	d5, #0.50000000
+	fmadd	d4, d3, d4, d5
+	frintm	d4, d4
+	mov	x8, #-7378697629483820647       ; =0x9999999999999999
+	movk	x8, #39322
+	movk	x8, #16313, lsl #48
+	fmov	d5, x8
+	fmul	d4, d4, d5
+	str	d1, [x0]
+	fmaxnm	d0, d0, d2
+	str	d0, [x1]
+	fcmp	d3, #0.0
+	cset	w8, gt
+	fmov	d0, #1.00000000
+	fcmp	d3, d0
+	cset	w9, lt
+	and	w9, w8, w9
+	str	w9, [x2]
+	mov	x9, #44145                      ; =0xac71
+	movk	x9, #56203, lsl #16
+	movk	x9, #104, lsl #32
+	movk	x9, #16368, lsl #48
+	fmov	d0, x9
+	fcmp	d4, d0
+	cset	w9, le
+	and	w8, w8, w9
+	str	w8, [x3]
+	ret
+	.cfi_endproc
+                                        ; -- End function
 	.globl	_main                           ; -- Begin function main
 	.p2align	2
 _main:                                  ; @main
@@ -2077,7 +2117,7 @@ _main:                                  ; @main
 	.cfi_offset w21, -40
 	.cfi_offset w22, -48
 	cmp	w0, #2
-	b.lt	LBB3_4
+	b.lt	LBB4_4
 ; %bb.1:
 	mov	w20, #0                         ; =0x0
 	mov	w8, w0
@@ -2087,21 +2127,21 @@ Lloh2:
 	adrp	x19, l_.str@PAGE
 Lloh3:
 	add	x19, x19, l_.str@PAGEOFF
-LBB3_2:                                 ; =>This Inner Loop Header: Depth=1
+LBB4_2:                                 ; =>This Inner Loop Header: Depth=1
 	ldr	x0, [x21], #8
 	mov	x1, x19
 	bl	_strcmp
 	cmp	w0, #0
 	csinc	w20, w20, wzr, ne
 	subs	x22, x22, #1
-	b.ne	LBB3_2
+	b.ne	LBB4_2
 ; %bb.3:
 	cmp	w20, #0
 	cset	w21, eq
-	b	LBB3_5
-LBB3_4:
+	b	LBB4_5
+LBB4_4:
 	mov	w21, #1                         ; =0x1
-LBB3_5:
+LBB4_5:
 	mov	w0, #3                          ; =0x3
 	bl	_curl_global_init
 	bl	_curl_easy_init
@@ -2148,7 +2188,7 @@ Lloh9:
 	mov	x0, x19
 	mov	w1, #92                         ; =0x5c
 	bl	_curl_easy_setopt
-	tbz	w21, #0, LBB3_9
+	tbz	w21, #0, LBB4_9
 ; %bb.6:
 Lloh10:
 	adrp	x2, _lockfree_block_ticker_thread@PAGE
@@ -2160,8 +2200,8 @@ Lloh11:
 	bl	_pthread_create
 	adrp	x21, __MergedGlobals@PAGE
 	ldr	w8, [x21, __MergedGlobals@PAGEOFF]
-	cbz	w8, LBB3_8
-LBB3_7:                                 ; =>This Inner Loop Header: Depth=1
+	cbz	w8, LBB4_8
+LBB4_7:                                 ; =>This Inner Loop Header: Depth=1
 	add	x2, sp, #24
 	mov	x0, x19
 	mov	x1, x20
@@ -2171,26 +2211,26 @@ LBB3_7:                                 ; =>This Inner Loop Header: Depth=1
 	movk	w0, #1, lsl #16
 	bl	_usleep
 	ldr	w8, [x21, __MergedGlobals@PAGEOFF]
-	cbnz	w8, LBB3_7
-LBB3_8:
+	cbnz	w8, LBB4_7
+LBB4_8:
 	str	wzr, [x21, __MergedGlobals@PAGEOFF]
 	ldr	x0, [sp, #16]
 	mov	x1, #0                          ; =0x0
 	bl	_pthread_join
 	ldr	x0, [sp, #24]
-	cbnz	x0, LBB3_10
-	b	LBB3_11
-LBB3_9:
+	cbnz	x0, LBB4_10
+	b	LBB4_11
+LBB4_9:
 	add	x2, sp, #24
 	mov	x0, x19
 	mov	x1, x20
 	mov	w3, #1                          ; =0x1
 	bl	_run_native_asm_sniper_cycle
 	ldr	x0, [sp, #24]
-	cbz	x0, LBB3_11
-LBB3_10:
+	cbz	x0, LBB4_11
+LBB4_10:
 	bl	_free
-LBB3_11:
+LBB4_11:
 	mov	x0, x20
 	bl	_curl_slist_free_all
 	mov	x0, x19
@@ -2211,40 +2251,40 @@ LBB3_11:
                                         ; -- End function
 	.section	__TEXT,__literal16,16byte_literals
 	.p2align	4, 0x0                          ; -- Begin function run_native_asm_sniper_cycle
-lCPI4_0:
+lCPI5_0:
 	.quad	0x4041800000000000              ; double 35
 	.quad	0x4050400000000000              ; double 65
-lCPI4_1:
+lCPI5_1:
 	.quad	0x403e000000000000              ; double 30
 	.quad	0x4041800000000000              ; double 35
-lCPI4_2:
+lCPI5_2:
 	.quad	0x4041800000000000              ; double 35
 	.quad	0x4026000000000000              ; double 11
-lCPI4_3:
+lCPI5_3:
 	.quad	0x4018000000000000              ; double 6
 	.quad	0x4041800000000000              ; double 35
-lCPI4_4:
+lCPI5_4:
 	.quad	0x4000000000000000              ; double 2
 	.quad	0x4041800000000000              ; double 35
-lCPI4_5:
+lCPI5_5:
 	.quad	0x4026000000000000              ; double 11
 	.quad	0x4044000000000000              ; double 40
-lCPI4_6:
+lCPI5_6:
 	.quad	0x4044000000000000              ; double 40
 	.quad	0x403a000000000000              ; double 26
-lCPI4_7:
+lCPI5_7:
 	.quad	0x3ff0810a569b1748              ; double 1.031504
 	.quad	0x3ff094af4f0d844d              ; double 1.0363
-lCPI4_8:
+lCPI5_8:
 	.quad	0x3ff09acabc515486              ; double 1.0377909999999999
 	.quad	0x3ff0c5d41fa76534              ; double 1.048298
-lCPI4_9:
+lCPI5_9:
 	.quad	0x4112de4c00000000              ; double 309139
 	.quad	0x41100a7400000000              ; double 262813
-lCPI4_10:
+lCPI5_10:
 	.quad	0x40f8e50000000000              ; double 101968
 	.quad	0x4103af6000000000              ; double 161260
-lCPI4_11:
+lCPI5_11:
 	.quad	0x40d19c4000000000              ; double 18033
 	.quad	0x4108753533333333              ; double 200358.64999999999
 	.section	__TEXT,__text,regular,pure_instructions
@@ -2298,7 +2338,7 @@ Lloh15:
 	adrp	x23, __MergedGlobals@PAGE+8
 Lloh16:
 	add	x23, x23, __MergedGlobals@PAGEOFF+8
-	cbz	x0, LBB4_11
+	cbz	x0, LBB5_11
 ; %bb.1:
 	mov	x20, x2
 	mov	x21, x1
@@ -2349,12 +2389,12 @@ Lloh22:
 	fmov	d14, x8
 	mov	x8, #4641240890982006784        ; =0x4069000000000000
 	str	x8, [sp, #792]                  ; 8-byte Folded Spill
-	b	LBB4_3
-LBB4_2:                                 ;   in Loop: Header=BB4_3 Depth=1
+	b	LBB5_3
+LBB5_2:                                 ;   in Loop: Header=BB5_3 Depth=1
 	add	x19, x19, #1
 	cmp	x19, #4
-	b.eq	LBB4_11
-LBB4_3:                                 ; =>This Inner Loop Header: Depth=1
+	b.eq	LBB5_11
+LBB5_3:                                 ; =>This Inner Loop Header: Depth=1
 Lloh23:
 	adrp	x8, __MergedGlobals.92@PAGE
 Lloh24:
@@ -2393,19 +2433,19 @@ Lloh24:
 	bl	_curl_easy_setopt
 	mov	x0, x22
 	bl	_curl_easy_perform
-	cbnz	w0, LBB4_2
-; %bb.4:                                ;   in Loop: Header=BB4_3 Depth=1
+	cbnz	w0, LBB5_2
+; %bb.4:                                ;   in Loop: Header=BB5_3 Depth=1
 	ldr	x0, [x20]
-	cbz	x0, LBB4_2
-; %bb.5:                                ;   in Loop: Header=BB4_3 Depth=1
+	cbz	x0, LBB5_2
+; %bb.5:                                ;   in Loop: Header=BB5_3 Depth=1
 	ldr	x8, [x20, #8]
 	cmp	x8, #129
-	b.lo	LBB4_2
-; %bb.6:                                ;   in Loop: Header=BB4_3 Depth=1
+	b.lo	LBB5_2
+; %bb.6:                                ;   in Loop: Header=BB5_3 Depth=1
 	mov	w1, #10                         ; =0xa
 	bl	_find_batch_result_for_id
-	cbz	x0, LBB4_2
-; %bb.7:                                ;   in Loop: Header=BB4_3 Depth=1
+	cbz	x0, LBB5_2
+; %bb.7:                                ;   in Loop: Header=BB5_3 Depth=1
 	ldr	x0, [x20]
 	mov	w1, #10                         ; =0xa
 	bl	_find_batch_result_for_id
@@ -2563,12 +2603,12 @@ Lloh26:
 	bl	_curl_easy_setopt
 	mov	x0, x22
 	bl	_curl_easy_perform
-	cbnz	w0, LBB4_2
-; %bb.8:                                ;   in Loop: Header=BB4_3 Depth=1
+	cbnz	w0, LBB5_2
+; %bb.8:                                ;   in Loop: Header=BB5_3 Depth=1
 	ldr	x0, [x20]
 	mov	w1, #28                         ; =0x1c
 	bl	_find_batch_result_for_id
-	cbz	x0, LBB4_2
+	cbz	x0, LBB5_2
 ; %bb.9:
 	ldr	x0, [x20]
 	mov	w1, #23                         ; =0x17
@@ -2742,11 +2782,11 @@ Lloh28:
 	str	d0, [x19, #128]
 	ldp	d1, d0, [x19, #136]
 	fcmp	d0, d1
-	b.ge	LBB4_11
+	b.ge	LBB5_11
 ; %bb.10:
 	adrp	x8, __MergedGlobals@PAGE+248
 	str	d0, [x8, __MergedGlobals@PAGEOFF+248]
-LBB4_11:
+LBB5_11:
 Lloh29:
 	adrp	x8, l_.str.6@PAGE
 Lloh30:
@@ -2838,24 +2878,24 @@ Lloh64:
 	add	x9, x9, l_.str.20@PAGEOFF
 	str	x9, [sp, #3112]
 	str	x8, [sp, #3120]
-	b.ge	LBB4_13
+	b.ge	LBB5_13
 ; %bb.12:
 	ldr	d1, [x23]
 	ldr	d5, [x23, #80]
 	fmov	d0, #5.00000000
 	mov.16b	v2, v1
-	b	LBB4_16
-LBB4_13:
+	b	LBB5_16
+LBB5_13:
 	ldr	d5, [x23, #80]
 	ldr	d1, [x23]
 	fcmp	d5, d0
-	b.le	LBB4_15
+	b.le	LBB5_15
 ; %bb.14:
 	mov	x8, #4630826316843712512        ; =0x4044000000000000
 	fmov	d0, x8
 	fdiv	d2, d1, d5
-	b	LBB4_16
-LBB4_15:
+	b	LBB5_16
+LBB5_15:
 	mov	x8, #11010                      ; =0x2b02
 	movk	x8, #5767, lsl #16
 	movk	x8, #52953, lsl #32
@@ -2863,7 +2903,7 @@ LBB4_15:
 	fmov	d2, x8
 	mov	x8, #4630826316843712512        ; =0x4044000000000000
 	fmov	d0, x8
-LBB4_16:
+LBB5_16:
 	mov	x8, #-3689348814741910324       ; =0xcccccccccccccccc
 	movk	x8, #52429
 	movk	x8, #16368, lsl #48
@@ -3004,39 +3044,39 @@ Lloh66:
 	str	d16, [sp, #2800]
 	str	d4, [sp, #2808]
 Lloh67:
-	adrp	x8, lCPI4_0@PAGE
+	adrp	x8, lCPI5_0@PAGE
 Lloh68:
-	ldr	q1, [x8, lCPI4_0@PAGEOFF]
+	ldr	q1, [x8, lCPI5_0@PAGEOFF]
 Lloh69:
-	adrp	x8, lCPI4_1@PAGE
+	adrp	x8, lCPI5_1@PAGE
 Lloh70:
-	ldr	q2, [x8, lCPI4_1@PAGEOFF]
+	ldr	q2, [x8, lCPI5_1@PAGEOFF]
 	str	q1, [sp, #2560]
 	str	q2, [sp, #2576]
 Lloh71:
-	adrp	x8, lCPI4_2@PAGE
+	adrp	x8, lCPI5_2@PAGE
 Lloh72:
-	ldr	q1, [x8, lCPI4_2@PAGEOFF]
+	ldr	q1, [x8, lCPI5_2@PAGEOFF]
 Lloh73:
-	adrp	x8, lCPI4_3@PAGE
+	adrp	x8, lCPI5_3@PAGE
 Lloh74:
-	ldr	q2, [x8, lCPI4_3@PAGEOFF]
+	ldr	q2, [x8, lCPI5_3@PAGEOFF]
 	str	q1, [sp, #2592]
 	str	q2, [sp, #2608]
 Lloh75:
-	adrp	x8, lCPI4_4@PAGE
+	adrp	x8, lCPI5_4@PAGE
 Lloh76:
-	ldr	q1, [x8, lCPI4_4@PAGEOFF]
+	ldr	q1, [x8, lCPI5_4@PAGEOFF]
 Lloh77:
-	adrp	x8, lCPI4_5@PAGE
+	adrp	x8, lCPI5_5@PAGE
 Lloh78:
-	ldr	q2, [x8, lCPI4_5@PAGEOFF]
+	ldr	q2, [x8, lCPI5_5@PAGEOFF]
 	str	q1, [sp, #2624]
 	str	q2, [sp, #2640]
 Lloh79:
-	adrp	x8, lCPI4_6@PAGE
+	adrp	x8, lCPI5_6@PAGE
 Lloh80:
-	ldr	q1, [x8, lCPI4_6@PAGEOFF]
+	ldr	q1, [x8, lCPI5_6@PAGEOFF]
 	str	q1, [sp, #2656]
 	mov	x8, #4630826316843712512        ; =0x4044000000000000
 	str	x8, [sp, #2672]
@@ -3074,7 +3114,7 @@ Lloh87:
 	adrp	x24, l___const.run_native_asm_sniper_cycle.am@PAGE
 Lloh88:
 	add	x24, x24, l___const.run_native_asm_sniper_cycle.am@PAGEOFF
-LBB4_17:                                ; =>This Inner Loop Header: Depth=1
+LBB5_17:                                ; =>This Inner Loop Header: Depth=1
 	add	x8, sp, #2688
 	add	x9, sp, #2816
 	; InlineAsm Start
@@ -3104,7 +3144,7 @@ LBB4_17:                                ; =>This Inner Loop Header: Depth=1
 	; InlineAsm Start
 	; InlineAsm End
 	subs	w19, w19, #1
-	b.ne	LBB4_17
+	b.ne	LBB5_17
 ; %bb.18:
 	add	x1, sp, #824
 	mov	w0, #6                          ; =0x6
@@ -3270,7 +3310,7 @@ Lloh90:
 	fcsel	d26, d25, d24, gt
 	cinc	w26, w8, gt
 	fcmp	d0, #0.0
-	b.le	LBB4_20
+	b.le	LBB5_20
 ; %bb.19:
 	add	w26, w26, #1
 	ldr	d24, [sp, #2296]
@@ -3281,20 +3321,20 @@ Lloh90:
 	cmp	x9, #1
 	csel	x9, x8, x9, lt
 	mov.16b	v24, v28
-	b	LBB4_23
-LBB4_20:
+	b	LBB5_23
+LBB5_20:
 	mov	w8, #8                          ; =0x8
 	ldr	x9, [sp, #800]                  ; 8-byte Folded Reload
 	cmp	x9, #1
 	csel	x9, x8, x9, lt
-	cbz	w26, LBB4_22
+	cbz	w26, LBB5_22
 ; %bb.21:
 	mov.16b	v24, v28
-	b	LBB4_23
-LBB4_22:
+	b	LBB5_23
+LBB5_22:
 	add	x8, sp, #1664
 	ldr	d24, [x8, x27, lsl #3]
-LBB4_23:
+LBB5_23:
 	mov	x8, #36805                      ; =0x8fc5
 	movk	x8, #30513, lsl #16
 	movk	x8, #8493, lsl #32
@@ -3313,216 +3353,216 @@ LBB4_23:
 	movk	x8, #15729, lsl #48
 	fmov	d24, x8
 	fccmp	d28, d24, #4, gt
-	b.le	LBB4_72
+	b.le	LBB5_72
 ; %bb.24:
 	fcmp	d22, #0.0
-	b.le	LBB4_27
+	b.le	LBB5_27
 ; %bb.25:
 	ldr	d24, [sp, #1536]
 	fcmp	d24, #0.0
-	b.gt	LBB4_27
+	b.gt	LBB5_27
 ; %bb.26:
 	fmul	d22, d13, d22
 	fdiv	d22, d22, d28
 	str	d22, [sp, #1536]
 	str	d22, [sp, #1408]
 	str	xzr, [sp, #1280]
-LBB4_27:
+LBB5_27:
 	fcmp	d20, #0.0
-	b.le	LBB4_30
+	b.le	LBB5_30
 ; %bb.28:
 	ldr	d22, [sp, #1544]
 	fcmp	d22, #0.0
-	b.gt	LBB4_30
+	b.gt	LBB5_30
 ; %bb.29:
 	fmul	d20, d13, d20
 	fdiv	d20, d20, d28
 	str	d20, [sp, #1544]
 	str	d20, [sp, #1416]
 	str	xzr, [sp, #1288]
-LBB4_30:
+LBB5_30:
 	fcmp	d23, #0.0
-	b.le	LBB4_33
+	b.le	LBB5_33
 ; %bb.31:
 	ldr	d20, [sp, #1552]
 	fcmp	d20, #0.0
-	b.gt	LBB4_33
+	b.gt	LBB5_33
 ; %bb.32:
 	fmul	d20, d13, d23
 	fdiv	d20, d20, d28
 	str	d20, [sp, #1552]
 	str	d20, [sp, #1424]
 	str	xzr, [sp, #1296]
-LBB4_33:
+LBB5_33:
 	fcmp	d19, #0.0
-	b.le	LBB4_36
+	b.le	LBB5_36
 ; %bb.34:
 	ldr	d20, [sp, #1560]
 	fcmp	d20, #0.0
-	b.gt	LBB4_36
+	b.gt	LBB5_36
 ; %bb.35:
 	fmul	d19, d13, d19
 	fdiv	d19, d19, d28
 	str	d19, [sp, #1560]
 	str	d19, [sp, #1432]
 	str	xzr, [sp, #1304]
-LBB4_36:
+LBB5_36:
 	fcmp	d21, #0.0
-	b.le	LBB4_39
+	b.le	LBB5_39
 ; %bb.37:
 	ldr	d19, [sp, #1568]
 	fcmp	d19, #0.0
-	b.gt	LBB4_39
+	b.gt	LBB5_39
 ; %bb.38:
 	fmul	d19, d13, d21
 	fdiv	d19, d19, d28
 	str	d19, [sp, #1568]
 	str	d19, [sp, #1440]
 	str	xzr, [sp, #1312]
-LBB4_39:
+LBB5_39:
 	fcmp	d17, #0.0
-	b.le	LBB4_42
+	b.le	LBB5_42
 ; %bb.40:
 	ldr	d19, [sp, #1576]
 	fcmp	d19, #0.0
-	b.gt	LBB4_42
+	b.gt	LBB5_42
 ; %bb.41:
 	fmul	d17, d13, d17
 	fdiv	d17, d17, d28
 	str	d17, [sp, #1576]
 	str	d17, [sp, #1448]
 	str	xzr, [sp, #1320]
-LBB4_42:
+LBB5_42:
 	fcmp	d18, #0.0
-	b.le	LBB4_45
+	b.le	LBB5_45
 ; %bb.43:
 	ldr	d17, [sp, #1584]
 	fcmp	d17, #0.0
-	b.gt	LBB4_45
+	b.gt	LBB5_45
 ; %bb.44:
 	fmul	d17, d13, d18
 	fdiv	d17, d17, d28
 	str	d17, [sp, #1584]
 	str	d17, [sp, #1456]
 	str	xzr, [sp, #1328]
-LBB4_45:
+LBB5_45:
 	fcmp	d7, #0.0
-	b.le	LBB4_48
+	b.le	LBB5_48
 ; %bb.46:
 	ldr	d17, [sp, #1592]
 	fcmp	d17, #0.0
-	b.gt	LBB4_48
+	b.gt	LBB5_48
 ; %bb.47:
 	fmul	d7, d13, d7
 	fdiv	d7, d7, d28
 	str	d7, [sp, #1592]
 	str	d7, [sp, #1464]
 	str	xzr, [sp, #1336]
-LBB4_48:
+LBB5_48:
 	fcmp	d16, #0.0
-	b.le	LBB4_51
+	b.le	LBB5_51
 ; %bb.49:
 	ldr	d7, [sp, #1600]
 	fcmp	d7, #0.0
-	b.gt	LBB4_51
+	b.gt	LBB5_51
 ; %bb.50:
 	fmul	d7, d13, d16
 	fdiv	d7, d7, d28
 	str	d7, [sp, #1600]
 	str	d7, [sp, #1472]
 	str	xzr, [sp, #1344]
-LBB4_51:
+LBB5_51:
 	fcmp	d5, #0.0
-	b.le	LBB4_54
+	b.le	LBB5_54
 ; %bb.52:
 	ldr	d7, [sp, #1608]
 	fcmp	d7, #0.0
-	b.gt	LBB4_54
+	b.gt	LBB5_54
 ; %bb.53:
 	fmul	d5, d13, d5
 	fdiv	d5, d5, d28
 	str	d5, [sp, #1608]
 	str	d5, [sp, #1480]
 	str	xzr, [sp, #1352]
-LBB4_54:
+LBB5_54:
 	fcmp	d6, #0.0
-	b.le	LBB4_57
+	b.le	LBB5_57
 ; %bb.55:
 	ldr	d5, [sp, #1616]
 	fcmp	d5, #0.0
-	b.gt	LBB4_57
+	b.gt	LBB5_57
 ; %bb.56:
 	fmul	d5, d13, d6
 	fdiv	d5, d5, d28
 	str	d5, [sp, #1616]
 	str	d5, [sp, #1488]
 	str	xzr, [sp, #1360]
-LBB4_57:
+LBB5_57:
 	fcmp	d3, #0.0
-	b.le	LBB4_60
+	b.le	LBB5_60
 ; %bb.58:
 	ldr	d5, [sp, #1624]
 	fcmp	d5, #0.0
-	b.gt	LBB4_60
+	b.gt	LBB5_60
 ; %bb.59:
 	fmul	d3, d13, d3
 	fdiv	d3, d3, d28
 	str	d3, [sp, #1624]
 	str	d3, [sp, #1496]
 	str	xzr, [sp, #1368]
-LBB4_60:
+LBB5_60:
 	fcmp	d4, #0.0
-	b.le	LBB4_63
+	b.le	LBB5_63
 ; %bb.61:
 	ldr	d3, [sp, #1632]
 	fcmp	d3, #0.0
-	b.gt	LBB4_63
+	b.gt	LBB5_63
 ; %bb.62:
 	fmul	d3, d13, d4
 	fdiv	d3, d3, d28
 	str	d3, [sp, #1632]
 	str	d3, [sp, #1504]
 	str	xzr, [sp, #1376]
-LBB4_63:
+LBB5_63:
 	fcmp	d2, #0.0
-	b.le	LBB4_66
+	b.le	LBB5_66
 ; %bb.64:
 	ldr	d3, [sp, #1640]
 	fcmp	d3, #0.0
-	b.gt	LBB4_66
+	b.gt	LBB5_66
 ; %bb.65:
 	fmul	d2, d13, d2
 	fdiv	d2, d2, d28
 	str	d2, [sp, #1640]
 	str	d2, [sp, #1512]
 	str	xzr, [sp, #1384]
-LBB4_66:
+LBB5_66:
 	fcmp	d1, #0.0
-	b.le	LBB4_69
+	b.le	LBB5_69
 ; %bb.67:
 	ldr	d2, [sp, #1648]
 	fcmp	d2, #0.0
-	b.gt	LBB4_69
+	b.gt	LBB5_69
 ; %bb.68:
 	fmul	d1, d13, d1
 	fdiv	d1, d1, d28
 	str	d1, [sp, #1648]
 	str	d1, [sp, #1520]
 	str	xzr, [sp, #1392]
-LBB4_69:
+LBB5_69:
 	fcmp	d0, #0.0
-	b.le	LBB4_72
+	b.le	LBB5_72
 ; %bb.70:
 	ldr	d1, [sp, #1656]
 	fcmp	d1, #0.0
-	b.gt	LBB4_72
+	b.gt	LBB5_72
 ; %bb.71:
 	fmul	d0, d13, d0
 	fdiv	d0, d0, d28
 	str	d0, [sp, #1656]
 	str	d0, [sp, #1528]
 	str	xzr, [sp, #1400]
-LBB4_72:
+LBB5_72:
 	str	d28, [sp, #744]                 ; 8-byte Folded Spill
 	str	d26, [sp, #776]                 ; 8-byte Folded Spill
 	add	x8, sp, #1536
@@ -3530,7 +3570,7 @@ LBB4_72:
 	fmaxnm	d9, d13, d0
 	fcmp	d13, d0
 	mov.16b	v8, v13
-	b.gt	LBB4_74
+	b.gt	LBB5_74
 ; %bb.73:
 	add	x8, sp, #1408
 	ldr	d8, [x8, x27, lsl #3]
@@ -3543,7 +3583,7 @@ LBB4_72:
 	fmov	d2, x8
 	fmul	d1, d1, d2
 	str	d1, [sp, #792]                  ; 8-byte Folded Spill
-LBB4_74:
+LBB5_74:
 	str	x9, [sp, #672]                  ; 8-byte Folded Spill
 	lsl	w24, w9, #3
 Lloh91:
@@ -3614,13 +3654,13 @@ Lloh96:
 	add	x23, x23, __MergedGlobals@PAGEOFF+4
 	str	x11, [sp, #616]                 ; 8-byte Folded Spill
 	cmp	x11, x9
-	b.lo	LBB4_86
+	b.lo	LBB5_86
 ; %bb.75:
 	ldr	x9, [x25, #96]
 	cmp	x8, x9
-	b.ls	LBB4_86
+	b.ls	LBB5_86
 ; %bb.76:
-	tbz	w21, #0, LBB4_86
+	tbz	w21, #0, LBB5_86
 ; %bb.77:
 	mov	x10, x23
 	ldr	w9, [x10], #-4
@@ -3633,7 +3673,7 @@ Lloh96:
 	movk	x10, #16471, lsl #48
 	fmov	d1, x10
 	cmp	w9, #1
-	b.lt	LBB4_80
+	b.lt	LBB5_80
 ; %bb.78:
 	mov	w10, #19                        ; =0x13
 	cmp	w9, #19
@@ -3647,7 +3687,7 @@ Lloh98:
 	umaddl	x10, w11, w13, x12
 	sub	w11, w11, #1
 	umaddl	x11, w11, w13, x12
-LBB4_79:                                ; =>This Inner Loop Header: Depth=1
+LBB5_79:                                ; =>This Inner Loop Header: Depth=1
 	ldp	q2, q3, [x11, #160]
 	stp	q2, q3, [x10, #160]
 	ldp	q2, q3, [x11, #192]
@@ -3664,8 +3704,8 @@ LBB4_79:                                ; =>This Inner Loop Header: Depth=1
 	sub	w9, w9, #1
 	stp	q2, q3, [x10], #-224
 	cmp	w9, #1
-	b.gt	LBB4_79
-LBB4_80:
+	b.gt	LBB5_79
+LBB5_80:
 	fmul	d10, d9, d1
 	fmul	d14, d8, d1
 	adrp	x9, _g_block_ring@PAGE
@@ -3673,10 +3713,10 @@ LBB4_80:
 	add	x8, sp, #3000
 	ldr	x8, [x8, x27, lsl #3]
 	fcmp	d13, d0
-	b.le	LBB4_83
+	b.le	LBB5_83
 ; %bb.81:
 	cmp	w26, #1
-	b.ls	LBB4_83
+	b.ls	LBB5_83
 ; %bb.82:
 Lloh99:
 	adrp	x0, _g_block_ring@PAGE+8
@@ -3690,8 +3730,8 @@ Lloh102:
 	mov	w1, #128                        ; =0x80
 	bl	_snprintf
 	ldr	d0, [sp, #776]                  ; 8-byte Folded Reload
-	b	LBB4_84
-LBB4_83:
+	b	LBB5_84
+LBB5_83:
 Lloh103:
 	adrp	x0, _g_block_ring@PAGE+8
 Lloh104:
@@ -3705,7 +3745,7 @@ Lloh106:
 	bl	_snprintf
 	add	x8, sp, #2176
 	ldr	d0, [x8, x27, lsl #3]
-LBB4_84:
+LBB5_84:
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
@@ -3735,11 +3775,11 @@ Lloh110:
 	adrp	x8, __MergedGlobals@PAGE+4
 	ldr	w9, [x8, __MergedGlobals@PAGEOFF+4]
 	cmp	w9, #19
-	b.gt	LBB4_86
+	b.gt	LBB5_86
 ; %bb.85:
 	add	w9, w9, #1
 	str	w9, [x8, __MergedGlobals@PAGEOFF+4]
-LBB4_86:
+LBB5_86:
 	ucvtf	d10, x19
 	fmov	d14, x20
 	ucvtf	d15, x22
@@ -3816,7 +3856,7 @@ Lloh112:
 	add	x10, x10, x22
 	stp	x9, x10, [x8]
 	ldr	w8, [sp, #784]                  ; 4-byte Folded Reload
-	cbz	w8, LBB4_88
+	cbz	w8, LBB5_88
 ; %bb.87:
 Lloh113:
 	adrp	x8, l_.str.29@PAGE
@@ -3827,8 +3867,8 @@ Lloh114:
 	movk	x20, #30513, lsl #16
 	movk	x20, #8493, lsl #32
 	movk	x20, #16239, lsl #48
-	b	LBB4_94
-LBB4_88:
+	b	LBB5_94
+LBB5_88:
 	adrp	x10, __MergedGlobals@PAGE+336
 	ldr	x9, [x10, __MergedGlobals@PAGEOFF+336]
 	adrp	x8, __MergedGlobals.92@PAGE+32
@@ -3836,32 +3876,32 @@ LBB4_88:
 	movk	x20, #30513, lsl #16
 	movk	x20, #8493, lsl #32
 	movk	x20, #16239, lsl #48
-	tbz	w21, #0, LBB4_90
+	tbz	w21, #0, LBB5_90
 ; %bb.89:
 Lloh115:
 	adrp	x10, l_.str.31@PAGE
 Lloh116:
 	add	x10, x10, l_.str.31@PAGEOFF
-	b	LBB4_93
-LBB4_90:
+	b	LBB5_93
+LBB5_90:
 	ldr	x11, [x8, __MergedGlobals.92@PAGEOFF+32]
 	add	x11, x11, #12
 	cmp	x9, x11
-	b.hs	LBB4_92
+	b.hs	LBB5_92
 ; %bb.91:
 Lloh117:
 	adrp	x8, l_.str.29@PAGE
 Lloh118:
 	add	x8, x8, l_.str.29@PAGEOFF
 	str	x8, [sp, #608]                  ; 8-byte Folded Spill
-	b	LBB4_94
-LBB4_92:
+	b	LBB5_94
+LBB5_92:
 	ldr	x9, [x10, __MergedGlobals@PAGEOFF+336]
 Lloh119:
 	adrp	x10, l_.str.32@PAGE
 Lloh120:
 	add	x10, x10, l_.str.32@PAGEOFF
-LBB4_93:
+LBB5_93:
 	str	x10, [sp, #608]                 ; 8-byte Folded Spill
 	str	x9, [x8, __MergedGlobals.92@PAGEOFF+32]
 Lloh121:
@@ -3869,7 +3909,7 @@ Lloh121:
 Lloh122:
 	add	x0, x0, l_.str.30@PAGEOFF
 	bl	_system
-LBB4_94:
+LBB5_94:
 	fmul	d12, d10, d14
 	fmul	d15, d15, d14
 	ldrsw	x8, [sp, #1276]
@@ -3878,7 +3918,7 @@ Lloh123:
 	adrp	x10, __MergedGlobals@PAGE+352
 Lloh124:
 	ldr	x10, [x10, __MergedGlobals@PAGEOFF+352]
-	cbz	x10, LBB4_96
+	cbz	x10, LBB5_96
 ; %bb.95:
 Lloh125:
 	adrp	x11, __MergedGlobals@PAGE+312
@@ -3893,8 +3933,8 @@ Lloh126:
 	fmov	d0, x10
 	fmul	d0, d9, d0
 	str	d0, [sp, #664]                  ; 8-byte Folded Spill
-	b	LBB4_97
-LBB4_96:
+	b	LBB5_97
+LBB5_96:
 	mov	x10, #5243                      ; =0x147b
 	movk	x10, #18350, lsl #16
 	movk	x10, #47841, lsl #32
@@ -3902,7 +3942,7 @@ LBB4_96:
 	fmov	d0, x10
 	fmul	d10, d9, d0
 	str	d10, [sp, #664]                 ; 8-byte Folded Spill
-LBB4_97:
+LBB5_97:
 	ldr	d14, [x9, x8, lsl #3]
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
@@ -3929,34 +3969,34 @@ Lloh128:
 	ldr	d1, [x8, __MergedGlobals@PAGEOFF+248]
 	str	d1, [sp, #1168]
 Lloh129:
-	adrp	x8, lCPI4_7@PAGE
+	adrp	x8, lCPI5_7@PAGE
 Lloh130:
-	ldr	q1, [x8, lCPI4_7@PAGEOFF]
+	ldr	q1, [x8, lCPI5_7@PAGEOFF]
 	add	x9, sp, #1168
 	stur	q1, [x9, #8]
 Lloh131:
-	adrp	x8, lCPI4_8@PAGE
+	adrp	x8, lCPI5_8@PAGE
 Lloh132:
-	ldr	q1, [x8, lCPI4_8@PAGEOFF]
+	ldr	q1, [x8, lCPI5_8@PAGEOFF]
 	stur	q1, [x9, #24]
 	mov	x8, #54241                      ; =0xd3e1
 	movk	x8, #48284, lsl #16
 	movk	x8, #1224, lsl #32
 	movk	x8, #16369, lsl #48
 Lloh133:
-	adrp	x9, lCPI4_9@PAGE
+	adrp	x9, lCPI5_9@PAGE
 Lloh134:
-	ldr	q1, [x9, lCPI4_9@PAGEOFF]
+	ldr	q1, [x9, lCPI5_9@PAGEOFF]
 Lloh135:
-	adrp	x9, lCPI4_10@PAGE
+	adrp	x9, lCPI5_10@PAGE
 Lloh136:
-	ldr	q2, [x9, lCPI4_10@PAGEOFF]
+	ldr	q2, [x9, lCPI5_10@PAGEOFF]
 	str	q1, [sp, #1120]
 	str	q2, [sp, #1136]
 Lloh137:
-	adrp	x9, lCPI4_11@PAGE
+	adrp	x9, lCPI5_11@PAGE
 Lloh138:
-	ldr	q1, [x9, lCPI4_11@PAGEOFF]
+	ldr	q1, [x9, lCPI5_11@PAGEOFF]
 	str	q1, [sp, #1152]
 	mov	x9, #32890                      ; =0x807a
 	movk	x9, #11989, lsl #16
@@ -4002,7 +4042,7 @@ Lloh142:
 	add	x1, x1, l_.str.34@PAGEOFF
 	bl	_fopen
 	str	x24, [sp, #696]                 ; 8-byte Folded Spill
-	cbz	x0, LBB4_104
+	cbz	x0, LBB5_104
 ; %bb.98:
 	mov	x21, x0
 	str	d11, [sp, #592]                 ; 8-byte Folded Spill
@@ -4191,7 +4231,7 @@ Lloh157:
 Lloh158:
 	add	x25, x25, l_.str.40@PAGEOFF
 	cmp	w8, #1
-	b.lt	LBB4_101
+	b.lt	LBB5_101
 ; %bb.99:
 Lloh159:
 	adrp	x19, _g_block_ring@PAGE+136
@@ -4203,7 +4243,7 @@ Lloh161:
 	adrp	x22, l_.str.39@PAGE
 Lloh162:
 	add	x22, x22, l_.str.39@PAGEOFF
-LBB4_100:                               ; =>This Inner Loop Header: Depth=1
+LBB5_100:                               ; =>This Inner Loop Header: Depth=1
 	ldur	x9, [x19, #-136]
 	sub	x10, x19, #128
 	ldp	q0, q1, [x19, #32]
@@ -4225,8 +4265,8 @@ LBB4_100:                               ; =>This Inner Loop Header: Depth=1
 	add	x19, x19, #224
 	cmp	x20, x8
 	add	x20, x20, #1
-	b.lt	LBB4_100
-LBB4_101:
+	b.lt	LBB5_100
+LBB5_101:
 Lloh163:
 	adrp	x0, l_.str.42@PAGE
 Lloh164:
@@ -4250,7 +4290,7 @@ Lloh164:
 	add	x22, sp, #1536
 	add	x21, sp, #1408
 	add	x20, sp, #1280
-LBB4_102:                               ; =>This Inner Loop Header: Depth=1
+LBB5_102:                               ; =>This Inner Loop Header: Depth=1
 	add	x8, sp, #1216
 	ldrsw	x8, [x8, x24, lsl #2]
 	add	x24, x24, #1
@@ -4319,7 +4359,7 @@ Lloh170:
 	add	x1, x1, l_.str.43@PAGEOFF
 	bl	_fprintf
 	cmp	x24, #15
-	b.ne	LBB4_102
+	b.ne	LBB5_102
 ; %bb.103:
 	ldrsw	x10, [sp, #1276]
 	add	x8, sp, #3000
@@ -4428,9 +4468,9 @@ Lloh184:
 	ldr	d15, [sp, #640]                 ; 8-byte Folded Reload
 	ldr	d9, [sp, #600]                  ; 8-byte Folded Reload
 	ldr	d11, [sp, #592]                 ; 8-byte Folded Reload
-LBB4_104:
+LBB5_104:
 	ldr	w8, [sp, #784]                  ; 4-byte Folded Reload
-	cbz	w8, LBB4_106
+	cbz	w8, LBB5_106
 ; %bb.105:
 	mov	x8, #36805                      ; =0x8fc5
 	movk	x8, #30513, lsl #16
@@ -5165,7 +5205,7 @@ Lloh244:
 	bl	_printf
 	mov	x0, x19
 	bl	_puts
-LBB4_106:
+LBB5_106:
 	ldr	x8, [sp, #3128]
 Lloh245:
 	adrp	x9, ___stack_chk_guard@GOTPAGE
@@ -5174,7 +5214,7 @@ Lloh246:
 Lloh247:
 	ldr	x9, [x9]
 	cmp	x9, x8
-	b.ne	LBB4_108
+	b.ne	LBB5_108
 ; %bb.107:
 	sub	sp, x29, #144
 	ldp	x29, x30, [sp, #144]            ; 16-byte Folded Reload
@@ -5188,7 +5228,7 @@ Lloh247:
 	ldp	d13, d12, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d15, d14, [sp], #160            ; 16-byte Folded Reload
 	ret
-LBB4_108:
+LBB5_108:
 	bl	___stack_chk_fail
 	.loh AdrpAdd	Lloh15, Lloh16
 	.loh AdrpLdrGotLdr	Lloh12, Lloh13, Lloh14
@@ -5380,7 +5420,7 @@ Lloh253:
 	mov	x22, x0
 	adrp	x23, __MergedGlobals@PAGE
 	ldr	w8, [x23, __MergedGlobals@PAGEOFF]
-	cbz	w8, LBB5_102
+	cbz	w8, LBB6_102
 ; %bb.1:
 	mov	w24, #0                         ; =0x0
 Lloh254:
@@ -5425,31 +5465,31 @@ Lloh259:
 	movk	x8, #16471, lsl #48
 	str	x8, [sp, #168]                  ; 8-byte Folded Spill
 	str	x22, [sp, #216]                 ; 8-byte Folded Spill
-	b	LBB5_3
-LBB5_2:                                 ;   in Loop: Header=BB5_3 Depth=1
+	b	LBB6_3
+LBB6_2:                                 ;   in Loop: Header=BB6_3 Depth=1
 	add	w24, w24, #1
 	mov	w0, #53392                      ; =0xd090
 	movk	w0, #3, lsl #16
 	bl	_usleep
 	ldr	w8, [x23, __MergedGlobals@PAGEOFF]
-	cbz	w8, LBB5_100
-LBB5_3:                                 ; =>This Loop Header: Depth=1
-                                        ;     Child Loop BB5_11 Depth 2
-                                        ;     Child Loop BB5_15 Depth 2
-                                        ;     Child Loop BB5_23 Depth 2
-                                        ;     Child Loop BB5_27 Depth 2
-                                        ;     Child Loop BB5_34 Depth 2
-                                        ;     Child Loop BB5_38 Depth 2
-                                        ;     Child Loop BB5_46 Depth 2
-                                        ;     Child Loop BB5_50 Depth 2
-                                        ;     Child Loop BB5_57 Depth 2
-                                        ;     Child Loop BB5_61 Depth 2
-                                        ;     Child Loop BB5_68 Depth 2
-                                        ;     Child Loop BB5_72 Depth 2
-                                        ;     Child Loop BB5_79 Depth 2
-                                        ;     Child Loop BB5_83 Depth 2
-                                        ;     Child Loop BB5_89 Depth 2
-                                        ;     Child Loop BB5_93 Depth 2
+	cbz	w8, LBB6_100
+LBB6_3:                                 ; =>This Loop Header: Depth=1
+                                        ;     Child Loop BB6_11 Depth 2
+                                        ;     Child Loop BB6_15 Depth 2
+                                        ;     Child Loop BB6_23 Depth 2
+                                        ;     Child Loop BB6_27 Depth 2
+                                        ;     Child Loop BB6_34 Depth 2
+                                        ;     Child Loop BB6_38 Depth 2
+                                        ;     Child Loop BB6_46 Depth 2
+                                        ;     Child Loop BB6_50 Depth 2
+                                        ;     Child Loop BB6_57 Depth 2
+                                        ;     Child Loop BB6_61 Depth 2
+                                        ;     Child Loop BB6_68 Depth 2
+                                        ;     Child Loop BB6_72 Depth 2
+                                        ;     Child Loop BB6_79 Depth 2
+                                        ;     Child Loop BB6_83 Depth 2
+                                        ;     Child Loop BB6_89 Depth 2
+                                        ;     Child Loop BB6_93 Depth 2
 	negs	w8, w24
 	and	w8, w8, #0x3
 	and	w9, w24, #0x3
@@ -5509,15 +5549,15 @@ LBB5_3:                                 ; =>This Loop Header: Depth=1
 	sub	x1, x29, #208
 	mov	w0, #6                          ; =0x6
 	bl	_clock_gettime
-	cbnz	w21, LBB5_2
-; %bb.4:                                ;   in Loop: Header=BB5_3 Depth=1
+	cbnz	w21, LBB6_2
+; %bb.4:                                ;   in Loop: Header=BB6_3 Depth=1
 	ldur	x0, [x29, #-176]
-	cbz	x0, LBB5_2
-; %bb.5:                                ;   in Loop: Header=BB5_3 Depth=1
+	cbz	x0, LBB6_2
+; %bb.5:                                ;   in Loop: Header=BB6_3 Depth=1
 	ldur	x8, [x29, #-168]
 	cmp	x8, #33
-	b.lo	LBB5_2
-; %bb.6:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.lo	LBB6_2
+; %bb.6:                                ;   in Loop: Header=BB6_3 Depth=1
 	stur	w24, [x29, #-212]               ; 4-byte Folded Spill
 	ldp	x9, x8, [x29, #-208]
 	stur	x9, [x29, #-240]                ; 8-byte Folded Spill
@@ -5560,41 +5600,41 @@ Lloh261:
 	add	x25, x25, l_.str.85@PAGEOFF
 	mov	x16, #1                         ; =0x1
 	movk	x16, #4100, lsl #32
-	cbz	x21, LBB5_18
-; %bb.7:                                ;   in Loop: Header=BB5_3 Depth=1
+	cbz	x21, LBB6_18
+; %bb.7:                                ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x21]
 	cmp	w8, #48
-	b.ne	LBB5_10
-; %bb.8:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_10
+; %bb.8:                                ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x21, #1]
 	orr	w8, w8, #0x20
 	cmp	w8, #120
-	b.ne	LBB5_10
-; %bb.9:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_10
+; %bb.9:                                ;   in Loop: Header=BB6_3 Depth=1
 	add	x21, x21, #2
-LBB5_10:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_10:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, #0                          ; =0x0
 	ldrb	w8, [x21, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.ne	LBB5_13
-LBB5_11:                                ;   Parent Loop BB5_3 Depth=1
+	b.ne	LBB6_13
+LBB6_11:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	cmp	w8, #125
-	b.eq	LBB5_13
-; %bb.12:                               ;   in Loop: Header=BB5_11 Depth=2
+	b.eq	LBB6_13
+; %bb.12:                               ;   in Loop: Header=BB6_11 Depth=2
 	add	x9, x9, #1
 	ldrb	w8, [x21, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.eq	LBB5_11
-LBB5_13:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x9, LBB5_18
-; %bb.14:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.eq	LBB6_11
+LBB6_13:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x9, LBB6_18
+; %bb.14:                               ;   in Loop: Header=BB6_3 Depth=1
 	mov	x8, #0                          ; =0x0
 	cmp	x9, #16
 	mov	w11, #16                        ; =0x10
@@ -5602,7 +5642,7 @@ LBB5_13:                                ;   in Loop: Header=BB5_3 Depth=1
 	add	x10, x21, x10
 	csel	x9, x9, x11, lo
 	sub	x10, x10, #16
-LBB5_15:                                ;   Parent Loop BB5_3 Depth=1
+LBB6_15:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldrsb	w11, [x10], #1
 	sub	w12, w11, #48
@@ -5618,18 +5658,18 @@ LBB5_15:                                ;   Parent Loop BB5_3 Depth=1
 	csel	w11, w11, w12, hi
 	orr	x8, x11, x8, lsl #4
 	subs	x9, x9, #1
-	b.ne	LBB5_15
-; %bb.16:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_15
+; %bb.16:                               ;   in Loop: Header=BB6_3 Depth=1
 	adrp	x10, __MergedGlobals@PAGE+336
 	ldr	x9, [x10, __MergedGlobals@PAGEOFF+336]
 	cmp	x8, x9
 	adrp	x21, __MergedGlobals.92@PAGE+8
-	b.ls	LBB5_19
-; %bb.17:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ls	LBB6_19
+; %bb.17:                               ;   in Loop: Header=BB6_3 Depth=1
 	str	x8, [x10, __MergedGlobals@PAGEOFF+336]
-	cbnz	x22, LBB5_20
-	b	LBB5_30
-LBB5_18:                                ;   in Loop: Header=BB5_3 Depth=1
+	cbnz	x22, LBB6_20
+	b	LBB6_30
+LBB6_18:                                ;   in Loop: Header=BB6_3 Depth=1
 Lloh262:
 	adrp	x8, __MergedGlobals@PAGE+336
 Lloh263:
@@ -5638,47 +5678,47 @@ Lloh263:
 	add	w8, w8, #1
 	stur	w8, [x29, #-212]                ; 4-byte Folded Spill
 	adrp	x21, __MergedGlobals.92@PAGE+8
-	cbnz	x22, LBB5_20
-	b	LBB5_30
-LBB5_19:                                ;   in Loop: Header=BB5_3 Depth=1
+	cbnz	x22, LBB6_20
+	b	LBB6_30
+LBB6_19:                                ;   in Loop: Header=BB6_3 Depth=1
 	cmp	x8, #0
 	ldur	w8, [x29, #-212]                ; 4-byte Folded Reload
 	cinc	w8, w8, eq
 	stur	w8, [x29, #-212]                ; 4-byte Folded Spill
-	cbz	x22, LBB5_30
-LBB5_20:                                ;   in Loop: Header=BB5_3 Depth=1
+	cbz	x22, LBB6_30
+LBB6_20:                                ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x22]
 	cmp	w8, #48
-	b.ne	LBB5_22
-; %bb.21:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_22
+; %bb.21:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x22, #1]
 	orr	w8, w8, #0x20
 	cmp	w8, #120
 	add	x8, x22, #2
 	csel	x22, x8, x22, eq
-LBB5_22:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_22:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, #0                          ; =0x0
 	ldrb	w8, [x22, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.ne	LBB5_25
-LBB5_23:                                ;   Parent Loop BB5_3 Depth=1
+	b.ne	LBB6_25
+LBB6_23:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	cmp	w8, #125
-	b.eq	LBB5_25
-; %bb.24:                               ;   in Loop: Header=BB5_23 Depth=2
+	b.eq	LBB6_25
+; %bb.24:                               ;   in Loop: Header=BB6_23 Depth=2
 	add	x9, x9, #1
 	ldrb	w8, [x22, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.eq	LBB5_23
-LBB5_25:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x9, LBB5_30
-; %bb.26:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.eq	LBB6_23
+LBB6_25:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x9, LBB6_30
+; %bb.26:                               ;   in Loop: Header=BB6_3 Depth=1
 	mov	x8, #0                          ; =0x0
 	cmp	x9, #16
 	mov	w11, #16                        ; =0x10
@@ -5686,7 +5726,7 @@ LBB5_25:                                ;   in Loop: Header=BB5_3 Depth=1
 	add	x10, x22, x10
 	csel	x9, x9, x11, lo
 	sub	x10, x10, #16
-LBB5_27:                                ;   Parent Loop BB5_3 Depth=1
+LBB6_27:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldrsb	w11, [x10], #1
 	sub	w12, w11, #48
@@ -5702,47 +5742,47 @@ LBB5_27:                                ;   Parent Loop BB5_3 Depth=1
 	csel	w11, w11, w12, hi
 	orr	x8, x11, x8, lsl #4
 	subs	x9, x9, #1
-	b.ne	LBB5_27
-; %bb.28:                               ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x8, LBB5_30
-; %bb.29:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_27
+; %bb.28:                               ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x8, LBB6_30
+; %bb.29:                               ;   in Loop: Header=BB6_3 Depth=1
 	adrp	x9, __MergedGlobals@PAGE+368
 	str	x8, [x9, __MergedGlobals@PAGEOFF+368]
-LBB5_30:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x24, LBB5_41
-; %bb.31:                               ;   in Loop: Header=BB5_3 Depth=1
+LBB6_30:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x24, LBB6_41
+; %bb.31:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x24]
 	cmp	w8, #48
-	b.ne	LBB5_33
-; %bb.32:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_33
+; %bb.32:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x24, #1]
 	orr	w8, w8, #0x20
 	cmp	w8, #120
 	add	x8, x24, #2
 	csel	x24, x8, x24, eq
-LBB5_33:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_33:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, #0                          ; =0x0
 	ldrb	w8, [x24, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.ne	LBB5_36
-LBB5_34:                                ;   Parent Loop BB5_3 Depth=1
+	b.ne	LBB6_36
+LBB6_34:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	cmp	w8, #125
-	b.eq	LBB5_36
-; %bb.35:                               ;   in Loop: Header=BB5_34 Depth=2
+	b.eq	LBB6_36
+; %bb.35:                               ;   in Loop: Header=BB6_34 Depth=2
 	add	x9, x9, #1
 	ldrb	w8, [x24, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.eq	LBB5_34
-LBB5_36:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x9, LBB5_52
-; %bb.37:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.eq	LBB6_34
+LBB6_36:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x9, LBB6_52
+; %bb.37:                               ;   in Loop: Header=BB6_3 Depth=1
 	mov	x8, #0                          ; =0x0
 	cmp	x9, #16
 	mov	w11, #16                        ; =0x10
@@ -5750,7 +5790,7 @@ LBB5_36:                                ;   in Loop: Header=BB5_3 Depth=1
 	add	x10, x24, x10
 	csel	x9, x9, x11, lo
 	sub	x10, x10, #16
-LBB5_38:                                ;   Parent Loop BB5_3 Depth=1
+LBB6_38:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldrsb	w11, [x10], #1
 	sub	w12, w11, #48
@@ -5766,20 +5806,20 @@ LBB5_38:                                ;   Parent Loop BB5_3 Depth=1
 	csel	w11, w11, w12, hi
 	orr	x8, x11, x8, lsl #4
 	subs	x9, x9, #1
-	b.ne	LBB5_38
-; %bb.39:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_38
+; %bb.39:                               ;   in Loop: Header=BB6_3 Depth=1
 Lloh264:
 	adrp	x9, __MergedGlobals@PAGE+288
 Lloh265:
 	ldr	x9, [x9, __MergedGlobals@PAGEOFF+288]
 	cmp	x8, x9
-	b.ls	LBB5_41
-; %bb.40:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ls	LBB6_41
+; %bb.40:                               ;   in Loop: Header=BB6_3 Depth=1
 	adrp	x9, __MergedGlobals@PAGE+288
 	str	x8, [x9, __MergedGlobals@PAGEOFF+288]
-LBB5_41:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x23, LBB5_53
-LBB5_42:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_41:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x23, LBB6_53
+LBB6_42:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x22, x0
 	mov	x0, x23
 	bl	_strlen
@@ -5791,48 +5831,48 @@ Lloh266:
 	adrp	x25, l_.str.85@PAGE
 Lloh267:
 	add	x25, x25, l_.str.85@PAGEOFF
-	b.lo	LBB5_53
-; %bb.43:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.lo	LBB6_53
+; %bb.43:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x23]
 	cmp	w8, #48
-	b.ne	LBB5_45
-; %bb.44:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_45
+; %bb.44:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x23, #1]
 	orr	w8, w8, #0x20
 	cmp	w8, #120
 	add	x8, x23, #2
 	csel	x23, x8, x23, eq
-LBB5_45:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_45:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, #0                          ; =0x0
 	ldrb	w8, [x23, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.ne	LBB5_48
-LBB5_46:                                ;   Parent Loop BB5_3 Depth=1
+	b.ne	LBB6_48
+LBB6_46:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	cmp	w8, #125
-	b.eq	LBB5_48
-; %bb.47:                               ;   in Loop: Header=BB5_46 Depth=2
+	b.eq	LBB6_48
+; %bb.47:                               ;   in Loop: Header=BB6_46 Depth=2
 	add	x9, x9, #1
 	ldrb	w8, [x23, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.eq	LBB5_46
-LBB5_48:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.eq	LBB6_46
+LBB6_48:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x8, #0                          ; =0x0
-	cbz	x9, LBB5_51
-; %bb.49:                               ;   in Loop: Header=BB5_3 Depth=1
+	cbz	x9, LBB6_51
+; %bb.49:                               ;   in Loop: Header=BB6_3 Depth=1
 	cmp	x9, #16
 	mov	w11, #16                        ; =0x10
 	csel	x10, x9, x11, hi
 	add	x10, x23, x10
 	csel	x9, x9, x11, lo
 	sub	x10, x10, #16
-LBB5_50:                                ;   Parent Loop BB5_3 Depth=1
+LBB6_50:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldrsb	w11, [x10], #1
 	sub	w12, w11, #48
@@ -5848,51 +5888,51 @@ LBB5_50:                                ;   Parent Loop BB5_3 Depth=1
 	csel	w11, w11, w12, hi
 	orr	x8, x11, x8, lsl #4
 	subs	x9, x9, #1
-	b.ne	LBB5_50
-LBB5_51:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_50
+LBB6_51:                                ;   in Loop: Header=BB6_3 Depth=1
 	str	x8, [x21, __MergedGlobals.92@PAGEOFF+8]
-	b	LBB5_53
-LBB5_52:                                ;   in Loop: Header=BB5_3 Depth=1
+	b	LBB6_53
+LBB6_52:                                ;   in Loop: Header=BB6_3 Depth=1
 Lloh268:
 	adrp	x8, __MergedGlobals@PAGE+288
 Lloh269:
 	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+288]
-	cbnz	x23, LBB5_42
-LBB5_53:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x28, LBB5_64
-; %bb.54:                               ;   in Loop: Header=BB5_3 Depth=1
+	cbnz	x23, LBB6_42
+LBB6_53:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x28, LBB6_64
+; %bb.54:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x28]
 	cmp	w8, #48
-	b.ne	LBB5_56
-; %bb.55:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_56
+; %bb.55:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x28, #1]
 	orr	w8, w8, #0x20
 	cmp	w8, #120
 	add	x8, x28, #2
 	csel	x28, x8, x28, eq
-LBB5_56:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_56:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, #0                          ; =0x0
 	ldrb	w8, [x28, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.ne	LBB5_59
-LBB5_57:                                ;   Parent Loop BB5_3 Depth=1
+	b.ne	LBB6_59
+LBB6_57:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	cmp	w8, #125
-	b.eq	LBB5_59
-; %bb.58:                               ;   in Loop: Header=BB5_57 Depth=2
+	b.eq	LBB6_59
+; %bb.58:                               ;   in Loop: Header=BB6_57 Depth=2
 	add	x9, x9, #1
 	ldrb	w8, [x28, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.eq	LBB5_57
-LBB5_59:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x9, LBB5_64
-; %bb.60:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.eq	LBB6_57
+LBB6_59:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x9, LBB6_64
+; %bb.60:                               ;   in Loop: Header=BB6_3 Depth=1
 	mov	x8, #0                          ; =0x0
 	cmp	x9, #16
 	mov	w11, #16                        ; =0x10
@@ -5900,7 +5940,7 @@ LBB5_59:                                ;   in Loop: Header=BB5_3 Depth=1
 	add	x10, x28, x10
 	csel	x9, x9, x11, lo
 	sub	x10, x10, #16
-LBB5_61:                                ;   Parent Loop BB5_3 Depth=1
+LBB6_61:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldrsb	w11, [x10], #1
 	sub	w12, w11, #48
@@ -5916,55 +5956,55 @@ LBB5_61:                                ;   Parent Loop BB5_3 Depth=1
 	csel	w11, w11, w12, hi
 	orr	x8, x11, x8, lsl #4
 	subs	x9, x9, #1
-	b.ne	LBB5_61
-; %bb.62:                               ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x8, LBB5_64
-; %bb.63:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_61
+; %bb.62:                               ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x8, LBB6_64
+; %bb.63:                               ;   in Loop: Header=BB6_3 Depth=1
 	adrp	x9, __MergedGlobals@PAGE+304
 	str	x8, [x9, __MergedGlobals@PAGEOFF+304]
-LBB5_64:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x27, LBB5_75
-; %bb.65:                               ;   in Loop: Header=BB5_3 Depth=1
+LBB6_64:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x27, LBB6_75
+; %bb.65:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x27]
 	cmp	w8, #48
-	b.ne	LBB5_67
-; %bb.66:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_67
+; %bb.66:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x27, #1]
 	orr	w8, w8, #0x20
 	cmp	w8, #120
 	add	x8, x27, #2
 	csel	x27, x8, x27, eq
-LBB5_67:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_67:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, #0                          ; =0x0
 	ldrb	w8, [x27, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.ne	LBB5_70
-LBB5_68:                                ;   Parent Loop BB5_3 Depth=1
+	b.ne	LBB6_70
+LBB6_68:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	cmp	w8, #125
-	b.eq	LBB5_70
-; %bb.69:                               ;   in Loop: Header=BB5_68 Depth=2
+	b.eq	LBB6_70
+; %bb.69:                               ;   in Loop: Header=BB6_68 Depth=2
 	add	x9, x9, #1
 	ldrb	w8, [x27, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.eq	LBB5_68
-LBB5_70:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.eq	LBB6_68
+LBB6_70:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x8, #0                          ; =0x0
-	cbz	x9, LBB5_73
-; %bb.71:                               ;   in Loop: Header=BB5_3 Depth=1
+	cbz	x9, LBB6_73
+; %bb.71:                               ;   in Loop: Header=BB6_3 Depth=1
 	cmp	x9, #16
 	mov	w11, #16                        ; =0x10
 	csel	x10, x9, x11, hi
 	add	x10, x27, x10
 	csel	x9, x9, x11, lo
 	sub	x10, x10, #16
-LBB5_72:                                ;   Parent Loop BB5_3 Depth=1
+LBB6_72:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldrsb	w11, [x10], #1
 	sub	w12, w11, #48
@@ -5980,60 +6020,60 @@ LBB5_72:                                ;   Parent Loop BB5_3 Depth=1
 	csel	w11, w11, w12, hi
 	orr	x8, x11, x8, lsl #4
 	subs	x9, x9, #1
-	b.ne	LBB5_72
-LBB5_73:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_72
+LBB6_73:                                ;   in Loop: Header=BB6_3 Depth=1
 Lloh270:
 	adrp	x9, __MergedGlobals@PAGE+360
 Lloh271:
 	ldr	x9, [x9, __MergedGlobals@PAGEOFF+360]
 	cmp	x8, x9
-	b.lo	LBB5_75
-; %bb.74:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.lo	LBB6_75
+; %bb.74:                               ;   in Loop: Header=BB6_3 Depth=1
 	adrp	x9, __MergedGlobals@PAGE+360
 	str	x8, [x9, __MergedGlobals@PAGEOFF+360]
-LBB5_75:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x26, LBB5_85
-; %bb.76:                               ;   in Loop: Header=BB5_3 Depth=1
+LBB6_75:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x26, LBB6_85
+; %bb.76:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x26]
 	cmp	w8, #48
-	b.ne	LBB5_78
-; %bb.77:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_78
+; %bb.77:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x26, #1]
 	orr	w8, w8, #0x20
 	cmp	w8, #120
 	add	x8, x26, #2
 	csel	x26, x8, x26, eq
-LBB5_78:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_78:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, #0                          ; =0x0
 	ldrb	w8, [x26, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.ne	LBB5_81
-LBB5_79:                                ;   Parent Loop BB5_3 Depth=1
+	b.ne	LBB6_81
+LBB6_79:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	cmp	w8, #125
-	b.eq	LBB5_81
-; %bb.80:                               ;   in Loop: Header=BB5_79 Depth=2
+	b.eq	LBB6_81
+; %bb.80:                               ;   in Loop: Header=BB6_79 Depth=2
 	add	x9, x9, #1
 	ldrb	w8, [x26, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.eq	LBB5_79
-LBB5_81:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.eq	LBB6_79
+LBB6_81:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x8, #0                          ; =0x0
-	cbz	x9, LBB5_84
-; %bb.82:                               ;   in Loop: Header=BB5_3 Depth=1
+	cbz	x9, LBB6_84
+; %bb.82:                               ;   in Loop: Header=BB6_3 Depth=1
 	cmp	x9, #16
 	mov	w11, #16                        ; =0x10
 	csel	x10, x9, x11, hi
 	add	x10, x26, x10
 	csel	x9, x9, x11, lo
 	sub	x10, x10, #16
-LBB5_83:                                ;   Parent Loop BB5_3 Depth=1
+LBB6_83:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldrsb	w11, [x10], #1
 	sub	w12, w11, #48
@@ -6049,45 +6089,45 @@ LBB5_83:                                ;   Parent Loop BB5_3 Depth=1
 	csel	w11, w11, w12, hi
 	orr	x8, x11, x8, lsl #4
 	subs	x9, x9, #1
-	b.ne	LBB5_83
-LBB5_84:                                ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_83
+LBB6_84:                                ;   in Loop: Header=BB6_3 Depth=1
 	adrp	x9, __MergedGlobals@PAGE+296
 	str	x8, [x9, __MergedGlobals@PAGEOFF+296]
-LBB5_85:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x0, LBB5_97
-; %bb.86:                               ;   in Loop: Header=BB5_3 Depth=1
+LBB6_85:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x0, LBB6_97
+; %bb.86:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x0]
 	cmp	w8, #48
-	b.ne	LBB5_88
-; %bb.87:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_88
+; %bb.87:                               ;   in Loop: Header=BB6_3 Depth=1
 	ldrb	w8, [x0, #1]
 	orr	w8, w8, #0x20
 	cmp	w8, #120
 	add	x8, x0, #2
 	csel	x0, x8, x0, eq
-LBB5_88:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_88:                                ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, #0                          ; =0x0
 	ldrb	w8, [x0, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.ne	LBB5_91
-LBB5_89:                                ;   Parent Loop BB5_3 Depth=1
+	b.ne	LBB6_91
+LBB6_89:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	cmp	w8, #125
-	b.eq	LBB5_91
-; %bb.90:                               ;   in Loop: Header=BB5_89 Depth=2
+	b.eq	LBB6_91
+; %bb.90:                               ;   in Loop: Header=BB6_89 Depth=2
 	add	x9, x9, #1
 	ldrb	w8, [x0, x9]
 	cmp	w8, #44
 	lsl	x10, x20, x8
 	and	x10, x10, x16
 	ccmp	x10, #0, #4, ls
-	b.eq	LBB5_89
-LBB5_91:                                ;   in Loop: Header=BB5_3 Depth=1
-	cbz	x9, LBB5_96
-; %bb.92:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.eq	LBB6_89
+LBB6_91:                                ;   in Loop: Header=BB6_3 Depth=1
+	cbz	x9, LBB6_96
+; %bb.92:                               ;   in Loop: Header=BB6_3 Depth=1
 	mov	x8, #0                          ; =0x0
 	cmp	x9, #16
 	mov	w11, #16                        ; =0x10
@@ -6095,7 +6135,7 @@ LBB5_91:                                ;   in Loop: Header=BB5_3 Depth=1
 	add	x10, x0, x10
 	csel	x9, x9, x11, lo
 	sub	x10, x10, #16
-LBB5_93:                                ;   Parent Loop BB5_3 Depth=1
+LBB6_93:                                ;   Parent Loop BB6_3 Depth=1
                                         ; =>  This Inner Loop Header: Depth=2
 	ldrsb	w11, [x10], #1
 	sub	w12, w11, #48
@@ -6111,24 +6151,24 @@ LBB5_93:                                ;   Parent Loop BB5_3 Depth=1
 	csel	w11, w11, w12, hi
 	orr	x8, x11, x8, lsl #4
 	subs	x9, x9, #1
-	b.ne	LBB5_93
-; %bb.94:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ne	LBB6_93
+; %bb.94:                               ;   in Loop: Header=BB6_3 Depth=1
 Lloh272:
 	adrp	x9, __MergedGlobals@PAGE+280
 Lloh273:
 	ldr	x9, [x9, __MergedGlobals@PAGEOFF+280]
 	cmp	x8, x9
-	b.ls	LBB5_97
-; %bb.95:                               ;   in Loop: Header=BB5_3 Depth=1
+	b.ls	LBB6_97
+; %bb.95:                               ;   in Loop: Header=BB6_3 Depth=1
 	adrp	x9, __MergedGlobals@PAGE+280
 	str	x8, [x9, __MergedGlobals@PAGEOFF+280]
-	b	LBB5_97
-LBB5_96:                                ;   in Loop: Header=BB5_3 Depth=1
+	b	LBB6_97
+LBB6_96:                                ;   in Loop: Header=BB6_3 Depth=1
 Lloh274:
 	adrp	x8, __MergedGlobals@PAGE+280
 Lloh275:
 	ldr	xzr, [x8, __MergedGlobals@PAGEOFF+280]
-LBB5_97:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_97:                                ;   in Loop: Header=BB6_3 Depth=1
 Lloh276:
 	adrp	x8, __MergedGlobals@PAGE+280
 Lloh277:
@@ -6145,8 +6185,8 @@ Lloh278:
 Lloh279:
 	add	x1, x1, l_.str.34@PAGEOFF
 	bl	_fopen
-	cbz	x0, LBB5_99
-; %bb.98:                               ;   in Loop: Header=BB5_3 Depth=1
+	cbz	x0, LBB6_99
+; %bb.98:                               ;   in Loop: Header=BB6_3 Depth=1
 	mov	x9, x21
 	mov	x21, x0
 	ldur	x8, [x29, #-240]                ; 8-byte Folded Reload
@@ -6229,7 +6269,7 @@ Lloh284:
 Lloh285:
 	add	x1, x1, l_.str.87@PAGEOFF
 	bl	_rename
-LBB5_99:                                ;   in Loop: Header=BB5_3 Depth=1
+LBB6_99:                                ;   in Loop: Header=BB6_3 Depth=1
 	ldr	x22, [sp, #216]                 ; 8-byte Folded Reload
 	adrp	x23, __MergedGlobals@PAGE
 	ldur	w24, [x29, #-212]               ; 4-byte Folded Reload
@@ -6249,13 +6289,13 @@ Lloh291:
 	movk	w0, #3, lsl #16
 	bl	_usleep
 	ldr	w8, [x23, __MergedGlobals@PAGEOFF]
-	cbnz	w8, LBB5_3
-LBB5_100:
+	cbnz	w8, LBB6_3
+LBB6_100:
 	ldur	x0, [x29, #-176]
-	cbz	x0, LBB5_102
+	cbz	x0, LBB6_102
 ; %bb.101:
 	bl	_free
-LBB5_102:
+LBB6_102:
 	mov	x0, x22
 	bl	_curl_slist_free_all
 	mov	x0, x19
@@ -6319,30 +6359,30 @@ _curl_write_cb:                         ; @curl_write_cb
 	add	x9, x19, x8
 	add	x9, x9, #1
 	cmp	x9, x10
-	b.ls	LBB6_5
+	b.ls	LBB7_5
 ; %bb.1:
 	lsl	x8, x10, #1
 	mov	w11, #16384                     ; =0x4000
 	cmp	x10, #0
 	csel	x8, x11, x8, eq
-LBB6_2:                                 ; =>This Inner Loop Header: Depth=1
+LBB7_2:                                 ; =>This Inner Loop Header: Depth=1
 	mov	x22, x8
 	lsl	x8, x8, #1
 	cmp	x22, x9
-	b.lo	LBB6_2
+	b.lo	LBB7_2
 ; %bb.3:
 	ldr	x0, [x20]
 	mov	x1, x22
 	bl	_realloc
-	cbz	x0, LBB6_7
+	cbz	x0, LBB7_7
 ; %bb.4:
 	str	x0, [x20]
 	str	x22, [x20, #16]
 	ldr	x8, [x20, #8]
-	b	LBB6_6
-LBB6_5:
+	b	LBB7_6
+LBB7_5:
 	ldr	x0, [x20]
-LBB6_6:
+LBB7_6:
 	add	x0, x0, x8
 	mov	x1, x21
 	mov	x2, x19
@@ -6356,7 +6396,7 @@ LBB6_6:
 	ldp	x20, x19, [sp, #16]             ; 16-byte Folded Reload
 	ldp	x22, x21, [sp], #48             ; 16-byte Folded Reload
 	ret
-LBB6_7:
+LBB7_7:
 	mov	x19, #0                         ; =0x0
 	mov	x0, x19
 	ldp	x29, x30, [sp, #32]             ; 16-byte Folded Reload
@@ -6385,7 +6425,7 @@ Lloh293:
 Lloh294:
 	ldr	x8, [x8]
 	stur	x8, [x29, #-24]
-	cbz	x0, LBB7_25
+	cbz	x0, LBB8_25
 ; %bb.1:
 	mov	x19, x1
 	mov	x20, x0
@@ -6408,78 +6448,78 @@ Lloh298:
 	add	x1, sp, #40
 	mov	x0, x20
 	bl	_strstr
-	cbnz	x0, LBB7_3
+	cbnz	x0, LBB8_3
 ; %bb.2:
 	add	x1, sp, #8
 	mov	x0, x20
 	bl	_strstr
-	cbz	x0, LBB7_25
-LBB7_3:
+	cbz	x0, LBB8_25
+LBB8_3:
 	mov	x19, x0
 	subs	x8, x0, x20
-	b.ls	LBB7_20
+	b.ls	LBB8_20
 ; %bb.4:
 	mov	x0, x19
 	ands	x9, x8, #0x3
-	b.eq	LBB7_8
+	b.eq	LBB8_8
 ; %bb.5:
 	mov	x0, x19
-LBB7_6:                                 ; =>This Inner Loop Header: Depth=1
+LBB8_6:                                 ; =>This Inner Loop Header: Depth=1
 	ldrb	w10, [x0]
 	cmp	w10, #123
-	b.eq	LBB7_20
-; %bb.7:                                ;   in Loop: Header=BB7_6 Depth=1
+	b.eq	LBB8_20
+; %bb.7:                                ;   in Loop: Header=BB8_6 Depth=1
 	sub	x0, x0, #1
 	subs	x9, x9, #1
-	b.ne	LBB7_6
-LBB7_8:
+	b.ne	LBB8_6
+LBB8_8:
 	sub	x8, x8, #1
 	cmp	x8, #3
-	b.hs	LBB7_10
+	b.hs	LBB8_10
 ; %bb.9:
 	mov	x0, x20
-	b	LBB7_20
-LBB7_10:                                ; =>This Inner Loop Header: Depth=1
+	b	LBB8_20
+LBB8_10:                                ; =>This Inner Loop Header: Depth=1
 	ldrb	w8, [x0]
 	cmp	w8, #123
-	b.eq	LBB7_20
-; %bb.11:                               ;   in Loop: Header=BB7_10 Depth=1
+	b.eq	LBB8_20
+; %bb.11:                               ;   in Loop: Header=BB8_10 Depth=1
 	ldurb	w8, [x0, #-1]
 	cmp	w8, #123
-	b.eq	LBB7_16
-; %bb.12:                               ;   in Loop: Header=BB7_10 Depth=1
+	b.eq	LBB8_16
+; %bb.12:                               ;   in Loop: Header=BB8_10 Depth=1
 	ldurb	w8, [x0, #-2]
 	cmp	w8, #123
-	b.eq	LBB7_17
-; %bb.13:                               ;   in Loop: Header=BB7_10 Depth=1
+	b.eq	LBB8_17
+; %bb.13:                               ;   in Loop: Header=BB8_10 Depth=1
 	ldurb	w8, [x0, #-3]
 	cmp	w8, #123
-	b.eq	LBB7_18
-; %bb.14:                               ;   in Loop: Header=BB7_10 Depth=1
+	b.eq	LBB8_18
+; %bb.14:                               ;   in Loop: Header=BB8_10 Depth=1
 	sub	x0, x0, #4
 	cmp	x0, x20
-	b.hi	LBB7_10
+	b.hi	LBB8_10
 ; %bb.15:
 	mov	x0, x20
-	b	LBB7_20
-LBB7_16:
+	b	LBB8_20
+LBB8_16:
 	sub	x0, x0, #1
-	b	LBB7_20
-LBB7_17:
+	b	LBB8_20
+LBB8_17:
 	sub	x0, x0, #2
-	b	LBB7_20
-LBB7_18:
+	b	LBB8_20
+LBB8_18:
 	sub	x0, x0, #3
-	b	LBB7_20
-LBB7_19:                                ;   in Loop: Header=BB7_20 Depth=1
+	b	LBB8_20
+LBB8_19:                                ;   in Loop: Header=BB8_20 Depth=1
 	add	x19, x19, #1
-LBB7_20:                                ; =>This Inner Loop Header: Depth=1
+LBB8_20:                                ; =>This Inner Loop Header: Depth=1
 	ldrb	w8, [x19]
-	cbz	w8, LBB7_22
-; %bb.21:                               ;   in Loop: Header=BB7_20 Depth=1
+	cbz	w8, LBB8_22
+; %bb.21:                               ;   in Loop: Header=BB8_20 Depth=1
 	cmp	w8, #125
-	b.ne	LBB7_19
-LBB7_22:
+	b.ne	LBB8_19
+LBB8_22:
 Lloh299:
 	adrp	x1, l_.str.81@PAGE
 Lloh300:
@@ -6487,10 +6527,10 @@ Lloh300:
 	bl	_strstr
 	mov	x8, x0
 	mov	x0, #0                          ; =0x0
-	cbz	x8, LBB7_25
+	cbz	x8, LBB8_25
 ; %bb.23:
 	cmp	x8, x19
-	b.hs	LBB7_25
+	b.hs	LBB8_25
 ; %bb.24:
 Lloh301:
 	adrp	x1, l_.str.82@PAGE
@@ -6500,7 +6540,7 @@ Lloh302:
 	bl	_strstr
 	cmp	x0, x19
 	csel	x0, x0, xzr, lo
-LBB7_25:
+LBB8_25:
 	ldur	x8, [x29, #-24]
 Lloh303:
 	adrp	x9, ___stack_chk_guard@GOTPAGE
@@ -6509,13 +6549,13 @@ Lloh304:
 Lloh305:
 	ldr	x9, [x9]
 	cmp	x9, x8
-	b.ne	LBB7_27
+	b.ne	LBB8_27
 ; %bb.26:
 	ldp	x29, x30, [sp, #96]             ; 16-byte Folded Reload
 	ldp	x20, x19, [sp, #80]             ; 16-byte Folded Reload
 	add	sp, sp, #112
 	ret
-LBB7_27:
+LBB8_27:
 	bl	___stack_chk_fail
 	.loh AdrpLdrGotLdr	Lloh292, Lloh293, Lloh294
 	.loh AdrpAdd	Lloh297, Lloh298
@@ -6544,7 +6584,7 @@ _decode_slot0_sqrt_price:               ; @decode_slot0_sqrt_price
 	.cfi_offset b12, -56
 	.cfi_offset b13, -64
 	mov.16b	v8, v3
-	cbz	x0, LBB8_9
+	cbz	x0, LBB9_9
 ; %bb.1:
 	mov.16b	v9, v0
 	mov.16b	v11, v1
@@ -6554,47 +6594,47 @@ Lloh306:
 Lloh307:
 	add	x1, x1, l_.str.82@PAGEOFF
 	bl	_strstr
-	cbz	x0, LBB8_9
+	cbz	x0, LBB9_9
 ; %bb.2:
 	mov	x9, x0
 	ldrb	w10, [x9, #2]!
-	cbz	w10, LBB8_9
+	cbz	w10, LBB9_9
 ; %bb.3:
 	mov	x8, #0                          ; =0x0
 	add	x9, x9, #1
-LBB8_4:                                 ; =>This Inner Loop Header: Depth=1
+LBB9_4:                                 ; =>This Inner Loop Header: Depth=1
 	cmp	w10, #34
-	b.eq	LBB8_7
-; %bb.5:                                ;   in Loop: Header=BB8_4 Depth=1
+	b.eq	LBB9_7
+; %bb.5:                                ;   in Loop: Header=BB9_4 Depth=1
 	cmp	x8, #63
-	b.hi	LBB8_10
-; %bb.6:                                ;   in Loop: Header=BB8_4 Depth=1
+	b.hi	LBB9_10
+; %bb.6:                                ;   in Loop: Header=BB9_4 Depth=1
 	add	x11, x8, #1
 	ldrb	w10, [x9, x8]
 	mov	x8, x11
-	cbnz	w10, LBB8_4
-	b	LBB8_8
-LBB8_7:
+	cbnz	w10, LBB9_4
+	b	LBB9_8
+LBB9_7:
 	mov	x11, x8
-LBB8_8:
+LBB9_8:
 	cmp	x11, #64
-	b.hs	LBB8_11
-LBB8_9:
+	b.hs	LBB9_11
+LBB9_9:
 	mov.16b	v0, v8
 	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
 	ldp	d9, d8, [sp, #32]               ; 16-byte Folded Reload
 	ldp	d11, d10, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d13, d12, [sp], #64             ; 16-byte Folded Reload
 	ret
-LBB8_10:
+LBB9_10:
 	cmp	x8, #64
-	b.lo	LBB8_9
-LBB8_11:
+	b.lo	LBB9_9
+LBB9_11:
 	mov	x8, #0                          ; =0x0
 	add	x9, x0, #2
 	movi.2d	v12, #0000000000000000
 	fmov	d0, #16.00000000
-LBB8_12:                                ; =>This Inner Loop Header: Depth=1
+LBB9_12:                                ; =>This Inner Loop Header: Depth=1
 	ldrsb	w10, [x9, x8]
 	sub	w11, w10, #48
 	sub	w12, w10, #97
@@ -6611,10 +6651,10 @@ LBB8_12:                                ; =>This Inner Loop Header: Depth=1
 	fmadd	d12, d12, d0, d1
 	add	x8, x8, #1
 	cmp	x8, #64
-	b.ne	LBB8_12
+	b.ne	LBB9_12
 ; %bb.13:
 	fcmp	d12, #0.0
-	b.le	LBB8_9
+	b.le	LBB9_9
 ; %bb.14:
 	fmov	d0, #1.00000000
 	mov	w0, #96                         ; =0x60
@@ -6624,11 +6664,11 @@ LBB8_12:                                ; =>This Inner Loop Header: Depth=1
 	fmul	d9, d0, d9
 	fcmp	d9, d11
 	fccmp	d9, d10, #0, ge
-	b.gt	LBB8_9
+	b.gt	LBB9_9
 ; %bb.15:
 	mov.16b	v0, v9
 	bl	___isnand
-	cbnz	w0, LBB8_9
+	cbnz	w0, LBB9_9
 ; %bb.16:
 	mov.16b	v0, v9
 	bl	___isinfd
@@ -6647,7 +6687,7 @@ LBB8_12:                                ; =>This Inner Loop Header: Depth=1
 _decode_aave_hf:                        ; @decode_aave_hf
 	.cfi_startproc
 ; %bb.0:
-	cbz	x0, LBB9_10
+	cbz	x0, LBB10_10
 ; %bb.1:
 	stp	d9, d8, [sp, #-32]!             ; 16-byte Folded Spill
 	stp	x29, x30, [sp, #16]             ; 16-byte Folded Spill
@@ -6663,52 +6703,52 @@ Lloh308:
 Lloh309:
 	add	x1, x1, l_.str.82@PAGEOFF
 	bl	_strstr
-	cbz	x0, LBB9_8
+	cbz	x0, LBB10_8
 ; %bb.2:
 	mov	x9, x0
 	ldrb	w10, [x9, #2]!
-	cbz	w10, LBB9_8
+	cbz	w10, LBB10_8
 ; %bb.3:
 	mov	x8, #0                          ; =0x0
 	add	x9, x9, #1
-LBB9_4:                                 ; =>This Inner Loop Header: Depth=1
+LBB10_4:                                ; =>This Inner Loop Header: Depth=1
 	cmp	w10, #34
-	b.eq	LBB9_11
-; %bb.5:                                ;   in Loop: Header=BB9_4 Depth=1
+	b.eq	LBB10_11
+; %bb.5:                                ;   in Loop: Header=BB10_4 Depth=1
 	cmp	x8, #383
-	b.hi	LBB9_12
-; %bb.6:                                ;   in Loop: Header=BB9_4 Depth=1
+	b.hi	LBB10_12
+; %bb.6:                                ;   in Loop: Header=BB10_4 Depth=1
 	add	x11, x8, #1
 	ldrb	w10, [x9, x8]
 	mov	x8, x11
-	cbnz	w10, LBB9_4
+	cbnz	w10, LBB10_4
 ; %bb.7:
 	cmp	x11, #384
 	mov.16b	v0, v9
-	b.hs	LBB9_13
-	b	LBB9_9
-LBB9_8:
+	b.hs	LBB10_13
+	b	LBB10_9
+LBB10_8:
 	mov.16b	v0, v9
-LBB9_9:
+LBB10_9:
 	ldp	x29, x30, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d9, d8, [sp], #32               ; 16-byte Folded Reload
-LBB9_10:
+LBB10_10:
 	ret
-LBB9_11:
+LBB10_11:
 	cmp	x8, #384
 	mov.16b	v0, v9
-	b.hs	LBB9_13
-	b	LBB9_9
-LBB9_12:
+	b.hs	LBB10_13
+	b	LBB10_9
+LBB10_12:
 	cmp	x8, #384
 	mov.16b	v0, v9
-	b.lo	LBB9_9
-LBB9_13:
+	b.lo	LBB10_9
+LBB10_13:
 	mov	x8, #0                          ; =0x0
 	add	x9, x0, #322
 	movi.2d	v1, #0000000000000000
 	fmov	d2, #16.00000000
-LBB9_14:                                ; =>This Inner Loop Header: Depth=1
+LBB10_14:                               ; =>This Inner Loop Header: Depth=1
 	ldrsb	w10, [x9, x8]
 	sub	w11, w10, #48
 	add	x8, x8, #1
@@ -6725,7 +6765,7 @@ LBB9_14:                                ; =>This Inner Loop Header: Depth=1
 	scvtf	d3, w10
 	fmadd	d1, d1, d2, d3
 	cmp	x8, #64
-	b.ne	LBB9_14
+	b.ne	LBB10_14
 ; %bb.15:
 	mov	x8, #17324                      ; =0x43ac
 	movk	x8, #53714, lsl #16
@@ -6741,18 +6781,18 @@ LBB9_14:                                ; =>This Inner Loop Header: Depth=1
 	mov	x8, #4636737291354636288        ; =0x4059000000000000
 	fmov	d1, x8
 	fccmp	d8, d1, #0, gt
-	b.gt	LBB9_9
+	b.gt	LBB10_9
 ; %bb.16:
 	mov.16b	v0, v8
 	bl	___isnand
 	mov.16b	v0, v9
-	cbnz	w0, LBB9_9
+	cbnz	w0, LBB10_9
 ; %bb.17:
 	mov.16b	v0, v8
 	bl	___isinfd
 	cmp	w0, #0
 	fcsel	d0, d8, d9, eq
-	b	LBB9_9
+	b	LBB10_9
 	.loh AdrpAdd	Lloh308, Lloh309
 	.cfi_endproc
                                         ; -- End function
@@ -7258,19 +7298,19 @@ __MergedGlobals:
 	.quad	0x4040f7e28240b780              ; double 33.936599999999999
 	.quad	0x3ff05119ce075f70              ; double 1.0198
 	.quad	0x3ff08ce703afb7e9              ; double 1.0344
-	.quad	0x4053800000000000              ; double 78
-	.quad	0x3fb3f7ced916872b              ; double 0.078
-	.quad	375670                          ; 0x5bb76
+	.quad	0x4051400000000000              ; double 69
+	.quad	0x3fb1a9fbe76c8b44              ; double 0.069000000000000006
+	.quad	381532                          ; 0x5d25c
 	.quad	499198                          ; 0x79dfe
-	.quad	418216192539                    ; 0x615fa0aa1b
-	.quad	117723178199979                 ; 0x6b119037ebab
+	.quad	1360851731288                   ; 0x13cd9158358
+	.quad	76138178284524                  ; 0x453f4d120bec
 	.quad	0x4054c28f5c28f5c3              ; double 83.040000000000006
 	.quad	0x40509b851eb851ec              ; double 66.430000000000007
 	.quad	0x40309c28f5c28f5c              ; double 16.609999999999999
-	.quad	516352476                       ; 0x1ec6e9dc
+	.quad	516662652                       ; 0x1ecba57c
 	.quad	516349818                       ; 0x1ec6df7a
 	.quad	9                               ; 0x9
-	.quad	9                               ; 0x9
+	.quad	16                              ; 0x10
 	.quad	20000000                        ; 0x1312d00
 
 .zerofill __DATA,__bss,__MergedGlobals.92,40,3 ; @_MergedGlobals.92

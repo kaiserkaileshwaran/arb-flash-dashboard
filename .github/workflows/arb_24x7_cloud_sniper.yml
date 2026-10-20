@@ -11,6 +11,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   cloud-sniper-24x7:
@@ -50,11 +51,11 @@ jobs:
           fi
           ./bin/arb_sniper_asm --self-test || true
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 120 || true
+            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 180 || true
             timeout 60 ./bin/arb_sniper_asm --daemon || true
           else
-            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 12 || true
-            timeout 12 ./bin/arb_sniper_asm --daemon || true
+            python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 90 || true
+            timeout 30 ./bin/arb_sniper_asm --daemon || true
           fi
           python3 scripts/verify_real_onchain_proofs.py || true
           python3 scripts/verify_table2_hf_and_mudrex_pipeline.py || true
@@ -70,3 +71,14 @@ jobs:
             git pull --rebase origin main || true
             git push origin main || true
           fi
+
+      - name: Self-Chain Next 24/7 Cloud Sniper Worker (Runs Even When Laptop is Off)
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/arb_24x7_cloud_sniper.yml/dispatches \
+            -d '{"ref":"main"}' || true

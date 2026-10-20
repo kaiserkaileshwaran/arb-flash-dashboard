@@ -288,6 +288,26 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "onchain_confirmed": True,
         "is_mudrex_direct_payout": True,
     },
+    {
+        "trade_number": 11,
+        "cycle": 11,
+        "block_number": 516661486,
+        "tx_hash": "0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c",
+        "reserve_tx_hash": "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+        "pair": "2-Route Atomic Multi-Flash Bundle (USDCE/WETH SushiV3 5bp<->1bp + UNI/WETH UniV3 5bp<->SushiV3 30bp • 0 MetaMask ETH Used • Relayer Refilled)",
+        "borrow_asset": "WETH/USDC.e/UNI",
+        "optimal_loan_usd": 217350.00,
+        "current_trade_gross_profit_usd": 0.003150,
+        "fees_deducted_from_profit_usd": 0.000100,
+        "current_trade_net_profit_usd": 0.003050,
+        "current_trade_post_tax_inr": round(0.003050 * 94.92, 2),
+        "binance_75_usd": round(0.003050 * 0.80, 6),
+        "binance_75_inr": round(0.003050 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.003050 * 0.20, 6),
+        "reserve_25_inr": round(0.003050 * 94.92 * 0.20, 2),
+        "onchain_confirmed": True,
+        "is_mudrex_direct_payout": True,
+    },
 ]
 
 

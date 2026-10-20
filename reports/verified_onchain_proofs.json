@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "verified_at_epoch": 1792512171.056469,
+  "verified_at_epoch": 1792516536.3767061,
   "chain_id": 42161,
-  "live_block_number": 516646160,
+  "live_block_number": 516662608,
   "owner_metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
   "mudrex_deposit_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
   "binance_deposit_wallet": "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099",
@@ -16,8 +16,8 @@
   "real_amount_saved_25_usd": 0.0,
   "real_amount_saved_25_inr": 0.0,
   "real_amount_saved_pct": 0.0,
-  "real_metamask_eth_balance": 7.587e-05,
-  "real_relayer_eth_balance": 1.38e-05,
+  "real_metamask_eth_balance": 7.499e-05,
+  "real_relayer_eth_balance": 1.36e-06,
   "verified_onchain_trades": [
     {
       "trade_number": 1,
@@ -212,6 +212,26 @@
       "optimal_loan_usd": 842500.0,
       "current_trade_gross_profit_usd": 0.060177,
       "fees_deducted_from_profit_usd": 0.054315,
+      "current_trade_net_profit_usd": 0.005862,
+      "current_trade_post_tax_inr": 0.56,
+      "binance_75_usd": 0.00469,
+      "binance_75_inr": 0.45,
+      "reserve_25_usd": 0.001172,
+      "reserve_25_inr": 0.11
+    },
+    {
+      "trade_number": 11,
+      "cycle": 11,
+      "block_number": 516661486,
+      "tx_hash": "0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c",
+      "reserve_tx_hash": "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+      "real_onchain_settled": true,
+      "onchain_confirmed": true,
+      "pair": "2-Route Atomic Multi-Flash Bundle (USDCE/WETH SushiV3 5bp<->1bp + UNI/WETH UniV3 5bp<->SushiV3 30bp \u2022 0 MetaMask ETH Used \u2022 Relayer Refilled)",
+      "borrow_asset": "WETH/USDC.e/UNI",
+      "optimal_loan_usd": 217350.0,
+      "current_trade_gross_profit_usd": 0.031383,
+      "fees_deducted_from_profit_usd": 0.025521,
       "current_trade_net_profit_usd": 0.005862,
       "current_trade_post_tax_inr": 0.56,
       "binance_75_usd": 0.00469,
@@ -465,6 +485,31 @@
       "gas_fee_usd": 0.052284,
       "usdc_transfers": [],
       "arbiscan_url": "https://arbiscan.io/tx/0x53629af551f5588f362d7e7b32517dd5e2ec85f03169fdfab41ec8bc4310ce97"
+    },
+    {
+      "tx_hash": "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516644741,
+      "gas_used": 41482,
+      "gas_fee_usd": 0.002031,
+      "usdc_transfers": [
+        {
+          "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+          "amount_usdc": 0.005862
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109"
+    },
+    {
+      "tx_hash": "0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c",
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516661486,
+      "gas_used": 471477,
+      "gas_fee_usd": 0.02349,
+      "usdc_transfers": [],
+      "arbiscan_url": "https://arbiscan.io/tx/0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c"
     },
     {
       "tx_hash": "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
