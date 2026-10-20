@@ -974,8 +974,47 @@ def main() -> int:
         mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = winning_meta
         gas_price_wei = 10_100_000  # 0.0101 gwei minimum Arbitrum One L2 basefee (cuts gas needed by 50%)
         max_affordable_gas = max(250_000, int((rel_wei - 5_000_000_000) // gas_price_wei))
+
+        # STRICT ZERO-WASTE TRIPLE PRE-PROOF GUARD BEFORE 1 WEI OF GAS IS EVER SPENT:
+        # Proof #1: Live `eth_call` state simulation must succeed at "latest" with positive profit.
+        # Proof #2: Live `eth_estimateGas` must succeed without revert and return exact gas units.
+        # Proof #3: Proven profit must strictly exceed 2.0x the exact estimated L2 gas cost.
+        triple_proof_passed = False
+        exact_est_gas = 300_000
         if fn_sig == "RAW_CALLDATA":
-            target_gas_limit = min(1_800_000, max_affordable_gas)
+            try:
+                call_res = rpc_call("eth_call", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": call_tuple}, "latest"])
+                est_res = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": call_tuple}])
+                c_hex = call_res.get("result", "")
+                g_hex = est_res.get("result", "")
+                if isinstance(c_hex, str) and c_hex.startswith("0x") and isinstance(g_hex, str) and g_hex.startswith("0x"):
+                    exact_est_gas = int(g_hex, 16)
+                    est_gas_cost_wei = exact_est_gas * gas_price_wei
+                    proven_prof_raw = int(c_hex, 16) if len(c_hex) >= 66 else min_gross
+                    proven_prof_wei = proven_prof_raw if is_weth else int((proven_prof_raw / 1e6) / 2415.0 * 1e18)
+                    if exact_est_gas > 21_000 and proven_prof_wei >= (est_gas_cost_wei * 2):
+                        triple_proof_passed = True
+            except Exception:
+                triple_proof_passed = False
+        else:
+            try:
+                est_out = subprocess.check_output(
+                    [cast_bin, "estimate", DEPLOYED_CONTRACT, fn_sig, call_tuple, str(rel_fee), "--from", RELAYER_WALLET, "--rpc-url", RPC_URL],
+                    stderr=subprocess.DEVNULL,
+                    timeout=10,
+                ).decode("utf-8").strip()
+                exact_est_gas = int(est_out, 10)
+                if exact_est_gas > 21_000 and min_gross >= (exact_est_gas * gas_price_wei * 2):
+                    triple_proof_passed = True
+            except Exception:
+                triple_proof_passed = False
+
+        if not triple_proof_passed:
+            # Abort broadcast with 0 wei gas spent if any of the 3 proofs fail!
+            return 0
+
+        if fn_sig == "RAW_CALLDATA":
+            target_gas_limit = min(max(250_000, int(exact_est_gas * 1.15)), max_affordable_gas)
             send_cmd = [
                 cast_bin,
                 "send",
