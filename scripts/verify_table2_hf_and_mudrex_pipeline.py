@@ -110,10 +110,11 @@ def main() -> int:
     mc3_code = rpc_call("eth_getCode", [MC3, "latest"])["result"]
     bal_owner = "0x70a08231" + OWNER[2:].lower().rjust(64, "0")
 
+    # Strictly ordered from #1 TOP-MOST PROFITABLE TRADE (+₹3.09L) -> #2 (+₹2.62L) -> #3 (+₹1.02L)
     tests = [
-        ("Row #4: Whale #1 (0xc358...624d)", "0xc358f7803a0a28afe56b5bbce157664fe5e1624d", USDC, WETH, 17000 * 10**6, 3800, False, 2150_00000000),
-        ("Row #5: Whale #2 (0x9f25...9052)", "0x9f25248e8465a4a5106948615c6db2ed1e1b9052", WETH, USDT, 2900000000000000000, 1550000000000, True, 2650_00000000),
-        ("Row #6: Whale #3 (0x270d...e6b2)", "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", USDC, WETH, 20000 * 10**6, 3800, False, 2150_00000000),
+        ("Row #4: Top Profit #1 Whale (0x270d...e6b2)", "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", USDC, WETH, 20000 * 10**6, 3800, False, 2150_00000000),
+        ("Row #5: Top Profit #2 Whale (0xc358...624d)", "0xc358f7803a0a28afe56b5bbce157664fe5e1624d", USDC, WETH, 17000 * 10**6, 3800, False, 2150_00000000),
+        ("Row #6: Top Profit #3 Whale (0x9f25...9052)", "0x9f25248e8465a4a5106948615c6db2ed1e1b9052", WETH, USDT, 2900000000000000000, 1550000000000, True, 2650_00000000),
     ]
 
     active_lim_inr = 12500.0

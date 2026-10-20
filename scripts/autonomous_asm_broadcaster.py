@@ -408,11 +408,12 @@ def main() -> int:
     # PRIORITY #1 (OPTION 2): Top 10 Bidirectional Aave V3 High-Risk Borrowers (Ultimate Crore-Scale Flash Loans • 100% Net Profit Direct to Mudrex)
     # =========================================================================
     aave_high_risk_watchlist = [
-        # (borrower_addr, debt_token, collateral_token, debt_to_cover_raw, min_net_1wei_raw, base_reimb_raw, is_weth, label)
-        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col (50% Close = ₹16.13L Flash Loan • Verified +₹2.60L Profit • 100% Direct to Mudrex)"),
-        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, usdt, 2900000000000000000, 1, RELAYER_REIMB_WEI, True, "WETH_debt/USDT_col (50% Close = ₹6.58L Flash Loan • Verified +₹1.03L Profit • ETH->USDC->Mudrex)"),
-        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", usdc, weth, 20000 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col (50% Close = ₹18.98L Flash Loan • Verified +₹3.06L Profit • 100% Direct to Mudrex)"),
-        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, 1, RELAYER_REIMB_WEI, True, "WETH_debt/WETH_col (50% Close = ₹57.53L Flash Loan • +₹2.96L Bonus • ETH->USDC->Mudrex)"),
+        # Strictly ordered from HIGHEST Verified Net Profit (#1: +₹3.09L) -> #2 (+₹2.62L) -> #3 (+₹1.02L) -> Lower!
+        # Executes 1 Single Top-Most Profitable Trade Alone First, then moves to next!
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", usdc, weth, 20000 * 10**6, 1, RELAYER_REIMB_USDC, False, "TOP PROFIT #1: USDC_debt/WETH_col (50% Close = ₹18.98L Flash Loan • Verified +₹3.09L Profit • ₹12,464.34 Mudrex + ₹2.96L MetaMask)"),
+        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, 1, RELAYER_REIMB_USDC, False, "TOP PROFIT #2: USDC_debt/WETH_col (50% Close = ₹16.13L Flash Loan • Verified +₹2.62L Profit • Mudrex + MetaMask)"),
+        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, usdt, 2900000000000000000, 1, RELAYER_REIMB_WEI, True, "TOP PROFIT #3: WETH_debt/USDT_col (50% Close = ₹6.58L Flash Loan • Verified +₹1.02L Profit • ETH->USDC->Mudrex+MetaMask)"),
+        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", weth, weth, 25 * 10**18, 1, RELAYER_REIMB_WEI, True, "WETH_debt/WETH_col (50% Close = ₹57.53L Flash Loan • +₹2.96L Bonus • ETH->USDC->Mudrex+MetaMask)"),
         ("0x9cd696c583ded4716d82012f7f22caeaf335266a", weth, usdc, 45 * 10**18, 1, RELAYER_REIMB_WEI, True, "WETH_debt/USDC_col (50% Close = ₹1.02 Crore Flash Loan • +₹5.10L Bonus • ETH->USDC->Mudrex)"),
         ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 25000 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col (50% Close = ₹23.73L Flash Loan • +₹1.18L Bonus • 100% Direct to Mudrex)"),
         ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 4000 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col (50% Close = ₹3.80L Flash Loan • +₹61.0k Bonus • 100% Direct to Mudrex)"),
