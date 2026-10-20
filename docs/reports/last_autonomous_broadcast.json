@@ -1,13 +1,13 @@
 {
   "ok": true,
   "status": "PARALLEL_WORKERS_ACTIVE_100PCT_NET_TO_MUDREX_AUTO_PRUNE_AND_RESPAWN",
-  "engine_mode": "DYNAMIC_AUTO_SCALED_80_WORKER_POOL (10_CORES_X_8)",
-  "detected_cpu_cores": 10,
-  "scaled_parallel_workers_n": 80,
-  "scaled_rpc_threads": 20,
-  "profit_split_policy": "100% Net Profit Direct EOA USDC.transfer to Mudrex (0xd252...3f05) + 0.00 MetaMask Balance Required + Relayer Gas Reimbursed",
-  "metamask_min_balance_required": "0.00 ETH / 0.00 USDC (Can trade at 0 balance 24/7 via Flash Loans + Separate Relayer)",
-  "bank_threshold_basis": "REAL_MUDREX_WALLET_ONLY_0xd2529585059e3e5c09c912f0f9570000c2a53f05 (Policy Min >= \u20b9100.00 INR)",
+  "winning_mode": "DIRECT_FLASH_SWAP_ARB_USDCE_P1_U5_100PCT_MUDREX",
+  "detected_cpu_cores": 4,
+  "scaled_parallel_workers_n": 32,
+  "scaled_rpc_threads": 8,
+  "profit_split_policy": "100% Net Profit Direct to Mudrex (Up to 12.5k L0 Cap) + Overflow to MetaMask (0xFF3c...89BE)",
+  "ultimate_flash_loan_limit_inr": 2500000000.0,
+  "ultimate_flash_loan_limit_label": "Up to \u20b9250.00 Crore INR (100% Aave V3 + Balancer V2 + UniV3 Pool Depth)",
   "mudrex_min_bank_withdrawal_inr": 100.0,
   "real_mudrex_usdc_balance": 0.37567,
   "real_mudrex_inr_balance": 35.66,
@@ -73,8 +73,8 @@
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
-      "target": "WEETH_UNI1_UNI5",
-      "gross_inr": 0.001,
+      "target": "PENDLE_P25_U5",
+      "gross_inr": 0.2061,
       "status": "COMPLETED_IN_PARALLEL_BUNDLE_TO_MUDREX"
     }
   ],
