@@ -594,8 +594,8 @@ def main() -> int:
         ("ARB_PCS1_SUSHI5",    pcs1_weth_arb,     sushi5_weth_arb,  weth,   arb,      150_000_000_000_000, True,  False),
         ("ARB_PCS5_SUSHI5",    pcs5_weth_arb,     sushi5_weth_arb,  weth,   arb,      180_000_000_000_000, True,  False),
         ("ARB_UNI5_SUSHI5",    uni5_weth_arb,     sushi5_weth_arb,  weth,   arb,      200_000_000_000_000, True,  False),
-        ("ARB_USDT_S30_U5",    "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    250_000, False, True),
-        ("ARB_USDT_S30_U5_S",  "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    100_000, False, True),
+        ("ARB_USDT_S30_U5",    "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    550_000, False, True),
+        ("ARB_USDT_S30_U5_S",  "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt,   arb,                    250_000, False, True),
         ("ARB_USDC_S30_U5",    "0x14716a16ef9eeaada7e266bcf023b71d2c9adbf3", "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", usdc,   arb,                    300_000, False, True),
         ("ARB_USDC_U1_U5",     u1_arb_usdc,       "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", usdc,   arb,                    250_000, False, True),
         ("USDT_UNI_U5_U30",    u5_uni_usdt,       u30_uni_usdt,     usdt,   uni_tok,               60_000, False, True),
@@ -1000,8 +1000,10 @@ def main() -> int:
                     if cycle_positive_probes:
                         cycle_positive_probes.sort(key=lambda x: -x[0])
                         used_borrow_pools = set()
-                        sell_pool_counts = {}
+                        used_all_pools = set()
                         bundle_loans = []
+                        bundle_raw_profits = []
+                        bundle_equiv_weis = []
                         bundle_lbls = []
                         sum_probe_wei = 0
                         for equiv_w, raw_p, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in cycle_positive_probes:
@@ -1013,46 +1015,68 @@ def main() -> int:
                             unit_s = "wei" if tb.lower() == weth.lower() else "uUSD"
                             bundle_lbls.append(f"{p_lbl}({raw_p}{unit_s})")
                             sum_probe_wei += equiv_w
-                            max_ps = 2 if ps_l in (sushi30_link_weth.lower(), uni1_weth_usdce.lower(), sushi5_weth_arb.lower(), uni100_aave_weth.lower()) else (0 if ps_l == u1_arb_usdt.lower() else 1)
-                            if sell_pool_counts.get(ps_l, 0) < max_ps:
-                                sell_pool_counts[ps_l] = sell_pool_counts.get(ps_l, 0) + 1
+                            if pb_l not in used_all_pools and ps_l not in used_all_pools and raw_p > 4:
+                                used_all_pools.add(pb_l)
+                                used_all_pools.add(ps_l)
                                 p_amt_b = 100_000_000_000_000 if pb_l == pcs_link_weth.lower() else p_amt
                                 bundle_loans.append((pb, ps, tb, tq, p_amt_b, 1, z0, z1))
+                                bundle_raw_profits.append(raw_p)
+                                bundle_equiv_weis.append(equiv_w)
                         if sum_probe_wei > bundled_multi_route_wei:
                             bundled_multi_route_wei = sum_probe_wei
                             bundled_routes_count = len(bundle_lbls)
                             bundled_route_labels = bundle_lbls
                         if len(bundle_loans) >= 2:
                             try:
-                                core_bundle_loans = bundle_loans[:8]
-                                marginal_gas_wei = int(RELAYER_REIMB_WEI * (1.0 + 0.25 * (len(core_bundle_loans) - 1)))
-                                fees_zero = [0] * len(core_bundle_loans)
-                                cd_multi = _encode_multi_flash_swaps_calldata(core_bundle_loans, fees_zero)
-                                m_req = json.dumps([{
-                                    "jsonrpc": "2.0",
-                                    "id": 999,
-                                    "method": "eth_call",
-                                    "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_multi}, "latest"],
-                                }], separators=(",", ":")).encode("utf-8")
-                                m_arr = _fast_keepalive_post(url, m_req)
-                                onchain_bundle_raw = 0
-                                if isinstance(m_arr, list) and m_arr and isinstance(m_arr[0].get("result"), str) and len(m_arr[0]["result"]) >= 66:
-                                    onchain_bundle_raw = int(m_arr[0]["result"], 16)
-                                if onchain_bundle_raw > marginal_gas_wei + MIN_NET_WETH_WEI:
-                                    b_score = int((onchain_bundle_raw / 1e18) * 2415.0 * 1e6)
-                                    if b_score > best_profit_score:
-                                        best_profit_score = b_score
-                                        fees_100pct_mudrex = [max(0, onchain_bundle_raw - len(core_bundle_loans))] + [0] * (len(core_bundle_loans) - 1)
-                                        cd_multi_exec = _encode_multi_flash_swaps_calldata(core_bundle_loans, fees_100pct_mudrex)
-                                        winning_meta = (
+                                cand_loans = bundle_loans[:8]
+                                cand_raws = bundle_raw_profits[:8]
+                                cand_equivs = bundle_equiv_weis[:8]
+                                verified_loans = []
+                                verified_raws = []
+                                verified_equiv_wei = 0
+                                # First try all disjoint candidates at once; if one shifted after Multicall3, greedily add clean routes
+                                cd_try_all = _encode_multi_flash_swaps_calldata(cand_loans, [max(0, r - 2) for r in cand_raws])
+                                try:
+                                    r_all = rpc_call("eth_call", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_try_all}, "latest"])
+                                    if isinstance(r_all.get("result"), str) and len(r_all["result"]) >= 66:
+                                        verified_loans = list(cand_loans)
+                                        verified_raws = list(cand_raws)
+                                        verified_equiv_wei = sum(cand_equivs)
+                                except Exception:
+                                    for l_item, r_item, eq_item in zip(cand_loans, cand_raws, cand_equivs):
+                                        test_l = verified_loans + [l_item]
+                                        test_f = [max(0, x - 2) for x in (verified_raws + [r_item])]
+                                        cd_step = _encode_multi_flash_swaps_calldata(test_l, test_f)
+                                        try:
+                                            r_step = rpc_call("eth_call", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_step}, "latest"])
+                                            if isinstance(r_step.get("result"), str) and len(r_step["result"]) >= 66:
+                                                verified_loans = test_l
+                                                verified_raws.append(r_item)
+                                                verified_equiv_wei += eq_item
+                                        except Exception:
+                                            continue
+                                if len(verified_loans) >= 2:
+                                    marginal_gas_wei = int(RELAYER_REIMB_WEI * (1.0 + 0.15 * (len(verified_loans) - 1)))
+                                    if verified_equiv_wei > marginal_gas_wei + MIN_NET_WETH_WEI:
+                                        b_score = int((verified_equiv_wei / 1e18) * 2415.0 * 1e6)
+                                        fees_100pct_mudrex = [max(0, r - 2) for r in verified_raws]
+                                        cd_multi_exec = _encode_multi_flash_swaps_calldata(verified_loans, fees_100pct_mudrex)
+                                        cand_bundle_meta = (
                                             "MULTI_ROUTE_ATOMIC_BUNDLE_100PCT_MUDREX",
                                             cd_multi_exec,
-                                            onchain_bundle_raw,
-                                            fees_100pct_mudrex[0],
+                                            verified_equiv_wei,
+                                            sum(fees_100pct_mudrex),
                                             True,
-                                            sum(x[4] for x in bundle_loans if x[2].lower() == weth.lower()),
+                                            sum(x[4] for x in verified_loans if x[2].lower() == weth.lower()),
                                             "RAW_CALLDATA",
                                         )
+                                        c_key = f"MULTI_BUNDLE:{len(verified_loans)}"
+                                        if c_key not in seen_winning_keys:
+                                            seen_winning_keys.add(c_key)
+                                            winning_candidates.append((b_score, cand_bundle_meta))
+                                        if b_score > best_profit_score:
+                                            best_profit_score = b_score
+                                            winning_meta = cand_bundle_meta
                             except Exception:
                                 pass
                     break
