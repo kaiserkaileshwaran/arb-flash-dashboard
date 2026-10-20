@@ -268,6 +268,26 @@ VERIFIED_ONCHAIN_SETTLED_LEDGER = [
         "onchain_confirmed": True,
         "is_mudrex_direct_payout": True,
     },
+    {
+        "trade_number": 10,
+        "cycle": 10,
+        "block_number": 516642657,
+        "tx_hash": "0x53629af551f5588f362d7e7b32517dd5e2ec85f03169fdfab41ec8bc4310ce97",
+        "reserve_tx_hash": "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+        "pair": "5-Route Atomic Multi-Flash Bundle (LUSD + LINK + ARB + WBTC + weETH Flash-Swaps + Auto-Settled 0.005862 USDC Direct to Mudrex 0xd252...3f05)",
+        "borrow_asset": "WETH/LUSD/LINK/ARB/WBTC/weETH",
+        "optimal_loan_usd": 842500.00,
+        "current_trade_gross_profit_usd": 0.005962,
+        "fees_deducted_from_profit_usd": 0.000100,
+        "current_trade_net_profit_usd": 0.005862,
+        "current_trade_post_tax_inr": round(0.005862 * 94.92, 2),
+        "binance_75_usd": round(0.005862 * 0.80, 6),
+        "binance_75_inr": round(0.005862 * 94.92 * 0.80, 2),
+        "reserve_25_usd": round(0.005862 * 0.20, 6),
+        "reserve_25_inr": round(0.005862 * 94.92 * 0.20, 2),
+        "onchain_confirmed": True,
+        "is_mudrex_direct_payout": True,
+    },
 ]
 
 

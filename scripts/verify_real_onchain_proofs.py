@@ -140,6 +140,17 @@ ONCHAIN_SETTLEMENT_TXS = [
             "0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd",
         ],
     },
+    {
+        "trade_number": 10,
+        "cycle": 10,
+        "pair": "5-Route Atomic Multi-Flash Bundle (LUSD + LINK + ARB + WBTC + weETH Flash-Swaps + Auto-Settled 5,862 Units Direct to Mudrex 0xd252...3f05)",
+        "borrow_asset": "WETH/LUSD/LINK/ARB/WBTC/weETH",
+        "optimal_loan_usd": 842500.00,
+        "tx_hashes": [
+            "0x53629af551f5588f362d7e7b32517dd5e2ec85f03169fdfab41ec8bc4310ce97",
+            "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+        ],
+    },
 ]
 
 
