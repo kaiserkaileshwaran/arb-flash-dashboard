@@ -1373,11 +1373,12 @@ function renderDashboard(payload) {
     `100.0% (10/10 = ₹${totInrOnChain.toFixed(2)} INR)`,
     `All <b>10 historical trades confirmed on Arbiscan (<code>status=0x1</code>)</b>: Mudrex <b>₹${mudInrOnChain.toFixed(2)}</b> + Earlier <b>₹${binOnlyInrOnChain.toFixed(2)}</b> = <b>₹${totInrOnChain.toFixed(2)} INR</b>.`
   );
+  const bundleFloorPct = Math.min(100.0, (Math.max(0, asmBundleNetInr) / 1.00) * 100.0);
   updateSingleProgressBar(
     'progTable1SpreadGas', 'progTable1SpreadGasVal', 'progTable1SpreadGasDesc',
     soloSpreadVsGasPct,
-    `${soloSpreadVsGasPct.toFixed(1)}% Solo (+₹${topSoloGrossInr.toFixed(2)} vs ₹${asmBundleGasInr.toFixed(2)} Gas) / 100% Bundled`,
-    `<b>100% Real Live Spread:</b> Top solo route (3-Hop Triangular <code>WETH→ARB→USDT→WETH</code>) yields <b>+₹${topSoloGrossInr.toFixed(2)} gross vs ₹${asmBundleGasInr.toFixed(2)} solo gas (+₹${Math.max(0, topSoloGrossInr - asmBundleGasInr).toFixed(2)} Solo Net = ${soloSpreadVsGasPct.toFixed(1)}%)</b>, and <b>#15 Bundle</b> yields <b>+₹${asmBundleNetInr.toFixed(2)} Net (100%)</b>!`
+    `${soloSpreadVsGasPct.toFixed(1)}% Solo (₹${topSoloGrossInr.toFixed(2)}/₹${asmBundleGasInr.toFixed(2)} Gas) • Bundle ${bundleFloorPct.toFixed(0)}% of ₹1 Floor`,
+    `<b>Un-Sugarcoated Live Market Thermometer:</b> Best single route yields <b>+₹${topSoloGrossInr.toFixed(2)} gross vs ₹${asmBundleGasInr.toFixed(2)} L2 gas (${soloSpreadVsGasPct.toFixed(1)}% of gas cost)</b>, and combining all positive routes yields <b>+₹${Math.max(0, asmBundleNetInr).toFixed(2)} Net (${bundleFloorPct.toFixed(0)}% of your ₹1.00 INR deposit floor — stopped until ≥ ₹1.00 INR)</b>.`
   );
   updateSingleProgressBar(
     'progCroreFlash', 'progCroreFlashVal', 'progCroreFlashDesc',
