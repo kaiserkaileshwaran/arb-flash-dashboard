@@ -1049,8 +1049,8 @@ def main() -> int:
                                 verified_loans = []
                                 verified_raws = []
                                 verified_equiv_wei = 0
-                                verified_est_gas_wei = RELAYER_REIMB_WEI
-                                # Greedily verify routes using eth_estimateGas with 90% fee buffer so 0 reverts occur on-chain
+                                verified_est_gas_wei = 0
+                                # Greedily verify routes using eth_estimateGas and ONLY append a route if its profit > marginal gas added
                                 for l_item, r_item, eq_item in zip(cand_loans, cand_raws, cand_equivs):
                                     test_l = verified_loans + [l_item]
                                     test_f = [max(0, int(x * 0.90)) for x in (verified_raws + [r_item])]
@@ -1058,13 +1058,16 @@ def main() -> int:
                                     try:
                                         r_step = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_step, "gasPrice": "0x1406f40"}])
                                         if isinstance(r_step.get("result"), str) and r_step["result"].startswith("0x"):
-                                            verified_loans = test_l
-                                            verified_raws.append(r_item)
-                                            verified_equiv_wei += eq_item
-                                            verified_est_gas_wei = int(r_step["result"], 16) * 20_054_000
+                                            new_gas_wei = int(r_step["result"], 16) * 20_054_000
+                                            delta_gas_wei = new_gas_wei - verified_est_gas_wei
+                                            if len(verified_loans) == 0 or eq_item > delta_gas_wei:
+                                                verified_loans = test_l
+                                                verified_raws.append(r_item)
+                                                verified_equiv_wei += eq_item
+                                                verified_est_gas_wei = new_gas_wei
                                     except Exception:
                                         continue
-                                if len(verified_loans) >= 2:
+                                if len(verified_loans) >= 1:
                                     marginal_gas_wei = max(RELAYER_REIMB_WEI, verified_est_gas_wei)
                                     if verified_equiv_wei > marginal_gas_wei + MIN_NET_WETH_WEI:
                                         b_score = int((verified_equiv_wei / 1e18) * 2415.0 * 1e6)
