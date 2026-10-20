@@ -2580,7 +2580,7 @@ _run_native_asm_sniper_cycle:           ; @run_native_asm_sniper_cycle
 	.cfi_offset b13, -144
 	.cfi_offset b14, -152
 	.cfi_offset b15, -160
-	str	w3, [sp, #784]                  ; 4-byte Folded Spill
+	str	w3, [sp, #800]                  ; 4-byte Folded Spill
 Lloh12:
 	adrp	x8, ___stack_chk_guard@GOTPAGE
 Lloh13:
@@ -2637,12 +2637,12 @@ Lloh22:
 	str	x8, [sp, #808]                  ; 8-byte Folded Spill
 	mov	x8, #70368744177664             ; =0x400000000000
 	movk	x8, #16543, lsl #48
-	str	x8, [sp, #800]                  ; 8-byte Folded Spill
+	str	x8, [sp, #792]                  ; 8-byte Folded Spill
 	mov	x8, #149533581377536            ; =0x880000000000
 	movk	x8, #16563, lsl #48
 	fmov	d14, x8
 	mov	x8, #4641240890982006784        ; =0x4069000000000000
-	str	x8, [sp, #792]                  ; 8-byte Folded Spill
+	str	x8, [sp, #784]                  ; 8-byte Folded Spill
 	b	LBB6_3
 LBB6_2:                                 ;   in Loop: Header=BB6_3 Depth=1
 	add	x19, x19, #1
@@ -2752,7 +2752,7 @@ Lloh24:
 	ldr	d3, [x24, #40]
 	fmov	d1, #10.00000000
 	mov.16b	v0, v8
-	ldr	d15, [sp, #800]                 ; 8-byte Folded Reload
+	ldr	d15, [sp, #792]                 ; 8-byte Folded Reload
 	mov.16b	v2, v15
 	bl	_decode_slot0_sqrt_price
 	str	d0, [x24, #40]
@@ -2816,7 +2816,7 @@ Lloh24:
 	ldr	d3, [x24, #96]
 	fmov	d1, #0.50000000
 	mov.16b	v0, v8
-	ldr	d2, [sp, #792]                  ; 8-byte Folded Reload
+	ldr	d2, [sp, #784]                  ; 8-byte Folded Reload
 	bl	_decode_slot0_sqrt_price
 	str	d0, [x24, #96]
 	ldr	x0, [x20]
@@ -3621,7 +3621,7 @@ Lloh130:
 	str	d0, [sp, #2680]
 	mov	w0, #58                         ; =0x3a
 	bl	_sysconf
-	str	x0, [sp, #800]                  ; 8-byte Folded Spill
+	str	x0, [sp, #808]                  ; 8-byte Folded Spill
 	add	x1, sp, #840
 	mov	w0, #6                          ; =0x6
 	bl	_clock_gettime
@@ -3689,27 +3689,26 @@ LBB6_32:                                ; =>This Inner Loop Header: Depth=1
 	fmov	d1, x8
 	sub	x8, x9, x11
 	scvtf	d2, x8
-	fmadd	d2, d0, d1, d2
+	fmadd	d1, d0, d1, d2
 	mov	x8, #43516                      ; =0xa9fc
 	movk	x8, #54001, lsl #16
 	movk	x8, #25165, lsl #32
 	movk	x8, #16208, lsl #48
 	fmov	d0, x8
-	fmul	d1, d2, d0
+	fmul	d12, d1, d0
 	mov	x8, #60813                      ; =0xed8d
 	movk	x8, #41141, lsl #16
 	movk	x8, #50935, lsl #32
 	movk	x8, #16048, lsl #48
 	fmov	d0, x8
-	str	d2, [sp, #704]                  ; 8-byte Folded Spill
-	fmul	d0, d2, d0
+	str	d1, [sp, #696]                  ; 8-byte Folded Spill
+	fmul	d0, d1, d0
 Lloh135:
 	adrp	x8, __MergedGlobals@PAGE+264
 Lloh136:
 	add	x8, x8, __MergedGlobals@PAGEOFF+264
-	str	d1, [sp, #808]                  ; 8-byte Folded Spill
-	str	d1, [x8]
-	str	d0, [sp, #760]                  ; 8-byte Folded Spill
+	str	d12, [x8]
+	str	d0, [sp, #776]                  ; 8-byte Folded Spill
 	str	d0, [x8, #8]
 	adrp	x9, __MergedGlobals.94@PAGE
 	ldr	x8, [x9, __MergedGlobals.94@PAGEOFF]
@@ -3833,32 +3832,32 @@ Lloh136:
 	ldr	d0, [sp, #1784]
 	fadd	d26, d1, d25
 	fcmp	d1, #0.0
-	fcsel	d28, d26, d25, gt
+	fcsel	d26, d26, d25, gt
 	ldr	d25, [sp, #2288]
 	fadd	d25, d25, d24
-	fcsel	d26, d25, d24, gt
-	cinc	w26, w8, gt
+	fcsel	d10, d25, d24, gt
+	cinc	w22, w8, gt
 	fcmp	d0, #0.0
 	b.le	LBB6_35
 ; %bb.34:
-	add	w26, w26, #1
+	add	w22, w22, #1
 	ldr	d24, [sp, #2296]
-	fadd	d26, d24, d26
-	fadd	d28, d0, d28
+	fadd	d10, d24, d10
+	fadd	d26, d0, d26
 	mov	w8, #8                          ; =0x8
-	ldr	x9, [sp, #800]                  ; 8-byte Folded Reload
+	ldr	x9, [sp, #808]                  ; 8-byte Folded Reload
 	cmp	x9, #1
 	csel	x9, x8, x9, lt
-	mov.16b	v24, v28
+	mov.16b	v24, v26
 	b	LBB6_38
 LBB6_35:
 	mov	w8, #8                          ; =0x8
-	ldr	x9, [sp, #800]                  ; 8-byte Folded Reload
+	ldr	x9, [sp, #808]                  ; 8-byte Folded Reload
 	cmp	x9, #1
 	csel	x9, x8, x9, lt
-	cbz	w26, LBB6_37
+	cbz	w22, LBB6_37
 ; %bb.36:
-	mov.16b	v24, v28
+	mov.16b	v24, v26
 	b	LBB6_38
 LBB6_37:
 	add	x8, sp, #1664
@@ -3872,8 +3871,8 @@ LBB6_38:
 	fadd	d24, d24, d25
 	movi.2d	v27, #0000000000000000
 	movi.2d	v25, #0000000000000000
-	str	d25, [sp, #792]                 ; 8-byte Folded Spill
-	fmaxnm	d13, d24, d27
+	str	d25, [sp, #808]                 ; 8-byte Folded Spill
+	fmaxnm	d8, d24, d27
 	str	d24, [sp, #752]                 ; 8-byte Folded Spill
 	fcmp	d24, #0.0
 	mov	x8, #59921                      ; =0xea11
@@ -3881,7 +3880,7 @@ LBB6_38:
 	movk	x8, #38809, lsl #32
 	movk	x8, #15729, lsl #48
 	fmov	d24, x8
-	fccmp	d28, d24, #4, gt
+	fccmp	d26, d24, #4, gt
 	b.le	LBB6_87
 ; %bb.39:
 	fcmp	d22, #0.0
@@ -3891,8 +3890,8 @@ LBB6_38:
 	fcmp	d24, #0.0
 	b.gt	LBB6_42
 ; %bb.41:
-	fmul	d22, d13, d22
-	fdiv	d22, d22, d28
+	fmul	d22, d8, d22
+	fdiv	d22, d22, d26
 	str	d22, [sp, #1536]
 	str	d22, [sp, #1408]
 	str	xzr, [sp, #1280]
@@ -3904,8 +3903,8 @@ LBB6_42:
 	fcmp	d22, #0.0
 	b.gt	LBB6_45
 ; %bb.44:
-	fmul	d20, d13, d20
-	fdiv	d20, d20, d28
+	fmul	d20, d8, d20
+	fdiv	d20, d20, d26
 	str	d20, [sp, #1544]
 	str	d20, [sp, #1416]
 	str	xzr, [sp, #1288]
@@ -3917,8 +3916,8 @@ LBB6_45:
 	fcmp	d20, #0.0
 	b.gt	LBB6_48
 ; %bb.47:
-	fmul	d20, d13, d23
-	fdiv	d20, d20, d28
+	fmul	d20, d8, d23
+	fdiv	d20, d20, d26
 	str	d20, [sp, #1552]
 	str	d20, [sp, #1424]
 	str	xzr, [sp, #1296]
@@ -3930,8 +3929,8 @@ LBB6_48:
 	fcmp	d20, #0.0
 	b.gt	LBB6_51
 ; %bb.50:
-	fmul	d19, d13, d19
-	fdiv	d19, d19, d28
+	fmul	d19, d8, d19
+	fdiv	d19, d19, d26
 	str	d19, [sp, #1560]
 	str	d19, [sp, #1432]
 	str	xzr, [sp, #1304]
@@ -3943,8 +3942,8 @@ LBB6_51:
 	fcmp	d19, #0.0
 	b.gt	LBB6_54
 ; %bb.53:
-	fmul	d19, d13, d21
-	fdiv	d19, d19, d28
+	fmul	d19, d8, d21
+	fdiv	d19, d19, d26
 	str	d19, [sp, #1568]
 	str	d19, [sp, #1440]
 	str	xzr, [sp, #1312]
@@ -3956,8 +3955,8 @@ LBB6_54:
 	fcmp	d19, #0.0
 	b.gt	LBB6_57
 ; %bb.56:
-	fmul	d17, d13, d17
-	fdiv	d17, d17, d28
+	fmul	d17, d8, d17
+	fdiv	d17, d17, d26
 	str	d17, [sp, #1576]
 	str	d17, [sp, #1448]
 	str	xzr, [sp, #1320]
@@ -3969,8 +3968,8 @@ LBB6_57:
 	fcmp	d17, #0.0
 	b.gt	LBB6_60
 ; %bb.59:
-	fmul	d17, d13, d18
-	fdiv	d17, d17, d28
+	fmul	d17, d8, d18
+	fdiv	d17, d17, d26
 	str	d17, [sp, #1584]
 	str	d17, [sp, #1456]
 	str	xzr, [sp, #1328]
@@ -3982,8 +3981,8 @@ LBB6_60:
 	fcmp	d17, #0.0
 	b.gt	LBB6_63
 ; %bb.62:
-	fmul	d7, d13, d7
-	fdiv	d7, d7, d28
+	fmul	d7, d8, d7
+	fdiv	d7, d7, d26
 	str	d7, [sp, #1592]
 	str	d7, [sp, #1464]
 	str	xzr, [sp, #1336]
@@ -3995,8 +3994,8 @@ LBB6_63:
 	fcmp	d7, #0.0
 	b.gt	LBB6_66
 ; %bb.65:
-	fmul	d7, d13, d16
-	fdiv	d7, d7, d28
+	fmul	d7, d8, d16
+	fdiv	d7, d7, d26
 	str	d7, [sp, #1600]
 	str	d7, [sp, #1472]
 	str	xzr, [sp, #1344]
@@ -4008,8 +4007,8 @@ LBB6_66:
 	fcmp	d7, #0.0
 	b.gt	LBB6_69
 ; %bb.68:
-	fmul	d5, d13, d5
-	fdiv	d5, d5, d28
+	fmul	d5, d8, d5
+	fdiv	d5, d5, d26
 	str	d5, [sp, #1608]
 	str	d5, [sp, #1480]
 	str	xzr, [sp, #1352]
@@ -4021,8 +4020,8 @@ LBB6_69:
 	fcmp	d5, #0.0
 	b.gt	LBB6_72
 ; %bb.71:
-	fmul	d5, d13, d6
-	fdiv	d5, d5, d28
+	fmul	d5, d8, d6
+	fdiv	d5, d5, d26
 	str	d5, [sp, #1616]
 	str	d5, [sp, #1488]
 	str	xzr, [sp, #1360]
@@ -4034,8 +4033,8 @@ LBB6_72:
 	fcmp	d5, #0.0
 	b.gt	LBB6_75
 ; %bb.74:
-	fmul	d3, d13, d3
-	fdiv	d3, d3, d28
+	fmul	d3, d8, d3
+	fdiv	d3, d3, d26
 	str	d3, [sp, #1624]
 	str	d3, [sp, #1496]
 	str	xzr, [sp, #1368]
@@ -4047,8 +4046,8 @@ LBB6_75:
 	fcmp	d3, #0.0
 	b.gt	LBB6_78
 ; %bb.77:
-	fmul	d3, d13, d4
-	fdiv	d3, d3, d28
+	fmul	d3, d8, d4
+	fdiv	d3, d3, d26
 	str	d3, [sp, #1632]
 	str	d3, [sp, #1504]
 	str	xzr, [sp, #1376]
@@ -4060,8 +4059,8 @@ LBB6_78:
 	fcmp	d3, #0.0
 	b.gt	LBB6_81
 ; %bb.80:
-	fmul	d2, d13, d2
-	fdiv	d2, d2, d28
+	fmul	d2, d8, d2
+	fdiv	d2, d2, d26
 	str	d2, [sp, #1640]
 	str	d2, [sp, #1512]
 	str	xzr, [sp, #1384]
@@ -4073,8 +4072,8 @@ LBB6_81:
 	fcmp	d2, #0.0
 	b.gt	LBB6_84
 ; %bb.83:
-	fmul	d1, d13, d1
-	fdiv	d1, d1, d28
+	fmul	d1, d8, d1
+	fdiv	d1, d1, d26
 	str	d1, [sp, #1648]
 	str	d1, [sp, #1520]
 	str	xzr, [sp, #1392]
@@ -4086,19 +4085,18 @@ LBB6_84:
 	fcmp	d1, #0.0
 	b.gt	LBB6_87
 ; %bb.86:
-	fmul	d0, d13, d0
-	fdiv	d0, d0, d28
+	fmul	d0, d8, d0
+	fdiv	d0, d0, d26
 	str	d0, [sp, #1656]
 	str	d0, [sp, #1528]
 	str	xzr, [sp, #1400]
 LBB6_87:
-	str	d28, [sp, #744]                 ; 8-byte Folded Spill
-	str	d26, [sp, #776]                 ; 8-byte Folded Spill
+	str	d26, [sp, #768]                 ; 8-byte Folded Spill
 	add	x8, sp, #1536
 	ldr	d0, [x8, x27, lsl #3]
-	fmaxnm	d9, d13, d0
-	fcmp	d13, d0
-	mov.16b	v8, v13
+	fmaxnm	d9, d8, d0
+	fcmp	d8, d0
+	str	d8, [sp, #704]                  ; 8-byte Folded Spill
 	b.gt	LBB6_89
 ; %bb.88:
 	add	x8, sp, #1408
@@ -4111,14 +4109,14 @@ LBB6_87:
 	movk	x8, #16471, lsl #48
 	fmov	d2, x8
 	fmul	d1, d1, d2
-	str	d1, [sp, #792]                  ; 8-byte Folded Spill
+	str	d1, [sp, #808]                  ; 8-byte Folded Spill
 LBB6_89:
-	str	x9, [sp, #672]                  ; 8-byte Folded Spill
-	lsl	w25, w9, #3
 Lloh137:
 	adrp	x23, __MergedGlobals@PAGE+248
 Lloh138:
 	add	x23, x23, __MergedGlobals@PAGEOFF+248
+	str	x9, [sp, #672]                  ; 8-byte Folded Spill
+	lsl	w25, w9, #3
 	ldr	x8, [x23, #32]
 	ucvtf	d1, x8
 	mov	x8, #60813                      ; =0xed8d
@@ -4128,16 +4126,16 @@ Lloh138:
 	fmov	d2, x8
 	fmul	d3, d1, d2
 	ldr	x8, [x23, #40]
-	ucvtf	d11, x8
+	ucvtf	d5, x8
 	str	d3, [sp, #656]                  ; 8-byte Folded Spill
-	fmadd	d4, d11, d2, d3
+	fmadd	d4, d5, d2, d3
 Lloh139:
 	adrp	x8, __MergedGlobals.94@PAGE+8
 Lloh140:
 	ldr	x8, [x8, __MergedGlobals.94@PAGEOFF+8]
 	ucvtf	d3, x8
 	fmul	d2, d3, d2
-	str	d4, [sp, #768]                  ; 8-byte Folded Spill
+	str	d4, [sp, #784]                  ; 8-byte Folded Spill
 	str	d2, [sp, #640]                  ; 8-byte Folded Spill
 	fadd	d4, d4, d2
 	ldr	x19, [x23, #48]
@@ -4145,7 +4143,7 @@ Lloh140:
 	movk	x20, #53714, lsl #16
 	movk	x20, #29277, lsl #32
 	movk	x20, #15410, lsl #48
-	ldr	x22, [x23, #56]
+	ldr	x21, [x23, #56]
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
@@ -4158,40 +4156,39 @@ Lloh140:
 	movk	x8, #57849, lsl #32
 	movk	x8, #16152, lsl #48
 	fmov	d2, x8
-	fmul	d1, d1, d2
+	fmul	d11, d1, d2
 	str	d4, [sp, #632]                  ; 8-byte Folded Spill
-	stp	d4, d1, [x23, #64]
-	str	d1, [sp, #800]                  ; 8-byte Folded Spill
+	stp	d4, d11, [x23, #64]
 	fmul	d1, d3, d2
 	str	d1, [sp, #624]                  ; 8-byte Folded Spill
 	str	d1, [x23, #80]
-	ldr	x11, [x23, #48]
-	ldr	d1, [x23]
-	fmov	d2, #1.00000000
-	fcmp	d1, d2
+	ldr	x24, [x23, #48]
+	ldr	d2, [x23]
+	fmov	d1, #1.00000000
+	fcmp	d2, d1
 	cset	w9, lt
 	ldr	x8, [x23, #88]
 	fcmp	d9, #0.0
 	cset	w10, gt
-	orr	w21, w10, w9
-	mov	x9, #20480                      ; =0x5000
-	movk	x9, #10041, lsl #16
-	movk	x9, #1164, lsl #32
+	mov	x11, #20480                     ; =0x5000
+	movk	x11, #10041, lsl #16
+	movk	x11, #1164, lsl #32
 Lloh141:
-	adrp	x24, __MergedGlobals@PAGE+4
+	adrp	x12, __MergedGlobals@PAGE+4
 Lloh142:
-	add	x24, x24, __MergedGlobals@PAGEOFF+4
-	str	x11, [sp, #616]                 ; 8-byte Folded Spill
-	cmp	x11, x9
+	add	x12, x12, __MergedGlobals@PAGEOFF+4
+	cmp	x24, x11
 	b.lo	LBB6_101
 ; %bb.90:
-	ldr	x9, [x23, #96]
-	cmp	x8, x9
+	ldr	x11, [x23, #96]
+	cmp	x8, x11
 	b.ls	LBB6_101
 ; %bb.91:
-	tbz	w21, #0, LBB6_101
+	orr	w9, w10, w9
+	tbz	w9, #0, LBB6_101
 ; %bb.92:
-	mov	x10, x24
+	str	d2, [sp, #760]                  ; 8-byte Folded Spill
+	mov	x10, x12
 	ldr	w9, [x10], #-4
 	ldr	x11, [x10, #352]
 	add	x11, x11, #1
@@ -4235,32 +4232,36 @@ LBB6_94:                                ; =>This Inner Loop Header: Depth=1
 	cmp	w9, #1
 	b.gt	LBB6_94
 LBB6_95:
-	fmul	d10, d9, d1
+	mov.16b	v15, v5
+	fmul	d13, d9, d1
 	fmul	d14, d8, d1
 	adrp	x9, _g_block_ring@PAGE
 	str	x8, [x9, _g_block_ring@PAGEOFF]
 	add	x8, sp, #3384
 	ldr	x8, [x8, x27, lsl #3]
-	fcmp	d13, d0
+	ldr	d1, [sp, #704]                  ; 8-byte Folded Reload
+	fcmp	d1, d0
 	b.le	LBB6_98
 ; %bb.96:
-	cmp	w26, #1
+	cmp	w22, #1
 	b.ls	LBB6_98
 ; %bb.97:
+	mov	x26, x22
 Lloh145:
 	adrp	x0, _g_block_ring@PAGE+8
 Lloh146:
 	add	x0, x0, _g_block_ring@PAGEOFF+8
-	stp	x26, x8, [sp]
+	stp	x22, x8, [sp]
 Lloh147:
 	adrp	x2, l_.str.28@PAGE
 Lloh148:
 	add	x2, x2, l_.str.28@PAGEOFF
 	mov	w1, #128                        ; =0x80
 	bl	_snprintf
-	ldr	d0, [sp, #776]                  ; 8-byte Folded Reload
+	mov.16b	v0, v10
 	b	LBB6_99
 LBB6_98:
+	mov	x26, x22
 Lloh149:
 	adrp	x0, _g_block_ring@PAGE+8
 Lloh150:
@@ -4296,22 +4297,25 @@ Lloh156:
 	add	x8, sp, #2432
 	ldr	d1, [x8, x27, lsl #3]
 	stp	d1, d0, [x9, #32]
-	stp	d10, d14, [x9, #48]
-	ldr	d0, [sp, #792]                  ; 8-byte Folded Reload
-	stp	d8, d0, [x9, #64]
+	stp	d13, d14, [x9, #48]
 	ldr	d0, [sp, #808]                  ; 8-byte Folded Reload
-	str	d0, [x9, #80]
+	stp	d8, d0, [x9, #64]
+	str	d12, [x9, #80]
 	adrp	x8, __MergedGlobals@PAGE+4
 	ldr	w9, [x8, __MergedGlobals@PAGEOFF+4]
 	cmp	w9, #19
+	mov.16b	v5, v15
+	ldr	d2, [sp, #760]                  ; 8-byte Folded Reload
+	mov	x22, x26
 	b.gt	LBB6_101
 ; %bb.100:
 	add	w9, w9, #1
 	str	w9, [x8, __MergedGlobals@PAGEOFF+4]
 LBB6_101:
-	ucvtf	d10, x19
-	fmov	d14, x20
-	ucvtf	d15, x22
+	str	d10, [sp, #760]                 ; 8-byte Folded Spill
+	ucvtf	d14, x19
+	fmov	d15, x20
+	ucvtf	d13, x21
 	ldr	d0, [sp, #1536]
 	ldr	d1, [sp, #1544]
 	fcmp	d1, #0.0
@@ -4374,81 +4378,105 @@ LBB6_101:
 	cinc	w9, w9, le
 	cinc	w8, w8, gt
 	fcmp	d1, #0.0
-	cinc	w22, w9, le
-	cinc	w19, w8, gt
+	cinc	w11, w9, le
+	cinc	w8, w8, gt
+	str	x8, [sp, #608]                  ; 8-byte Folded Spill
 Lloh157:
 	adrp	x8, __MergedGlobals.94@PAGE+16
 Lloh158:
 	add	x8, x8, __MergedGlobals.94@PAGEOFF+16
 	ldp	x9, x10, [x8]
 	add	x9, x9, w25, sxtw
-	add	x10, x10, x22
+	str	x11, [sp, #600]                 ; 8-byte Folded Spill
+	add	x10, x10, x11
 	stp	x9, x10, [x8]
-	ldr	w8, [sp, #784]                  ; 4-byte Folded Reload
+	ldr	w8, [sp, #800]                  ; 4-byte Folded Reload
 	cbz	w8, LBB6_103
 ; %bb.102:
 Lloh159:
-	adrp	x8, l_.str.31@PAGE
+	adrp	x26, l_.str.31@PAGE
 Lloh160:
-	add	x8, x8, l_.str.31@PAGEOFF
-	str	x8, [sp, #608]                  ; 8-byte Folded Spill
+	add	x26, x26, l_.str.31@PAGEOFF
+	adrp	x19, __MergedGlobals@PAGE+248
 	mov	x20, #36805                     ; =0x8fc5
 	movk	x20, #30513, lsl #16
 	movk	x20, #8493, lsl #32
 	movk	x20, #16239, lsl #48
-	b	LBB6_109
+	b	LBB6_110
 LBB6_103:
-	adrp	x10, __MergedGlobals@PAGE+336
-	ldr	x9, [x10, __MergedGlobals@PAGEOFF+336]
+Lloh161:
+	adrp	x26, l_.str.33@PAGE
+Lloh162:
+	add	x26, x26, l_.str.33@PAGEOFF
+	fmov	d0, #1.00000000
+	fcmp	d2, d0
 	adrp	x8, __MergedGlobals.94@PAGE+32
+	adrp	x9, __MergedGlobals@PAGE+336
+	adrp	x19, __MergedGlobals@PAGE+248
 	mov	x20, #36805                     ; =0x8fc5
 	movk	x20, #30513, lsl #16
 	movk	x20, #8493, lsl #32
 	movk	x20, #16239, lsl #48
-	tbz	w21, #0, LBB6_105
+	b.lt	LBB6_107
 ; %bb.104:
-Lloh161:
-	adrp	x10, l_.str.33@PAGE
-Lloh162:
-	add	x10, x10, l_.str.33@PAGEOFF
-	b	LBB6_108
-LBB6_105:
-	ldr	x11, [x8, __MergedGlobals.94@PAGEOFF+32]
-	add	x11, x11, #12
-	cmp	x9, x11
-	b.hs	LBB6_107
+	ldr	d0, [x19, __MergedGlobals@PAGEOFF+248]
+	mov	x10, #44564                     ; =0xae14
+	movk	x10, #57671, lsl #16
+	movk	x10, #5242, lsl #32
+	movk	x10, #16368, lsl #48
+	fmov	d1, x10
+	fcmp	d0, d1
+	b.le	LBB6_107
+; %bb.105:
+	mov	x10, #5243                      ; =0x147b
+	movk	x10, #18350, lsl #16
+	movk	x10, #47841, lsl #32
+	movk	x10, #16471, lsl #48
+	fmov	d0, x10
+	fmul	d0, d9, d0
+	ldr	x10, [x9, __MergedGlobals@PAGEOFF+336]
+	fmov	d1, #1.00000000
+	fcmp	d0, d1
+	b.ge	LBB6_108
 ; %bb.106:
+	ldr	x11, [x8, __MergedGlobals.94@PAGEOFF+32]
+	add	x11, x11, #24
 Lloh163:
-	adrp	x8, l_.str.31@PAGE
+	adrp	x26, l_.str.31@PAGE
 Lloh164:
-	add	x8, x8, l_.str.31@PAGEOFF
-	str	x8, [sp, #608]                  ; 8-byte Folded Spill
-	b	LBB6_109
+	add	x26, x26, l_.str.31@PAGEOFF
+	cmp	x10, x11
+	b.lo	LBB6_110
 LBB6_107:
-	ldr	x9, [x10, __MergedGlobals@PAGEOFF+336]
-Lloh165:
-	adrp	x10, l_.str.34@PAGE
-Lloh166:
-	add	x10, x10, l_.str.34@PAGEOFF
+	mov.16b	v10, v5
+	ldr	x10, [x9, __MergedGlobals@PAGEOFF+336]
+	b	LBB6_109
 LBB6_108:
-	str	x10, [sp, #608]                 ; 8-byte Folded Spill
-	str	x9, [x8, __MergedGlobals.94@PAGEOFF+32]
+	mov.16b	v10, v5
+Lloh165:
+	adrp	x26, l_.str.34@PAGE
+Lloh166:
+	add	x26, x26, l_.str.34@PAGEOFF
+LBB6_109:
+	str	x10, [x8, __MergedGlobals.94@PAGEOFF+32]
 Lloh167:
 	adrp	x0, l_.str.32@PAGE
 Lloh168:
 	add	x0, x0, l_.str.32@PAGEOFF
 	bl	_system
-LBB6_109:
-	fmul	d12, d10, d14
-	fmul	d15, d15, d14
+	mov.16b	v5, v10
+LBB6_110:
+	fmul	d14, d14, d15
+	fmul	d15, d13, d15
 	ldrsw	x8, [sp, #1276]
 	add	x9, sp, #1536
 Lloh169:
 	adrp	x10, __MergedGlobals@PAGE+352
 Lloh170:
 	ldr	x10, [x10, __MergedGlobals@PAGEOFF+352]
-	cbz	x10, LBB6_111
-; %bb.110:
+	str	d12, [sp, #792]                 ; 8-byte Folded Spill
+	cbz	x10, LBB6_112
+; %bb.111:
 Lloh171:
 	adrp	x11, __MergedGlobals@PAGE+312
 Lloh172:
@@ -4462,8 +4490,8 @@ Lloh172:
 	fmov	d0, x10
 	fmul	d0, d9, d0
 	str	d0, [sp, #664]                  ; 8-byte Folded Spill
-	b	LBB6_112
-LBB6_111:
+	b	LBB6_113
+LBB6_112:
 	mov	x10, #5243                      ; =0x147b
 	movk	x10, #18350, lsl #16
 	movk	x10, #47841, lsl #32
@@ -4471,8 +4499,8 @@ LBB6_111:
 	fmov	d0, x10
 	fmul	d10, d9, d0
 	str	d10, [sp, #664]                 ; 8-byte Folded Spill
-LBB6_112:
-	ldr	d14, [x9, x8, lsl #3]
+LBB6_113:
+	ldr	d13, [x9, x8, lsl #3]
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
@@ -4492,39 +4520,36 @@ LBB6_112:
 	fmov	d1, x8
 	fmul	d1, d9, d1
 	str	d1, [sp, #736]                  ; 8-byte Folded Spill
-Lloh173:
-	adrp	x8, __MergedGlobals@PAGE+248
-Lloh174:
-	ldr	d1, [x8, __MergedGlobals@PAGEOFF+248]
+	ldr	d1, [x19, __MergedGlobals@PAGEOFF+248]
 	str	d1, [sp, #1168]
-Lloh175:
+Lloh173:
 	adrp	x8, lCPI6_20@PAGE
-Lloh176:
+Lloh174:
 	ldr	q1, [x8, lCPI6_20@PAGEOFF]
 	add	x9, sp, #1168
 	stur	q1, [x9, #8]
-Lloh177:
+Lloh175:
 	adrp	x8, lCPI6_21@PAGE
-Lloh178:
+Lloh176:
 	ldr	q1, [x8, lCPI6_21@PAGEOFF]
 	stur	q1, [x9, #24]
 	mov	x8, #54241                      ; =0xd3e1
 	movk	x8, #48284, lsl #16
 	movk	x8, #1224, lsl #32
 	movk	x8, #16369, lsl #48
-Lloh179:
+Lloh177:
 	adrp	x9, lCPI6_22@PAGE
-Lloh180:
+Lloh178:
 	ldr	q1, [x9, lCPI6_22@PAGEOFF]
-Lloh181:
+Lloh179:
 	adrp	x9, lCPI6_23@PAGE
-Lloh182:
+Lloh180:
 	ldr	q2, [x9, lCPI6_23@PAGEOFF]
 	str	q1, [sp, #1120]
 	str	q2, [sp, #1136]
-Lloh183:
+Lloh181:
 	adrp	x9, lCPI6_24@PAGE
-Lloh184:
+Lloh182:
 	ldr	q1, [x9, lCPI6_24@PAGEOFF]
 	str	q1, [sp, #1152]
 	mov	x9, #32890                      ; =0x807a
@@ -4532,10 +4557,11 @@ Lloh184:
 	movk	x9, #57849, lsl #32
 	movk	x9, #16152, lsl #48
 	fmov	d1, x9
-	fmul	d2, d11, d1
+	fmul	d12, d5, d1
 	add	x9, sp, #1664
-	ldr	d11, [x9, x27, lsl #3]
-	fmul	d5, d11, d0
+	ldr	d1, [x9, x27, lsl #3]
+	str	d1, [sp, #616]                  ; 8-byte Folded Spill
+	fmul	d5, d1, d0
 	str	x8, [sp, #1208]
 	add	x8, sp, #816
 	mov	x9, #116548232544256            ; =0x6a0000000000
@@ -4554,54 +4580,53 @@ Lloh184:
 	add	x5, sp, #1024
 	add	x6, sp, #976
 	add	x7, sp, #880
-	ldr	d1, [sp, #800]                  ; 8-byte Folded Reload
-	str	d2, [sp, #688]                  ; 8-byte Folded Spill
+	str	d11, [sp, #744]                 ; 8-byte Folded Spill
+	mov.16b	v1, v11
+	mov.16b	v2, v12
 	mov.16b	v3, v15
-	mov.16b	v4, v12
+	mov.16b	v4, v14
 	str	d5, [sp, #680]                  ; 8-byte Folded Spill
-	mov	x2, x26
+	mov	x2, x22
 	bl	_asm_evaluate_all_tables_and_12perspectives
-Lloh185:
+Lloh183:
 	adrp	x0, l_.str.35@PAGE
-Lloh186:
+Lloh184:
 	add	x0, x0, l_.str.35@PAGEOFF
-Lloh187:
+Lloh185:
 	adrp	x1, l_.str.36@PAGE
-Lloh188:
+Lloh186:
 	add	x1, x1, l_.str.36@PAGEOFF
 	bl	_fopen
-	str	x25, [sp, #696]                 ; 8-byte Folded Spill
-	cbz	x0, LBB6_119
-; %bb.113:
+	str	x25, [sp, #688]                 ; 8-byte Folded Spill
+	cbz	x0, LBB6_120
+; %bb.114:
 	mov	x21, x0
-	str	d11, [sp, #592]                 ; 8-byte Folded Spill
+	str	d12, [sp, #584]                 ; 8-byte Folded Spill
 	mov	x8, #5243                       ; =0x147b
 	movk	x8, #18350, lsl #16
 	movk	x8, #47841, lsl #32
 	movk	x8, #16471, lsl #48
 	fmov	d0, x8
-	fmul	d0, d14, d0
-	str	d0, [sp, #568]                  ; 8-byte Folded Spill
+	fmul	d0, d13, d0
+	str	d0, [sp, #560]                  ; 8-byte Folded Spill
 	mov	x8, #80126909874176             ; =0x48e000000000
 	movk	x8, #16767, lsl #48
 	fmov	d0, x8
-	str	d9, [sp, #600]                  ; 8-byte Folded Spill
-	fmul	d14, d9, d0
+	str	d9, [sp, #576]                  ; 8-byte Folded Spill
+	fmul	d13, d9, d0
 	mov	x8, #35184372088832             ; =0x200000000000
 	movk	x8, #16556, lsl #48
 	fmov	d0, x8
-	mov.16b	v8, v13
-	ldr	d13, [sp, #792]                 ; 8-byte Folded Reload
-	fmul	d0, d13, d0
-	str	d0, [sp, #576]                  ; 8-byte Folded Spill
-	str	x19, [sp, #584]                 ; 8-byte Folded Spill
-Lloh189:
+	ldr	d12, [sp, #808]                 ; 8-byte Folded Reload
+	fmul	d0, d12, d0
+	str	d0, [sp, #568]                  ; 8-byte Folded Spill
+Lloh187:
 	adrp	x19, l_.str.39@PAGE
-Lloh190:
+Lloh188:
 	add	x19, x19, l_.str.39@PAGEOFF
-Lloh191:
+Lloh189:
 	adrp	x20, l_.str.38@PAGE
-Lloh192:
+Lloh190:
 	add	x20, x20, l_.str.38@PAGEOFF
 	ldr	d0, [sp, #816]
 	mov	x8, #52429                      ; =0xcccd
@@ -4611,37 +4636,42 @@ Lloh192:
 	fmov	d1, x8
 	fcmp	d0, d1
 	csel	x8, x20, x19, ge
-	fadd	d1, d15, d12
+	fadd	d1, d15, d14
 	ldr	x23, [sp, #672]                 ; 8-byte Folded Reload
 	str	x23, [sp, #24]
 	str	d1, [sp, #16]
 	str	d0, [sp]
 	str	x8, [sp, #8]
-Lloh193:
+Lloh191:
 	adrp	x1, l_.str.37@PAGE
-Lloh194:
+Lloh192:
 	add	x1, x1, l_.str.37@PAGEOFF
 	bl	_fprintf
-Lloh195:
+Lloh193:
 	adrp	x10, __MergedGlobals.94@PAGE
-Lloh196:
+Lloh194:
 	add	x10, x10, __MergedGlobals.94@PAGEOFF
 	ldp	x8, x9, [x10, #16]
-	ldur	d9, [x24, #244]
+	mov	x15, x24
+Lloh195:
+	adrp	x24, __MergedGlobals@PAGE+4
+Lloh196:
+	add	x24, x24, __MergedGlobals@PAGEOFF+4
+	ldur	d8, [x24, #244]
 	sub	x13, x24, #4
 	mov	x11, #5243                      ; =0x147b
 	movk	x11, #18350, lsl #16
 	movk	x11, #47841, lsl #32
 	movk	x11, #16471, lsl #48
 	fmov	d7, x11
-	ldr	d11, [sp, #776]                 ; 8-byte Folded Reload
+	ldr	d11, [sp, #760]                 ; 8-byte Folded Reload
 	fmul	d1, d11, d7
-	mov.16b	v0, v10
-	ldr	d10, [sp, #744]                 ; 8-byte Folded Reload
-	fmul	d2, d10, d7
+	ldr	d31, [sp, #768]                 ; 8-byte Folded Reload
+	fmul	d2, d31, d7
 	ldr	d3, [sp, #752]                  ; 8-byte Folded Reload
 	fmul	d3, d3, d7
-	fmul	d4, d8, d7
+	ldr	d0, [sp, #704]                  ; 8-byte Folded Reload
+	fmul	d4, d0, d7
 	ldr	x10, [x10]
 	ldr	x11, [x13, #352]
 	add	x12, x24, #308
@@ -4652,11 +4682,10 @@ Lloh196:
 	mov	x14, #20479                     ; =0x4fff
 	movk	x14, #10041, lsl #16
 	movk	x14, #1164, lsl #32
-	ldr	x15, [sp, #616]                 ; 8-byte Folded Reload
 	cmp	x15, x14
 	csel	x14, x20, x19, hi
-	ldr	d31, [sp, #768]                 ; 8-byte Folded Reload
-	fmul	d16, d31, d7
+	ldr	d9, [sp, #784]                  ; 8-byte Folded Reload
+	fmul	d16, d9, d7
 	add	x15, sp, #3384
 	ldr	x15, [x15, x27, lsl #3]
 	add	x16, sp, #3256
@@ -4682,7 +4711,7 @@ Lloh196:
 	fmul	d28, d26, d7
 	fmul	d29, d27, d7
 	add	x17, sp, #1280
-	str	x27, [sp, #616]                 ; 8-byte Folded Spill
+	str	x27, [sp, #592]                 ; 8-byte Folded Spill
 	ldr	d30, [x17, x27, lsl #3]
 	fmul	d7, d30, d7
 	stp	d7, d30, [sp, #504]
@@ -4697,48 +4726,48 @@ Lloh196:
 	ldr	d7, [sp, #640]                  ; 8-byte Folded Reload
 	str	d7, [sp, #376]
 	ldr	d7, [sp, #624]                  ; 8-byte Folded Reload
-	stp	d31, d7, [sp, #360]
+	stp	d9, d7, [sp, #360]
 	ldr	d7, [sp, #648]                  ; 8-byte Folded Reload
 	stp	d7, d16, [sp, #344]
 	ldr	d7, [sp, #632]                  ; 8-byte Folded Reload
 	str	d7, [sp, #336]
-	ldr	x15, [sp, #608]                 ; 8-byte Folded Reload
-	stp	x14, x15, [sp, #320]
+	stp	x14, x26, [sp, #320]
 	str	d15, [sp, #640]                 ; 8-byte Folded Spill
-	stp	d12, d15, [sp, #304]
-	str	d12, [sp, #648]                 ; 8-byte Folded Spill
+	stp	d14, d15, [sp, #304]
+	str	d14, [sp, #648]                 ; 8-byte Folded Spill
 	stp	x12, x13, [sp, #288]
-	ldr	d7, [sp, #760]                  ; 8-byte Folded Reload
+	ldr	d7, [sp, #776]                  ; 8-byte Folded Reload
 	str	d7, [sp, #280]
-	ldr	d7, [sp, #808]                  ; 8-byte Folded Reload
-	stp	d14, d7, [sp, #264]
-	str	d0, [sp, #256]
-	ldr	d0, [sp, #568]                  ; 8-byte Folded Reload
-	stp	d6, d0, [sp, #240]
+	ldr	d7, [sp, #792]                  ; 8-byte Folded Reload
+	stp	d13, d7, [sp, #264]
+	ldr	d7, [sp, #560]                  ; 8-byte Folded Reload
+	stp	d7, d10, [sp, #248]
+	str	d6, [sp, #240]
 	str	q5, [sp, #224]
 	stp	x10, x11, [sp, #208]
-	ldr	d0, [sp, #800]                  ; 8-byte Folded Reload
+	ldr	d6, [sp, #744]                  ; 8-byte Folded Reload
 	ldr	d5, [sp, #656]                  ; 8-byte Folded Reload
-	stp	d5, d0, [sp, #192]
-	ldr	d5, [sp, #736]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #576]                  ; 8-byte Folded Reload
-	stp	d0, d5, [sp, #176]
-	ldr	d0, [sp, #720]                  ; 8-byte Folded Reload
+	stp	d5, d6, [sp, #192]
+	ldr	d6, [sp, #736]                  ; 8-byte Folded Reload
+	ldr	d5, [sp, #568]                  ; 8-byte Folded Reload
+	stp	d5, d6, [sp, #176]
+	ldr	d6, [sp, #720]                  ; 8-byte Folded Reload
 	ldr	d5, [sp, #728]                  ; 8-byte Folded Reload
-	stp	d5, d0, [sp, #160]
+	stp	d5, d6, [sp, #160]
 	ldr	d5, [sp, #712]                  ; 8-byte Folded Reload
-	stp	d5, d13, [sp, #144]
-	stp	d4, d8, [sp, #128]
+	stp	d5, d12, [sp, #144]
+	stp	d4, d0, [sp, #128]
 	str	d3, [sp, #120]
 	str	x28, [sp, #112]
-	stp	d2, d10, [sp, #96]
+	stp	d2, d31, [sp, #96]
 	stp	d1, d11, [sp, #80]
-	str	x26, [sp, #656]                 ; 8-byte Folded Spill
-	str	x26, [sp, #72]
-	str	d9, [sp, #64]
+	str	x22, [sp, #704]                 ; 8-byte Folded Spill
+	str	x22, [sp, #72]
+	str	d8, [sp, #64]
 	stp	x8, x9, [sp, #48]
-	ldr	x8, [sp, #584]                  ; 8-byte Folded Reload
-	stp	x8, x22, [sp, #32]
+	ldr	x9, [sp, #600]                  ; 8-byte Folded Reload
+	ldr	x8, [sp, #608]                  ; 8-byte Folded Reload
+	stp	x8, x9, [sp, #32]
 	stp	x23, x25, [sp, #16]
 Lloh197:
 	adrp	x1, l_.str.40@PAGE
@@ -4757,8 +4786,8 @@ Lloh201:
 Lloh202:
 	add	x25, x25, l_.str.42@PAGEOFF
 	cmp	w8, #1
-	b.lt	LBB6_116
-; %bb.114:
+	b.lt	LBB6_117
+; %bb.115:
 Lloh203:
 	adrp	x19, _g_block_ring@PAGE+136
 Lloh204:
@@ -4769,7 +4798,7 @@ Lloh205:
 	adrp	x22, l_.str.41@PAGE
 Lloh206:
 	add	x22, x22, l_.str.41@PAGEOFF
-LBB6_115:                               ; =>This Inner Loop Header: Depth=1
+LBB6_116:                               ; =>This Inner Loop Header: Depth=1
 	ldur	x9, [x19, #-136]
 	sub	x10, x19, #128
 	ldp	q0, q1, [x19, #32]
@@ -4791,8 +4820,8 @@ LBB6_115:                               ; =>This Inner Loop Header: Depth=1
 	add	x19, x19, #224
 	cmp	x23, x8
 	add	x23, x23, #1
-	b.lt	LBB6_115
-LBB6_116:
+	b.lt	LBB6_116
+LBB6_117:
 Lloh207:
 	adrp	x0, l_.str.44@PAGE
 Lloh208:
@@ -4810,12 +4839,12 @@ Lloh208:
 	add	x20, sp, #3384
 	add	x28, sp, #3256
 	add	x26, sp, #2432
-	add	x23, sp, #2176
-	add	x27, sp, #2048
+	add	x27, sp, #2176
+	add	x23, sp, #2048
 	add	x24, sp, #1920
 	add	x22, sp, #1536
 	add	x19, sp, #1280
-LBB6_117:                               ; =>This Inner Loop Header: Depth=1
+LBB6_118:                               ; =>This Inner Loop Header: Depth=1
 	add	x8, sp, #1216
 	ldrsw	x8, [x8, x25, lsl #2]
 	add	x25, x25, #1
@@ -4830,8 +4859,8 @@ LBB6_117:                               ; =>This Inner Loop Header: Depth=1
 	ldr	d3, [x11, x8, lsl #3]
 	add	x11, sp, #2304
 	ldr	d4, [x11, x8, lsl #3]
-	ldr	d5, [x23, x8, lsl #3]
-	ldr	d6, [x27, x8, lsl #3]
+	ldr	d5, [x27, x8, lsl #3]
+	ldr	d6, [x23, x8, lsl #3]
 	fmul	d7, d5, d8
 	ldr	d16, [x24, x8, lsl #3]
 	add	x11, sp, #1792
@@ -4881,8 +4910,8 @@ Lloh212:
 	add	x1, x1, l_.str.45@PAGEOFF
 	bl	_fprintf
 	cmp	x25, #15
-	b.ne	LBB6_117
-; %bb.118:
+	b.ne	LBB6_118
+; %bb.119:
 	ldrsw	x10, [sp, #1276]
 	add	x8, sp, #3384
 	ldr	x8, [x8, x10, lsl #3]
@@ -4981,23 +5010,23 @@ Lloh223:
 	adrp	x23, __MergedGlobals@PAGE+248
 Lloh224:
 	add	x23, x23, __MergedGlobals@PAGEOFF+248
-	ldr	x27, [sp, #616]                 ; 8-byte Folded Reload
-	ldr	x26, [sp, #656]                 ; 8-byte Folded Reload
-	ldr	d12, [sp, #648]                 ; 8-byte Folded Reload
+	ldr	x27, [sp, #592]                 ; 8-byte Folded Reload
+	ldr	x22, [sp, #704]                 ; 8-byte Folded Reload
+	ldr	d14, [sp, #648]                 ; 8-byte Folded Reload
 	ldr	d15, [sp, #640]                 ; 8-byte Folded Reload
-	ldr	d9, [sp, #600]                  ; 8-byte Folded Reload
-	ldr	d11, [sp, #592]                 ; 8-byte Folded Reload
-LBB6_119:
-	ldr	w8, [sp, #784]                  ; 4-byte Folded Reload
-	cbz	w8, LBB6_121
-; %bb.120:
+	ldr	d12, [sp, #584]                 ; 8-byte Folded Reload
+	ldr	d9, [sp, #576]                  ; 8-byte Folded Reload
+LBB6_120:
+	ldr	w8, [sp, #800]                  ; 4-byte Folded Reload
+	cbz	w8, LBB6_122
+; %bb.121:
 	mov	x8, #36805                      ; =0x8fc5
 	movk	x8, #30513, lsl #16
 	movk	x8, #8493, lsl #32
 	movk	x8, #49007, lsl #48
 	fmov	d0, x8
-	mov.16b	v10, v9
-	fadd	d9, d11, d0
+	ldr	d13, [sp, #616]                 ; 8-byte Folded Reload
+	fadd	d10, d13, d0
 Lloh225:
 	adrp	x19, l_str.93@PAGE
 Lloh226:
@@ -5011,8 +5040,8 @@ Lloh228:
 	bl	_printf
 	mov	x0, x19
 	bl	_puts
-	ldr	d1, [sp, #760]                  ; 8-byte Folded Reload
-	ldr	d0, [sp, #808]                  ; 8-byte Folded Reload
+	ldr	d1, [sp, #776]                  ; 8-byte Folded Reload
+	ldr	d0, [sp, #792]                  ; 8-byte Folded Reload
 	stp	d0, d1, [sp]
 Lloh229:
 	adrp	x0, l_.str.50@PAGE
@@ -5059,21 +5088,22 @@ Lloh235:
 Lloh236:
 	add	x0, x0, l_.str.53@PAGEOFF
 	bl	_printf
-	ldr	d14, [sp, #680]                 ; 8-byte Folded Reload
-	stp	d11, d14, [sp]
+	ldr	d11, [sp, #680]                 ; 8-byte Folded Reload
+	stp	d13, d11, [sp]
 Lloh237:
 	adrp	x0, l_.str.54@PAGE
 Lloh238:
 	add	x0, x0, l_.str.54@PAGEOFF
 	bl	_printf
-	ldr	d2, [sp, #776]                  ; 8-byte Folded Reload
-	fmul	d0, d2, d8
-	ldr	d3, [sp, #744]                  ; 8-byte Folded Reload
-	fmul	d1, d3, d8
-	stp	d3, d1, [sp, #24]
-	stp	d2, d0, [sp, #8]
-	str	x26, [sp, #784]                 ; 8-byte Folded Spill
-	str	x26, [sp]
+	ldr	d3, [sp, #760]                  ; 8-byte Folded Reload
+	fmul	d0, d3, d8
+	ldr	d2, [sp, #768]                  ; 8-byte Folded Reload
+	fmul	d1, d2, d8
+	stp	d2, d1, [sp, #24]
+	stp	d3, d0, [sp, #8]
+                                        ; kill: def $w22 killed $w22 killed $x22 def $x22
+	str	x22, [sp, #800]                 ; 8-byte Folded Spill
+	str	x22, [sp]
 Lloh239:
 	adrp	x0, l_.str.55@PAGE
 Lloh240:
@@ -5085,26 +5115,26 @@ Lloh241:
 Lloh242:
 	add	x0, x0, l_.str.56@PAGEOFF
 	bl	_printf
-	fmul	d11, d9, d8
-	stp	d9, d11, [sp]
+	fmul	d13, d10, d8
+	stp	d10, d13, [sp]
 Lloh243:
 	adrp	x0, l_.str.57@PAGE
 Lloh244:
 	add	x0, x0, l_.str.57@PAGEOFF
 	bl	_printf
 	ldr	d0, [sp, #752]                  ; 8-byte Folded Reload
-	fmul	d13, d0, d8
-	stp	d0, d13, [sp]
+	fmul	d10, d0, d8
+	stp	d0, d10, [sp]
 Lloh245:
 	adrp	x0, l_.str.58@PAGE
 Lloh246:
 	add	x0, x0, l_.str.58@PAGEOFF
 	bl	_printf
-	ldr	d1, [sp, #792]                  ; 8-byte Folded Reload
+	ldr	d1, [sp, #808]                  ; 8-byte Folded Reload
 	ldr	d0, [sp, #712]                  ; 8-byte Folded Reload
 	stp	d0, d1, [sp, #16]
 	ldr	d0, [sp, #664]                  ; 8-byte Folded Reload
-	stp	d10, d0, [sp]
+	stp	d9, d0, [sp]
 Lloh247:
 	adrp	x0, l_.str.59@PAGE
 Lloh248:
@@ -5610,9 +5640,9 @@ Lloh260:
 	movk	x8, #25165, lsl #32
 	movk	x8, #16144, lsl #48
 	fmov	d1, x8
-	ldr	d2, [sp, #704]                  ; 8-byte Folded Reload
+	ldr	d2, [sp, #696]                  ; 8-byte Folded Reload
 	fmul	d3, d2, d1
-	ldr	d1, [sp, #808]                  ; 8-byte Folded Reload
+	ldr	d1, [sp, #792]                  ; 8-byte Folded Reload
 	stp	d1, d3, [sp, #8]
 	str	d0, [sp]
 Lloh261:
@@ -5621,7 +5651,7 @@ Lloh262:
 	add	x0, x0, l_.str.65@PAGEOFF
 	bl	_printf
 	ldr	d0, [sp, #888]
-	ldr	x8, [sp, #696]                  ; 8-byte Folded Reload
+	ldr	x8, [sp, #688]                  ; 8-byte Folded Reload
 	str	x8, [sp, #8]
 	str	d0, [sp]
 Lloh263:
@@ -5639,7 +5669,7 @@ Lloh266:
 	add	x0, x0, l_.str.67@PAGEOFF
 	bl	_printf
 	ldr	d0, [sp, #904]
-	ldr	d1, [sp, #768]                  ; 8-byte Folded Reload
+	ldr	d1, [sp, #784]                  ; 8-byte Folded Reload
 	fmul	d8, d1, d8
 	stp	d0, d8, [sp]
 Lloh267:
@@ -5648,13 +5678,13 @@ Lloh268:
 	add	x0, x0, l_.str.68@PAGEOFF
 	bl	_printf
 	ldr	d0, [sp, #912]
-	stp	d11, d13, [sp, #24]
+	stp	d13, d10, [sp, #24]
 	mov	x8, #4786                       ; =0x12b2
 	movk	x8, #44275, lsl #16
 	movk	x8, #5540, lsl #32
 	movk	x8, #16343, lsl #48
 	str	x8, [sp, #16]
-	stp	d0, d14, [sp]
+	stp	d0, d11, [sp]
 Lloh269:
 	adrp	x0, l_.str.69@PAGE
 Lloh270:
@@ -5669,7 +5699,7 @@ Lloh272:
 	add	x0, x0, l_.str.70@PAGEOFF
 	bl	_printf
 	ldr	d0, [sp, #928]
-	ldr	x8, [sp, #784]                  ; 8-byte Folded Reload
+	ldr	x8, [sp, #800]                  ; 8-byte Folded Reload
 	str	x8, [sp, #8]
 	str	d0, [sp]
 Lloh273:
@@ -5678,8 +5708,8 @@ Lloh274:
 	add	x0, x0, l_.str.71@PAGEOFF
 	bl	_printf
 	ldr	d0, [sp, #936]
-	fadd	d1, d15, d12
-	stp	d15, d12, [sp, #16]
+	fadd	d1, d15, d14
+	stp	d15, d14, [sp, #16]
 	stp	d0, d1, [sp]
 Lloh275:
 	adrp	x0, l_.str.72@PAGE
@@ -5690,7 +5720,7 @@ Lloh276:
 	mov	x8, #116548232544256            ; =0x6a0000000000
 	movk	x8, #16584, lsl #48
 	fmov	d1, x8
-	ldr	d9, [sp, #800]                  ; 8-byte Folded Reload
+	ldr	d9, [sp, #744]                  ; 8-byte Folded Reload
 	fsub	d1, d1, d9
 	stp	d9, d1, [sp, #8]
 	str	d0, [sp]
@@ -5700,8 +5730,7 @@ Lloh278:
 	add	x0, x0, l_.str.73@PAGEOFF
 	bl	_printf
 	ldr	d0, [sp, #952]
-	ldr	d1, [sp, #688]                  ; 8-byte Folded Reload
-	stp	d9, d1, [sp, #16]
+	stp	d9, d12, [sp, #16]
 	stp	d0, d8, [sp]
 Lloh279:
 	adrp	x0, l_.str.74@PAGE
@@ -5724,7 +5753,7 @@ Lloh284:
 	bl	_printf
 	mov	x0, x19
 	bl	_puts
-LBB6_121:
+LBB6_122:
 	ldr	x8, [sp, #3512]
 Lloh285:
 	adrp	x9, ___stack_chk_guard@GOTPAGE
@@ -5733,8 +5762,8 @@ Lloh286:
 Lloh287:
 	ldr	x9, [x9]
 	cmp	x9, x8
-	b.ne	LBB6_123
-; %bb.122:
+	b.ne	LBB6_124
+; %bb.123:
 	sub	sp, x29, #144
 	ldp	x29, x30, [sp, #144]            ; 16-byte Folded Reload
 	ldp	x20, x19, [sp, #128]            ; 16-byte Folded Reload
@@ -5747,7 +5776,7 @@ Lloh287:
 	ldp	d13, d12, [sp, #16]             ; 16-byte Folded Reload
 	ldp	d15, d14, [sp], #160            ; 16-byte Folded Reload
 	ret
-LBB6_123:
+LBB6_124:
 	bl	___stack_chk_fail
 	.loh AdrpAdd	Lloh15, Lloh16
 	.loh AdrpLdrGotLdr	Lloh12, Lloh13, Lloh14
@@ -5847,15 +5876,13 @@ LBB6_123:
 	.loh AdrpAdd	Lloh167, Lloh168
 	.loh AdrpLdr	Lloh169, Lloh170
 	.loh AdrpLdr	Lloh171, Lloh172
-	.loh AdrpAdd	Lloh187, Lloh188
 	.loh AdrpAdd	Lloh185, Lloh186
-	.loh AdrpLdr	Lloh183, Lloh184
-	.loh AdrpAdrp	Lloh181, Lloh183
+	.loh AdrpAdd	Lloh183, Lloh184
 	.loh AdrpLdr	Lloh181, Lloh182
 	.loh AdrpAdrp	Lloh179, Lloh181
 	.loh AdrpLdr	Lloh179, Lloh180
+	.loh AdrpAdrp	Lloh177, Lloh179
 	.loh AdrpLdr	Lloh177, Lloh178
-	.loh AdrpAdrp	Lloh175, Lloh177
 	.loh AdrpLdr	Lloh175, Lloh176
 	.loh AdrpAdrp	Lloh173, Lloh175
 	.loh AdrpLdr	Lloh173, Lloh174
@@ -5866,6 +5893,7 @@ LBB6_123:
 	.loh AdrpAdd	Lloh193, Lloh194
 	.loh AdrpAdd	Lloh191, Lloh192
 	.loh AdrpAdd	Lloh189, Lloh190
+	.loh AdrpAdd	Lloh187, Lloh188
 	.loh AdrpAdd	Lloh205, Lloh206
 	.loh AdrpAdd	Lloh203, Lloh204
 	.loh AdrpAdd	Lloh207, Lloh208
@@ -7490,16 +7518,16 @@ l_.str.30:                              ; @.str.30
 	.asciz	"CONFIRMED_ONCHAIN_MUDREX_TX"
 
 l_.str.31:                              ; @.str.31
-	.asciz	"PARALLEL_WORKERS_ACTIVE_AUTO_PRUNE_AND_RESPAWN"
+	.asciz	"SMALL_TRADE_UNDER_1_INR_ABORTED_TRYING_NEW_ROUTE"
 
 l_.str.32:                              ; @.str.32
 	.asciz	"python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &"
 
 l_.str.33:                              ; @.str.33
-	.asciz	"PROFITABLE_WORKER_EXECUTED_AND_NEXT_CYCLE_SPAWNED_INSTANTLY"
+	.asciz	"FULL_SERVER_PREEMPTION_HUGE_HF_LOAN_PRIORITY_1_ACTIVE"
 
 l_.str.34:                              ; @.str.34
-	.asciz	"UNPROFITABLE_WORKERS_TERMINATED_NEXT_PARALLEL_BATCH_SPAWNED"
+	.asciz	"SMALL_TRADE_GE_1_INR_EXECUTED_AND_DEPOSITED_TO_MUDREX"
 
 l_.str.35:                              ; @.str.35
 	.asciz	"reports/asm_sniper_telemetry.json.tmp"

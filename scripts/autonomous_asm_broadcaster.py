@@ -470,12 +470,13 @@ def main() -> int:
     # REAL ARBITRUM ONE 0.01-0.015 GWEI GAS FILTER ($0.0038 USD = ₹0.36 INR = 1,550,000,000,000 wei)
     # 100% of Net Profit (Gross - ₹0.36 INR Gas Reimbursement) is routed directly to Mudrex (0xd252...3f05).
     # MetaMask (0xFF3c...89BE) requires 0.00 balance to trade!
-    MIN_GROSS_WETH_WEI = 1_400_000_000_000
+    MIN_SMALL_TRADE_NET_WEI = 4_400_000_000_000  # Strict >= ₹1.00 INR Net Profit floor for small trades (aborts if < ₹1.00 INR!)
+    MIN_GROSS_WETH_WEI = 1_360_000_000_000 + MIN_SMALL_TRADE_NET_WEI
     RELAYER_REIMB_WEI  = 1_360_000_000_000
-    MIN_NET_WETH_WEI   = 40_000_000_000
-    MIN_GROSS_USDC_RAW = 3_500
+    MIN_NET_WETH_WEI   = MIN_SMALL_TRADE_NET_WEI
+    MIN_GROSS_USDC_RAW = 3_350 + 10_535  # Gas ($0.00335) + >= ₹1.00 INR ($0.010535 = 10,535 micro-USDC)
     RELAYER_REIMB_USDC = 3_350
-    MIN_NET_USDC_RAW   = 150
+    MIN_NET_USDC_RAW   = 10_535
     MUDREX_MIN_BANK_WITHDRAWAL_INR = 100.00
 
     import os as _os
@@ -982,7 +983,8 @@ def main() -> int:
                                     closest_aave_bonus_inr = round(tot_debt_usd * 0.5 * 0.05 * 94.92, 2)
 
                         # Case C: Pre-Gas Sub-Threshold Spread Probes (probe_start_id ..)
-                        elif item_id >= probe_start_id:
+                        # FULL SERVER PREEMPTION FOR HUGE HF LOANS: If any Aave V3 borrower is liquidatable (HF < 1.0) or within 0.5% (HF <= 1.005), ABORT all small trades immediately!
+                        elif item_id >= probe_start_id and aave_liquidatable_count == 0 and lowest_aave_hf > 1.0050:
                             if isinstance(res_str, str) and res_str.startswith("0x") and len(res_str) >= 66:
                                 raw_prof = int(res_str, 16)
                                 p_idx = item_id - probe_start_id
@@ -993,13 +995,21 @@ def main() -> int:
                                     if equiv_wei > best_pre_gas_wei:
                                         best_pre_gas_wei = equiv_wei
                                     cycle_positive_probes.append((equiv_wei, raw_prof, p_def))
+                                    gross_inr_item = round((equiv_wei / 1e18) * 2415.0 * 94.92, 4)
+                                    net_inr_item = round(gross_inr_item - 0.3607, 4)
                                     cycle_under_2pct_items.append({
                                         "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
                                         "target": p_def[0],
-                                        "gross_inr": round((equiv_wei / 1e18) * 2415.0 * 94.92, 4),
-                                        "status": "COMPLETED_IN_PARALLEL_BUNDLE_TO_MUDREX",
+                                        "gross_inr": gross_inr_item,
+                                        "net_inr": net_inr_item,
+                                        "status": (
+                                            "READY_FOR_IMMEDIATE_MUDREX_DEPOSIT_GE_1_INR"
+                                            if net_inr_item >= 1.00
+                                            else "ABORTED_NET_UNDER_1_INR_TRYING_NEW_ROUTE"
+                                        ),
                                     })
-                                    # Promote any single probe that beats real 0.01 gwei L2 gas (₹0.36 INR) using 100% Direct to Mudrex!
+                                    # STRICT >= ₹1.00 INR NET PROFIT GATE FOR SMALL TRADES:
+                                    # Only promote a small trade if Net Profit after gas >= ₹1.00 INR (MIN_GROSS_WETH_WEI); otherwise ABORT & try new route!
                                     if equiv_wei >= MIN_GROSS_WETH_WEI:
                                         reimb_raw = RELAYER_REIMB_WEI if is_probe_weth else RELAYER_REIMB_USDC
                                         if raw_prof > reimb_raw:
@@ -1026,7 +1036,8 @@ def main() -> int:
                         table2_under_2pct_fast_triggers = cycle_under_2pct_items[:12]
 
                     # Method A: Verify Multi-Route Atomic Bundle (executeMultiMaxDirectPoolFlashSwaps = 0xd34ac4bb)
-                    if cycle_positive_probes:
+                    # Only run small-trade bundles when NO Large/Huge Aave V3 HF loan is in critical trigger window (HF > 1.0050)!
+                    if cycle_positive_probes and aave_liquidatable_count == 0 and lowest_aave_hf > 1.0050:
                         cycle_positive_probes.sort(key=lambda x: -x[0])
                         used_borrow_pools = set()
                         used_all_pools = set()
@@ -1082,8 +1093,10 @@ def main() -> int:
                                     except Exception:
                                         continue
                                 if len(verified_loans) >= 1:
-                                    marginal_gas_wei = max(1_350_000_000_000, verified_est_gas_wei)
-                                    if verified_equiv_wei > marginal_gas_wei:
+                                    # STRICT >= ₹1.00 INR NET PROFIT GATE FOR SMALL-TRADE BUNDLES:
+                                    # Must cover marginal gas PLUS >= ₹1.00 INR (MIN_SMALL_TRADE_NET_WEI = 4.4e12 wei) so Mudrex receives >= ₹1.00 INR immediately!
+                                    marginal_gas_wei = max(1_350_000_000_000, verified_est_gas_wei) + MIN_SMALL_TRADE_NET_WEI
+                                    if verified_equiv_wei >= marginal_gas_wei:
                                         b_score = int((verified_equiv_wei / 1e18) * 2415.0 * 1e6)
                                         fees_100pct_mudrex = [max(0, int(r) - 1) for r in verified_raws]
                                         cd_multi_exec = _encode_multi_flash_swaps_calldata(verified_loans, fees_100pct_mudrex)
@@ -1379,8 +1392,8 @@ def main() -> int:
             out = json.loads(subprocess.check_output(send_cmd, timeout=20).decode("utf-8"))
             mudrex_settlement_tx = None
             if is_weth and rel_fee > 0:
-                gas_deficit_wei = max(RELAYER_REIMB_WEI, MIN_GAS_RESERVE_WEI - rel_wei)
-                reimb_eth_wei = min(rel_fee, gas_deficit_wei)
+                exact_gas_reimb_wei = (exact_est_gas + 195_000) * gas_price_wei
+                reimb_eth_wei = min(rel_fee, max(RELAYER_REIMB_WEI, exact_gas_reimb_wei))
                 mudrex_100_weth_wei = max(0, rel_fee - reimb_eth_wei)
                 time.sleep(0.8)
                 try:
@@ -1393,9 +1406,9 @@ def main() -> int:
                             "withdraw(uint256)",
                             str(rel_fee),
                             "--gas-limit",
-                            "60000",
+                            "45000",
                             "--gas-price",
-                            "20500000",
+                            str(gas_price_wei),
                             "--private-key",
                             RELAYER_PK,
                             "--rpc-url",
@@ -1407,7 +1420,7 @@ def main() -> int:
                 except Exception:
                     pass
                 # 2. Upgrade #3: Single-Step Direct-to-Mudrex Router Swap (or Direct-to-MetaMask when Daily Limit Full)
-                if mudrex_100_weth_wei > 2_000_000_000_000:
+                if mudrex_100_weth_wei >= MIN_SMALL_TRADE_NET_WEI:
                     try:
                         uni_router = "0xE592427A0AEce92De3Edee1F18E0157C05861564"
                         est_usdc_units = max(MIN_MUDREX_USDC_UNITS, int((mudrex_100_weth_wei / 1e18) * 2393.0 * 1_000_000))
@@ -1433,9 +1446,9 @@ def main() -> int:
                                     "--value",
                                     str(mudrex_100_weth_wei),
                                     "--gas-limit",
-                                    "210000",
+                                    "195000",
                                     "--gas-price",
-                                    "20500000",
+                                    str(gas_price_wei),
                                     "--private-key",
                                     RELAYER_PK,
                                     "--rpc-url",

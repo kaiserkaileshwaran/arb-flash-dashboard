@@ -1137,19 +1137,27 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     g_total_workers_spawned += (uint64_t)scaled_workers_n;
     g_total_workers_pruned  += (uint64_t)pruned_workers_blk;
 
-    /* Autonomous On-Chain Broadcaster Hook inside ./bin/arb_sniper_asm (0-Block Instant Dispatch When Profitable + Continuous 12-Block Loop) */
-    const char *exec_hook_status = "PARALLEL_WORKERS_ACTIVE_AUTO_PRUNE_AND_RESPAWN";
+    /* Autonomous On-Chain Broadcaster Hook inside ./bin/arb_sniper_asm:
+     * 1) FULL SERVER PREEMPTION when Huge Aave V3 HF Loan triggers (hf_liquidatable_now or hf_aave_top1 <= 1.0050)
+     * 2) SMALL TRADE GATE: Execute & deposit to Mudrex ONLY when Net Profit >= ₹1.00 INR; otherwise ABORT & respawn on next 250ms block!
+     */
+    const char *exec_hook_status = "SMALL_TRADE_UNDER_1_INR_ABORTED_TRYING_NEW_ROUTE";
     if (!self_test_only) {
-        if (effective_best_net_usd > 0.0 || hf_liquidatable_now) {
+        if (hf_liquidatable_now || hf_aave_top1 <= 1.0050) {
             g_last_dispatched_block = g_live_block_number;
             int rc = system("python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &");
             (void)rc;
-            exec_hook_status = "PROFITABLE_WORKER_EXECUTED_AND_NEXT_CYCLE_SPAWNED_INSTANTLY";
-        } else if (g_live_block_number >= g_last_dispatched_block + 12) {
+            exec_hook_status = "FULL_SERVER_PREEMPTION_HUGE_HF_LOAN_PRIORITY_1_ACTIVE";
+        } else if ((effective_best_net_usd * INR_PER_USD) >= 1.00) {
             g_last_dispatched_block = g_live_block_number;
             int rc = system("python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &");
             (void)rc;
-            exec_hook_status = "UNPROFITABLE_WORKERS_TERMINATED_NEXT_PARALLEL_BATCH_SPAWNED";
+            exec_hook_status = "SMALL_TRADE_GE_1_INR_EXECUTED_AND_DEPOSITED_TO_MUDREX";
+        } else if (g_live_block_number >= g_last_dispatched_block + 24) {
+            g_last_dispatched_block = g_live_block_number;
+            int rc = system("python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &");
+            (void)rc;
+            exec_hook_status = "SMALL_TRADE_UNDER_1_INR_ABORTED_TRYING_NEW_ROUTE";
         }
     }
 
