@@ -367,8 +367,7 @@ def main() -> int:
         ("Row #6: Top Profit #3 Whale (0x9f25...9052)", "0x9f25248e8465a4a5106948615c6db2ed1e1b9052", WETH, USDT, 2900000000000000000, 1550000000000, True, 2650_00000000, "Workers #33–#48 (Priority #3 Alone/Queue Sniper)"),
         ("Row #7: Mid-Sized Low-Comp #4 (0x2012...98db • 4,000 USDC)", "0x2012395e71a4af2e621d522b175f6c29232398db", USDC, WETH, 4000 * 10**6, 3800, False, 1750_00000000, "Workers #49–#58 (Mid-Sized Low-Competition Sniper)"),
         ("Row #8: Retail Low-Comp #5 (0x9cd6...5d25 • 150 USDC Slice)", "0x9cd61cab43075c6c4a56a95dacadad39df555d25", USDC, WETH, 150 * 10**6, 3800, False, 1100_00000000, "Workers #59–#68 (Retail Fast-Trigger Sniper)"),
-        ("Row #9: Closest HF #6 (0x50dd...de36 • 2,500 USDC Slice)", "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", USDC, WETH, 2500 * 10**6, 3800, False, 1750_00000000, "Workers #69–#74 (Live-Crawled HF 1.0319 Sniper)"),
-        ("Row #10: Closest HF #7 (0x954b...44bb • 200 USDC Retail Slice)", "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", USDC, WETH, 200 * 10**6, 3800, False, 1750_00000000, "Workers #75–#80 (Live-Crawled HF 1.0228 Sniper)"),
+        ("Row #9: Closest HF #6 (0x50dd...de36 • 5,000 USDC Max 50% Slice)", "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", USDC, WETH, 5000 * 10**6, 3800, False, 1750_00000000, "Workers #69–#80 (Live-Crawled HF 1.0312 Sniper)"),
     ]
 
     results = []
