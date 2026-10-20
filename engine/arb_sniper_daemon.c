@@ -286,6 +286,67 @@ void evaluate_full_loan_routes_asm(
     (void)max_neg_net;
 }
 
+/*
+ * O(1) Time, O(1) Space, O(1) Mathematical Complexity Single-Route Sweet-Spot Kernel
+ * Exported for ctypes FFI in autonomous_asm_broadcaster.py & verify_table2_hf_and_mudrex_pipeline.py
+ */
+__attribute__((hot, flatten))
+void asm_eval_single_sweet_spot(
+    double  p1,
+    double  p2,
+    double  y1,
+    double  y2,
+    double  fee_floor_bps,
+    double  bal_max_usd,
+    double  aave_max_usd,
+    double  gas_fee_usd,
+    double * __restrict__ out_spread_bps,
+    double * __restrict__ out_full_loan_usd,
+    double * __restrict__ out_gross_usd,
+    double * __restrict__ out_net_usd
+) {
+    int p1_le_p2  = (p1 <= p2);
+    double p_low  = p1_le_p2 ? p1 : p2;
+    double p_high = p1_le_p2 ? p2 : p1;
+    double frac_diff  = (p_low > 1e-12) ? ((p_high - p_low) / p_low) : 0.0;
+    double spread_bps = frac_diff * 10000.0;
+    double edge_bps   = spread_bps - fee_floor_bps;
+
+    double d_star_full = 0.0;
+    double gross_full  = 0.0;
+    double net_full    = 0.0;
+
+    if (edge_bps > 0.0) {
+        double y_low      = p1_le_p2 ? y1 : y2;
+        double y_high     = p1_le_p2 ? y2 : y1;
+        double v1_usd     = p_low  * y_low;
+        double v2_usd     = p_high * y_high;
+        double v_prod     = v1_usd * v2_usd;
+        double v_sum      = v1_usd + v2_usd;
+        double inv_v_prod = (v_prod > 1e-15) ? (1.0 / v_prod) : 0.0;
+        double inv_v_sum  = (v_sum  > 1e-15) ? (1.0 / v_sum)  : 0.0;
+        double slip_coeff = (v_prod > 1e-15) ? (v_sum * inv_v_prod) : 1e15;
+        double total_cap  = bal_max_usd + aave_max_usd;
+        double safe_cap   = (v1_usd < v2_usd) ? v1_usd : v2_usd;
+        if (safe_cap > total_cap) safe_cap = total_cap;
+
+        double edge_frac = edge_bps * 0.0001;
+        d_star_full = 0.50 * edge_frac * v_prod * inv_v_sum;
+        if (d_star_full > safe_cap) d_star_full = safe_cap;
+
+        double ovf_part = (d_star_full > bal_max_usd) ? (d_star_full - bal_max_usd) : 0.0;
+        double aave_fee = ovf_part * 0.0005;
+        gross_full = (d_star_full * edge_frac) - (d_star_full * d_star_full * slip_coeff) - aave_fee;
+        if (gross_full < 0.0) gross_full = 0.0;
+        if (gross_full > gas_fee_usd) net_full = gross_full - gas_fee_usd;
+    }
+
+    *out_spread_bps    = spread_bps;
+    *out_full_loan_usd = d_star_full;
+    *out_gross_usd     = gross_full;
+    *out_net_usd       = net_full;
+}
+
 /* Global Shared Lock-Free State (Updated by Thread 1 every 250ms, read by Thread 2) */
 static volatile uint64_t g_live_block_number = 516352476ULL;
 static volatile uint64_t g_live_gas_wei      = 20000000ULL;

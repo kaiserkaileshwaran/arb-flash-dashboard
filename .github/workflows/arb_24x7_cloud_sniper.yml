@@ -33,6 +33,7 @@ jobs:
           sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev
           mkdir -p bin reports
           gcc -O3 -march=native -flto -ffast-math -funroll-loops -S engine/arb_sniper_daemon.c -o engine/arb_sniper_daemon_cloud_x86_64.s || true
+          gcc -O3 -march=native -flto -ffast-math -funroll-loops -fPIC -shared engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/libarb_asm_kernel.so || true
           gcc -O3 -march=native -flto -ffast-math -funroll-loops engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
 
       - name: Run 24/7 Cloud Arbitrum One Uncapped Assembly Sniper & Auto-Mudrex Broadcaster
@@ -56,6 +57,7 @@ jobs:
             timeout 12 ./bin/arb_sniper_asm --daemon || true
           fi
           python3 scripts/verify_real_onchain_proofs.py || true
+          python3 scripts/verify_table2_hf_and_mudrex_pipeline.py || true
           mkdir -p docs/reports && cp -f index.html docs/index.html && cp -f reports/*.json docs/reports/ || true
 
       - name: Commit & Push Updated On-Chain Telemetry to GitHub Pages
