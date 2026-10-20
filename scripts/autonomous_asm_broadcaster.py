@@ -618,6 +618,21 @@ def main() -> int:
         ("WEETH_UNI1_UNI5",    uni1_weeth_weth,   uni5_weeth_weth,  weth,   weeth,     20_000_000_000_000, False, True),
         ("ARB_USDCE_P1_U5",    "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                  1_500_000, False, True),
         ("ARB_USDCE_P1_U5_S",  "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                    600_000, False, True),
+        ("ARB_USDCE_U5_U1",    "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", "0x855a24f58eb3ba4af6bfbd77173371ef9369a66b", usdc_e, arb,                    100_000, False, True),
+        ("ARB_USDT_U5_S30",    "0xb791ad21ba45c76629003b4a2f04c0d544406e37", "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", usdt,   arb,                    200_000, False, True),
+        ("ARB_USDCE_U100_U1",  "0xa8328bf492ba1b77ad6381b3f7567d942b000baf", "0x855a24f58eb3ba4af6bfbd77173371ef9369a66b", usdc_e, arb,                    100_000, False, True),
+        ("ARB_USDC_U5_P1",     "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", "0x93cce474015007b38da0ecea96671ee4dc3d40ad", usdc,   arb,                    400_000, False, True),
+        ("ARB_USDC_P5_P1",     "0x9ffca51d23ac7f7df82da414865ef1055e5afcc3", "0x93cce474015007b38da0ecea96671ee4dc3d40ad", usdc,   arb,                    400_000, False, True),
+        ("ARB_USDT_P5_S30",    "0x81d1cc282e9a097115e59f67b9d81d4d1d00ac51", "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", usdt,   arb,                    100_000, False, True),
+        ("WETH_USDC_P25_U1",   "0xb3d494d53aac707c469318f15cfd5d7857a61388", "0x6f38e884725a116c9c7fbf208e79fe8828a2595f", weth,   usdc,    100_000_000_000_000, True,  False),
+        ("PENDLE_WETH_P5_P25", "0x042691f78269ba3d6325c945044239758aecc275", "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", weth,   pendle,  200_000_000_000_000, False, True),
+        ("PENDLE_WETH_U5_P25", "0xb08a8794a5d3ccca3725d92964696858d3201909", "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", weth,   pendle,  200_000_000_000_000, False, True),
+        ("UNI_WETH_U5_S30",    "0xff96d42dc8e2700abab1f1f82ecf699caa1a2056", "0xf57dbfb951136d273c793f40f546160c9b8a0edb", weth,   uni_tok,  40_000_000_000_000, True,  False),
+        ("USDCE_WETH_S5_S1",   "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40", "0x5db80967733bcdcb31f0b03ffce86bf30482c82d", weth,   usdc_e,   25_000_000_000_000, True,  False),
+        ("USDCE_WETH_U1_S1",   "0xe754841b77c874135caca3386676e886459c2d61", "0x5db80967733bcdcb31f0b03ffce86bf30482c82d", weth,   usdc_e,   25_000_000_000_000, True,  False),
+        ("LUSD_WETH_U1_U5",    "0xbd872aae38f8f7e907e7903a0f072818ac6e275e", "0x2bcfb04e64cacfacd2ea9c1db76a0ca999bcb65a", weth,   lusd_tok,  6_250_000_000_000, True,  False),
+        ("ARB_WETH_U1_P1",     "0x89a4026e9ade251c67b7fb38054931a39936d9c5", "0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3", weth,   arb,      50_000_000_000_000, True,  False),
+        ("WETH_USDT_U1_P1",    "0x42161084d0672e1d3f26a9b53e653be2084ff19c", "0x389938cf14be379217570d8e4619e51fbdafaa21", weth,   usdt,    100_000_000_000_000, True,  False),
     ]
     probe_start_id = len(batch_rpc) + 1
     for p_idx, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in enumerate(probe_defs):
