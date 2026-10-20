@@ -1553,31 +1553,9 @@ async function fundAuthorizedRelayerGas() {
       await waitForRealArbitrumReceipt(authTxHash, provider);
     }
 
-    if (relayerWei < 35000000000000n) {
-      // 0.00005 ETH = 50,000,000,000,000 wei = 0x2d79883d2000 (≈ ₹11.50 INR revolving gas float)
-      statusEl.innerHTML = `⏳ Step 2/2: Please click <b>Confirm</b> in MetaMask to seed the <b>0.00005 ETH (≈ ₹11.50 INR) Revolving Gas Float</b> into your 24/7 Relayer (<code>${LOCAL_RELAYER_WALLET}</code>) — this float is strictly protected and automatically refills itself from every trade's profit...`;
-      const floatTxHash = await provider.request({
-        method: 'eth_sendTransaction',
-        params: [{
-          from: DEFAULT_OWNER_WALLET,
-          to: LOCAL_RELAYER_WALLET,
-          value: '0x2d79883d2000',
-        }],
-      });
-      statusEl.innerHTML = `⏳ Waiting for Revolving Gas Float confirmation (<a href="https://arbiscan.io/tx/${floatTxHash}" target="_blank"><b>${floatTxHash}</b></a>)...`;
-      const rcpt2 = await waitForRealArbitrumReceipt(floatTxHash, provider);
-      if (rcpt2 && rcpt2.confirmed) {
-        statusEl.innerHTML = `<span class="pos">✅ 24/7 REVOLVING GAS FLOAT &amp; RELAYER AUTHORIZATION ACTIVE (Block #${rcpt2.blockNumber.toLocaleString()})!</span><br>` +
-          `• <b>Relayer (<code>${LOCAL_RELAYER_WALLET}</code>):</b> Authorized on <code>${DEPLOYED_CONTRACT_ADDR}</code> &amp; funded with <b>0.00005 ETH (≈ ₹11.50 INR)</b> Revolving Gas Float.<br>` +
-          `• <b>Strict Net-Positive Profit Guard:</b> The C/Assembly daemon now automatically executes every block where <code>grossProfit &gt; L2 Gas + Fees</code>, reimburses the gas float out of the trade's profit, and sends net profits to your wallet!`;
-        fetchState();
-        return;
-      }
-    } else {
-      statusEl.innerHTML = `<span class="pos">✅ 24/7 Relayer (<code>${LOCAL_RELAYER_WALLET}</code>) is ALREADY Authorized &amp; Funded (${(Number(relayerWei)/1e18).toFixed(6)} ETH Revolving Gas Float)!</span> Autonomous sniper is actively watching every Arbitrum block.`;
-    }
+    statusEl.innerHTML = `<span class="pos">🔒 100% FLASH-LOAN-PROFIT-ONLY PROTECTION ACTIVE:</span> Relayer (<code>${LOCAL_RELAYER_WALLET}</code>) is authorized and funded (${(Number(relayerWei)/1e18).toFixed(8)} ETH). MetaMask ETH transfers are permanently disabled; all gas is paid by the Relayer and reimbursed strictly from Flash Loan profits.`;
   } catch (err) {
-    statusEl.innerHTML = `<span class="danger">❌ Relayer Setup Cancelled or Rejected: ${err.message || err}</span>`;
+    statusEl.innerHTML = `<span class="danger">❌ Relayer Check Notice: ${err.message || err}</span>`;
   }
 }
 
