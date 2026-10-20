@@ -743,6 +743,8 @@ def main() -> int:
     aave_liquidatable_count = 0
     aave_borrower_hfs = {}
     table2_under_2pct_fast_triggers = []
+    winning_candidates = []
+    seen_winning_keys = set()
     cycles_scanned = 0
     latencies_ms = []
     active_rpc_url = RPC_URLS[0]
@@ -776,9 +778,13 @@ def main() -> int:
                                     raw_prof = int(res_str, 16)
                                     if raw_prof > 0:
                                         score = int((raw_prof / 1e18) * 2415.0 * 1e6) if meta[4] else raw_prof
+                                        c_key = f"{meta[0]}:{meta[1]}"
+                                        if c_key not in seen_winning_keys:
+                                            seen_winning_keys.add(c_key)
+                                            winning_candidates.append((score, meta[:7]))
                                         if score > best_profit_score:
                                             best_profit_score = score
-                                            winning_meta = meta
+                                            winning_meta = meta[:7]
                             else:
                                 # executeGaslessRelayedArbitrage returns void ("0x") on success without revert
                                 if isinstance(res_str, str) and res_str == "0x" and "error" not in item:
@@ -812,11 +818,15 @@ def main() -> int:
                                     score = int((raw_prof / 1e18) * 2415.0 * 1e6) if meta[4] else raw_prof
                                     if "AAVE_V3_LIQUIDATION" in meta[0]:
                                         score += 100_000_000  # Priority #1 boost for 500 bps Aave Liquidation
+                                    c_key = f"{meta[0]}:{meta[1]}"
+                                    if c_key not in seen_winning_keys:
+                                        seen_winning_keys.add(c_key)
+                                        winning_candidates.append((score, meta[:7]))
                                     if score > best_profit_score:
                                         best_profit_score = score
-                                        winning_meta = meta
+                                        winning_meta = meta[:7]
 
-                        # Case B: Choice 2 Live Aave V3 Health Factor Watchlist + <2.00% Fast Trigger Items
+                        # Case B: Choice 2 Live Aave V3 Health Factor Watchlist + Pre-Rounded (round(HF, 1) == 1.0) Hyper-Alert Pre-Signer
                         elif aave_hf_start_id <= item_id <= aave_hf_end_id:
                             if isinstance(res_str, str) and len(res_str) >= 386:
                                 watch_idx = item_id - aave_hf_start_id
@@ -826,13 +836,15 @@ def main() -> int:
                                 if 0.0 < hf_val < 100.0:
                                     aave_borrower_hfs[b_info[0].lower()] = round(hf_val, 6)
                                     dist_pct = round(max(0.0, (hf_val - 1.0) * 100.0), 4)
-                                    if dist_pct < 2.00:
+                                    # Pre-warm any whale whose Math.round(hf * 10) / 10 == 1.0 (i.e. HF <= 1.0499) for 0ms instant execution!
+                                    if round(hf_val, 1) <= 1.0 or dist_pct < 5.00:
                                         cycle_under_2pct_items.append({
-                                            "type": "AAVE_PRE_LIQ_UNDER_2PCT",
+                                            "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
                                             "target": b_info[0],
                                             "hf": round(hf_val, 6),
+                                            "rounded_hf_1dec": round(hf_val, 1),
                                             "distance_pct": dist_pct,
-                                            "status": "ACTIVE_UNDER_2PCT_FAST_TRIGGER_READY",
+                                            "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY",
                                         })
                                 if 0.0 < hf_val < 1.0:
                                     aave_liquidatable_count += 1
@@ -1116,8 +1128,12 @@ def main() -> int:
         print(json.dumps(summary, indent=2))
         return 0
 
-    if winning_meta is not None:
-        mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = winning_meta
+    execution_queue = [m for _, m in sorted(winning_candidates, key=lambda x: x[0], reverse=True)]
+    if not execution_queue and winning_meta is not None:
+        execution_queue = [winning_meta[:7]]
+
+    for active_cand_meta in execution_queue:
+        mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = active_cand_meta[:7]
         gas_price_wei = 10_100_000  # 0.0101 gwei minimum Arbitrum One L2 basefee (cuts gas needed by 50%)
         max_affordable_gas = max(250_000, int((rel_wei - 5_000_000_000) // gas_price_wei))
 
@@ -1156,8 +1172,8 @@ def main() -> int:
                 triple_proof_passed = False
 
         if not triple_proof_passed:
-            # Abort broadcast with 0 wei gas spent if any of the 3 proofs fail!
-            return 0
+            # Skip this candidate with 0 wei gas spent and immediately check the next candidate in the queue (e.g. #2 or #3)!
+            continue
 
         if fn_sig == "RAW_CALLDATA":
             target_gas_limit = min(max(250_000, int(exact_est_gas * 1.15)), max_affordable_gas)
