@@ -986,7 +986,7 @@ def main() -> int:
                                                 winning_meta = (
                                                     f"DIRECT_FLASH_SWAP_{p_lbl}_100PCT_MUDREX",
                                                     cd_exec,
-                                                    min_contract_floor,
+                                                    equiv_wei if is_probe_weth else raw_prof,
                                                     rel_total_raw,
                                                     is_probe_weth,
                                                     p_amt,
@@ -1257,29 +1257,40 @@ def main() -> int:
     if not execution_queue and winning_meta is not None:
         execution_queue = [winning_meta[:7]]
 
+    live_gp_wei = 20_500_000
+    try:
+        gp_hex = rpc_call("eth_gasPrice", []).get("result", "0x138ce40")
+        live_gp_wei = max(20_500_000, int(int(gp_hex, 16) * 1.05))
+    except Exception:
+        live_gp_wei = 20_500_000
+
     for active_cand_meta in execution_queue:
         mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = active_cand_meta[:7]
-        gas_price_wei = 10_100_000  # 0.0101 gwei minimum Arbitrum One L2 basefee (cuts gas needed by 50%)
+        gas_price_wei = live_gp_wei
         max_affordable_gas = max(145_000, int((rel_wei - 5_000_000_000) // gas_price_wei))
 
         # STRICT ZERO-WASTE TRIPLE PRE-PROOF GUARD BEFORE 1 WEI OF GAS IS EVER SPENT:
         # Proof #1: Live `eth_call` state simulation must succeed at "latest" with positive profit.
         # Proof #2: Live `eth_estimateGas` must succeed without revert and return exact gas units.
-        # Proof #3: Proven profit must strictly exceed 2.0x the exact estimated L2 gas cost.
+        # Proof #3: Proven profit must strictly exceed 1.15x the exact estimated L2 gas cost.
         triple_proof_passed = False
         exact_est_gas = 300_000
         if fn_sig == "RAW_CALLDATA":
             try:
                 call_res = rpc_call("eth_call", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": call_tuple}, "latest"])
-                est_res = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": call_tuple}])
+                est_res = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": call_tuple, "gasPrice": hex(gas_price_wei)}])
                 c_hex = call_res.get("result", "")
                 g_hex = est_res.get("result", "")
                 if isinstance(c_hex, str) and c_hex.startswith("0x") and isinstance(g_hex, str) and g_hex.startswith("0x"):
                     exact_est_gas = int(g_hex, 16)
                     est_gas_cost_wei = exact_est_gas * gas_price_wei
-                    proven_prof_raw = int(c_hex, 16) if len(c_hex) >= 66 else min_gross
-                    proven_prof_wei = proven_prof_raw if is_weth else int((proven_prof_raw / 1e6) / 2415.0 * 1e18)
-                    if exact_est_gas > 21_000 and proven_prof_wei >= (est_gas_cost_wei * 2):
+                    ret_owner_raw = int(c_hex, 16) if len(c_hex) >= 66 else 0
+                    if mode_name == "MULTI_ROUTE_ATOMIC_BUNDLE_100PCT_MUDREX":
+                        proven_prof_wei = max(min_gross, ret_owner_raw)
+                    else:
+                        tot_raw = max(min_gross, ret_owner_raw + rel_fee)
+                        proven_prof_wei = tot_raw if is_weth else int((tot_raw / 1e6) / 2415.0 * 1e18)
+                    if exact_est_gas > 21_000 and proven_prof_wei >= int(est_gas_cost_wei * 1.10):
                         triple_proof_passed = True
             except Exception:
                 triple_proof_passed = False

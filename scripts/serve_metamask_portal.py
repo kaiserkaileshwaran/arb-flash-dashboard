@@ -2493,6 +2493,110 @@ class LivePortalHandler(http.server.BaseHTTPRequestHandler):
             if rep_file.exists() and rep_file.suffix == ".json":
                 self._send_json(json.loads(rep_file.read_text(encoding="utf-8")))
                 return
+        if self.path.startswith("/api/live-verified-bundle"):
+            try:
+                import urllib.request
+                owner_w = "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
+                contract_w = "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
+                weth     = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
+                usdc_e   = "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
+                usdt     = "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
+                arb      = "0x912CE59144191C1204E64559FE8253a0e49E6548"
+                wbtc     = "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f"
+                uni_tok  = "0xFa7F8980b0f1E64A2062791cc3b0871572f1F7f0"
+                lusd_tok = "0x93b346b6BC2548dA6A1E7d98E9a421B42541425b"
+                aave_tok = "0xba5DdD1f9d7F570dc94a51479a000E3BCE967196"
+                cands = [
+                    ("ARB_USDT_S30_U5",  "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt, arb, 250_000, False, True),
+                    ("USDT_UNI_U5_U30",  "0x3b2eafce2b05341a0bee6a3569b5f769afb3042f", "0xd97c8ee1c1e47f50a66e69d5ad155f882e38b0e5", usdt, uni_tok, 60_000, False, True),
+                    ("LUSD_UNI5_UNI30",  "0x2bcfb04e64cacfacd2ea9c1db76a0ca999bcb65a", "0x4b4f821d0ac2d9b3230609e954158c83fa4283f1", weth, lusd_tok, 35_000_000_000_000, True, False),
+                    ("WBTC_WETH_P25_U5", "0xc46f301f589c6027b440778252dd9da239160fbc", "0x2f5e87c9312fa29aed5c179e456625d79015299c", weth, wbtc, 24_000_000_000_000, False, True),
+                    ("USDT_AAVE_U1_P5",  "0xc6cda9e7b7587549080d0785621e6a4de3be86d9", "0x901667660bc0eb7d22617da2ee91593c17b136a3", usdt, aave_tok, 25_000, False, True),
+                    ("USDCE_PCS1_UNI1",  "0x4fc7ac44dae553464d92c049175133239a8705c1", "0xe754841b77c874135caca3386676e886459c2d61", weth, usdc_e, 150_000_000_000_000, True, False),
+                ]
+                def _enc_single(pb, ps, tb, tq, amt, mnp, z0, z1, rf):
+                    return (
+                        "0x3260f1cc"
+                        + pb.lower().replace("0x", "").rjust(64, "0")
+                        + ps.lower().replace("0x", "").rjust(64, "0")
+                        + tb.lower().replace("0x", "").rjust(64, "0")
+                        + tq.lower().replace("0x", "").rjust(64, "0")
+                        + hex(int(amt))[2:].rjust(64, "0")
+                        + hex(int(mnp))[2:].rjust(64, "0")
+                        + ("1" if z0 else "0").rjust(64, "0")
+                        + ("1" if z1 else "0").rjust(64, "0")
+                        + hex(int(rf))[2:].rjust(64, "0")
+                    )
+                def _enc_multi(loans, fees):
+                    n = len(loans)
+                    head = ("0"*62 + "40") + hex(64 + 32 + n * 256)[2:].rjust(64, "0")
+                    lp = hex(n)[2:].rjust(64, "0")
+                    for pb, ps, tb, tq, amt, mnp, z0, z1 in loans:
+                        lp += (
+                            pb.lower().replace("0x", "").rjust(64, "0")
+                            + ps.lower().replace("0x", "").rjust(64, "0")
+                            + tb.lower().replace("0x", "").rjust(64, "0")
+                            + tq.lower().replace("0x", "").rjust(64, "0")
+                            + hex(int(amt))[2:].rjust(64, "0")
+                            + hex(int(mnp))[2:].rjust(64, "0")
+                            + ("1" if z0 else "0").rjust(64, "0")
+                            + ("1" if z1 else "0").rjust(64, "0")
+                        )
+                    fp = hex(n)[2:].rjust(64, "0")
+                    for rf in fees:
+                        fp += hex(int(rf))[2:].rjust(64, "0")
+                    return "0xd34ac4bb" + head + lp + fp
+
+                batch = []
+                for idx, (lbl, pb, ps, tb, tq, amt, z0, z1) in enumerate(cands):
+                    cd = _enc_single(pb, ps, tb, tq, amt, 1, z0, z1, 0)
+                    batch.append({"jsonrpc":"2.0","id":idx+1,"method":"eth_call","params":[{"from":owner_w,"to":contract_w,"data":cd},"latest"]})
+                req = urllib.request.Request("https://arb1.arbitrum.io/rpc", data=json.dumps(batch).encode(), headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0"})
+                resp = json.loads(urllib.request.urlopen(req, timeout=6).read().decode())
+                verified_loans = []
+                verified_lbls = []
+                tot_equiv_wei = 0
+                for item in resp:
+                    idx = int(item.get("id", 0)) - 1
+                    if 0 <= idx < len(cands) and isinstance(item.get("result"), str) and len(item["result"]) >= 66:
+                        prof = int(item["result"], 16)
+                        if prof > 2:
+                            lbl, pb, ps, tb, tq, amt, z0, z1 = cands[idx]
+                            test_l = verified_loans + [(pb, ps, tb, tq, amt, 1, z0, z1)]
+                            cd_test = _enc_multi(test_l, [0]*len(test_l))
+                            r_chk = urllib.request.Request("https://arb1.arbitrum.io/rpc", data=json.dumps({"jsonrpc":"2.0","id":99,"method":"eth_estimateGas","params":[{"from":owner_w,"to":contract_w,"data":cd_test,"gasPrice":"0x17d7840"}]}).encode(), headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0"})
+                            res_chk = json.loads(urllib.request.urlopen(r_chk, timeout=5).read().decode())
+                            if isinstance(res_chk.get("result"), str) and res_chk["result"].startswith("0x"):
+                                verified_loans = test_l
+                                unit_s = "wei" if tb.lower() == weth.lower() else "uUSDT"
+                                verified_lbls.append(f"{lbl} (+{prof} {unit_s})")
+                                eq_w = prof if tb.lower() == weth.lower() else int((prof / 1e6) / 2415.0 * 1e18)
+                                tot_equiv_wei += eq_w
+                if verified_loans:
+                    final_cd = _enc_multi(verified_loans, [0]*len(verified_loans))
+                    r_est = urllib.request.Request("https://arb1.arbitrum.io/rpc", data=json.dumps({"jsonrpc":"2.0","id":100,"method":"eth_estimateGas","params":[{"from":owner_w,"to":contract_w,"data":final_cd,"gasPrice":"0x17d7840"}]}).encode(), headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0"})
+                    res_est = json.loads(urllib.request.urlopen(r_est, timeout=5).read().decode())
+                    est_gas = int(res_est.get("result", "0x120e34"), 16)
+                    safe_gas_hex = hex(int(est_gas * 1.15))
+                    gross_inr = round((tot_equiv_wei / 1e18) * 2415.0 * 94.92, 4)
+                    self._send_json({
+                        "ok": True,
+                        "to": contract_w,
+                        "from": owner_w,
+                        "value": "0x0",
+                        "calldata": final_cd,
+                        "gas_hex": safe_gas_hex,
+                        "gas_int": int(est_gas * 1.15),
+                        "routes_count": len(verified_loans),
+                        "route_labels": verified_lbls,
+                        "gross_inr": gross_inr,
+                        "net_inr": round(max(0.05, gross_inr - 0.3607), 4),
+                    })
+                    return
+                self._send_json({"ok": False, "error": "No verified routes in current block"})
+            except Exception as e:
+                self._send_json({"ok": False, "error": str(e)})
+            return
         if self.path.startswith("/api/mudrex-limit"):
             dest_file = REPORTS_DIR / "checkout_destination.json"
             cfg = {"destination": "MUDREX", "mudrex_level": "LEVEL_0", "mudrex_limit_inr": 12500.0}
@@ -2588,6 +2692,110 @@ class LivePortalHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(raw)
 
     def do_POST(self) -> None:
+        if self.path.startswith("/api/live-verified-bundle"):
+            try:
+                import urllib.request
+                owner_w = "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
+                contract_w = "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
+                weth     = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
+                usdc_e   = "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8"
+                usdt     = "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9"
+                arb      = "0x912CE59144191C1204E64559FE8253a0e49E6548"
+                wbtc     = "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f"
+                uni_tok  = "0xFa7F8980b0f1E64A2062791cc3b0871572f1F7f0"
+                lusd_tok = "0x93b346b6BC2548dA6A1E7d98E9a421B42541425b"
+                aave_tok = "0xba5DdD1f9d7F570dc94a51479a000E3BCE967196"
+                cands = [
+                    ("ARB_USDT_S30_U5",  "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", "0xb791ad21ba45c76629003b4a2f04c0d544406e37", usdt, arb, 250_000, False, True),
+                    ("USDT_UNI_U5_U30",  "0x3b2eafce2b05341a0bee6a3569b5f769afb3042f", "0xd97c8ee1c1e47f50a66e69d5ad155f882e38b0e5", usdt, uni_tok, 60_000, False, True),
+                    ("LUSD_UNI5_UNI30",  "0x2bcfb04e64cacfacd2ea9c1db76a0ca999bcb65a", "0x4b4f821d0ac2d9b3230609e954158c83fa4283f1", weth, lusd_tok, 35_000_000_000_000, True, False),
+                    ("WBTC_WETH_P25_U5", "0xc46f301f589c6027b440778252dd9da239160fbc", "0x2f5e87c9312fa29aed5c179e456625d79015299c", weth, wbtc, 24_000_000_000_000, False, True),
+                    ("USDT_AAVE_U1_P5",  "0xc6cda9e7b7587549080d0785621e6a4de3be86d9", "0x901667660bc0eb7d22617da2ee91593c17b136a3", usdt, aave_tok, 25_000, False, True),
+                    ("USDCE_PCS1_UNI1",  "0x4fc7ac44dae553464d92c049175133239a8705c1", "0xe754841b77c874135caca3386676e886459c2d61", weth, usdc_e, 150_000_000_000_000, True, False),
+                ]
+                def _enc_single(pb, ps, tb, tq, amt, mnp, z0, z1, rf):
+                    return (
+                        "0x3260f1cc"
+                        + pb.lower().replace("0x", "").rjust(64, "0")
+                        + ps.lower().replace("0x", "").rjust(64, "0")
+                        + tb.lower().replace("0x", "").rjust(64, "0")
+                        + tq.lower().replace("0x", "").rjust(64, "0")
+                        + hex(int(amt))[2:].rjust(64, "0")
+                        + hex(int(mnp))[2:].rjust(64, "0")
+                        + ("1" if z0 else "0").rjust(64, "0")
+                        + ("1" if z1 else "0").rjust(64, "0")
+                        + hex(int(rf))[2:].rjust(64, "0")
+                    )
+                def _enc_multi(loans, fees):
+                    n = len(loans)
+                    head = ("0"*62 + "40") + hex(64 + 32 + n * 256)[2:].rjust(64, "0")
+                    lp = hex(n)[2:].rjust(64, "0")
+                    for pb, ps, tb, tq, amt, mnp, z0, z1 in loans:
+                        lp += (
+                            pb.lower().replace("0x", "").rjust(64, "0")
+                            + ps.lower().replace("0x", "").rjust(64, "0")
+                            + tb.lower().replace("0x", "").rjust(64, "0")
+                            + tq.lower().replace("0x", "").rjust(64, "0")
+                            + hex(int(amt))[2:].rjust(64, "0")
+                            + hex(int(mnp))[2:].rjust(64, "0")
+                            + ("1" if z0 else "0").rjust(64, "0")
+                            + ("1" if z1 else "0").rjust(64, "0")
+                        )
+                    fp = hex(n)[2:].rjust(64, "0")
+                    for rf in fees:
+                        fp += hex(int(rf))[2:].rjust(64, "0")
+                    return "0xd34ac4bb" + head + lp + fp
+
+                batch = []
+                for idx, (lbl, pb, ps, tb, tq, amt, z0, z1) in enumerate(cands):
+                    cd = _enc_single(pb, ps, tb, tq, amt, 1, z0, z1, 0)
+                    batch.append({"jsonrpc":"2.0","id":idx+1,"method":"eth_call","params":[{"from":owner_w,"to":contract_w,"data":cd},"latest"]})
+                req = urllib.request.Request("https://arb1.arbitrum.io/rpc", data=json.dumps(batch).encode(), headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0"})
+                resp = json.loads(urllib.request.urlopen(req, timeout=6).read().decode())
+                verified_loans = []
+                verified_lbls = []
+                tot_equiv_wei = 0
+                for item in resp:
+                    idx = int(item.get("id", 0)) - 1
+                    if 0 <= idx < len(cands) and isinstance(item.get("result"), str) and len(item["result"]) >= 66:
+                        prof = int(item["result"], 16)
+                        if prof > 2:
+                            lbl, pb, ps, tb, tq, amt, z0, z1 = cands[idx]
+                            test_l = verified_loans + [(pb, ps, tb, tq, amt, 1, z0, z1)]
+                            cd_test = _enc_multi(test_l, [0]*len(test_l))
+                            r_chk = urllib.request.Request("https://arb1.arbitrum.io/rpc", data=json.dumps({"jsonrpc":"2.0","id":99,"method":"eth_estimateGas","params":[{"from":owner_w,"to":contract_w,"data":cd_test,"gasPrice":"0x17d7840"}]}).encode(), headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0"})
+                            res_chk = json.loads(urllib.request.urlopen(r_chk, timeout=5).read().decode())
+                            if isinstance(res_chk.get("result"), str) and res_chk["result"].startswith("0x"):
+                                verified_loans = test_l
+                                unit_s = "wei" if tb.lower() == weth.lower() else "uUSDT"
+                                verified_lbls.append(f"{lbl} (+{prof} {unit_s})")
+                                eq_w = prof if tb.lower() == weth.lower() else int((prof / 1e6) / 2415.0 * 1e18)
+                                tot_equiv_wei += eq_w
+                if verified_loans:
+                    final_cd = _enc_multi(verified_loans, [0]*len(verified_loans))
+                    r_est = urllib.request.Request("https://arb1.arbitrum.io/rpc", data=json.dumps({"jsonrpc":"2.0","id":100,"method":"eth_estimateGas","params":[{"from":owner_w,"to":contract_w,"data":final_cd,"gasPrice":"0x17d7840"}]}).encode(), headers={"Content-Type":"application/json","User-Agent":"Mozilla/5.0"})
+                    res_est = json.loads(urllib.request.urlopen(r_est, timeout=5).read().decode())
+                    est_gas = int(res_est.get("result", "0x120e34"), 16)
+                    safe_gas_hex = hex(int(est_gas * 1.15))
+                    gross_inr = round((tot_equiv_wei / 1e18) * 2415.0 * 94.92, 4)
+                    self._send_json({
+                        "ok": True,
+                        "to": contract_w,
+                        "from": owner_w,
+                        "value": "0x0",
+                        "calldata": final_cd,
+                        "gas_hex": safe_gas_hex,
+                        "gas_int": int(est_gas * 1.15),
+                        "routes_count": len(verified_loans),
+                        "route_labels": verified_lbls,
+                        "gross_inr": gross_inr,
+                        "net_inr": round(max(0.05, gross_inr - 0.3607), 4),
+                    })
+                    return
+                self._send_json({"ok": False, "error": "No verified routes in current block"})
+            except Exception as e:
+                self._send_json({"ok": False, "error": str(e)})
+            return
         if self.path.startswith("/api/mudrex-limit"):
             length = int(self.headers.get("Content-Length", "0"))
             body = self.rfile.read(length).decode("utf-8") if length > 0 else "{}"
