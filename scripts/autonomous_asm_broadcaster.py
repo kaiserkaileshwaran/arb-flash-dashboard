@@ -1406,73 +1406,91 @@ def main() -> int:
                     )
                 except Exception:
                     pass
-                # 2. Swap 100% net profit (using --value, zero approve needed!) to USDC into RELAYER_WALLET, then direct EOA USDC.transfer(MUDREX_WALLET)
+                # 2. Upgrade #3: Single-Step Direct-to-Mudrex Router Swap (or Direct-to-MetaMask when Daily Limit Full)
                 if mudrex_100_weth_wei > 2_000_000_000_000:
                     try:
                         uni_router = "0xE592427A0AEce92De3Edee1F18E0157C05861564"
-                        swap_tuple = f"({weth},{usdc},500,{RELAYER_WALLET},{int(time.time()) + 300},{mudrex_100_weth_wei},0,0)"
-                        subprocess.check_output(
-                            [
-                                cast_bin,
-                                "send",
-                                uni_router,
-                                "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))(uint256)",
-                                swap_tuple,
-                                "--value",
-                                str(mudrex_100_weth_wei),
-                                "--gas-limit",
-                                "210000",
-                                "--gas-price",
-                                "20500000",
-                                "--private-key",
-                                RELAYER_PK,
-                                "--rpc-url",
-                                RPC_URL,
-                                "--json",
-                            ],
-                            stderr=subprocess.DEVNULL,
-                            timeout=20,
+                        est_usdc_units = max(MIN_MUDREX_USDC_UNITS, int((mudrex_100_weth_wei / 1e18) * 2393.0 * 1_000_000))
+                        mud_est_u, mm_est_u, _ = _compute_safe_mudrex_and_metamask_split(est_usdc_units, real_mudrex_usdc)
+                        if mm_est_u == 0 and mud_est_u >= MIN_MUDREX_USDC_UNITS:
+                            # Single-Step Direct-to-Mudrex Swap (saves ~52,000 gas & 250ms!)
+                            swap_recipient = MUDREX_WALLET
+                        elif mud_est_u < MIN_MUDREX_USDC_UNITS and mm_est_u >= 100:
+                            # Daily limit reached: Single-Step Direct-to-MetaMask Backup Swap!
+                            swap_recipient = OWNER_METAMASK
+                        else:
+                            # Straddles exact ₹12,500 boundary: swap to RELAYER_WALLET then exact 2-way split
+                            swap_recipient = RELAYER_WALLET
+                        swap_tuple = f"({weth},{usdc},500,{swap_recipient},{int(time.time()) + 300},{mudrex_100_weth_wei},0,0)"
+                        s_out = json.loads(
+                            subprocess.check_output(
+                                [
+                                    cast_bin,
+                                    "send",
+                                    uni_router,
+                                    "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))(uint256)",
+                                    swap_tuple,
+                                    "--value",
+                                    str(mudrex_100_weth_wei),
+                                    "--gas-limit",
+                                    "210000",
+                                    "--gas-price",
+                                    "20500000",
+                                    "--private-key",
+                                    RELAYER_PK,
+                                    "--rpc-url",
+                                    RPC_URL,
+                                    "--json",
+                                ],
+                                stderr=subprocess.DEVNULL,
+                                timeout=20,
+                            ).decode("utf-8")
                         )
-                        rel_clean = RELAYER_WALLET.lower().replace("0x", "").rjust(64, "0")
-                        rel_usdc_raw = int(
-                            rpc_call("eth_call", [{"to": usdc, "data": "0x70a08231" + rel_clean}, "latest"]).get("result", "0x0"),
-                            16,
-                        )
-                        if rel_usdc_raw >= MIN_MUDREX_USDC_UNITS:
-                            mud_share_units, mm_backup_units, _ = _compute_safe_mudrex_and_metamask_split(rel_usdc_raw, real_mudrex_usdc)
-                            # 1) Send up to remaining Cumulative Daily & Lifetime Mudrex Limit directly to Mudrex (0xd252...3f05) for Direct UPI Bank Payout
-                            if mud_share_units >= MIN_MUDREX_USDC_UNITS:
-                                try:
-                                    t_out = json.loads(
+                        if swap_recipient == MUDREX_WALLET:
+                            mudrex_settlement_tx = s_out.get("transactionHash")
+                            _record_mudrex_sent_units(mud_est_u, real_mudrex_usdc)
+                            real_mudrex_usdc += mud_est_u / 1_000_000.0
+                        elif swap_recipient == OWNER_METAMASK:
+                            mudrex_settlement_tx = s_out.get("transactionHash")
+                        else:
+                            rel_clean = RELAYER_WALLET.lower().replace("0x", "").rjust(64, "0")
+                            rel_usdc_raw = int(
+                                rpc_call("eth_call", [{"to": usdc, "data": "0x70a08231" + rel_clean}, "latest"]).get("result", "0x0"),
+                                16,
+                            )
+                            if rel_usdc_raw >= MIN_MUDREX_USDC_UNITS:
+                                mud_share_units, mm_backup_units, _ = _compute_safe_mudrex_and_metamask_split(rel_usdc_raw, real_mudrex_usdc)
+                                if mud_share_units >= MIN_MUDREX_USDC_UNITS:
+                                    try:
+                                        t_out = json.loads(
+                                            subprocess.check_output(
+                                                [
+                                                    cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
+                                                    MUDREX_WALLET, str(mud_share_units),
+                                                    "--gas-limit", "75000", "--gas-price", "20500000",
+                                                    "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
+                                                ],
+                                                stderr=subprocess.DEVNULL, timeout=15,
+                                            ).decode("utf-8")
+                                        )
+                                        mudrex_settlement_tx = t_out.get("transactionHash")
+                                        _record_mudrex_sent_units(mud_share_units, real_mudrex_usdc)
+                                        real_mudrex_usdc += mud_share_units / 1_000_000.0
+                                    except Exception:
+                                        pass
+                                if mm_backup_units >= 100:
+                                    try:
                                         subprocess.check_output(
                                             [
                                                 cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
-                                                MUDREX_WALLET, str(mud_share_units),
+                                                OWNER_METAMASK, str(mm_backup_units),
                                                 "--gas-limit", "75000", "--gas-price", "20500000",
                                                 "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                                             ],
                                             stderr=subprocess.DEVNULL, timeout=15,
-                                        ).decode("utf-8")
-                                    )
-                                    mudrex_settlement_tx = t_out.get("transactionHash")
-                                    _record_mudrex_sent_units(mud_share_units, real_mudrex_usdc)
-                                    real_mudrex_usdc += mud_share_units / 1_000_000.0
-                                except Exception:
-                                    pass
-                            # 2) Save 100% of excess over Cumulative Daily/Lifetime Mudrex Limit safely in MetaMask Unlimited Backup Wallet (0xFF3c...89BE)
-                            if mm_backup_units >= 100:
-                                try:
-                                    subprocess.check_output(
-                                        [
-                                            cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
-                                            OWNER_METAMASK, str(mm_backup_units),
-                                            "--gas-limit", "75000", "--gas-price", "20500000",
-                                            "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
-                                        ],
-                                        stderr=subprocess.DEVNULL, timeout=15,
-                                    )
-                                except Exception:
-                                    pass
+                                        )
+                                    except Exception:
+                                        pass
                     except Exception:
                         pass
             elif not is_weth and rel_fee > RELAYER_REIMB_USDC:
