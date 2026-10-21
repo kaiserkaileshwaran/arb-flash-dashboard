@@ -1152,11 +1152,11 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             int rc = system("python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &");
             (void)rc;
             exec_hook_status = "FULL_SERVER_PREEMPTION_HUGE_HF_LOAN_PRIORITY_1_ACTIVE";
-        } else if ((effective_best_net_usd * INR_PER_USD) >= 1.00) {
+        } else if ((effective_best_net_usd * INR_PER_USD) >= 0.40) {
             g_last_dispatched_block = g_live_block_number;
             int rc = system("python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &");
             (void)rc;
-            exec_hook_status = "SMALL_TRADE_GE_1_INR_EXECUTED_AND_DEPOSITED_TO_MUDREX";
+            exec_hook_status = "AI_ADAPTIVE_ZERO_BURN_GE_0_40_INR_EXECUTED_TO_MUDREX";
         } else if (g_live_block_number >= g_last_dispatched_block + 24) {
             g_last_dispatched_block = g_live_block_number;
             int rc = system("python3 scripts/autonomous_asm_broadcaster.py >/dev/null 2>&1 &");
