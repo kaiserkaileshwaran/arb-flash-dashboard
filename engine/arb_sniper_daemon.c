@@ -792,7 +792,9 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x3b2eafce2b05341a0bee6a3569b5f769afb3042f\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":22},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x2bcfb04e64cacfacd2ea9c1db76a0ca999bcb65a\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":38},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x4b4f821d0ac2d9b3230609e954158c83fa4283f1\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":39},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x80ceb98632409080924dce50c26acc25458dde17\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":40}"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x80ceb98632409080924dce50c26acc25458dde17\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":40},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612\",\"data\":\"0x50d25bcd\"},\"latest\"],\"id\":46},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526\",\"data\":\"0xe76c01e4\"},\"latest\"],\"id\":47}"
         "]";
 
     const char *slot0_batch_b =
@@ -852,6 +854,9 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     static double hf_aave_b3         = 1.0229;
     static double hf_aave_b4         = 1.0556;
     static double hf_aave_top1       = 1.0220;
+    static double p_chainlink_eth    = 2513.59;
+    static double p_camelot_v3       = 2513.50;
+    static double fee_camelot_v3_bps = 1.00;
     static const char *closest_aave_borrower = "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2";
 
     if (curl) {
@@ -882,6 +887,26 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
                 p_uni5_lusd        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 38), 1.0,   500.0, 20000.0, p_uni5_lusd);
                 p_uni30_lusd       = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 39), 1.0,   500.0, 20000.0, p_uni30_lusd);
                 p_pcs5_aave        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 40), 1.0,   2.0,   500.0,   p_pcs5_aave);
+                {
+                    uint64_t cl_raw = asm_parse_hex_u64(find_batch_result_for_id(buf->data, 46));
+                    if (cl_raw > 50000000000ULL && cl_raw < 2000000000000ULL) {
+                        p_chainlink_eth = (double)cl_raw / 1e8;
+                    }
+                    const char *cam_hex = find_batch_result_for_id(buf->data, 47);
+                    p_camelot_v3 = decode_slot0_sqrt_price(cam_hex, 1e12, 500.0, 20000.0, p_camelot_v3);
+                    if (cam_hex) {
+                        const char *cp = strstr(cam_hex, "0x");
+                        if (cp && strlen(cp) >= 194) {
+                            char fee_word[17];
+                            memcpy(fee_word, cp + 2 + 176, 16);
+                            fee_word[16] = 0;
+                            uint64_t f_zto = strtoull(fee_word, NULL, 16);
+                            if (f_zto > 0 && f_zto <= 50000) {
+                                fee_camelot_v3_bps = (double)f_zto / 100.0;
+                            }
+                        }
+                    }
+                }
                 buf->size = 0;
                 curl_easy_setopt(curl, CURLOPT_POSTFIELDS, slot0_batch_b);
                 if (curl_easy_perform(curl) == CURLE_OK && find_batch_result_for_id(buf->data, 28)) {
@@ -1216,10 +1241,16 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             "  \"assembly_source\": \"engine/arb_sniper_daemon.s\",\n"
             "  \"overall_12perspective_score_pct\": %.1f,\n"
             "  \"all_12_perspectives_at_100pct\": %s,\n"
+            "  \"chainlink_eth_usd\": %.2f,\n"
+            "  \"camelot_v3_weth_usdc_price\": %.2f,\n"
+            "  \"camelot_v3_dynamic_fee_bps\": %.2f,\n"
             "  \"combined_authorized_executor_eth\": %.8f,\n"
             "  \"detected_cpu_cores\": %ld,\n",
             overall_12_score_pct,
             (overall_12_score_pct >= 99.95) ? "true" : "false",
+            p_chainlink_eth,
+            p_camelot_v3,
+            fee_camelot_v3_bps,
             mm_eth_val + rel_eth_val,
             detected_cpu_cores
         );

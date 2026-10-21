@@ -353,13 +353,18 @@ def main() -> int:
         # Upgrade #1: Auto-Unwrap Relayer WETH -> Native ETH whenever Relayer has >= 0.00000032 ETH to pay 31k unwrap gas
         if rel_weth_wei >= 200_000_000_000 and rel_wei >= 320_000_000_000 and RELAYER_PK:
             try:
-                subprocess.check_output(
+                unwrap_init_cd = "0x2e1a7d4d" + hex(rel_weth_wei)[2:].rjust(64, "0")
+                _send_raw_tx_or_cast(
+                    weth_tok_init,
+                    unwrap_init_cd,
+                    31000,
+                    10100000,
+                    0,
                     [
                         cast_bin, "send", weth_tok_init, "withdraw(uint256)", str(rel_weth_wei),
                         "--gas-limit", "31000", "--gas-price", "10100000",
                         "--private-key", RELAYER_PK, "--rpc-url", RPC_URL,
                     ],
-                    stderr=subprocess.DEVNULL, timeout=12,
                 )
                 rel_hex = rpc_call("eth_getBalance", [RELAYER_WALLET, "latest"]).get("result", "0x0")
                 rel_wei = int(rel_hex, 16)
@@ -548,7 +553,7 @@ def main() -> int:
     live_gp_init_wei = 10_500_000
     try:
         gp_init_hex = rpc_call("eth_gasPrice", []).get("result", "0xa037a0")
-        live_gp_init_wei = max(10_000_000, int(gp_init_hex, 16))
+        live_gp_init_wei = min(12_000_000, max(10_000_000, int(gp_init_hex, 16)))
     except Exception:
         live_gp_init_wei = 10_500_000
     REAL_LIVE_SWAP_GAS_WEI = int(135_000 * live_gp_init_wei)
@@ -674,9 +679,16 @@ def main() -> int:
     aave_hf_end_id = len(batch_rpc)
 
     # 5. Add Pre-Gas Diagnostic & Multi-Route Bundle Probes (min_gross=1 wei at dual-size sweet-spot tiers)
+    # Ordered with highest-yield verified on-chain positive routes first so top slice always captures them
     probe_defs = [
-        ("UNI_SUSHI30_PCS5",   sushi30_uni_weth,  pcs5_uni_weth,    weth,   uni_tok,  150_000_000_000_000, True,  False),
+        ("USDCE_WETH_S5_S1",   "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40", "0x5db80967733bcdcb31f0b03ffce86bf30482c82d", weth,   usdc_e,  140_000_000_000_000, True,  False),
+        ("WETH_USDT_P1_U1",    "0x389938cf14be379217570d8e4619e51fbdafaa21", "0x42161084d0672e1d3f26a9b53e653be2084ff19c", weth,   usdt,  1_750_000_000_000_000, True,  False),
+        ("UNI_WETH_P5_S30",    "0xad198ad5f32cba24bcafa6e9ffece312c2ddcd6f", "0xf57dbfb951136d273c793f40f546160c9b8a0edb", weth,   uni_tok, 100_000_000_000_000, True,  False),
+        ("USDT_AAVE_U1_P5",    u1_aave_usdt,      p5_aave_usdt,     usdt,   aave_tok,              25_000, False, True),
         ("WBTC_USDCE_P1_U5",   "0x06607df154875f0507c33418707f366bd47a62fa", "0xac70bd92f89e6739b3a08db9b6081a923912f73d", usdc_e, wbtc,               1_500_000, False, True),
+        ("LUSD_WETH_U1_U5",    "0xbd872aae38f8f7e907e7903a0f072818ac6e275e", "0x2bcfb04e64cacfacd2ea9c1db76a0ca999bcb65a", weth,   lusd_tok, 12_500_000_000_000, True,  False),
+        ("ARB_USDCE_P1_U5",    "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                    450_000, False, True),
+        ("UNI_SUSHI30_PCS5",   sushi30_uni_weth,  pcs5_uni_weth,    weth,   uni_tok,  150_000_000_000_000, True,  False),
         ("WBTC_USDCE_P1_U5_S", "0x06607df154875f0507c33418707f366bd47a62fa", "0xac70bd92f89e6739b3a08db9b6081a923912f73d", usdc_e, wbtc,                 600_000, False, True),
         ("WBTC_USDT_U30_P1",   "0x53c6ca2597711ca7a73b6921faf4031eedf71339", "0xeaf03f385c642b02b5c563640bba7c4fbf96c27d", usdt,   wbtc,               8_000_000, False, True),
         ("LINK_PCS25_SUSHI30", pcs25_link_weth,   sushi30_link_weth,weth,   link,     150_000_000_000_000, True,  False),
@@ -688,7 +700,6 @@ def main() -> int:
         ("ARB_USDC_S30_U5",    "0x14716a16ef9eeaada7e266bcf023b71d2c9adbf3", "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", usdc,   arb,                    300_000, False, True),
         ("ARB_USDC_U1_U5",     u1_arb_usdc,       "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", usdc,   arb,                    250_000, False, True),
         ("USDT_UNI_U5_U30",    u5_uni_usdt,       u30_uni_usdt,     usdt,   uni_tok,               60_000, False, True),
-        ("USDT_AAVE_U1_P5",    u1_aave_usdt,      p5_aave_usdt,     usdt,   aave_tok,              25_000, False, True),
         ("LUSD_UNI5_UNI30",    uni5_weth_lusd,    uni30_weth_lusd,  weth,   lusd_tok,  35_000_000_000_000, True,  False),
         ("WBTC_WETH_P25_U5",   "0xc46f301f589c6027b440778252dd9da239160fbc", "0x2f5e87c9312fa29aed5c179e456625d79015299c", weth, wbtc, 24_000_000_000_000, False, True),
         ("WBTC_WETH_P25_U1",   "0xc46f301f589c6027b440778252dd9da239160fbc", "0x03a3be7ab4aa263d42d63b6cc594f4fb3d3f3951", weth, wbtc, 24_000_000_000_000, False, True),
@@ -705,7 +716,6 @@ def main() -> int:
         ("PENDLE_P25_U5",      "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", uni_pendle_weth,  weth,   pendle,   200_000_000_000_000, False, True),
         ("WSTETH_UNI5_UNI1",   uni5_wsteth_weth,  uni_wsteth_weth,  weth,   wsteth,   150_000_000_000_000, False, True),
         ("WEETH_UNI1_UNI5",    uni1_weeth_weth,   uni5_weeth_weth,  weth,   weeth,     20_000_000_000_000, False, True),
-        ("ARB_USDCE_P1_U5",    "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                    450_000, False, True),
         ("ARB_USDCE_P1_U5_S",  "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                    220_000, False, True),
         ("ARB_USDCE_U5_U1",    "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", "0x855a24f58eb3ba4af6bfbd77173371ef9369a66b", usdc_e, arb,                    100_000, False, True),
         ("ARB_USDT_U5_S30",    "0xb791ad21ba45c76629003b4a2f04c0d544406e37", "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", usdt,   arb,                    200_000, False, True),
@@ -717,11 +727,10 @@ def main() -> int:
         ("PENDLE_WETH_P5_P25", "0x042691f78269ba3d6325c945044239758aecc275", "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", weth,   pendle,  160_000_000_000_000, False, True),
         ("PENDLE_WETH_U5_P25", "0xb08a8794a5d3ccca3725d92964696858d3201909", "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", weth,   pendle,  200_000_000_000_000, False, True),
         ("UNI_WETH_U5_S30",    "0xff96d42dc8e2700abab1f1f82ecf699caa1a2056", "0xf57dbfb951136d273c793f40f546160c9b8a0edb", weth,   uni_tok,  35_000_000_000_000, True,  False),
-        ("USDCE_WETH_S5_S1",   "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40", "0x5db80967733bcdcb31f0b03ffce86bf30482c82d", weth,   usdc_e,  140_000_000_000_000, True,  False),
         ("USDCE_WETH_U1_S1",   "0xe754841b77c874135caca3386676e886459c2d61", "0x5db80967733bcdcb31f0b03ffce86bf30482c82d", weth,   usdc_e,  125_000_000_000_000, True,  False),
-        ("LUSD_WETH_U1_U5",    "0xbd872aae38f8f7e907e7903a0f072818ac6e275e", "0x2bcfb04e64cacfacd2ea9c1db76a0ca999bcb65a", weth,   lusd_tok, 12_500_000_000_000, True,  False),
         ("ARB_WETH_U1_P1",     "0x89a4026e9ade251c67b7fb38054931a39936d9c5", "0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3", weth,   arb,      50_000_000_000_000, True,  False),
         ("WETH_USDT_U1_P1",    "0x42161084d0672e1d3f26a9b53e653be2084ff19c", "0x389938cf14be379217570d8e4619e51fbdafaa21", weth,   usdt,  1_600_000_000_000_000, True,  False),
+        ("WEETH_WETH_U5_U1",   "0xd90660a0b8ad757e7c1d660ce633776a0862b087", "0x14353445c8329df76e6f15e9ead18fa2d45a8bb6", weth,   weeth,    20_000_000_000_000, False, True),
         ("USDT_USDCE_P1_U1",   "0x858dff46915d3f81bb7ff06158b2806164acb2a0", "0x8c9d230d45d6cfee39a6680fb7cb7e8de7ea8e71", usdc_e, usdt,                500_000, False, True),
         ("WSTETH_WETH_U5_U1",  "0xb93f8a075509e71325c1c2fc8fa6a75f2d536a13", "0x35218a1cbac5bbc3e57fd9bd38219d37571b3537", weth,   wsteth,   50_000_000_000_000, False, True),
     ]
@@ -1133,18 +1142,21 @@ def main() -> int:
                         bundle_equiv_weis = []
                         bundle_lbls = []
                         sum_probe_wei = 0
+                        min_marginal_bundle_wei = int(45_000 * live_gp_init_wei)
                         for equiv_w, raw_p, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in cycle_positive_probes:
                             pb_l = pb.lower()
                             ps_l = ps.lower()
-                            if pb_l in used_borrow_pools:
+                            if pb_l in used_all_pools or ps_l in used_all_pools:
+                                continue
+                            if len(bundle_lbls) > 0 and equiv_w < min_marginal_bundle_wei:
                                 continue
                             used_borrow_pools.add(pb_l)
+                            used_all_pools.add(pb_l)
+                            used_all_pools.add(ps_l)
                             unit_s = "wei" if tb.lower() == weth.lower() else "uUSD"
                             bundle_lbls.append(f"{p_lbl}({raw_p}{unit_s})")
                             sum_probe_wei += equiv_w
-                            if p_lbl != "USDT_AAVE_U1_P5" and pb_l not in used_all_pools and ps_l not in used_all_pools and raw_p > 4:
-                                used_all_pools.add(pb_l)
-                                used_all_pools.add(ps_l)
+                            if p_lbl != "USDT_AAVE_U1_P5" and raw_p > 4:
                                 p_amt_b = p_amt
                                 bundle_loans.append((pb, ps, tb, tq, p_amt_b, 1, z0, z1))
                                 bundle_raw_profits.append(raw_p)
@@ -1223,9 +1235,21 @@ def main() -> int:
 
     min_lat_ms = round(min(latencies_ms), 2) if latencies_ms else 0.0
     avg_lat_ms = round(sum(latencies_ms) / len(latencies_ms), 2) if latencies_ms else 0.0
-    pre_gas_inr = round((best_pre_gas_wei / 1e18) * 2415.0 * 94.92, 4)
-    bundled_pre_gas_inr = round((bundled_multi_route_wei / 1e18) * 2415.0 * 94.92, 4)
-    l2_gas_inr = round((REAL_LIVE_SWAP_GAS_WEI / 1e18) * 2415.0 * 94.92, 4)  # Exact live Arbitrum gas cost at current eth_gasPrice
+    chainlink_eth_usd = 2415.0
+    camelot_dyn_fee_bps = 1.00
+    try:
+        cl_hex = rpc_call("eth_call", [{"to": "0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612", "data": "0x50d25bcd"}, "latest"]).get("result", "0x0")
+        cl_val = int(cl_hex, 16) / 1e8
+        if 500.0 < cl_val < 20000.0:
+            chainlink_eth_usd = round(cl_val, 2)
+        cam_hex = rpc_call("eth_call", [{"to": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526", "data": "0xe76c01e4"}, "latest"]).get("result", "0x0")
+        if len(cam_hex) >= 194:
+            camelot_dyn_fee_bps = round(int(cam_hex[130:194], 16) / 100.0, 2)
+    except Exception:
+        pass
+    pre_gas_inr = round((best_pre_gas_wei / 1e18) * chainlink_eth_usd * 94.92, 4)
+    bundled_pre_gas_inr = round((bundled_multi_route_wei / 1e18) * chainlink_eth_usd * 94.92, 4)
+    l2_gas_inr = round((REAL_LIVE_SWAP_GAS_WEI / 1e18) * chainlink_eth_usd * 94.92, 4)  # Exact live Arbitrum gas cost at current eth_gasPrice
     bundled_est_gas_inr = round(l2_gas_inr * (1.0 + 0.35 * max(0, min(2, bundled_routes_count - 1))), 4)
 
     # Query live on-chain Real Mudrex Wallet USDC balance (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
@@ -1301,6 +1325,8 @@ def main() -> int:
             "scan_duration_sec": round(time.time() - start_ts, 2),
             "rpc_latency_min_ms": min_lat_ms,
             "rpc_latency_avg_ms": avg_lat_ms,
+            "chainlink_eth_usd_price": chainlink_eth_usd,
+            "camelot_v3_dynamic_fee_bps": camelot_dyn_fee_bps,
             "aave_lowest_health_factor": lowest_aave_hf,
             "aave_closest_borrower": closest_aave_borrower,
             "aave_closest_borrower_debt_usd": closest_aave_debt_usd,
@@ -1370,6 +1396,8 @@ def main() -> int:
             "hourly_14400_blocks_net_inr": round(net_b_inr * 14400.0, 2),
             "rpc_latency_min_ms": min_lat_ms,
             "rpc_latency_avg_ms": avg_lat_ms,
+            "chainlink_eth_usd_price": chainlink_eth_usd,
+            "camelot_v3_dynamic_fee_bps": camelot_dyn_fee_bps,
             "aave_lowest_health_factor": lowest_aave_hf,
             "aave_closest_borrower": closest_aave_borrower,
             "aave_borrower_hfs": aave_borrower_hfs,
