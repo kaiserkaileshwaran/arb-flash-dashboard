@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792600837.7468138
+    "ts": 1792600844.4446642
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -59,56 +59,56 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_P1_U5",
       "gross_inr": 0.2031,
-      "net_inr": -0.424,
+      "net_inr": -0.4162,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDT_S30_U5_S",
       "gross_inr": 0.0118,
-      "net_inr": -0.6153,
+      "net_inr": -0.6075,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.1163,
-      "net_inr": -0.5108,
+      "net_inr": -0.503,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WSTETH_UNI5_UNI1",
       "gross_inr": 0.0089,
-      "net_inr": -0.6182,
+      "net_inr": -0.6104,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "PENDLE_WETH_U5_P25",
       "gross_inr": 0.0457,
-      "net_inr": -0.5814,
+      "net_inr": -0.5736,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1",
       "gross_inr": 0.6816,
-      "net_inr": 0.0545,
+      "net_inr": 0.0623,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "LUSD_WETH_U1_U5",
       "gross_inr": 0.0468,
-      "net_inr": -0.5803,
+      "net_inr": -0.5725,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WETH_USDT_U1_P1",
       "gross_inr": 0.1087,
-      "net_inr": -0.5184,
+      "net_inr": -0.5106,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -123,9 +123,9 @@
   "multi_route_bundle_probes": 49,
   "total_rpc_checks_per_cycle": 89,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.67,
-  "rpc_latency_min_ms": 221.5,
-  "rpc_latency_avg_ms": 221.5,
+  "scan_duration_sec": 0.94,
+  "rpc_latency_min_ms": 197.27,
+  "rpc_latency_avg_ms": 197.27,
   "aave_lowest_health_factor": 1.019534,
   "aave_closest_borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
   "aave_closest_borrower_debt_usd": 66952.06,
@@ -143,7 +143,7 @@
     "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.081958,
     "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.049013,
     "0x572372831a9d6b2e3ee8fa284505599e6125fea9": 1.079874,
-    "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.066942
+    "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.063544
   },
   "best_single_route_pre_gas_wei": 2973238332745,
   "best_single_route_pre_gas_inr": 0.6816,
@@ -160,10 +160,10 @@
   ],
   "bundled_multi_route_gross_wei": 5334476536238,
   "bundled_multi_route_gross_inr": 1.2228,
-  "l2_gas_cost_inr": 0.6271,
-  "bundled_total_gas_cost_inr": 3.0414,
-  "single_net_if_forced_inr": 0.0545,
-  "bundled_net_if_forced_inr": -1.8186,
+  "l2_gas_cost_inr": 0.6193,
+  "bundled_total_gas_cost_inr": 3.0036,
+  "single_net_if_forced_inr": 0.0623,
+  "bundled_net_if_forced_inr": -1.7808,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -180,10 +180,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 20638,
-    "per_route_ns": 1289.88,
+    "latency_ns": 19286,
+    "per_route_ns": 1205.38,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 2871600.0
   },
-  "ts": 1792600837.7472289
+  "ts": 1792600844.4451303
 }
