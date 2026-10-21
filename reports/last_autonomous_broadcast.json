@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 5
+      "frames_received": 13
     },
-    "ts": 1792609159.495797
+    "ts": 1792609170.3209965
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -130,10 +130,10 @@
   "multi_route_bundle_probes": 63,
   "total_rpc_checks_per_cycle": 107,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.59,
-  "rpc_latency_min_ms": 303.21,
-  "rpc_latency_avg_ms": 303.21,
-  "chainlink_eth_usd_price": 2496.52,
+  "scan_duration_sec": 1.06,
+  "rpc_latency_min_ms": 447.16,
+  "rpc_latency_avg_ms": 447.16,
+  "chainlink_eth_usd_price": 2494.99,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022916,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
@@ -161,21 +161,21 @@
     "0x875e726fa2e984570b32f505c9c64f864d1d2e5b": 1.106329
   },
   "best_single_route_pre_gas_wei": 2948880127884,
-  "best_single_route_pre_gas_inr": 0.6988,
+  "best_single_route_pre_gas_inr": 0.6984,
   "bundled_routes_count": 5,
   "bundled_route_labels": [
     "USDCE_WETH_U1_S1(2948880127884wei)",
     "WETH_USDT_U1_P1(1455012929754wei)",
-    "ARB_USDC_U5_P1(1544uUSD)",
     "ARB_PCS1_UNI1(561716899474wei)",
-    "USDT_AAVE_U1_P5(1202uUSD)"
+    "USDT_AAVE_U1_P5(1202uUSD)",
+    "ARB_UNI5_SUSHI5(224818251379wei)"
   ],
-  "bundled_multi_route_gross_wei": 6102669998519,
-  "bundled_multi_route_gross_inr": 1.4461,
-  "l2_gas_cost_inr": 0.3839,
-  "bundled_total_gas_cost_inr": 0.6526,
-  "single_net_if_forced_inr": 0.3149,
-  "bundled_net_if_forced_inr": 0.7935,
+  "bundled_multi_route_gross_wei": 5688150775778,
+  "bundled_multi_route_gross_inr": 1.3471,
+  "l2_gas_cost_inr": 0.3837,
+  "bundled_total_gas_cost_inr": 0.6523,
+  "single_net_if_forced_inr": 0.3147,
+  "bundled_net_if_forced_inr": 0.6948,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -192,10 +192,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 25468,
-    "per_route_ns": 1591.75,
+    "latency_ns": 26980,
+    "per_route_ns": 1686.25,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792609159.5034873
+  "ts": 1792609170.3214877
 }
