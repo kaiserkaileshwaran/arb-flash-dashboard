@@ -9,7 +9,7 @@
   "scaled_parallel_workers_n": 80,
   "execution_mode": "Dynamic Auto-Scaled 80-Worker (10-Core x 8) ARM64 SIMD Pool (100% Net Profit Direct to Mudrex • 0 MetaMask Balance Required)",
   "loan_sizing_policy": "100% Real Un-Sugarcoated Closed-Form Arbitrage Math (100% Net Profit Direct to Mudrex • Single or Atomic Bundle Executes When Gross > ₹0.36 L2 Gas or Trigger < 2.00% / HF < 1.0)",
-  "parallel_workers_per_block": 80,
+  "parallel_workers_per_block": 128,
   "profitable_workers_completed_block": 15,
   "unprofitable_workers_terminated_block": 1,
   "total_workers_spawned_session": 449520,
