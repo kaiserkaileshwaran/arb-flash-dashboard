@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792599681.3479767
+    "ts": 1792599688.935419
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -59,56 +59,56 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_P1_U5",
       "gross_inr": 0.0527,
-      "net_inr": -0.5662,
+      "net_inr": -0.567,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_PCS1_SUSHI5",
       "gross_inr": 0.0631,
-      "net_inr": -0.5558,
+      "net_inr": -0.5566,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_PCS5_SUSHI5",
       "gross_inr": 0.0788,
-      "net_inr": -0.5401,
+      "net_inr": -0.5409,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_UNI5_SUSHI5",
-      "gross_inr": 0.0665,
-      "net_inr": -0.5524,
+      "gross_inr": 0.0625,
+      "net_inr": -0.5572,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDT_S30_U5_S",
       "gross_inr": 0.0215,
-      "net_inr": -0.5974,
+      "net_inr": -0.5982,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.1131,
-      "net_inr": -0.5058,
+      "net_inr": -0.5066,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WSTETH_UNI5_UNI1",
       "gross_inr": 0.0089,
-      "net_inr": -0.61,
+      "net_inr": -0.6108,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDC_U5_P1",
       "gross_inr": 0.1306,
-      "net_inr": -0.4883,
+      "net_inr": -0.4891,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -123,9 +123,9 @@
   "multi_route_bundle_probes": 49,
   "total_rpc_checks_per_cycle": 89,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.0,
-  "rpc_latency_min_ms": 180.41,
-  "rpc_latency_avg_ms": 180.41,
+  "scan_duration_sec": 1.52,
+  "rpc_latency_min_ms": 638.8,
+  "rpc_latency_avg_ms": 638.8,
   "aave_lowest_health_factor": 1.022586,
   "aave_closest_borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
   "aave_closest_borrower_debt_usd": 66652.89,
@@ -153,20 +153,20 @@
     "ARB_USDC_U5_P1(1376uUSD)",
     "USDT_AAVE_U1_P5(1192uUSD)",
     "ARB_PCS5_SUSHI5(343773689433wei)",
-    "ARB_UNI5_SUSHI5(290150456167wei)",
     "ARB_PCS1_SUSHI5(275057538111wei)",
+    "ARB_UNI5_SUSHI5(272700816177wei)",
     "WBTC_USDCE_P1_U5(555uUSD)",
     "LUSD_WETH_U1_U5(204356316325wei)",
     "ARB_USDT_S30_U5_S(226uUSD)",
     "ARB_WETH_U1_P1(57739355999wei)",
     "WSTETH_UNI5_UNI1(38754360557wei)"
   ],
-  "bundled_multi_route_gross_wei": 5380863478196,
-  "bundled_multi_route_gross_inr": 1.2335,
-  "l2_gas_cost_inr": 0.6189,
-  "bundled_total_gas_cost_inr": 4.0229,
-  "single_net_if_forced_inr": 0.0193,
-  "bundled_net_if_forced_inr": -2.7894,
+  "bundled_multi_route_gross_wei": 5363413838206,
+  "bundled_multi_route_gross_inr": 1.2295,
+  "l2_gas_cost_inr": 0.6197,
+  "bundled_total_gas_cost_inr": 4.0281,
+  "single_net_if_forced_inr": 0.0185,
+  "bundled_net_if_forced_inr": -2.7986,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -183,10 +183,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 21422,
-    "per_route_ns": 1338.88,
+    "latency_ns": 21543,
+    "per_route_ns": 1346.44,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 2871600.0
   },
-  "ts": 1792599681.3484662
+  "ts": 1792599688.935904
 }
