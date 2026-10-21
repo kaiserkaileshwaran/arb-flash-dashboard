@@ -23,7 +23,7 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 15,
+      "frames_received": 17,
       "oracle_updates_detected": 0,
       "whale_swaps_decoded": 9,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792613043.7246385
+    "ts": 1792613050.3936598
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -99,42 +99,42 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1_OPT",
       "gross_inr": 0.394,
-      "net_inr": -0.2345,
+      "net_inr": -0.2249,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "LINK_SUSHI30_PCS5_REV_OPT",
       "gross_inr": 0.7114,
-      "net_inr": 0.0829,
-      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
-    },
-    {
-      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
-      "target": "ARB_USDCE_U5_P1_REV",
-      "gross_inr": 0.1275,
-      "net_inr": -0.501,
+      "net_inr": 0.0925,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "CAM_UNI1_WETH_USDT",
       "gross_inr": 0.004,
-      "net_inr": -0.6245,
+      "net_inr": -0.6149,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.11,
-      "net_inr": -0.5185,
+      "net_inr": -0.5089,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "LUSD_WETH_U1_U5_OPT",
       "gross_inr": 0.0479,
-      "net_inr": -0.5806,
+      "net_inr": -0.571,
+      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
+    },
+    {
+      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
+      "target": "ARB_PCS1_SUSHI5",
+      "gross_inr": 0.0837,
+      "net_inr": -0.5352,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -149,9 +149,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 2.19,
-  "rpc_latency_min_ms": 1848.39,
-  "rpc_latency_avg_ms": 1848.39,
+  "scan_duration_sec": 1.95,
+  "rpc_latency_min_ms": 1516.48,
+  "rpc_latency_avg_ms": 1516.48,
   "chainlink_eth_usd_price": 2492.57,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022908,
@@ -181,22 +181,21 @@
   },
   "best_single_route_pre_gas_wei": 3103421562062,
   "best_single_route_pre_gas_inr": 0.7343,
-  "bundled_routes_count": 7,
+  "bundled_routes_count": 6,
   "bundled_route_labels": [
     "LINK_SUSHI30_PCS5_REV_OPT(3103421562062wei)",
     "USDCE_WETH_U1_S1(2079663398300wei)",
     "ARB_PCS1_UNI1(1149973971357wei)",
-    "ARB_UNI5_SUSHI5(607290172582wei)",
-    "ARB_USDCE_U5_P1_REV(1343uUSD)",
-    "USDT_AAVE_U1_P5(1159uUSD)",
-    "ARB_USDC_U5_P1(1000uUSD)"
+    "ARB_UNI5_SUSHI5(691193937642wei)",
+    "ARB_USDC_U5_P1(1229uUSD)",
+    "USDT_AAVE_U1_P5(1159uUSD)"
   ],
-  "bundled_multi_route_gross_wei": 8390452623969,
-  "bundled_multi_route_gross_inr": 1.9851,
-  "l2_gas_cost_inr": 0.6486,
-  "bundled_total_gas_cost_inr": 1.1026,
-  "single_net_if_forced_inr": 0.0857,
-  "bundled_net_if_forced_inr": 0.8825,
+  "bundled_multi_route_gross_wei": 8013072745137,
+  "bundled_multi_route_gross_inr": 1.8959,
+  "l2_gas_cost_inr": 0.6388,
+  "bundled_total_gas_cost_inr": 1.086,
+  "single_net_if_forced_inr": 0.0955,
+  "bundled_net_if_forced_inr": 0.8099,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -218,11 +217,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 20761,
-    "per_route_ns": 1297.56,
+    "latency_ns": 20781,
+    "per_route_ns": 1298.81,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792613043.7252767,
-  "hmac_sha256_integrity": "63dbc19b088326359cc7a4922c2ab1d47608f669e28012219f20aa0bc2ec13b1"
+  "ts": 1792613050.3942833,
+  "hmac_sha256_integrity": "2589b5a69f56856cb7c7f1d1987e57ae2bcadfefeb7d0648eb8ae4375f5b4ef2"
 }
