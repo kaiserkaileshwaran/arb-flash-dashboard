@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 9
+      "frames_received": 7
     },
-    "ts": 1792609129.7369387
+    "ts": 1792609136.5853534
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -130,9 +130,9 @@
   "multi_route_bundle_probes": 63,
   "total_rpc_checks_per_cycle": 107,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.07,
-  "rpc_latency_min_ms": 766.63,
-  "rpc_latency_avg_ms": 766.63,
+  "scan_duration_sec": 1.02,
+  "rpc_latency_min_ms": 735.78,
+  "rpc_latency_avg_ms": 735.78,
   "chainlink_eth_usd_price": 2496.52,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022922,
@@ -191,10 +191,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 21771,
-    "per_route_ns": 1360.69,
+    "latency_ns": 23154,
+    "per_route_ns": 1447.12,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792609129.737446
+  "ts": 1792609136.5858612
 }
