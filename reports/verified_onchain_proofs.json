@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "verified_at_epoch": 1792622488.1222804,
+  "verified_at_epoch": 1792622864.9210498,
   "chain_id": 42161,
-  "live_block_number": 517048962,
+  "live_block_number": 517050198,
   "owner_metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
   "mudrex_deposit_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
   "binance_deposit_wallet": "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099",
@@ -16,8 +16,8 @@
   "real_amount_saved_25_usd": 0.0,
   "real_amount_saved_25_inr": 0.0,
   "real_amount_saved_pct": 0.0,
-  "real_metamask_eth_balance": 6.602e-05,
-  "real_relayer_eth_balance": 1.36e-06,
+  "real_metamask_eth_balance": 4.558e-05,
+  "real_relayer_eth_balance": 2.136e-05,
   "verified_onchain_trades": [
     {
       "trade_number": 1,
