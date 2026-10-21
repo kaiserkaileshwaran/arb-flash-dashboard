@@ -1648,12 +1648,18 @@ function renderDashboard(payload) {
     const soloImmMud5 = Math.min(remDaily2, 712);
     const soloQueMud5 = Math.round((712 - soloImmMud5) * 100) / 100;
 
+    const lowCompLiqNow = Number(((autoBcast && autoBcast.mudrex_bank_payout_status && autoBcast.mudrex_bank_payout_status.low_competition_lending_markets) || {}).liquidatable_now || 0);
+    const hfGapPct = Math.max(0, (minLiveHf - 1.0) * 100);
+    const hfNote = minLiveHf < 1.0000
+      ? `<span class="pos"><b>Live HF (closest Aave): ${minLiveHf.toFixed(4)}</b></span><br><b>Needed HF: <code>&lt; 1.0000</code> ✅ REACHED</b><br><span class="pos"><b>Liquidation firing now</b></span>`
+      : `<span class="warn"><b>Live HF (closest Aave): ${minLiveHf.toFixed(4)}</b></span><br><b>Needed HF: <code>&lt; 1.0000</code></b><br><span class="muted">Gap ${hfGapPct.toFixed(2)}% • auto-fires the moment it is reached</span>`;
+
     const topPriorityRows = `
       <tr class="row-green">
         <td><span class="pill-green">🟢 #1 DEPOSITED (Trade #11)</span></td>
         <td><a href="https://arbiscan.io/block/516661486" target="_blank"><b>Blk #516,661,486</b></a><br><a href="https://arbiscan.io/tx/0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c" target="_blank"><b>Tx 0xf53cf53d...</b></a></td>
         <td><b>2-Route Atomic Flash Bundle (Trade #11)</b><br>(USDCE/WETH + UNI/WETH → Mudrex)</td>
-        <td><span class="pos"><b>Live HF: 0.9850</b><br><b>Req Spread: Met</b></span></td>
+        <td><span class="pos"><b>Executed as DEX flash-swap (no HF needed)</b></span><br>${hfNote}</td>
         <td><span class="pos"><b>✅ Deposited on-chain @ Block #516,661,486!</b> Executed 2-Route Atomic Flash Swap with <b>0.00 MetaMask ETH burned</b> and deposited to your Mudrex wallet (<b>₹36.22 INR = 0.381532 USDC</b>).</span></td>
         <td><b>₹2,06,30,862</b></td>
         <td>-₹0.28</td>
@@ -1666,7 +1672,7 @@ function renderDashboard(payload) {
         <td><span class="pill-green">🟢 #2 DEPOSITED (Trade #10)</span></td>
         <td><a href="https://arbiscan.io/block/516642657" target="_blank"><b>Blk #516,642,657</b></a><br><a href="https://arbiscan.io/tx/0x53629af551f5588f362d7e7b32517dd5e2ec85f03169fdfab41ec8bc4310ce97" target="_blank"><b>Tx 0x53629af5...</b></a></td>
         <td><b>5-Route Atomic Flash Bundle (Trade #10)</b><br>(Swapped to +5,862 USDC units → Mudrex)</td>
-        <td><span class="pos"><b>Live HF: 0.9912</b><br><b>Req Spread: Met</b></span></td>
+        <td><span class="pos"><b>Executed as DEX flash-swap (no HF needed)</b></span><br>${hfNote}</td>
         <td><span class="pos"><b>✅ Deposited on-chain @ Block #516,642,657!</b> Direct USDC transfer <a href="https://arbiscan.io/tx/0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109" target="_blank"><code>0x76dd4069...7109</code></a> is inside your <b>₹36.22 INR (0.381532 USDC)</b> Mudrex balance.</span></td>
         <td><b>₹7,99,70,100</b></td>
         <td>-₹0.32</td>
@@ -1679,7 +1685,7 @@ function renderDashboard(payload) {
         <td><span class="${(asmBundleNetInr >= 0.40 && isOnChainGateVerified) ? 'pill-green' : 'pill-yellow'}">${(asmBundleNetInr >= 0.40 && isOnChainGateVerified) ? '🟢 #3 EXECUTING &amp; DEPOSITING' : '🟡 #3 ACTIVE &amp; ONGOING (Parallel Bundle)'}</span></td>
         <td><a href="https://arbiscan.io/block/${blk}" target="_blank"><b>Live Blk #${blk.toLocaleString()}</b></a><br><span class="warn"><b>${Math.round(asmNs)} ns</b></span></td>
         <td><b>Top Single DEX Spread / Multi-Route Bundle</b><br>(Runs in Parallel While HF Loans Wait)</td>
-        <td><span class="warn"><b>Live Spread: +₹${asmBundleGrossInr.toFixed(2)}</b><br><b>Req Gas: &gt; ₹${asmBundleGasInr.toFixed(2)}</b></span></td>
+        <td><span class="warn"><b>Live Spread: +₹${asmBundleGrossInr.toFixed(2)}</b><br><b>Req Gas: &gt; ₹${asmBundleGasInr.toFixed(2)}</b></span><br>${hfNote}</td>
         <td><b>🟡 Active &amp; Ongoing in Parallel Without Waiting for HF &lt; 1.0000:</b> Fires every time combined DEX spread exceeds L2 gas + ₹0.40 INR, while 00:00 IST daily sweep consolidates all sub-limit profits ≥ ₹1.00 INR to <b>Mudrex (<code>0xd252...3f05</code>)</b>!</td>
         <td><b>₹2,43,28,000</b></td>
         <td>-₹${asmBundleGasInr.toFixed(2)}</td>
@@ -1779,7 +1785,7 @@ function renderDashboard(payload) {
         <td><b>Low-Competition Lending Markets</b><br>(Compound V3 Comet • Radiant V2 • Silo • Dolomite)</td>
         <td>
           <span class="warn"><b>8 Active Whales ($195.1k Debt)</b></span><br>
-          <b>Req: <code>isLiquidatable == 1</code></b><br>
+          <b>Needed: <code>isLiquidatable == 1</code> (≈ HF &lt; 1.0000)</b><br><span class="warn">Live: <b>${lowCompLiqNow > 0 ? lowCompLiqNow + " liquidatable NOW" : "0 liquidatable (HF ≥ 1.0000)"}</b></span><br>
           <span class="pos"><b>US-East (Virginia) Co-Located</b></span>
         </td>
         <td><b>🔥 Low-Competition Arbitrum Lending Scanner (90% Fewer Competing Bots than Aave V3):</b> Monitors <b>8 active Compound V3 Comet whales</b> (led by <code>0x6773...9990</code> at <b>$98,092 USDC debt</b> &amp; <code>0xca76...2e74</code> at <b>$39,008 USDC debt</b>) + Radiant V2, Silo &amp; Dolomite. Calls <code>Comet.absorb()</code> (<code>0xab9c4b5d</code>, <b>$0.00 capital required</b>) for an <b>8% collateral discount (+₹14.81 Lakh INR pool)</b>!</td>
@@ -1813,7 +1819,7 @@ function renderDashboard(payload) {
         <td><b>Unbundled Solo Fast-Spread Probe</b><br>(Gross +₹0.13 vs ₹${asmBundleGasInr.toFixed(2)} Solo Gas)</td>
         <td>
           <span class="danger"><b>Solo Net: -₹${Math.max(0.01, asmBundleGasInr - 0.13).toFixed(2)}</b></span><br>
-          <b>Req Gate: <code>&gt; ₹0.00 (≥ +₹1.00 INR)</code></b>
+          <b>Req Gate: <code>&gt; ₹0.00 (≥ +₹1.00 INR)</code></b><br>${hfNote}
         </td>
         <td><span class="danger"><b>🔴 Aborted in Hardware Registers (@ Blk #${blk.toLocaleString()}):</b> Any trade with <code>≤ ₹0.00</code> net profit is strictly never processed (<b>0.00 ETH spent</b>); profitable positive legs are combined into the shared-gas multi-route bundle above!</span></td>
         <td><b>₹16,611 (0.00175 WETH)</b></td>
@@ -1833,7 +1839,7 @@ function renderDashboard(payload) {
       const netInr = Number(t.current_trade_post_tax_inr || (Number(t.current_trade_net_profit_usd || 0) * INR_PER_USD));
       const txShort = t.tx_hash ? `<a href="https://arbiscan.io/tx/${t.tx_hash}" target="_blank">Tx ${t.tx_hash.slice(0,10)}...</a>` : '';
       const destDetail = t.trade_number >= 4 ? `Mudrex (<code>0xd252...3f05</code>) → Direct UPI` : `Earlier Wallet (<code>0xb411...0099</code>)`;
-      const execHf = (0.9815 + (Number(t.trade_number || 1) * 0.0014)).toFixed(4);
+      
       const thrNote = t.trade_number >= 4
         ? `<span class="pill-green">🟢 Inside ₹${mudInrOnChain.toFixed(2)} Mudrex Balance</span>`
         : `<span class="pill-green">🟢 Inside ₹${binOnlyInrOnChain.toFixed(2)} Earlier Balance</span>`;
@@ -1841,7 +1847,7 @@ function renderDashboard(payload) {
         <td><span class="pill-green">🟢 DEPOSITED (Trade #${t.trade_number})</span></td>
         <td><a href="https://arbiscan.io/block/${bNum}" target="_blank"><b>Blk #${bNum.toLocaleString()}</b></a><br>${txShort}</td>
         <td><b>${String(t.pair || '').split('(')[0].trim()} (Trade #${t.trade_number})</b></td>
-        <td><span class="pos"><b>Live HF: ${execHf}</b><br><b>Req HF: &lt; 1.0000 (Met)</b></span></td>
+        <td><span class="pos"><b>Executed as DEX flash-swap (no HF needed)</b></span><br>${hfNote}</td>
         <td><span class="pos"><b>✅ Already deposited &amp; settled on-chain</b> into ${destDetail}.</span></td>
         <td><b>₹${loanInr.toLocaleString('en-IN', {maximumFractionDigits:0})}</b></td>
         <td>-₹${feesInr.toFixed(2)}</td>
