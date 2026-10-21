@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 13,
+      "frames_received": 6,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 6,
+      "whale_swaps_decoded": 2,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,97 +44,97 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792616743.5726361
+    "ts": 1792616749.4512756
   },
   "table2_under_2pct_fast_triggers": [
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
-      "hf": 1.034149,
+      "hf": 1.034584,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 3.4149,
+      "distance_pct": 3.4584,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x9f25248e8465a4a5106948615c6db2ed1e1b9052",
-      "hf": 1.026233,
+      "hf": 1.02651,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 2.6233,
+      "distance_pct": 2.651,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
-      "hf": 1.022907,
+      "hf": 1.022905,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 2.2907,
+      "distance_pct": 2.2905,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0xba62acf915c1697d000de2f70494ab65cfbcf710",
-      "hf": 1.046033,
+      "hf": 1.045938,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.6033,
+      "distance_pct": 4.5938,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x9cd61cab43075c6c4a56a95dacadad39df555d25",
-      "hf": 1.048836,
+      "hf": 1.048702,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.8836,
+      "distance_pct": 4.8702,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36",
-      "hf": 1.044136,
+      "hf": 1.043395,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.4136,
+      "distance_pct": 4.3395,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1_OPT",
       "gross_inr": 0.3794,
-      "net_inr": -0.2395,
+      "net_inr": -0.2399,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_U5_P1_REV",
       "gross_inr": 0.0134,
-      "net_inr": -0.6055,
+      "net_inr": -0.6059,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.11,
-      "net_inr": -0.5089,
+      "net_inr": -0.5093,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "LUSD_WETH_U1_U5_OPT",
       "gross_inr": 0.0479,
-      "net_inr": -0.571,
+      "net_inr": -0.5714,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1_HIGH",
       "gross_inr": 0.3438,
-      "net_inr": -0.2751,
+      "net_inr": -0.2755,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_P1_U5_OPT",
       "gross_inr": 0.0367,
-      "net_inr": -0.5822,
+      "net_inr": -0.5826,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -149,34 +149,34 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.72,
-  "rpc_latency_min_ms": 1100.16,
-  "rpc_latency_avg_ms": 1100.16,
+  "scan_duration_sec": 1.05,
+  "rpc_latency_min_ms": 712.99,
+  "rpc_latency_avg_ms": 712.99,
   "chainlink_eth_usd_price": 2489.83,
   "camelot_v3_dynamic_fee_bps": 1.0,
-  "aave_lowest_health_factor": 1.022907,
+  "aave_lowest_health_factor": 1.022905,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
-  "aave_closest_borrower_debt_usd": 127265.24,
-  "aave_closest_5pct_liq_bonus_inr": 302000.42,
+  "aave_closest_borrower_debt_usd": 127175.24,
+  "aave_closest_5pct_liq_bonus_inr": 301786.84,
   "aave_liquidatable_positions_now": 0,
   "aave_borrower_hfs": {
-    "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2": 1.034149,
-    "0x9f25248e8465a4a5106948615c6db2ed1e1b9052": 1.026233,
-    "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb": 1.022907,
-    "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.046033,
-    "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.048836,
-    "0x408dcf31e16b438a86fe01e258cd357651aa7b3f": 1.051277,
-    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.044136,
-    "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.051316,
+    "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2": 1.034584,
+    "0x9f25248e8465a4a5106948615c6db2ed1e1b9052": 1.02651,
+    "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb": 1.022905,
+    "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.045938,
+    "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.048702,
+    "0x408dcf31e16b438a86fe01e258cd357651aa7b3f": 1.051246,
+    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.043395,
+    "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.051041,
     "0x7d7937bac6af9975bbacbcd53d53e5c61968cd36": 1.056172,
-    "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.050969,
+    "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.050224,
     "0x572372831a9d6b2e3ee8fa284505599e6125fea9": 1.079048,
-    "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.085944,
-    "0xb71ae1fe3a27d8b3f9a769f033374cfe1587b07a": 1.091617,
-    "0x9cd696c583ded4716d82012f7f22caeaf335266a": 1.091819,
-    "0x2012395e71a4af2e621d522b175f6c29232398db": 1.097749,
-    "0xea12ea09ecd81f19ec642d93ccd2c4723bdb592b": 1.088923,
-    "0xbfef061243c3da14d20aa9cb054350a9192d3a93": 1.101353,
+    "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.085816,
+    "0xb71ae1fe3a27d8b3f9a769f033374cfe1587b07a": 1.091987,
+    "0x9cd696c583ded4716d82012f7f22caeaf335266a": 1.092009,
+    "0x2012395e71a4af2e621d522b175f6c29232398db": 1.097437,
+    "0xea12ea09ecd81f19ec642d93ccd2c4723bdb592b": 1.088502,
+    "0xbfef061243c3da14d20aa9cb054350a9192d3a93": 1.101463,
     "0x875e726fa2e984570b32f505c9c64f864d1d2e5b": 1.10653
   },
   "best_single_route_pre_gas_wei": 2079663398300,
@@ -189,10 +189,10 @@
   ],
   "bundled_multi_route_gross_wei": 3825998223131,
   "bundled_multi_route_gross_inr": 0.9042,
-  "l2_gas_cost_inr": 0.6381,
-  "bundled_total_gas_cost_inr": 1.0848,
-  "single_net_if_forced_inr": -0.1466,
-  "bundled_net_if_forced_inr": -0.1806,
+  "l2_gas_cost_inr": 0.6385,
+  "bundled_total_gas_cost_inr": 1.0854,
+  "single_net_if_forced_inr": -0.147,
+  "bundled_net_if_forced_inr": -0.1812,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -214,11 +214,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 20310,
-    "per_route_ns": 1269.38,
+    "latency_ns": 19449,
+    "per_route_ns": 1215.56,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792616743.573195,
-  "hmac_sha256_integrity": "5580c4a930e4ce440c831dbb58b4748b1ab5bf30d44f5336d381c715c2201873"
+  "ts": 1792616749.4518685,
+  "hmac_sha256_integrity": "ec318c9013189fd6c822b6996ed37984d672d910e34a69c5ba04a55085372ece"
 }
