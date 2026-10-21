@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 47
+      "frames_received": 55
     },
-    "ts": 1792609497.68894
+    "ts": 1792609508.2551737
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -93,6 +93,13 @@
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
+      "target": "CAM_UNI1_WETH_USDT",
+      "gross_inr": 0.0145,
+      "net_inr": -0.3569,
+      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
+    },
+    {
+      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.11,
       "net_inr": -0.2614,
@@ -111,13 +118,6 @@
       "gross_inr": 0.0483,
       "net_inr": -0.3231,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
-    },
-    {
-      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
-      "target": "ARB_USDCE_P1_U5",
-      "gross_inr": 0.0671,
-      "net_inr": -0.3043,
-      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
   "parallel_workers_launched": 107,
@@ -131,9 +131,9 @@
   "multi_route_bundle_probes": 63,
   "total_rpc_checks_per_cycle": 107,
   "cycles_scanned": 1,
-  "scan_duration_sec": 3.34,
-  "rpc_latency_min_ms": 1222.27,
-  "rpc_latency_avg_ms": 1222.27,
+  "scan_duration_sec": 3.86,
+  "rpc_latency_min_ms": 1966.43,
+  "rpc_latency_avg_ms": 1966.43,
   "chainlink_eth_usd_price": 2488.1,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022904,
@@ -192,10 +192,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 29866,
-    "per_route_ns": 1866.62,
+    "latency_ns": 31629,
+    "per_route_ns": 1976.81,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792609497.6896482
+  "ts": 1792609508.2557154
 }
