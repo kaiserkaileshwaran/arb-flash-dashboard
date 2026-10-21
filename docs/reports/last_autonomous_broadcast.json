@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 54
+      "frames_received": 14
     },
-    "ts": 1792609757.3661842
+    "ts": 1792609760.9274657
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -131,9 +131,9 @@
   "multi_route_bundle_probes": 63,
   "total_rpc_checks_per_cycle": 107,
   "cycles_scanned": 1,
-  "scan_duration_sec": 2.2,
-  "rpc_latency_min_ms": 1175.21,
-  "rpc_latency_avg_ms": 1175.21,
+  "scan_duration_sec": 1.77,
+  "rpc_latency_min_ms": 773.56,
+  "rpc_latency_avg_ms": 773.56,
   "chainlink_eth_usd_price": 2488.66,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022906,
@@ -163,18 +163,19 @@
   },
   "best_single_route_pre_gas_wei": 2948880127884,
   "best_single_route_pre_gas_inr": 0.6966,
-  "bundled_routes_count": 3,
+  "bundled_routes_count": 4,
   "bundled_route_labels": [
     "USDCE_WETH_U1_S1(2948880127884wei)",
+    "WETH_USDT_U1_P1(1146014778061wei)",
     "USDT_AAVE_U1_P5(1159uUSD)",
-    "ARB_USDC_U5_P1(902uUSD)"
+    "ARB_USDC_U5_P1(1001uUSD)"
   ],
-  "bundled_multi_route_gross_wei": 3802296276952,
-  "bundled_multi_route_gross_inr": 0.8982,
+  "bundled_multi_route_gross_wei": 4989304843833,
+  "bundled_multi_route_gross_inr": 1.1786,
   "l2_gas_cost_inr": 0.3827,
   "bundled_total_gas_cost_inr": 0.6506,
   "single_net_if_forced_inr": 0.3139,
-  "bundled_net_if_forced_inr": 0.2476,
+  "bundled_net_if_forced_inr": 0.528,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -191,10 +192,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 28864,
-    "per_route_ns": 1804.0,
+    "latency_ns": 25307,
+    "per_route_ns": 1581.69,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792609757.366707
+  "ts": 1792609760.9279616
 }

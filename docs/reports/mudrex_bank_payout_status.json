@@ -10,7 +10,7 @@
   "wss_sequencer_feed": {
     "connected": true,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 54
+    "frames_received": 14
   },
-  "ts": 1792609757.3661842
+  "ts": 1792609760.9274657
 }
