@@ -515,6 +515,10 @@ def main() -> int:
         ("0xfbc4c01531188b6d544f01d83fa9b2e5e2e023da", usdc, weth, 20000 * 10**6, 1, RELAYER_REIMB_USDC, False, "WHALE USDC/WETH: 20,000 USDC Flash Loan • Verified +₹3.07L Profit • Direct USDC->Mudrex+MetaMask"),
         ("0x53de01b273594a5955d3790609b9ff2ed9117122", usdc, weth, 150 * 10**6, 1, RELAYER_REIMB_USDC, False, "RETAIL LOW-COMPETITION: 150 USDC Flash Loan • Verified +₹18,033 Profit • 100% Direct to Mudrex+MetaMask"),
         ("0x59030187518422b4fa4a971b6891fb3d61e2bfee", usdc, weth, 4000 * 10**6, 1, RELAYER_REIMB_USDC, False, "MID-SIZED LOW-COMPETITION: 4,000 USDC Flash Loan • Verified +₹1.61L Profit • Mudrex+MetaMask"),
+        ("0xba62acf915c1697d000de2f70494ab65cfbcf710", usdc, weth, 280 * 10**6, 1, RELAYER_REIMB_USDC, False, "NEW DISCOVERED RETAIL (HF 1.0465): USDC_debt/WETH_col (280 USDC = ₹26.6k Loan • round(HF,1)==1.0 PRE-WARMED • +₹1,329 Bonus)"),
+        ("0x572372831a9d6b2e3ee8fa284505599e6125fea9", usdt, weth, 4800 * 10**6, 1, RELAYER_REIMB_USDC, False, "NEW DISCOVERED MID (HF 1.0585): USDT_debt/WETH_col (4,800 USDT = ₹4.55L Loan • +₹22,780 Bonus)"),
+        ("0x572372831a9d6b2e3ee8fa284505599e6125fea9", usdc, arb, 1490 * 10**6, 1, RELAYER_REIMB_USDC, False, "NEW DISCOVERED 10% ARB BONUS (HF 1.0585): USDC_debt/ARB_col (1,490 USDC = ₹1.41L Loan • +10.0% Bonus = +₹14,143)"),
+        ("0x541980dd1db4123185d6b632e9d6a09f77c1e4fa", usdc, weth, 1985 * 10**6, 1, RELAYER_REIMB_USDC, False, "NEW DISCOVERED MID (HF 1.0591): USDC_debt/WETH_col (1,985 USDC = ₹1.88L Loan • +₹9,420 Bonus)"),
     ]
 
     # =========================================================================
