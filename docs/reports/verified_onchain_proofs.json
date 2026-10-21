@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "verified_at_epoch": 1792559789.6274028,
+  "verified_at_epoch": 1792559977.0940843,
   "chain_id": 42161,
-  "live_block_number": 516819097,
+  "live_block_number": 516819729,
   "owner_metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
   "mudrex_deposit_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
   "binance_deposit_wallet": "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099",
