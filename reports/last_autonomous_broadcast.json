@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792607026.6076665
+    "ts": 1792607034.9196398
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -93,8 +93,8 @@
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_P1_U5",
-      "gross_inr": 0.047,
-      "net_inr": -0.3244,
+      "gross_inr": 0.0238,
+      "net_inr": -0.3476,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
@@ -107,8 +107,8 @@
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDC_S30_U5",
-      "gross_inr": 0.0513,
-      "net_inr": -0.3201,
+      "gross_inr": 0.0349,
+      "net_inr": -0.3365,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -123,9 +123,9 @@
   "multi_route_bundle_probes": 52,
   "total_rpc_checks_per_cycle": 84,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.19,
-  "rpc_latency_min_ms": 255.76,
-  "rpc_latency_avg_ms": 255.76,
+  "scan_duration_sec": 1.39,
+  "rpc_latency_min_ms": 238.55,
+  "rpc_latency_avg_ms": 238.55,
   "chainlink_eth_usd_price": 2516.99,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.020598,
@@ -152,16 +152,16 @@
   "bundled_routes_count": 4,
   "bundled_route_labels": [
     "USDCE_WETH_S5_S1(3068157011780wei)",
-    "ARB_WETH_U1_U5(947149112603wei)",
+    "ARB_WETH_U1_U5(893995626439wei)",
     "ARB_USDT_S30_U5(1936uUSD)",
     "WBTC_USDCE_P1_U5(1780uUSD)"
   ],
-  "bundled_multi_route_gross_wei": 5554022480489,
-  "bundled_multi_route_gross_inr": 1.3269,
+  "bundled_multi_route_gross_wei": 5500868994325,
+  "bundled_multi_route_gross_inr": 1.3142,
   "l2_gas_cost_inr": 0.387,
   "bundled_total_gas_cost_inr": 0.6579,
   "single_net_if_forced_inr": 0.346,
-  "bundled_net_if_forced_inr": 0.669,
+  "bundled_net_if_forced_inr": 0.6563,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -178,10 +178,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 26009,
-    "per_route_ns": 1625.56,
+    "latency_ns": 24025,
+    "per_route_ns": 1501.56,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792607026.6081395
+  "ts": 1792607034.9201434
 }
