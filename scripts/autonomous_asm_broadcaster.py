@@ -426,6 +426,10 @@ def rpc_call(method: str, params: list) -> dict:
 
 def _send_raw_tx_or_cast(to_addr: str, data_hex: str, gas_limit: int, gas_price_wei: int, value_wei: int = 0, fallback_cmd: list = None) -> dict:
     """Signs and broadcasts raw calldata directly via eth_account in <1.5ms (works on AWS & GitHub Actions without Foundry cast)."""
+    # Single-executor guard: set ARB_DISABLE_BROADCAST=1 on every machine EXCEPT the one designated executor
+    # (the AWS us-east-1 box) so two machines never race the same Relayer nonce / same opportunity.
+    if os.environ.get("ARB_DISABLE_BROADCAST", "").strip() == "1":
+        raise RuntimeError("BROADCAST_DISABLED_ON_THIS_NODE (ARB_DISABLE_BROADCAST=1): scan-only node")
     try:
         from eth_account import Account
         from eth_utils import to_checksum_address
