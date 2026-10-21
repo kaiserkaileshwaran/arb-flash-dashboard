@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792541804.6558027
+    "ts": 1792541809.333699
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -51,63 +51,63 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "UNI_SUSHI30_PCS5",
       "gross_inr": 0.0497,
-      "net_inr": -1.2161,
+      "net_inr": -1.2145,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_PCS1_SUSHI5",
       "gross_inr": 0.0419,
-      "net_inr": -1.2239,
+      "net_inr": -1.2223,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDC_U1_U5",
       "gross_inr": 0.1229,
-      "net_inr": -1.1429,
+      "net_inr": -1.1413,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_UNI_U5_U30",
       "gross_inr": 0.1841,
-      "net_inr": -1.0817,
+      "net_inr": -1.0801,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.0987,
-      "net_inr": -1.1671,
+      "net_inr": -1.1655,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_PCS1_UNI1",
       "gross_inr": 0.0717,
-      "net_inr": -1.1941,
-      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
-    },
-    {
-      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
-      "target": "ARB_WETH_U1_U5",
-      "gross_inr": 0.0107,
-      "net_inr": -1.2551,
+      "net_inr": -1.1925,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_WETH_P5_U5",
       "gross_inr": 0.0071,
-      "net_inr": -1.2587,
+      "net_inr": -1.2571,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_P1_U5",
       "gross_inr": 0.2215,
-      "net_inr": -1.0443,
+      "net_inr": -1.0427,
+      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
+    },
+    {
+      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
+      "target": "ARB_USDCE_P1_U5_S",
+      "gross_inr": 0.1018,
+      "net_inr": -1.1624,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -122,9 +122,9 @@
   "multi_route_bundle_probes": 49,
   "total_rpc_checks_per_cycle": 82,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.06,
-  "rpc_latency_min_ms": 210.07,
-  "rpc_latency_avg_ms": 210.07,
+  "scan_duration_sec": 3.13,
+  "rpc_latency_min_ms": 2354.97,
+  "rpc_latency_avg_ms": 2354.97,
   "aave_lowest_health_factor": 1.022877,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
   "aave_closest_borrower_debt_usd": 125127.41,
@@ -143,30 +143,31 @@
   },
   "best_single_route_pre_gas_wei": 966459627329,
   "best_single_route_pre_gas_inr": 0.2215,
-  "bundled_routes_count": 15,
+  "bundled_routes_count": 16,
   "bundled_route_labels": [
     "ARB_USDCE_P1_U5(2334uUSD)",
     "USDT_UNI_U5_U30(1940uUSD)",
     "ARB_USDT_U5_S30(1352uUSD)",
-    "ARB_USDCE_U5_U1(1301uUSD)",
+    "ARB_USDCE_U5_U1(1300uUSD)",
     "ARB_USDC_U1_U5(1295uUSD)",
+    "ARB_USDT_P5_S30(1177uUSD)",
     "USDT_AAVE_U1_P5(1040uUSD)",
     "ARB_PCS1_UNI1(312973525843wei)",
+    "USDCE_WETH_U1_S1(252523151421wei)",
     "UNI_SUSHI30_PCS5(216880832552wei)",
     "USDCE_WETH_S5_S1(173706861474wei)",
     "WETH_USDT_U1_P1(151806331943wei)",
+    "ARB_USDCE_U100_U1(357uUSD)",
     "LUSD_WETH_U1_U5(140386069046wei)",
-    "ARB_USDT_P5_S30(115uUSD)",
-    "ARB_WETH_U1_U5(46885309990wei)",
-    "ARB_WETH_P5_U5(30985421440wei)",
+    "ARB_WETH_P5_U5(31000366796wei)",
     "WSTETH_WETH_U5_U1(3383413114wei)"
   ],
-  "bundled_multi_route_gross_wei": 4959823500389,
-  "bundled_multi_route_gross_inr": 1.1369,
-  "l2_gas_cost_inr": 1.2658,
-  "bundled_total_gas_cost_inr": 11.0125,
-  "single_net_if_forced_inr": -1.0443,
-  "bundled_net_if_forced_inr": -9.8756,
+  "bundled_multi_route_gross_wei": 5752639848252,
+  "bundled_multi_route_gross_inr": 1.3187,
+  "l2_gas_cost_inr": 1.2642,
+  "bundled_total_gas_cost_inr": 11.6938,
+  "single_net_if_forced_inr": -1.0427,
+  "bundled_net_if_forced_inr": -10.3751,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -183,10 +184,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 23194,
-    "per_route_ns": 1449.62,
+    "latency_ns": 40686,
+    "per_route_ns": 2542.88,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 2871600.0
   },
-  "ts": 1792541804.65638
+  "ts": 1792541809.3342845
 }
