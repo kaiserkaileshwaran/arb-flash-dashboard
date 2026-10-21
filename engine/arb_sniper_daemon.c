@@ -1106,15 +1106,21 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     g_total_asm_cycles++;
     int best_i = rk[0];
 
-    /* Method A: Multi-Route Atomic Bundle Aggregation across all positive routes */
+    /* Method A: Multi-Route Atomic Bundle Aggregation across strictly > ₹0.00 (>= ₹0.01 INR) positive routes */
     int    bundle_routes_count = 0;
     double bundle_loan_usd     = 0.0;
     double bundle_gross_usd    = 0.0;
     for (int i = 0; i < N; i++) {
-        if (gr[i] > 0.0) {
+        if ((gr[i] * INR_PER_USD) >= 0.01) {
             bundle_routes_count++;
             bundle_loan_usd  += opt[i];
             bundle_gross_usd += gr[i];
+        } else {
+            /* Strictly abort any route whose gross profit rounds to ₹0.00 INR */
+            gr[i]   = 0.0;
+            nt[i]   = 0.0;
+            tr75[i] = 0.0;
+            sv25[i] = 0.0;
         }
     }
     double bundle_total_gas_usd  = gas_fee_usd;
@@ -1123,13 +1129,30 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double bundle_tr75_usd       = bundle_net_usd * 1.00;
     double bundle_sv25_usd       = 0.0;
 
-    /* When Method A Atomic Bundle is net-positive, allocate shared L2 gas proportionally across bundled routes */
+    /* When Method A Atomic Bundle is net-positive, allocate shared L2 gas proportionally across bundled routes;
+     * strictly abort any route whose net share rounds to ₹0.00 (< ₹0.01 INR)! */
     if (bundle_net_usd > 0.0 && bundle_gross_usd > 1e-12) {
+        bundle_routes_count = 0;
         for (int i = 0; i < N; i++) {
             if (gr[i] > 0.0 && nt[i] <= 0.0) {
                 double share_net = bundle_net_usd * (gr[i] / bundle_gross_usd);
-                nt[i]   = share_net;
-                tr75[i] = share_net * 1.00;
+                if ((share_net * INR_PER_USD) >= 0.01) {
+                    nt[i]   = share_net;
+                    tr75[i] = share_net * 1.00;
+                    sv25[i] = 0.0;
+                    bundle_routes_count++;
+                } else {
+                    gr[i]   = 0.0;
+                    nt[i]   = 0.0;
+                    tr75[i] = 0.0;
+                    sv25[i] = 0.0;
+                }
+            } else if ((nt[i] * INR_PER_USD) >= 0.01) {
+                bundle_routes_count++;
+            } else {
+                gr[i]   = 0.0;
+                nt[i]   = 0.0;
+                tr75[i] = 0.0;
                 sv25[i] = 0.0;
             }
         }
