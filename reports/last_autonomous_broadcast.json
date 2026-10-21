@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792608332.0650375
+    "ts": 1792608334.77989
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -123,9 +123,9 @@
   "multi_route_bundle_probes": 59,
   "total_rpc_checks_per_cycle": 99,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.17,
-  "rpc_latency_min_ms": 640.28,
-  "rpc_latency_avg_ms": 640.28,
+  "scan_duration_sec": 1.38,
+  "rpc_latency_min_ms": 910.13,
+  "rpc_latency_avg_ms": 910.13,
   "chainlink_eth_usd_price": 2513.21,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.021328,
@@ -140,7 +140,7 @@
     "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.047277,
     "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.050586,
     "0x408dcf31e16b438a86fe01e258cd357651aa7b3f": 1.051666,
-    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.053883,
+    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.053882,
     "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.056005,
     "0x7d7937bac6af9975bbacbcd53d53e5c61968cd36": 1.056174,
     "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.06078,
@@ -181,10 +181,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 23538,
-    "per_route_ns": 1471.12,
+    "latency_ns": 54079,
+    "per_route_ns": 3379.94,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792608332.0658407
+  "ts": 1792608334.7806761
 }
