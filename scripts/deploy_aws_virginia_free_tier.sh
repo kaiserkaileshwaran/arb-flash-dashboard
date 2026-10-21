@@ -103,6 +103,41 @@ RestartSec=2
 WantedBy=multi-user.target
 EOF
 
+sudo tee /etc/systemd/system/arb-portal.service >/dev/null <<EOF
+[Unit]
+Description=Arbitrum Live Web Dashboard & Telemetry Server on Port 8080 (AWS N. Virginia)
+After=network-online.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=$WORKDIR
+ExecStart=/usr/bin/python3 $WORKDIR/scripts/serve_metamask_portal.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo tee /usr/local/bin/arb-status >/dev/null <<EOF
+#!/usr/bin/env bash
+echo "========================================================================"
+echo "⚡ AWS us-east-1 (N. VIRGINIA) LIVE ARBITRUM SNIPER TELEMETRY"
+echo "========================================================================"
+echo "1. C/Assembly Daemon (arb-sniper-asm) : \$(systemctl is-active arb-sniper-asm.service)"
+echo "2. Auto-Broadcaster  (arb-broadcaster): \$(systemctl is-active arb-broadcaster.service)"
+echo "3. AI Git Auto-Sync  (arb-auto-sync)  : \$(systemctl is-active arb-auto-sync.service)"
+echo "------------------------------------------------------------------------"
+if [ -f "$WORKDIR/reports/last_autonomous_broadcast.json" ]; then
+    cat "$WORKDIR/reports/last_autonomous_broadcast.json"
+else
+    sudo journalctl -u arb-broadcaster.service -n 25 --no-pager
+fi
+echo "========================================================================"
+EOF
+sudo chmod +x /usr/local/bin/arb-status
+
 sudo tee /etc/systemd/system/arb-auto-sync.service >/dev/null <<EOF
 [Unit]
 Description=AI Autonomous Remote Git Sync & Hot-Reload Daemon (AWS N. Virginia)
@@ -121,12 +156,14 @@ WantedBy=multi-user.target
 EOF
 
 sudo systemctl daemon-reload
-sudo systemctl enable arb-sniper-asm.service arb-broadcaster.service arb-auto-sync.service
-sudo systemctl restart arb-sniper-asm.service arb-broadcaster.service arb-auto-sync.service
+sudo systemctl enable arb-sniper-asm.service arb-broadcaster.service arb-portal.service arb-auto-sync.service
+sudo systemctl restart arb-sniper-asm.service arb-broadcaster.service arb-portal.service arb-auto-sync.service
 
 echo "========================================================================"
 echo "✅ AWS us-east-1 (N. VIRGINIA) 24/7 SYSTEMD SNIPER + AI AUTO-SYNC LIVE!"
 echo "   - C/Assembly Daemon Status : $(sudo systemctl is-active arb-sniper-asm.service)"
 echo "   - Auto-Broadcaster Status  : $(sudo systemctl is-active arb-broadcaster.service)"
+echo "   - Web Portal (Port 8080)   : $(sudo systemctl is-active arb-portal.service)"
 echo "   - AI Remote Auto-Sync      : $(sudo systemctl is-active arb-auto-sync.service)"
+echo "   - View Live Telemetry      : Run 'arb-status' anytime!"
 echo "========================================================================"

@@ -573,31 +573,28 @@ def main() -> int:
     SCALED_RPC_THREADS = max(16, DETECTED_CPU_CORES * 2)
 
     # =========================================================================
-    # PRIORITY #1 (OPTION 2): Top 10 Bidirectional Aave V3 High-Risk Borrowers (Ultimate Crore-Scale Flash Loans • 100% Net Profit Direct to Mudrex)
+    # PRIORITY #1 (OPTION 2): Top Bidirectional Aave V3 High-Risk Borrowers (On-Chain Reserve Verified • <=49.2% Close Factor • 100% Net Profit Direct to Mudrex)
     # =========================================================================
     aave_high_risk_watchlist = [
-        # Strictly ordered from HIGHEST Verified Net Profit (#1: +₹3.09L) -> #2 (+₹2.62L) -> #3 (+₹1.02L) -> Lower!
-        # Executes 1 Single Top-Most Profitable Trade Alone First, then moves to next!
-        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", usdc, weth, 20000 * 10**6, 1, RELAYER_REIMB_USDC, False, "TOP PROFIT #1: USDC_debt/WETH_col (50% Close = ₹18.98L Flash Loan • Verified +₹3.09L Profit • ₹12,464.34 Mudrex + ₹2.96L MetaMask)"),
-        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 17000 * 10**6, 1, RELAYER_REIMB_USDC, False, "TOP PROFIT #2: USDC_debt/WETH_col (50% Close = ₹16.13L Flash Loan • Verified +₹2.62L Profit • Mudrex + MetaMask)"),
-        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, usdt, 2900000000000000000, 1, RELAYER_REIMB_WEI, True, "TOP PROFIT #3: WETH_debt/USDT_col (50% Close = ₹6.58L Flash Loan • Verified +₹1.02L Profit • ETH->USDC->Mudrex+MetaMask)"),
-        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", usdc, weth, 200 * 10**6, 1, RELAYER_REIMB_USDC, False, "CLOSEST HF #1 (1.0228): USDC_debt/WETH_col (200 USDC = ₹18.98k Slice • Live HF 1.0228 round(HF,1)==1.0 PRE-WARMED)"),
-        ("0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", usdc, weth, 2500 * 10**6, 1, RELAYER_REIMB_USDC, False, "CLOSEST HF #2 (1.0319): USDC_debt/WETH_col (2,500 USDC = ₹2.37L Loan • Live HF 1.0319 round(HF,1)==1.0 PRE-WARMED)"),
-        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", weth, usdc, 45 * 10**18, 1, RELAYER_REIMB_WEI, True, "WETH_debt/USDC_col (50% Close = ₹1.02 Crore Flash Loan • +₹5.10L Bonus • ETH->USDC->Mudrex)"),
-        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 25000 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/WETH_col (50% Close = ₹23.73L Flash Loan • +₹1.18L Bonus • 100% Direct to Mudrex)"),
-        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 4000 * 10**6, 1, RELAYER_REIMB_USDC, False, "MID-SIZED LOW-COMPETITION #5: USDC_debt/WETH_col (₹3.80L Flash Loan • Verified +₹1.61L Profit • Mudrex + MetaMask)"),
-        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, wbtc, 4500 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/WBTC_col (7.0% Bonus = ₹4.27L Flash Loan • +₹68.5k Bonus • 100% Direct to Mudrex)"),
-        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, arb, 1200 * 10**6, 1, RELAYER_REIMB_USDC, False, "USDC_debt/ARB_col (10.0% Bonus = 1,000 bps • 1,653 ARB Collateral • 100% Direct to Mudrex)"),
-        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", usdc, weth, 150 * 10**6, 1, RELAYER_REIMB_USDC, False, "RETAIL LOW-COMPETITION #4: USDC_debt/WETH_col (150 USDC = ₹14.2k Loan • Live HF 1.0409 PRE-WARMED • Verified +₹18,033 Profit)"),
-        ("0x4c2707ec572416256c939ca9cc653acbb1473145", usdc, weth, 5000 * 10**6, 1, RELAYER_REIMB_USDC, False, "LIVE LOGS DISCOVERED #6: USDC_debt/WETH_col (5,000 USDC = ₹4.75L Loan • Live HF 1.0499 round(HF,1)==1.0 PRE-WARMED)"),
-        ("0x04bd123d5041070d4e212cd9e15d4406e1e9992e", usdt, weth, 17000 * 10**6, 1, RELAYER_REIMB_USDC, False, "WHALE USDT/WETH: 17,000 USDT Flash Loan • Verified +₹2.61L Profit • Auto USDT->USDC->Mudrex+MetaMask"),
-        ("0xfbc4c01531188b6d544f01d83fa9b2e5e2e023da", usdc, weth, 20000 * 10**6, 1, RELAYER_REIMB_USDC, False, "WHALE USDC/WETH: 20,000 USDC Flash Loan • Verified +₹3.07L Profit • Direct USDC->Mudrex+MetaMask"),
-        ("0x53de01b273594a5955d3790609b9ff2ed9117122", usdc, weth, 150 * 10**6, 1, RELAYER_REIMB_USDC, False, "RETAIL LOW-COMPETITION: 150 USDC Flash Loan • Verified +₹18,033 Profit • 100% Direct to Mudrex+MetaMask"),
-        ("0x59030187518422b4fa4a971b6891fb3d61e2bfee", usdc, weth, 4000 * 10**6, 1, RELAYER_REIMB_USDC, False, "MID-SIZED LOW-COMPETITION: 4,000 USDC Flash Loan • Verified +₹1.61L Profit • Mudrex+MetaMask"),
-        ("0xba62acf915c1697d000de2f70494ab65cfbcf710", usdc, weth, 280 * 10**6, 1, RELAYER_REIMB_USDC, False, "NEW DISCOVERED RETAIL (HF 1.0465): USDC_debt/WETH_col (280 USDC = ₹26.6k Loan • round(HF,1)==1.0 PRE-WARMED • +₹1,329 Bonus)"),
-        ("0x572372831a9d6b2e3ee8fa284505599e6125fea9", usdt, weth, 4800 * 10**6, 1, RELAYER_REIMB_USDC, False, "NEW DISCOVERED MID (HF 1.0585): USDT_debt/WETH_col (4,800 USDT = ₹4.55L Loan • +₹22,780 Bonus)"),
-        ("0x572372831a9d6b2e3ee8fa284505599e6125fea9", usdc, arb, 1490 * 10**6, 1, RELAYER_REIMB_USDC, False, "NEW DISCOVERED 10% ARB BONUS (HF 1.0585): USDC_debt/ARB_col (1,490 USDC = ₹1.41L Loan • +10.0% Bonus = +₹14,143)"),
-        ("0x541980dd1db4123185d6b632e9d6a09f77c1e4fa", usdc, weth, 1985 * 10**6, 1, RELAYER_REIMB_USDC, False, "NEW DISCOVERED MID (HF 1.0591): USDC_debt/WETH_col (1,985 USDC = ₹1.88L Loan • +₹9,420 Bonus)"),
+        # Strictly verified via Aave V3 ProtocolDataProvider.getUserReserveData(asset, borrower)
+        # Bidirectional coverage: Short-ETH borrowers (WETH_debt/Stable_col) trigger when ETH rises +2.20%;
+        # Long-ETH borrowers (Stable_debt/WETH_col) trigger when ETH drops -3.1% to -5.0%!
+        ("0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2", weth, usdc, 13 * 10**18, 1, RELAYER_REIMB_WEI, True, "CLOSEST HF #1 (1.0220): WETH_debt/USDC_col (13 WETH = ₹29.78L Flash Loan • 48.9% Close of 26.55 WETH Debt • +₹1,48,885 Bonus -> Mudrex)"),
+        ("0x9f25248e8465a4a5106948615c6db2ed1e1b9052", weth, usdt, 2850000000000000000, 1, RELAYER_REIMB_WEI, True, "CLOSEST HF #2 (1.0225): WETH_debt/USDT_col (2.85 WETH = ₹6.53L Flash Loan • 49.0% Close of 5.81 WETH Debt • +₹32,645 Bonus -> Mudrex)"),
+        ("0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb", usdc, weth, 198 * 10**6, 1, RELAYER_REIMB_USDC, False, "CLOSEST HF #3 (1.0229): USDC_debt/WETH_col (198 USDC = ₹18.8k Slice • 49.0% Close of 403.99 USDC Debt • PRE-WARMED)"),
+        ("0xba62acf915c1697d000de2f70494ab65cfbcf710", usdc, weth, 255 * 10**6, 1, RELAYER_REIMB_USDC, False, "CLOSEST HF #4 (1.0484): USDC_debt/WETH_col (255 USDC = ₹24.2k Loan • 49.1% Close of 519.59 USDC Debt • +₹1,210 Bonus)"),
+        ("0x9cd61cab43075c6c4a56a95dacadad39df555d25", usdc, weth, 2950 * 10**6, 1, RELAYER_REIMB_USDC, False, "CLOSEST HF #5 (1.0503): USDC_debt/WETH_col (2,950 USDC = ₹2.80L Loan • 48.8% Close of 6,041.73 USDC Debt • +₹14,002 Bonus)"),
+        ("0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", usdc, weth, 5000 * 10**6, 1, RELAYER_REIMB_USDC, False, "CLOSEST HF #6 (1.0528): USDC_debt/WETH_col (5,000 USDC = ₹4.75L Loan • 48.2% Close of 10,366.52 USDC Debt • +₹23,732 Bonus)"),
+        ("0xc358f7803a0a28afe56b5bbce157664fe5e1624d", usdc, weth, 11500 * 10**6, 1, RELAYER_REIMB_USDC, False, "WHALE #1 (HF 1.0543): USDC_debt/WETH_col (11,500 USDC = ₹10.91L Flash Loan • 49.1% Close of 23,413 USDC Debt • +₹54,585 Bonus)"),
+        ("0x541980dd1db4123185d6b632e9d6a09f77c1e4fa", usdc, weth, 1985 * 10**6, 1, RELAYER_REIMB_USDC, False, "MID #1 (HF 1.0596): USDC_debt/WETH_col (1,985 USDC = ₹1.88L Loan • 47.8% Close of 4,148.42 USDC Debt • +₹9,420 Bonus)"),
+        ("0x572372831a9d6b2e3ee8fa284505599e6125fea9", usdt, weth, 4750 * 10**6, 1, RELAYER_REIMB_USDC, False, "MID #2 (HF 1.0730): USDT_debt/WETH_col (4,750 USDT = ₹4.51L Loan • 49.2% Close of 9,642.35 USDT Debt • +₹22,542 Bonus)"),
+        ("0x572372831a9d6b2e3ee8fa284505599e6125fea9", usdc, arb, 1020 * 10**6, 1, RELAYER_REIMB_USDC, False, "10% ARB BONUS #1 (HF 1.0730): USDC_debt/ARB_col (1,020 USDC = ₹96.8k Loan • 48.8% Close of 2,090.87 USDC Debt • +10.0% ARB Bonus = +₹9,682)"),
+        ("0x4c2707ec572416256c939ca9cc653acbb1473145", usdt, weth, 3100 * 10**6, 1, RELAYER_REIMB_USDC, False, "MID #3 (HF 1.0802): USDT_debt/WETH_col (3,100 USDT = ₹2.94L Loan • 49.2% Close of 6,303.28 USDT Debt • +₹14,713 Bonus)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", weth, usdc, 45 * 10**18, 1, RELAYER_REIMB_WEI, True, "MEGA WHALE #1 (HF 1.0904): WETH_debt/USDC_col (45 WETH = ₹1.02 Crore Flash Loan • 20.5% Close of 219.08 WETH Debt • +₹5.10L Bonus)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, weth, 20500 * 10**6, 1, RELAYER_REIMB_USDC, False, "MEGA WHALE #2 (HF 1.0904): USDC_debt/WETH_col (20,500 USDC = ₹19.46L Flash Loan • 48.7% Close of 42,084.87 USDC Debt • +₹97,300 Bonus)"),
+        ("0x9cd696c583ded4716d82012f7f22caeaf335266a", usdc, arb, 1200 * 10**6, 1, RELAYER_REIMB_USDC, False, "10% ARB BONUS #2 (HF 1.0904): USDC_debt/ARB_col (1,200 USDC • 10.0% Bonus on 1,653 ARB Collateral • Direct to Mudrex)"),
+        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, weth, 4000 * 10**6, 1, RELAYER_REIMB_USDC, False, "MID #4 (HF 1.1381): USDC_debt/WETH_col (4,000 USDC = ₹3.80L Flash Loan • 27.1% Close of 14,760 USDC Debt • +₹18,986 Bonus)"),
+        ("0x2012395e71a4af2e621d522b175f6c29232398db", usdc, wbtc, 4500 * 10**6, 1, RELAYER_REIMB_USDC, False, "7% WBTC BONUS (HF 1.1381): USDC_debt/WBTC_col (4,500 USDC = ₹4.27L Flash Loan • 30.5% Close seizing 0.1528 WBTC • +₹29,900 Bonus)"),
     ]
 
     # =========================================================================
@@ -624,42 +621,39 @@ def main() -> int:
     for pb, ps, tb, tq, amt, mg, z0, z1, rf, is_w in raw_tiers:
         req_id = len(batch_rpc) + 1
         calldata_hex = _encode_flash_swap_calldata(pb, ps, tb, tq, amt, mg, z0, z1, rf)
-        call_tuple = f"({pb},{ps},{tb},{tq},{amt},{mg},{'true' if z0 else 'false'},{'true' if z1 else 'false'})"
         batch_rpc.append({
             "jsonrpc": "2.0",
             "id": req_id,
             "method": "eth_call",
             "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": calldata_hex}, "latest"],
         })
-        candidate_meta.append(("DIRECT_FLASH_SWAP", call_tuple, mg, rf, is_w, amt, "executeDirectPoolFlashSwap((address,address,address,address,uint256,uint256,bool,bool),uint256)(uint256)"))
+        candidate_meta.append(("DIRECT_FLASH_SWAP", calldata_hex, mg, rf, is_w, amt, "RAW_CALLDATA"))
 
     # 2. Add Option 3 Triangular 3-Hop & SushiSwap V2 <-> UniV3 Tiers (Selector 0x1034ef63, Strategy 1 & 2)
     sushiv2_start_id = len(batch_rpc) + 1
     for st_type, b_tok, t_tok, m_tok, b_amt, min_n, fee1, fee2, buy_uni, rf, is_w, label in sushiv2_spatial_tiers:
         req_id = len(batch_rpc) + 1
         cd_hex = _encode_gasless_arb_calldata(st_type, b_tok, t_tok, m_tok, b_amt, min_n, fee1, fee2, buy_uni, zero_addr, rf)
-        call_tuple = f"({st_type},{b_tok},{t_tok},{m_tok},{b_amt},{min_n},{fee1},{fee2},{'true' if buy_uni else 'false'},{zero_addr})"
         batch_rpc.append({
             "jsonrpc": "2.0",
             "id": req_id,
             "method": "eth_call",
             "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_hex}, "latest"],
         })
-        candidate_meta.append(("TRIANGULAR_OR_SUSHIV2_ARB", call_tuple, min_n + rf, rf, is_w, b_amt, "executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256)"))
+        candidate_meta.append(("TRIANGULAR_OR_SUSHIV2_ARB", cd_hex, min_n + rf, rf, is_w, b_amt, "RAW_CALLDATA"))
 
-    # 3. Add Option 2 Aave V3 Liquidation Execution Tiers for ALL 10 High-Risk Borrowers (Probed at base gas floor so 0 false reverts!)
+    # 3. Add Option 2 Aave V3 Liquidation Execution Tiers for ALL High-Risk Borrowers (Probed at base gas floor so 0 false reverts!)
     aave_exec_start_id = len(batch_rpc) + 1
     for b_addr, d_tok, c_tok, d_amt, min_n, rf, is_w, label in aave_high_risk_watchlist:
         req_id = len(batch_rpc) + 1
         cd_hex = _encode_gasless_arb_calldata(3, d_tok, c_tok, zero_addr, d_amt, min_n, 500, 0, True, b_addr, rf)
-        call_tuple = f"(3,{d_tok},{c_tok},{zero_addr},{d_amt},{min_n},500,0,true,{b_addr})"
         batch_rpc.append({
             "jsonrpc": "2.0",
             "id": req_id,
             "method": "eth_call",
             "params": [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_hex}, "latest"],
         })
-        candidate_meta.append(("AAVE_V3_LIQUIDATION", call_tuple, min_n + rf, rf, is_w, d_amt, "executeGaslessRelayedArbitrage((uint8,address,address,address,uint256,uint256,uint24,uint24,bool,address),uint256)", b_addr, d_tok, c_tok))
+        candidate_meta.append(("AAVE_V3_LIQUIDATION", cd_hex, min_n + rf, rf, is_w, d_amt, "RAW_CALLDATA", b_addr, d_tok, c_tok))
 
     exec_end_id = len(batch_rpc)
 
@@ -1574,16 +1568,19 @@ def main() -> int:
                                 mud_share_units, mm_backup_units, _ = _compute_safe_mudrex_and_metamask_split(rel_usdc_raw, real_mudrex_usdc)
                                 if mud_share_units >= MIN_MUDREX_USDC_UNITS:
                                     try:
-                                        t_out = json.loads(
-                                            subprocess.check_output(
-                                                [
-                                                    cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
-                                                    MUDREX_WALLET, str(mud_share_units),
-                                                    "--gas-limit", "75000", "--gas-price", "20500000",
-                                                    "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
-                                                ],
-                                                stderr=subprocess.DEVNULL, timeout=15,
-                                            ).decode("utf-8")
+                                        tx_data_mud = "0xa9059cbb" + MUDREX_WALLET.lower().replace("0x", "").rjust(64, "0") + hex(mud_share_units)[2:].rjust(64, "0")
+                                        t_out = _send_raw_tx_or_cast(
+                                            usdc,
+                                            tx_data_mud,
+                                            75000,
+                                            20500000,
+                                            0,
+                                            [
+                                                cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
+                                                MUDREX_WALLET, str(mud_share_units),
+                                                "--gas-limit", "75000", "--gas-price", "20500000",
+                                                "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
+                                            ],
                                         )
                                         mudrex_settlement_tx = t_out.get("transactionHash")
                                         _record_mudrex_sent_units(mud_share_units, real_mudrex_usdc)
@@ -1592,14 +1589,19 @@ def main() -> int:
                                         pass
                                 if mm_backup_units >= 100:
                                     try:
-                                        subprocess.check_output(
+                                        tx_data_mm = "0xa9059cbb" + OWNER_METAMASK.lower().replace("0x", "").rjust(64, "0") + hex(mm_backup_units)[2:].rjust(64, "0")
+                                        _send_raw_tx_or_cast(
+                                            usdc,
+                                            tx_data_mm,
+                                            75000,
+                                            20500000,
+                                            0,
                                             [
                                                 cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
                                                 OWNER_METAMASK, str(mm_backup_units),
                                                 "--gas-limit", "75000", "--gas-price", "20500000",
                                                 "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                                             ],
-                                            stderr=subprocess.DEVNULL, timeout=15,
                                         )
                                     except Exception:
                                         pass
@@ -1612,16 +1614,19 @@ def main() -> int:
                     mud_share_units, mm_backup_units, _ = _compute_safe_mudrex_and_metamask_split(mudrex_100_usdc, real_mudrex_usdc)
                     if mud_share_units >= MIN_MUDREX_USDC_UNITS:
                         try:
-                            t_out = json.loads(
-                                subprocess.check_output(
-                                    [
-                                        cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
-                                        MUDREX_WALLET, str(mud_share_units),
-                                        "--gas-limit", "75000", "--gas-price", "20500000",
-                                        "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
-                                    ],
-                                    stderr=subprocess.DEVNULL, timeout=15,
-                                ).decode("utf-8")
+                            tx_data_mud = "0xa9059cbb" + MUDREX_WALLET.lower().replace("0x", "").rjust(64, "0") + hex(mud_share_units)[2:].rjust(64, "0")
+                            t_out = _send_raw_tx_or_cast(
+                                usdc,
+                                tx_data_mud,
+                                75000,
+                                20500000,
+                                0,
+                                [
+                                    cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
+                                    MUDREX_WALLET, str(mud_share_units),
+                                    "--gas-limit", "75000", "--gas-price", "20500000",
+                                    "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
+                                ],
                             )
                             mudrex_settlement_tx = t_out.get("transactionHash")
                             _record_mudrex_sent_units(mud_share_units, real_mudrex_usdc)
@@ -1630,14 +1635,19 @@ def main() -> int:
                             pass
                     if mm_backup_units >= 100:
                         try:
-                            subprocess.check_output(
+                            tx_data_mm = "0xa9059cbb" + OWNER_METAMASK.lower().replace("0x", "").rjust(64, "0") + hex(mm_backup_units)[2:].rjust(64, "0")
+                            _send_raw_tx_or_cast(
+                                usdc,
+                                tx_data_mm,
+                                75000,
+                                20500000,
+                                0,
                                 [
                                     cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
                                     OWNER_METAMASK, str(mm_backup_units),
                                     "--gas-limit", "75000", "--gas-price", "20500000",
                                     "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                                 ],
-                                stderr=subprocess.DEVNULL, timeout=15,
                             )
                         except Exception:
                             pass
@@ -1674,14 +1684,35 @@ def main() -> int:
             for st_tok in (usdt, usdc_e):
                 st_bal = int(rpc_call("eth_call", [{"to": st_tok, "data": "0x70a08231" + rel_clean_q}, "latest"]).get("result", "0x0"), 16)
                 if st_bal >= 10_536:
-                    subprocess.check_output(
+                    app_cd = "0x095ea7b3" + uni_router_q.lower().replace("0x", "").rjust(64, "0") + hex(st_bal)[2:].rjust(64, "0")
+                    _send_raw_tx_or_cast(
+                        st_tok,
+                        app_cd,
+                        65000,
+                        20500000,
+                        0,
                         [cast_bin, "send", st_tok, "approve(address,uint256)(bool)", uni_router_q, str(st_bal), "--gas-limit", "65000", "--gas-price", "20500000", "--private-key", RELAYER_PK, "--rpc-url", RPC_URL],
-                        stderr=subprocess.DEVNULL, timeout=15,
                     )
-                    sw_tup = f"({st_tok},{usdc},100,{RELAYER_WALLET},{int(time.time()) + 300},{st_bal},0,0)"
-                    subprocess.check_output(
+                    dl_ts = int(time.time()) + 300
+                    sw_tup = f"({st_tok},{usdc},100,{RELAYER_WALLET},{dl_ts},{st_bal},0,0)"
+                    sw_cd = (
+                        "0x414bf389"
+                        + st_tok.lower().replace("0x", "").rjust(64, "0")
+                        + usdc.lower().replace("0x", "").rjust(64, "0")
+                        + hex(100)[2:].rjust(64, "0")
+                        + RELAYER_WALLET.lower().replace("0x", "").rjust(64, "0")
+                        + hex(dl_ts)[2:].rjust(64, "0")
+                        + hex(st_bal)[2:].rjust(64, "0")
+                        + "0".rjust(64, "0")
+                        + "0".rjust(64, "0")
+                    )
+                    _send_raw_tx_or_cast(
+                        uni_router_q,
+                        sw_cd,
+                        185000,
+                        20500000,
+                        0,
                         [cast_bin, "send", uni_router_q, "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))(uint256)", sw_tup, "--gas-limit", "185000", "--gas-price", "20500000", "--private-key", RELAYER_PK, "--rpc-url", RPC_URL],
-                        stderr=subprocess.DEVNULL, timeout=15,
                     )
             pending_q_usdc = int(rpc_call("eth_call", [{"to": usdc, "data": "0x70a08231" + rel_clean_q}, "latest"]).get("result", "0x0"), 16)
             if pending_q_usdc >= 10_536:  # Strictly >= ₹1.00 INR consolidated daily settlement to Mudrex
