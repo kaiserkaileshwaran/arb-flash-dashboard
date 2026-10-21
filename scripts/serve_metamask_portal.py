@@ -418,10 +418,10 @@ INIT_CODE_KECCAK256 = "0x36fa283fa9c48037606f2dccb8af122badca2f2380adb4d79b56c98
 
 def _arb_rpc_call(method: str, params: Any) -> Dict[str, Any]:
     rpcs = [
-        "https://arbitrum.drpc.org",
-        "https://arbitrum-one-rpc.publicnode.com",
-        "https://arb-pokt.nodies.app",
         "https://arb1.arbitrum.io/rpc",
+        "https://arbitrum-one-rpc.publicnode.com",
+        "https://arbitrum-one.public.blastapi.io",
+        "https://1rpc.io/arb",
     ]
     last_err = None
     for url in rpcs:
@@ -708,6 +708,18 @@ def get_realtime_payload() -> Dict[str, Any]:
     if auto_bcast_path.exists():
         try:
             auto_bcast = json.loads(auto_bcast_path.read_text(encoding="utf-8"))
+            b_hfs = auto_bcast.get("aave_borrower_hfs") or {}
+            if isinstance(b_hfs, dict):
+                if "0xc358f7803a0a28afe56b5bbce157664fe5e1624d" in b_hfs:
+                    _CACHED_WALLET_BALANCES["aave_hf_borrower_1"] = float(b_hfs["0xc358f7803a0a28afe56b5bbce157664fe5e1624d"])
+                if "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2" in b_hfs:
+                    _CACHED_WALLET_BALANCES["aave_hf_borrower_2"] = float(b_hfs["0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2"])
+                if "0x9f25248e8465a4a5106948615c6db2ed1e1b9052" in b_hfs:
+                    _CACHED_WALLET_BALANCES["aave_hf_borrower_3"] = float(b_hfs["0x9f25248e8465a4a5106948615c6db2ed1e1b9052"])
+                if "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb" in b_hfs:
+                    _CACHED_WALLET_BALANCES["aave_hf_borrower_4"] = float(b_hfs["0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb"])
+                if "0x9cd61cab43075c6c4a56a95dacadad39df555d25" in b_hfs:
+                    _CACHED_WALLET_BALANCES["aave_hf_borrower_5"] = float(b_hfs["0x9cd61cab43075c6c4a56a95dacadad39df555d25"])
         except Exception:
             pass
     return {

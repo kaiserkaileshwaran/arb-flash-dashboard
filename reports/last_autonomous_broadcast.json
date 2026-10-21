@@ -182,7 +182,7 @@
     "latency_ns": 29554,
     "per_route_ns": 1847.12,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
-    "top_sweet_spot_usd": 2871600.0
+    "top_sweet_spot_usd": 44270.5
   },
   "ts": 1792603542.7172148
 }

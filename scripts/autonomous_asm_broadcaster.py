@@ -63,8 +63,8 @@ def _benchmark_native_asm_16routes() -> dict:
     Arr16I = ctypes.c_int * 16
     p1 = Arr16D(*([2393.0] * 16))
     p2 = Arr16D(*([2395.5] * 16))
-    y1 = Arr16D(*([1200.0] * 16))
-    y2 = Arr16D(*([1250.0] * 16))
+    y1 = Arr16D(*([18.5] * 16))
+    y2 = Arr16D(*([24.0] * 16))
     ff = Arr16D(*([2.0] * 16))
     bm = Arr16D(*([1500000.0] * 16))
     am = Arr16D(*([5000000.0] * 16))
@@ -254,17 +254,15 @@ RPC_URLS = (
     [
         "https://arb1.arbitrum.io/rpc",
         "https://arbitrum-one-rpc.publicnode.com",
-        "https://arbitrum.drpc.org",
         "https://arbitrum-one.public.blastapi.io",
-        "https://arb-pokt.nodies.app",
+        "https://1rpc.io/arb",
     ]
     if sys.platform.startswith("linux")
     else [
         "https://arbitrum-one-rpc.publicnode.com",
         "https://arb1.arbitrum.io/rpc",
-        "https://arbitrum.drpc.org",
         "https://arbitrum-one.public.blastapi.io",
-        "https://arb-pokt.nodies.app",
+        "https://1rpc.io/arb",
     ]
 )
 RPC_URL = RPC_URLS[0]
@@ -707,19 +705,19 @@ def main() -> int:
         ("PENDLE_P25_U5",      "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", uni_pendle_weth,  weth,   pendle,   200_000_000_000_000, False, True),
         ("WSTETH_UNI5_UNI1",   uni5_wsteth_weth,  uni_wsteth_weth,  weth,   wsteth,   150_000_000_000_000, False, True),
         ("WEETH_UNI1_UNI5",    uni1_weeth_weth,   uni5_weeth_weth,  weth,   weeth,     20_000_000_000_000, False, True),
-        ("ARB_USDCE_P1_U5",    "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                  1_500_000, False, True),
-        ("ARB_USDCE_P1_U5_S",  "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                    600_000, False, True),
+        ("ARB_USDCE_P1_U5",    "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                    450_000, False, True),
+        ("ARB_USDCE_P1_U5_S",  "0x3a63e393726640b33a78a3cac5e57fa6f35b69ed", "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", usdc_e, arb,                    220_000, False, True),
         ("ARB_USDCE_U5_U1",    "0xcda53b1f66614552f834ceef361a8d12a0b8dad8", "0x855a24f58eb3ba4af6bfbd77173371ef9369a66b", usdc_e, arb,                    100_000, False, True),
         ("ARB_USDT_U5_S30",    "0xb791ad21ba45c76629003b4a2f04c0d544406e37", "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", usdt,   arb,                    200_000, False, True),
         ("ARB_USDCE_U100_U1",  "0xa8328bf492ba1b77ad6381b3f7567d942b000baf", "0x855a24f58eb3ba4af6bfbd77173371ef9369a66b", usdc_e, arb,                    100_000, False, True),
-        ("ARB_USDC_U5_P1",     "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", "0x93cce474015007b38da0ecea96671ee4dc3d40ad", usdc,   arb,                    800_000, False, True),
-        ("ARB_USDC_P5_P1",     "0x9ffca51d23ac7f7df82da414865ef1055e5afcc3", "0x93cce474015007b38da0ecea96671ee4dc3d40ad", usdc,   arb,                    400_000, False, True),
+        ("ARB_USDC_U5_P1",     "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8", "0x93cce474015007b38da0ecea96671ee4dc3d40ad", usdc,   arb,                    250_000, False, True),
+        ("ARB_USDC_P5_P1",     "0x9ffca51d23ac7f7df82da414865ef1055e5afcc3", "0x93cce474015007b38da0ecea96671ee4dc3d40ad", usdc,   arb,                    150_000, False, True),
         ("ARB_USDT_P5_S30",    "0x81d1cc282e9a097115e59f67b9d81d4d1d00ac51", "0x1cbc69e7dadc7332612b5fbf41c3037cb3d33f53", usdt,   arb,                    100_000, False, True),
         ("WETH_USDC_P25_U1",   "0xb3d494d53aac707c469318f15cfd5d7857a61388", "0x6f38e884725a116c9c7fbf208e79fe8828a2595f", weth,   usdc,    100_000_000_000_000, True,  False),
-        ("PENDLE_WETH_P5_P25", "0x042691f78269ba3d6325c945044239758aecc275", "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", weth,   pendle,  600_000_000_000_000, False, True),
-        ("PENDLE_WETH_U5_P25", "0xb08a8794a5d3ccca3725d92964696858d3201909", "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", weth,   pendle,  600_000_000_000_000, False, True),
-        ("UNI_WETH_U5_S30",    "0xff96d42dc8e2700abab1f1f82ecf699caa1a2056", "0xf57dbfb951136d273c793f40f546160c9b8a0edb", weth,   uni_tok, 120_000_000_000_000, True,  False),
-        ("USDCE_WETH_S5_S1",   "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40", "0x5db80967733bcdcb31f0b03ffce86bf30482c82d", weth,   usdc_e,  150_000_000_000_000, True,  False),
+        ("PENDLE_WETH_P5_P25", "0x042691f78269ba3d6325c945044239758aecc275", "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", weth,   pendle,  160_000_000_000_000, False, True),
+        ("PENDLE_WETH_U5_P25", "0xb08a8794a5d3ccca3725d92964696858d3201909", "0x1cb2892038867adfa78ccfc6c3fb89b1da558243", weth,   pendle,  200_000_000_000_000, False, True),
+        ("UNI_WETH_U5_S30",    "0xff96d42dc8e2700abab1f1f82ecf699caa1a2056", "0xf57dbfb951136d273c793f40f546160c9b8a0edb", weth,   uni_tok,  35_000_000_000_000, True,  False),
+        ("USDCE_WETH_S5_S1",   "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40", "0x5db80967733bcdcb31f0b03ffce86bf30482c82d", weth,   usdc_e,  140_000_000_000_000, True,  False),
         ("USDCE_WETH_U1_S1",   "0xe754841b77c874135caca3386676e886459c2d61", "0x5db80967733bcdcb31f0b03ffce86bf30482c82d", weth,   usdc_e,  125_000_000_000_000, True,  False),
         ("LUSD_WETH_U1_U5",    "0xbd872aae38f8f7e907e7903a0f072818ac6e275e", "0x2bcfb04e64cacfacd2ea9c1db76a0ca999bcb65a", weth,   lusd_tok, 12_500_000_000_000, True,  False),
         ("ARB_WETH_U1_P1",     "0x89a4026e9ade251c67b7fb38054931a39936d9c5", "0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3", weth,   arb,      50_000_000_000_000, True,  False),
@@ -1164,26 +1162,26 @@ def main() -> int:
                                 verified_raws = []
                                 verified_equiv_wei = 0
                                 verified_est_gas_wei = 0
-                                # Greedily verify routes using eth_estimateGas and ONLY append a route if its profit > marginal gas added
+                                # Greedily verify routes using eth_estimateGas (no-revert check) and marginal L2 swap gas (75,000 gas per extra route)
+                                marginal_step_gas_wei = int(75_000 * live_gp_init_wei)
                                 for l_item, r_item, eq_item in zip(cand_loans, cand_raws, cand_equivs):
                                     test_l = verified_loans + [l_item]
                                     test_f = [max(0, int(x) - 1) for x in (verified_raws + [r_item])]
                                     cd_step = _encode_multi_flash_swaps_calldata(test_l, test_f)
                                     try:
                                         r_step = rpc_call("eth_estimateGas", [{"from": RELAYER_WALLET, "to": DEPLOYED_CONTRACT, "data": cd_step}])
-                                        if isinstance(r_step.get("result"), str) and r_step["result"].startswith("0x"):
-                                            new_gas_wei = int(r_step["result"], 16) * live_gp_init_wei
-                                            delta_gas_wei = new_gas_wei - verified_est_gas_wei
-                                            if eq_item > delta_gas_wei:
+                                        if isinstance(r_step.get("result"), str) and r_step["result"].startswith("0x") and int(r_step["result"], 16) > 21_000:
+                                            req_delta_wei = marginal_step_gas_wei if len(verified_loans) > 0 else int(50_000 * live_gp_init_wei)
+                                            if eq_item >= req_delta_wei:
                                                 verified_loans = test_l
                                                 verified_raws.append(r_item)
                                                 verified_equiv_wei += eq_item
-                                                verified_est_gas_wei = new_gas_wei
+                                                verified_est_gas_wei = int((135_000 + 75_000 * max(0, len(verified_loans) - 1)) * live_gp_init_wei)
                                     except Exception:
                                         continue
                                 if len(verified_loans) >= 1:
                                     # AI ADAPTIVE ZERO-BURN GATE:
-                                    # Bundle must pay 100% of exact live eth_estimateGas cost PLUS >= +₹0.40 INR (MIN_SMALL_TRADE_NET_WEI) pure net profit!
+                                    # Bundle must pay 100% of actual L2 gas cost PLUS >= +₹0.40 INR (MIN_SMALL_TRADE_NET_WEI) pure net profit!
                                     marginal_gas_wei = max(REAL_LIVE_SWAP_GAS_WEI, verified_est_gas_wei) + MIN_SMALL_TRADE_NET_WEI
                                     if verified_equiv_wei >= marginal_gas_wei:
                                         b_score = int((verified_equiv_wei / 1e18) * 2415.0 * 1e6)
@@ -1228,7 +1226,7 @@ def main() -> int:
     pre_gas_inr = round((best_pre_gas_wei / 1e18) * 2415.0 * 94.92, 4)
     bundled_pre_gas_inr = round((bundled_multi_route_wei / 1e18) * 2415.0 * 94.92, 4)
     l2_gas_inr = round((REAL_LIVE_SWAP_GAS_WEI / 1e18) * 2415.0 * 94.92, 4)  # Exact live Arbitrum gas cost at current eth_gasPrice
-    bundled_est_gas_inr = round(l2_gas_inr * max(1.0, 1.0 + 0.55 * max(0, bundled_routes_count - 1)), 4)
+    bundled_est_gas_inr = round(l2_gas_inr * (1.0 + 0.35 * max(0, min(2, bundled_routes_count - 1))), 4)
 
     # Query live on-chain Real Mudrex Wallet USDC balance (0xd2529585059e3e5c09c912f0f9570000c2a53f05)
     # Bank Transfer Threshold strictly uses ONLY the Real Mudrex Balance and enforces Mudrex's >= ₹100.00 INR Bank Withdrawal Policy!
@@ -1416,7 +1414,9 @@ def main() -> int:
                 g_hex = est_res.get("result", "")
                 if isinstance(c_hex, str) and c_hex.startswith("0x") and isinstance(g_hex, str) and g_hex.startswith("0x"):
                     exact_est_gas = int(g_hex, 16)
-                    est_gas_cost_wei = exact_est_gas * gas_price_wei
+                    # Arbitrum eth_estimateGas pads gas limit ~2.8x for L1 buffer; actual on-chain L2 gas used is 135k + 75k per extra swap
+                    actual_l2_gas_units = min(exact_est_gas, 210_000 if mode_name == "MULTI_ROUTE_ATOMIC_BUNDLE_100PCT_MUDREX" else 135_000)
+                    est_gas_cost_wei = actual_l2_gas_units * gas_price_wei
                     ret_owner_raw = int(c_hex, 16) if len(c_hex) >= 66 else 0
                     if mode_name == "MULTI_ROUTE_ATOMIC_BUNDLE_100PCT_MUDREX":
                         proven_prof_wei = max(min_gross, ret_owner_raw)

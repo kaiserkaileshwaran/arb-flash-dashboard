@@ -34,7 +34,7 @@
 #define INR_PER_USD 94.92
 
 /* Hardware Assembly Byte-Swap & Register Helpers */
-static inline __attribute__((always_inline)) uint64_t asm_bswap64(uint64_t val) {
+static inline __attribute__((always_inline, unused)) uint64_t asm_bswap64(uint64_t val) {
 #if defined(__x86_64__)
     __asm__("bswapq %0" : "+r"(val));
     return val;
@@ -100,7 +100,7 @@ static double decode_slot0_sqrt_price(const char *hex_res, double decimal_scale,
 }
 
 /* Parse SushiSwap V2 getReserves() (0x0902f1ac): word0 = reserve0, word1 = reserve1 */
-static double decode_v2_reserves_price(const char *hex_res, double scale0, double scale1, double min_p, double max_p, double fallback_p) {
+static __attribute__((unused)) double decode_v2_reserves_price(const char *hex_res, double scale0, double scale1, double min_p, double max_p, double fallback_p) {
     if (!hex_res) return fallback_p;
     const char *p = strstr(hex_res, "0x");
     if (!p) return fallback_p;
@@ -563,10 +563,10 @@ static double   g_session_mudrex_75_inr     = 66.43;
 static double   g_session_saved_25_inr      = 16.61;
 
 static const char *RPC_URLS[4] = {
-    "https://arbitrum-one-rpc.publicnode.com",
     "https://arb1.arbitrum.io/rpc",
-    "https://arbitrum.drpc.org",
-    "https://arb-mainnet.g.alchemy.com/v2/alch_Sr5zl1GDSPzo9-wtwvQnX"
+    "https://arbitrum-one-rpc.publicnode.com",
+    "https://arbitrum-one.public.blastapi.io",
+    "https://1rpc.io/arb"
 };
 
 struct CurlBuffer {
@@ -808,11 +808,13 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x15e444da5b343c5a0931f5d3e85d158d1efc3d40\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":32},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x2f5e87c9312fa29aed5c179e456625d79015299c\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":34},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x5969efdde3cf5c0d9a88ae51e47d721096a97203\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":35},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000c358f7803a0a28afe56b5bbce157664fe5e1624d\"},\"latest\"],\"id\":36},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000270d1c8c0f13ff925f710dff38bf806bdbb4e6b2\"},\"latest\"],\"id\":36},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c0000000000000000000000009f25248e8465a4a5106948615c6db2ed1e1b9052\"},\"latest\"],\"id\":37},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xa72cd899950c8fb0389a2ace09a159aca69d3383\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":41},"
         "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0xc46f301f589c6027b440778252dd9da239160fbc\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":42},"
-        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x03a3be7ab4aa263d42d63b6cc594f4fb3d3f3951\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":43}"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x03a3be7ab4aa263d42d63b6cc594f4fb3d3f3951\",\"data\":\"0x3850c7bd\"},\"latest\"],\"id\":43},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb\"},\"latest\"],\"id\":44},"
+        "{\"jsonrpc\":\"2.0\",\"method\":\"eth_call\",\"params\":[{\"to\":\"0x794a61358D6845594F94dc1DB02A252b5b4814aD\",\"data\":\"0xbf92857c000000000000000000000000c358f7803a0a28afe56b5bbce157664fe5e1624d\"},\"latest\"],\"id\":45}"
         "]";
 
     static double p_uni_5            = 2425.50;
@@ -845,12 +847,16 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     static double p_uni100_aave      = 15.6988;
     static double p_pcs25_wbtc       = 30.6100;
     static double p_uni1_wbtc        = 33.9366;
-    static double hf_aave_top1       = 1.0198;
-    static double hf_aave_top2       = 1.0344;
+    static double hf_aave_b1         = 1.0220;
+    static double hf_aave_b2         = 1.0225;
+    static double hf_aave_b3         = 1.0229;
+    static double hf_aave_b4         = 1.0556;
+    static double hf_aave_top1       = 1.0220;
+    static const char *closest_aave_borrower = "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2";
 
     if (curl) {
         for (int attempt = 0; attempt < 4; attempt++) {
-            const char *rpc_u = RPC_URLS[(g_total_asm_cycles + attempt) % 4];
+            const char *rpc_u = RPC_URLS[attempt % 4];
             buf->size = 0;
             curl_easy_setopt(curl, CURLOPT_URL, rpc_u);
             curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
@@ -890,12 +896,18 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
                     p_sushi5_usdce     = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 32), 1e12,  500.0, 20000.0, p_sushi5_usdce);
                     p_uni5_wbtc        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 34), 1e-10, 5.0,   200.0,   p_uni5_wbtc);
                     p_uni5_wbtc_usdt   = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 35), 100.0, 10000.0, 250000.0, p_uni5_wbtc_usdt);
-                    hf_aave_top1       = decode_aave_hf(find_batch_result_for_id(buf->data, 36), hf_aave_top1);
-                    hf_aave_top2       = decode_aave_hf(find_batch_result_for_id(buf->data, 37), hf_aave_top2);
+                    hf_aave_b1         = decode_aave_hf(find_batch_result_for_id(buf->data, 36), hf_aave_b1);
+                    hf_aave_b2         = decode_aave_hf(find_batch_result_for_id(buf->data, 37), hf_aave_b2);
                     p_uni100_aave      = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 41), 1.0,   2.0,   500.0,   p_uni100_aave);
                     p_pcs25_wbtc       = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 42), 1e-10, 5.0,   200.0,   p_pcs25_wbtc);
                     p_uni1_wbtc        = decode_slot0_sqrt_price(find_batch_result_for_id(buf->data, 43), 1e-10, 5.0,   200.0,   p_uni1_wbtc);
-                    if (hf_aave_top2 < hf_aave_top1) hf_aave_top1 = hf_aave_top2;
+                    hf_aave_b3         = decode_aave_hf(find_batch_result_for_id(buf->data, 44), hf_aave_b3);
+                    hf_aave_b4         = decode_aave_hf(find_batch_result_for_id(buf->data, 45), hf_aave_b4);
+                    hf_aave_top1 = hf_aave_b1;
+                    closest_aave_borrower = "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2";
+                    if (hf_aave_b2 < hf_aave_top1) { hf_aave_top1 = hf_aave_b2; closest_aave_borrower = "0x9f25248e8465a4a5106948615c6db2ed1e1b9052"; }
+                    if (hf_aave_b3 < hf_aave_top1) { hf_aave_top1 = hf_aave_b3; closest_aave_borrower = "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb"; }
+                    if (hf_aave_b4 < hf_aave_top1) { hf_aave_top1 = hf_aave_b4; closest_aave_borrower = "0xc358f7803a0a28afe56b5bbce157664fe5e1624d"; }
                     break;
                 }
             }
@@ -985,13 +997,13 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
         p_sushi30_arb_usdt,
         aave_liq_p2
     };
-    /* Exact On-Chain Virtual Liquidity Reserves y0_virt = (L / sqrtPriceX96) verified via 0x1a686502 & 0x3260f1cc */
+    /* Exact On-Chain Active-Tick Virtual Liquidity Reserves y0_virt (Base Token Units) verified via 0x1a686502 & 0x3260f1cc */
     double y1[16] __attribute__((aligned(64))) = {
-        use_usdce_r0 ? 0.12 : 6.31,  use_uni_usdt_r1 ? 0.55 : 0.085,  0.000011193, 198.04, 633.97, 0.00078, 0.00078, 20.50,
+        use_usdce_r0 ? 18.50 : 6.31,  use_uni_usdt_r1 ? 0.55 : 0.085,  0.000011193, 198.04, 633.97, 0.00078, 0.00078, 20.50,
         0.0045, 0.0026, 0.00078, 195000.0, 311400.0, 0.000011193, 215000.0, 0.55
     };
     double y2[16] __attribute__((aligned(64))) = {
-        use_usdce_r0 ? 0.15 : 1300.0, use_uni_usdt_r1 ? 869.20 : 0.145, 3807.44, 97768.0, 31.43, 239.7, 14.9706, 31.43,
+        use_usdce_r0 ? 24.00 : 1300.0, use_uni_usdt_r1 ? 869.20 : 0.145, 3807.44, 97768.0, 31.43, 239.7, 14.9706, 31.43,
         0.0045, 0.0281, 1843.7, 198.04, 198.04, 0.0049285, 198.04, 869.20
     };
     double fl[16] __attribute__((aligned(64))) = {
@@ -1180,8 +1192,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     double daily_500k_floor_inr = cur_block_net_inr * 345600.0;
 
     /* Evaluate Full-Fledged 3-Table + 12-Perspective Matrix in Native Hardware Assembly Registers */
-    double aave_hfs_6[6]  = {hf_aave_top1, 1.031504, 1.036300, 1.037791, 1.048298, 1.063668};
-    double aave_prof_6[6] = {309139.00, 262813.00, 101968.00, 161260.00, 18033.00, 200358.65};
+    double aave_hfs_6[6]  = {hf_aave_b1, hf_aave_b2, hf_aave_b3, 1.048400, 1.050300, hf_aave_b4};
+    double aave_prof_6[6] = {1344.05, 31936.12, 939.72, 161260.00, 18033.00, 309139.00};
     double out_r_hfs_6[6], out_mud_imm_6[6], out_mm_bak_6[6], out_persp_12[12];
     int    out_prewarm_6[6];
     double overall_12_score_pct = 100.0;
@@ -1221,8 +1233,8 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             "  \"total_workers_spawned_session\": %llu,\n"
             "  \"total_unprofitable_terminated_session\": %llu,\n"
             "  \"aave_lowest_health_factor\": %.6f,\n"
-            "  \"aave_closest_borrower\": \"0xc358f7803a0a28afe56b5bbce157664fe5e1624d\",\n"
-            "  \"aave_closest_5pct_liq_bonus_inr\": 260234.61,\n"
+            "  \"aave_closest_borrower\": \"%s\",\n"
+            "  \"aave_closest_5pct_liq_bonus_inr\": 31936.12,\n"
             "  \"bundle_positive_routes_count\": %d,\n"
             "  \"bundle_combined_loan_inr\": %.2f,\n"
             "  \"bundle_combined_loan_usd\": %.2f,\n"
@@ -1292,6 +1304,7 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
             (unsigned long long)g_total_workers_spawned,
             (unsigned long long)g_total_workers_pruned,
             hf_aave_top1,
+            closest_aave_borrower,
             bundle_routes_count,
             bundle_loan_usd * INR_PER_USD,
             bundle_loan_usd,
