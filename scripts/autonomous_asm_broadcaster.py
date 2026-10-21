@@ -126,6 +126,25 @@ def _current_ist_date_str() -> str:
     return datetime.now(ist).strftime("%Y-%m-%d")
 
 
+def _is_midnight_consolidated_settlement_due(single_trade_weth_wei: int = 0) -> bool:
+    """
+    Settles accumulated daily profits in ONE single lump-sum transaction after 00:00 IST each day
+    (saves 195,000 router swap gas per trade all day long and ensures consolidated >= ₹1.00+ INR Mudrex deposits).
+    Also triggers immediately if a large trade/liquidation (>= ₹50 INR = 218,000,000,000,000 wei) lands!
+    """
+    if single_trade_weth_wei >= 218_000_000_000_000:
+        return True
+    today_str = _current_ist_date_str()
+    try:
+        if MUDREX_DAILY_LEDGER_JSON.exists():
+            ld = json.loads(MUDREX_DAILY_LEDGER_JSON.read_text(encoding="utf-8"))
+            if ld.get("last_midnight_batch_date") == today_str:
+                return False
+    except Exception:
+        pass
+    return True
+
+
 def _compute_safe_mudrex_and_metamask_split(total_usdc_units: int, onchain_mudrex_usdc: float) -> tuple:
     """
     Strictly enforces Mudrex's Cumulative 24-Hour Daily Limit AND Lifetime Limit across all trades in a day.
@@ -186,6 +205,7 @@ def _record_mudrex_sent_units(sent_units: int, onchain_mudrex_usdc: float) -> No
             json.dumps(
                 {
                     "ist_date": today_str,
+                    "last_midnight_batch_date": today_str,
                     "daily_sent_usdc_units": daily_u,
                     "daily_sent_inr": round((daily_u / 1_000_000) * 94.92, 2),
                     "lifetime_sent_usdc_units": life_u,
@@ -230,13 +250,23 @@ def _load_local_relayer_env() -> tuple:
 
 
 RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
-RPC_URLS = [
-    "https://arbitrum-one-rpc.publicnode.com",
-    "https://arb1.arbitrum.io/rpc",
-    "https://arbitrum.drpc.org",
-    "https://arbitrum-one.public.blastapi.io",
-    "https://arb-pokt.nodies.app",
-]
+RPC_URLS = (
+    [
+        "https://arb1.arbitrum.io/rpc",
+        "https://arbitrum-one-rpc.publicnode.com",
+        "https://arbitrum.drpc.org",
+        "https://arbitrum-one.public.blastapi.io",
+        "https://arb-pokt.nodies.app",
+    ]
+    if sys.platform.startswith("linux")
+    else [
+        "https://arbitrum-one-rpc.publicnode.com",
+        "https://arb1.arbitrum.io/rpc",
+        "https://arbitrum.drpc.org",
+        "https://arbitrum-one.public.blastapi.io",
+        "https://arb-pokt.nodies.app",
+    ]
+)
 RPC_URL = RPC_URLS[0]
 MIN_GAS_RESERVE_WEI = 25_000_000_000_000  # Keep 0.000025 ETH (~5 full Flash-Swap txs) permanently in relayer gas reserve
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
@@ -1464,7 +1494,8 @@ def main() -> int:
                 out = json.loads(subprocess.check_output(send_cmd, timeout=20).decode("utf-8"))
             mudrex_settlement_tx = None
             if is_weth and rel_fee > 0:
-                exact_gas_reimb_wei = (exact_est_gas + 195_000) * gas_price_wei
+                do_midnight_or_large_settle = _is_midnight_consolidated_settlement_due(rel_fee)
+                exact_gas_reimb_wei = (exact_est_gas + (195_000 if do_midnight_or_large_settle else 0)) * gas_price_wei
                 reimb_eth_wei = min(rel_fee, max(RELAYER_REIMB_WEI, exact_gas_reimb_wei))
                 mudrex_100_weth_wei = max(0, rel_fee - reimb_eth_wei)
                 time.sleep(0.8)
@@ -1485,8 +1516,8 @@ def main() -> int:
                     )
                 except Exception:
                     pass
-                # 2. Upgrade #3: Single-Step Direct-to-Mudrex Router Swap (or Direct-to-MetaMask when Daily Limit Full)
-                if mudrex_100_weth_wei >= MIN_SMALL_TRADE_NET_WEI:
+                # 2. 00:00 IST Consolidated Daily Lump-Sum Settlement (>= ₹1.00 INR) OR Immediate Huge Liquidation Settlement
+                if do_midnight_or_large_settle and mudrex_100_weth_wei >= 4_370_000_000_000:
                     try:
                         uni_router = "0xE592427A0AEce92De3Edee1F18E0157C05861564"
                         est_usdc_units = max(MIN_MUDREX_USDC_UNITS, int((mudrex_100_weth_wei / 1e18) * 2393.0 * 1_000_000))
@@ -1635,14 +1666,14 @@ def main() -> int:
         except Exception:
             pass
 
-    # Auto-Flush any Pending Mudrex Queue (USDT / USDC.e / USDC) in RELAYER_WALLET straight to Mudrex (0xd252...3f05) up to Cumulative Daily/Lifetime Limit, and excess to MetaMask!
-    if rel_wei >= 2_500_000_000_000 and RELAYER_PK:
+    # 00:00 IST Daily Consolidated Lump-Sum Mudrex Settlement (>= ₹1.00 INR = 10,536 USDC units)
+    if rel_wei >= 2_500_000_000_000 and RELAYER_PK and _is_midnight_consolidated_settlement_due():
         try:
             rel_clean_q = RELAYER_WALLET.lower().replace("0x", "").rjust(64, "0")
             uni_router_q = "0xE592427A0AEce92De3Edee1F18E0157C05861564"
             for st_tok in (usdt, usdc_e):
                 st_bal = int(rpc_call("eth_call", [{"to": st_tok, "data": "0x70a08231" + rel_clean_q}, "latest"]).get("result", "0x0"), 16)
-                if st_bal >= 10_000:
+                if st_bal >= 10_536:
                     subprocess.check_output(
                         [cast_bin, "send", st_tok, "approve(address,uint256)(bool)", uni_router_q, str(st_bal), "--gas-limit", "65000", "--gas-price", "20500000", "--private-key", RELAYER_PK, "--rpc-url", RPC_URL],
                         stderr=subprocess.DEVNULL, timeout=15,
@@ -1653,28 +1684,38 @@ def main() -> int:
                         stderr=subprocess.DEVNULL, timeout=15,
                     )
             pending_q_usdc = int(rpc_call("eth_call", [{"to": usdc, "data": "0x70a08231" + rel_clean_q}, "latest"]).get("result", "0x0"), 16)
-            if pending_q_usdc >= MIN_MUDREX_USDC_UNITS:
+            if pending_q_usdc >= 10_536:  # Strictly >= ₹1.00 INR consolidated daily settlement to Mudrex
                 send_q_units, mm_q_units, _ = _compute_safe_mudrex_and_metamask_split(pending_q_usdc, real_mudrex_usdc)
-                if send_q_units >= MIN_MUDREX_USDC_UNITS:
-                    subprocess.check_output(
+                if send_q_units >= 10_536:
+                    tx_data_mud = "0xa9059cbb" + MUDREX_WALLET.lower().replace("0x", "").rjust(64, "0") + hex(send_q_units)[2:].rjust(64, "0")
+                    _send_raw_tx_or_cast(
+                        usdc,
+                        tx_data_mud,
+                        75000,
+                        20500000,
+                        0,
                         [
                             cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
                             MUDREX_WALLET, str(send_q_units),
                             "--gas-limit", "75000", "--gas-price", "20500000",
                             "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                         ],
-                        stderr=subprocess.DEVNULL, timeout=15,
                     )
                     _record_mudrex_sent_units(send_q_units, real_mudrex_usdc)
                 if mm_q_units >= 100:
-                    subprocess.check_output(
+                    tx_data_mm = "0xa9059cbb" + OWNER_METAMASK.lower().replace("0x", "").rjust(64, "0") + hex(mm_q_units)[2:].rjust(64, "0")
+                    _send_raw_tx_or_cast(
+                        usdc,
+                        tx_data_mm,
+                        75000,
+                        20500000,
+                        0,
                         [
                             cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
                             OWNER_METAMASK, str(mm_q_units),
                             "--gas-limit", "75000", "--gas-price", "20500000",
                             "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                         ],
-                        stderr=subprocess.DEVNULL, timeout=15,
                     )
         except Exception:
             pass
