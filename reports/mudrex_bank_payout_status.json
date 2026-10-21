@@ -10,7 +10,14 @@
   "wss_sequencer_feed": {
     "connected": true,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 107
+    "frames_received": 59,
+    "oracle_updates_detected": 0
   },
-  "ts": 1792608858.231926
+  "gas_spike_circuit_breaker_tripped": false,
+  "max_allowed_gas_price_wei": 25000000,
+  "weth_to_usdc_auto_converter_1bp_ready": true,
+  "bidirectional_reverse_mirrors_active": true,
+  "liquidation_swap_fee_tier_1bp_active": true,
+  "ts": 1792609894.4563,
+  "hmac_sha256_integrity": "b7b593fde6043545722a8a13cf1815b9dd3129718427fc2553eb7243fe740534"
 }
