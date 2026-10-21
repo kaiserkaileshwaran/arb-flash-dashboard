@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 48
+      "frames_received": 44
     },
-    "ts": 1792609467.7716978
+    "ts": 1792609476.5055838
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -107,8 +107,8 @@
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_P1_U5",
-      "gross_inr": 0.0252,
-      "net_inr": -0.3462,
+      "gross_inr": 0.0439,
+      "net_inr": -0.3275,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
@@ -130,9 +130,9 @@
   "multi_route_bundle_probes": 63,
   "total_rpc_checks_per_cycle": 107,
   "cycles_scanned": 1,
-  "scan_duration_sec": 3.63,
-  "rpc_latency_min_ms": 1155.47,
-  "rpc_latency_avg_ms": 1155.47,
+  "scan_duration_sec": 3.76,
+  "rpc_latency_min_ms": 1230.42,
+  "rpc_latency_avg_ms": 1230.42,
   "chainlink_eth_usd_price": 2485.49,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022907,
@@ -166,15 +166,15 @@
   "bundled_route_labels": [
     "USDCE_WETH_U1_S1(2948880127884wei)",
     "USDT_AAVE_U1_P5(1159uUSD)",
-    "ARB_USDC_U5_P1(807uUSD)",
+    "ARB_USDC_U5_P1(662uUSD)",
     "PENDLE_WETH_P5_P25(268413655442wei)"
   ],
-  "bundled_multi_route_gross_wei": 4031372458274,
-  "bundled_multi_route_gross_inr": 0.9511,
+  "bundled_multi_route_gross_wei": 3971331050406,
+  "bundled_multi_route_gross_inr": 0.9369,
   "l2_gas_cost_inr": 0.3822,
   "bundled_total_gas_cost_inr": 0.6497,
   "single_net_if_forced_inr": 0.3135,
-  "bundled_net_if_forced_inr": 0.3014,
+  "bundled_net_if_forced_inr": 0.2872,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -191,10 +191,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 27512,
-    "per_route_ns": 1719.5,
+    "latency_ns": 28002,
+    "per_route_ns": 1750.12,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792609467.772264
+  "ts": 1792609476.506169
 }
