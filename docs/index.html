@@ -1843,8 +1843,7 @@ function renderDashboard(payload) {
   if (matrixBadge) {
     matrixBadge.innerText = `🟢 11 Deposited Trades (₹${totInrOnChain.toFixed(2)}) | 🟡 ${posRoutesCount}/16 Active Ongoing Routes | 🔴 ${Math.max(0, 16 - posRoutesCount)}/16 Aborted in ${Math.round(asmNs)} ns (0 Gas Burned)`;
   }
-  if (routesBody) {
-    const rawRoutesArr = Array.isArray(asmTel.routes) ? asmTel.routes : [];
+  if (routesBody) try {
     const sortedRoutes = rawRoutesArr.map((r, origIdx) => {
       const loanInr = Number(r.full_loan_inr || (Number(r.full_loan_usd || 0) * INR_PER_USD));
       const grossInr = Number(r.gross_inr || (Number(r.gross_usd || 0) * INR_PER_USD));
@@ -1924,6 +1923,8 @@ function renderDashboard(payload) {
         <td>${nextActionHtml}</td>
       </tr>`;
     }).join('');
+  } catch (t3err) {
+    routesBody.innerHTML = `<tr class="row-red"><td colspan="13">Table 3 render error: ${String(t3err && t3err.stack || t3err).replace(/</g,'&lt;')}</td></tr>`;
   }
 }
 
