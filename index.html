@@ -269,10 +269,9 @@
         <button id="btnLimL3" onclick="setMudrexTransactionLimit(1898400, 'Level 3 ($20,000 / ₹18.98L/day)')" style="background:#312e81;color:#c7d2fe;border:1px solid #6366f1;">L3: $20k (₹18.98L)</button>
         <button id="btnLimL4" onclick="setMudrexTransactionLimit(2000000, 'Level 4 (₹20,00,000 Fiat / ₹5Cr Life)')" style="background:#4c1d95;color:#ddd6fe;border:1px solid #8b5cf6;">L4: ₹20,00,000</button>
         <button id="btnLimL5" onclick="setMudrexTransactionLimit(4000000, 'Level 5 Max (₹40,00,000/day • ₹14Cr Life)')" style="background:#3b0764;color:#f3e8ff;border:1px solid #a855f7;">💎 L5 Max: ₹40,00,000</button>
-        <button onclick="executeLiveProfitableBundleZeroAlert()" style="background:#22c55e;color:#052e16;border:1px solid #86efac;font-weight:900;">🚀 1-Click Execute Live Trade #10 Now (0 ETH Value)</button>
         <button onclick="sendRemainingAmountToMudrexByLimit()" style="background:#059669;color:#ffffff;border:1px solid #34d399;font-weight:800;">💸 Send Remaining Amount (MetaMask → Mudrex by Limit)</button>
         <button onclick="runLiveTable2TriggerVerification()" style="background:#10b981;color:#052e16;border:1px solid #34d399;font-weight:800;">🧪 Verify All 3 Tables (Parallel O(1) Assembly &amp; Proof Statements)</button>
-        <button onclick="copyRelayerAddressForManualSend()" style="background:#f59e0b;color:#0f172a;border:1px solid #fbbf24;font-weight:800;">⛽ 1-Click Fuel Relayer (0.00002 ETH)</button>
+        <button onclick="copyRelayerAddressForManualSend()" style="background:#f59e0b;color:#0f172a;border:1px solid #fbbf24;font-weight:800;">⛽ 1-Click Fuel Relayer (0.00002 ETH → 0x9dD0...ea70)</button>
         <span style="font-size:12px;color:#fbbf24;font-weight:700;margin-left:2px;">UPI Min:</span>
         <input id="autoThresholdInrInput" type="number" class="input-ctrl" style="width:70px;" value="100" min="100" step="10" oninput="setAutoWithdrawThreshold(this.value)" />
       </div>
@@ -880,52 +879,9 @@ async function runLiveTable2TriggerVerification() {
 async function executeLiveProfitableBundleZeroAlert() {
   const statusEl = document.getElementById('bankTransferStatusBar');
   if (statusEl) {
-    statusEl.innerHTML = `⏳ <b>Verifying Live Multi-Route Flash-Loan Bundle on Current Arbitrum One Block via <code>eth_call</code> &amp; <code>eth_estimateGas</code>...</b>`;
+    statusEl.innerHTML = `<span class="pos">🛡️ <b>ZERO-BURN METAMASK GUARD ACTIVE:</b> Manual MetaMask trade execution is disabled when net profit is below live Arbitrum gas so your MetaMask ETH is NEVER burned on gas! All profitable trades (≥ +₹0.40 INR net after 100% live gas) are executed automatically by the 24/7 Relayer (<code>${LOCAL_RELAYER_WALLET}</code>).</span>`;
   }
-  try {
-    const r = await fetch(`${API_BASE}/api/live-verified-bundle?t=` + Date.now());
-    const bundle = await r.json();
-    if (!bundle || !bundle.ok || !bundle.calldata) {
-      if (statusEl) {
-        statusEl.innerHTML = `<span class="warn">⚠️ Live block verification returned: ${bundle && bundle.error ? bundle.error : 'Retry in 1 second'}</span>`;
-      }
-      return;
-    }
-    if (window.ethereum) {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0xa4b1' }]
-      }).catch(() => {});
-      if (accounts && accounts[0]) {
-        if (statusEl) {
-          statusEl.innerHTML = `<span class="pos">✅ LIVE BUNDLE VERIFIED ON-CHAIN (${bundle.routes_count} Disjoint Routes: <code>${bundle.route_labels.join(', ')}</code> • Gross <b>+₹${bundle.gross_inr} INR</b> / Net <b>+₹${bundle.net_inr} INR</b>)!</span><br>` +
-            `• Sending <b><code>value: 0x0</code> (0 ETH leaves your wallet)</b> to Smart Contract <code>${bundle.to}</code> (<code>gas: ${bundle.gas_hex}</code>) — click <b>Confirm</b> in MetaMask! (If MetaMask shows a "Review alert" box, click the words <b>"Review alert"</b> inside the MetaMask popup → check <b>"I understand"</b> → click <b>Confirm</b>!)`;
-        }
-        const txHash = await window.ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [{
-            from: accounts[0],
-            to: bundle.to,
-            value: '0x0',
-            data: bundle.calldata,
-            gas: bundle.gas_hex
-          }]
-        });
-        if (statusEl) {
-          statusEl.innerHTML = `<span class="pos">🎉 LIVE TRADE #10 BROADCASTED ON ARBITRUM ONE! Tx: <a href="https://arbiscan.io/tx/${txHash}" target="_blank"><code>${txHash}</code></a></span><br>` +
-            `• Executed <b>${bundle.routes_count} Disjoint Flash-Loan Routes</b> (<code>${bundle.route_labels.join(', ')}</code>) — 100% of profit delivered directly to your wallet!`;
-        }
-        return;
-      }
-    }
-  } catch (err) {
-    if (statusEl) {
-      statusEl.innerHTML = `<span class="warn">ℹ️ MetaMask Popup Note:</span> ${err && err.message ? err.message : 'Transaction cancelled'}.<br>` +
-        `• <b>Why MetaMask shows "Review alert":</b> Whenever a local site (<code>http://localhost:8080</code>) initiates a transaction, MetaMask v12's Blockaid scanner displays a <b>"Review alert"</b> banner inside the MetaMask window and disables the blue <b>Confirm</b> button until you click the words <b>"Review alert"</b> inside the MetaMask popup → check <b>"I understand"</b> → click <b>Confirm</b>!<br>` +
-        `• <b>Zero-Alert Way to Fuel 24/7 Background Relayer (Takes 5 Seconds):</b> Address <code>${LOCAL_RELAYER_WALLET}</code> is copied to your clipboard — click the <b>MetaMask Fox Icon in your browser's top-right toolbar</b> → click <b>Send</b> → paste <code>${LOCAL_RELAYER_WALLET}</code> → type <b><code>0.00002</code> ETH</b> → click <b>Confirm</b> (<b>0 Review alerts</b> because you initiated it directly inside the MetaMask extension)!`;
-    }
-  }
+  return;
 }
 
 async function copyRelayerAddressForManualSend() {
