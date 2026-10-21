@@ -25,7 +25,7 @@
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
       "frames_received": 9
     },
-    "ts": 1792609123.744548
+    "ts": 1792609129.7369387
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -130,9 +130,9 @@
   "multi_route_bundle_probes": 63,
   "total_rpc_checks_per_cycle": 107,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.15,
-  "rpc_latency_min_ms": 739.38,
-  "rpc_latency_avg_ms": 739.38,
+  "scan_duration_sec": 1.07,
+  "rpc_latency_min_ms": 766.63,
+  "rpc_latency_avg_ms": 766.63,
   "chainlink_eth_usd_price": 2496.52,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022922,
@@ -155,7 +155,7 @@
     "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.079856,
     "0xb71ae1fe3a27d8b3f9a769f033374cfe1587b07a": 1.089251,
     "0x9cd696c583ded4716d82012f7f22caeaf335266a": 1.090388,
-    "0x2012395e71a4af2e621d522b175f6c29232398db": 1.120802,
+    "0x2012395e71a4af2e621d522b175f6c29232398db": 1.087954,
     "0xea12ea09ecd81f19ec642d93ccd2c4723bdb592b": 1.091155,
     "0xbfef061243c3da14d20aa9cb054350a9192d3a93": 1.102205,
     "0x875e726fa2e984570b32f505c9c64f864d1d2e5b": 1.106369
@@ -191,10 +191,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 22622,
-    "per_route_ns": 1413.88,
+    "latency_ns": 21771,
+    "per_route_ns": 1360.69,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792609123.7460048
+  "ts": 1792609129.737446
 }
