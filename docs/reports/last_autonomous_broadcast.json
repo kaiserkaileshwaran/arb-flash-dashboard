@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792608558.4942577
+    "ts": 1792608566.6950994
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -123,10 +123,10 @@
   "multi_route_bundle_probes": 59,
   "total_rpc_checks_per_cycle": 99,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.33,
-  "rpc_latency_min_ms": 862.47,
-  "rpc_latency_avg_ms": 862.47,
-  "chainlink_eth_usd_price": 2510.57,
+  "scan_duration_sec": 0.94,
+  "rpc_latency_min_ms": 537.5,
+  "rpc_latency_avg_ms": 537.5,
+  "chainlink_eth_usd_price": 2508.31,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022277,
   "aave_closest_borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
@@ -152,17 +152,17 @@
     "0xbfef061243c3da14d20aa9cb054350a9192d3a93": 1.100451
   },
   "best_single_route_pre_gas_wei": 2948880127884,
-  "best_single_route_pre_gas_inr": 0.7027,
+  "best_single_route_pre_gas_inr": 0.7021,
   "bundled_routes_count": 1,
   "bundled_route_labels": [
     "USDCE_WETH_U1_S1(2948880127884wei)"
   ],
   "bundled_multi_route_gross_wei": 2948880127884,
-  "bundled_multi_route_gross_inr": 0.7027,
-  "l2_gas_cost_inr": 0.3861,
-  "bundled_total_gas_cost_inr": 0.3861,
-  "single_net_if_forced_inr": 0.3166,
-  "bundled_net_if_forced_inr": 0.3166,
+  "bundled_multi_route_gross_inr": 0.7021,
+  "l2_gas_cost_inr": 0.3857,
+  "bundled_total_gas_cost_inr": 0.3857,
+  "single_net_if_forced_inr": 0.3164,
+  "bundled_net_if_forced_inr": 0.3164,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -179,10 +179,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 28249,
-    "per_route_ns": 1765.56,
+    "latency_ns": 25799,
+    "per_route_ns": 1612.44,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792608558.495037
+  "ts": 1792608566.695821
 }
