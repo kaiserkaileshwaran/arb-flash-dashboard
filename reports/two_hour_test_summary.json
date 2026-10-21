@@ -9,24 +9,24 @@
   "strict_per_trade_fee_isolation": true,
   "liq_backfill_1200k_done": true,
   "swap_backfill_8k_done": true,
-  "uncapped_flash_capacity_usd": 396539453.63,
-  "uncapped_flash_capacity_inr_crore": 3763.95,
+  "uncapped_flash_capacity_usd": 396541595.47,
+  "uncapped_flash_capacity_inr_crore": 3763.97,
   "started_at": "2026-10-21T19:09:08Z",
-  "last_updated_at": "2026-10-21T22:28:55Z",
+  "last_updated_at": "2026-10-21T22:30:27Z",
   "start_epoch": 1792609748.697906,
   "target_duration_seconds": 86400,
-  "elapsed_seconds": 11986.4,
-  "remaining_seconds": 74413.6,
-  "progress_pct": 13.87,
-  "total_cycles_completed": 180,
-  "last_block_number": 517046510,
-  "rpc_error_count": 100,
-  "http_429_rate_limit_count": 13,
+  "elapsed_seconds": 12078.4,
+  "remaining_seconds": 74321.6,
+  "progress_pct": 13.98,
+  "total_cycles_completed": 184,
+  "last_block_number": 517046809,
+  "rpc_error_count": 137,
+  "http_429_rate_limit_count": 16,
   "rpc_failover_count": 1,
   "network_drop_recoveries": 0,
   "last_rpc_error": "HTTP 429 Rate Limit on arb-mainnet.g.alchemy.com",
-  "latency_sum_ms": 136269.94,
-  "avg_alchemy_latency_ms": 757.06,
+  "latency_sum_ms": 143787.71,
+  "avg_alchemy_latency_ms": 781.45,
   "min_alchemy_latency_ms": 232.48,
   "max_alchemy_latency_ms": 7022.29,
   "max_dex_spread_seen_bps": 63.88,
@@ -41,7 +41,7 @@
   "cumulative_flash_net_profit_inr_pre_tax": 83.6,
   "cumulative_flash_net_profit_inr_post_tax": 83.6,
   "verified_onchain_liquidations_count": 0,
-  "verified_intrablock_swaps_count": 802,
+  "verified_intrablock_swaps_count": 800,
   "per_trade_profit_ledger": [
     {
       "trade_number": 1,
@@ -263,45 +263,6 @@
   ],
   "verified_profitable_routes_ring": [
     {
-      "pair": "WETH/USDT (Camelot V3 1.00bps <-> UniV3 5.00bps) [Blk #517046014 \u2022 Tx 0x58d45fc2...]",
-      "p1": 2488.3888,
-      "p2": 2490.2708,
-      "spread_bps": 7.56,
-      "fee_floor_bps": 6.0,
-      "net_margin_bps": 1.56,
-      "borrow_symbol": "WETH",
-      "asm_v3_gross_usd": 0.4918,
-      "net_profit_usd": 0.4861,
-      "block_number": 517046014,
-      "tx_hash": "0x58d45fc2a4707d7fe566166b478f64a714af653e7a73b0938f354041b5099ba0"
-    },
-    {
-      "pair": "WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps) [Blk #517046018 \u2022 Tx 0x6abd9f13...]",
-      "p1": 2488.1466,
-      "p2": 2488.9866,
-      "spread_bps": 3.38,
-      "fee_floor_bps": 2.0,
-      "net_margin_bps": 1.38,
-      "borrow_symbol": "WETH",
-      "asm_v3_gross_usd": 1.2802,
-      "net_profit_usd": 1.2745,
-      "block_number": 517046018,
-      "tx_hash": "0x6abd9f138bf2790160b2bfc83bae98d60d10d29d79a60ef4291cd668728a82dc"
-    },
-    {
-      "pair": "WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 1.00bps) [Blk #517046018 \u2022 Tx 0x6abd9f13...]",
-      "p1": 2488.1924,
-      "p2": 2488.9866,
-      "spread_bps": 3.19,
-      "fee_floor_bps": 2.0,
-      "net_margin_bps": 1.19,
-      "borrow_symbol": "WETH",
-      "asm_v3_gross_usd": 0.8834,
-      "net_profit_usd": 0.8777,
-      "block_number": 517046018,
-      "tx_hash": "0x6abd9f138bf2790160b2bfc83bae98d60d10d29d79a60ef4291cd668728a82dc"
-    },
-    {
       "pair": "WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps) [Blk #517046020 \u2022 Tx 0x752a7e5c...]",
       "p1": 2488.5134,
       "p2": 2487.7743,
@@ -452,6 +413,42 @@
       "asm_v3_gross_usd": 1.1231,
       "net_profit_usd": 1.1174,
       "block_number": 517046435
+    },
+    {
+      "pair": "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps) [Blk #517046521 \u2022 Top-of-Block QuoterV2]",
+      "p1": 2489.5054,
+      "p2": 2487.8818,
+      "spread_bps": 6.53,
+      "fee_floor_bps": 2.0,
+      "net_margin_bps": 4.53,
+      "borrow_symbol": "WETH",
+      "asm_v3_gross_usd": 7.9163,
+      "net_profit_usd": 7.9106,
+      "block_number": 517046521
+    },
+    {
+      "pair": "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps) [Blk #517046599 \u2022 Top-of-Block QuoterV2]",
+      "p1": 2488.3888,
+      "p2": 2489.9787,
+      "spread_bps": 6.39,
+      "fee_floor_bps": 2.0,
+      "net_margin_bps": 4.39,
+      "borrow_symbol": "WETH",
+      "asm_v3_gross_usd": 4.89,
+      "net_profit_usd": 4.8842,
+      "block_number": 517046599
+    },
+    {
+      "pair": "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps) [Blk #517046662 \u2022 Top-of-Block QuoterV2]",
+      "p1": 84343.027,
+      "p2": 84313.1244,
+      "spread_bps": 3.55,
+      "fee_floor_bps": 2.07,
+      "net_margin_bps": 1.48,
+      "borrow_symbol": "WETH",
+      "asm_v3_gross_usd": 0.4723,
+      "net_profit_usd": 0.4666,
+      "block_number": 517046662
     }
   ],
   "live_aave_whale_watchlist": [
@@ -468,12 +465,12 @@
     {
       "borrower": "0x9f25248e8465a4a5106948615c6db2ed1e1b9052",
       "health_factor": 1.0268,
-      "debt_usd": 35152.53,
+      "debt_usd": 35152.54,
       "collateral_usd": 45510.3,
       "distance_to_liquidation_pct": 2.61,
-      "est_flash_loan_usd": 17576.26,
+      "est_flash_loan_usd": 17576.27,
       "est_liq_bonus_usd": 843.66,
-      "est_liq_bonus_inr": 80080.28
+      "est_liq_bonus_inr": 80080.3
     },
     {
       "borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
@@ -498,12 +495,12 @@
     {
       "borrower": "0xc358f7803a0a28afe56b5bbce157664fe5e1624d",
       "health_factor": 1.0507,
-      "debt_usd": 60591.49,
+      "debt_usd": 60591.5,
       "collateral_usd": 75913.69,
       "distance_to_liquidation_pct": 4.83,
-      "est_flash_loan_usd": 30295.74,
+      "est_flash_loan_usd": 30295.75,
       "est_liq_bonus_usd": 1454.2,
-      "est_liq_bonus_inr": 138032.26
+      "est_liq_bonus_inr": 138032.28
     },
     {
       "borrower": "0x7d7937bac6af9975bbacbcd53d53e5c61968cd36",
@@ -538,12 +535,12 @@
     {
       "borrower": "0x2012395e71a4af2e621d522b175f6c29232398db",
       "health_factor": 1.0836,
-      "debt_usd": 18858.46,
+      "debt_usd": 18858.47,
       "collateral_usd": 25471.8,
       "distance_to_liquidation_pct": 7.72,
-      "est_flash_loan_usd": 9429.23,
+      "est_flash_loan_usd": 9429.24,
       "est_liq_bonus_usd": 452.6,
-      "est_liq_bonus_inr": 42961.08
+      "est_liq_bonus_inr": 42961.1
     },
     {
       "borrower": "0xea12ea09ecd81f19ec642d93ccd2c4723bdb592b",
@@ -568,12 +565,12 @@
     {
       "borrower": "0x9cd696c583ded4716d82012f7f22caeaf335266a",
       "health_factor": 1.0922,
-      "debt_usd": 587007.31,
-      "collateral_usd": 781894.93,
+      "debt_usd": 587007.35,
+      "collateral_usd": 781894.96,
       "distance_to_liquidation_pct": 8.44,
-      "est_flash_loan_usd": 293503.66,
+      "est_flash_loan_usd": 293503.67,
       "est_liq_bonus_usd": 14088.18,
-      "est_liq_bonus_inr": 1337249.61
+      "est_liq_bonus_inr": 1337249.7
     },
     {
       "borrower": "0xb71ae1fe3a27d8b3f9a769f033374cfe1587b07a",
@@ -598,28 +595,28 @@
     {
       "borrower": "0x875e726fa2e984570b32f505c9c64f864d1d2e5b",
       "health_factor": 1.1065,
-      "debt_usd": 113157.14,
-      "collateral_usd": 160525.77,
+      "debt_usd": 113157.15,
+      "collateral_usd": 160525.79,
       "distance_to_liquidation_pct": 9.62,
       "est_flash_loan_usd": 56578.57,
       "est_liq_bonus_usd": 2715.77,
-      "est_liq_bonus_inr": 257781.02
+      "est_liq_bonus_inr": 257781.04
     },
     {
       "borrower": "0x12bb24d553161036461ef1dc789c6f73765e1a57",
       "health_factor": 1.1073,
-      "debt_usd": 11589.3,
+      "debt_usd": 11589.31,
       "collateral_usd": 15586.49,
       "distance_to_liquidation_pct": 9.69,
       "est_flash_loan_usd": 5794.65,
       "est_liq_bonus_usd": 278.14,
-      "est_liq_bonus_inr": 26401.35
+      "est_liq_bonus_inr": 26401.38
     },
     {
       "borrower": "0xc767ecd98c87182f272386e75086a1cfacc5c724",
       "health_factor": 1.108,
       "debt_usd": 10449.0,
-      "collateral_usd": 14197.55,
+      "collateral_usd": 14197.56,
       "distance_to_liquidation_pct": 9.75,
       "est_flash_loan_usd": 5224.5,
       "est_liq_bonus_usd": 250.78,
@@ -688,14 +685,14 @@
   ],
   "live_dex_routes_snapshot": [
     {
-      "pair": "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps)",
-      "p1": 2489.5054,
-      "p2": 2487.485,
-      "spread_bps": 8.12,
+      "pair": "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps)",
+      "p1": 2488.3888,
+      "p2": 2489.9787,
+      "spread_bps": 6.39,
       "fee_floor_bps": 2.0,
-      "net_margin_bps": 6.12,
+      "net_margin_bps": 4.39,
       "borrow_symbol": "WETH",
-      "asm_v3_gross_usd": 13.7865
+      "asm_v3_gross_usd": 4.89
     },
     {
       "pair": "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
@@ -708,34 +705,14 @@
       "asm_v3_gross_usd": 2.2783
     },
     {
-      "pair": "TRI-3HOP: WETH -> USDC -> ARB -> WETH (CamV3 1bps -> CamV3 2.50bps -> CamV3 2.50bps)",
-      "p1": 2486.4272,
-      "p2": 2488.5034,
-      "spread_bps": 8.35,
-      "fee_floor_bps": 6.0,
-      "net_margin_bps": 2.35,
+      "pair": "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps)",
+      "p1": 84343.027,
+      "p2": 84313.1244,
+      "spread_bps": 3.55,
+      "fee_floor_bps": 2.07,
+      "net_margin_bps": 1.48,
       "borrow_symbol": "WETH",
-      "asm_v3_gross_usd": 1.1231
-    },
-    {
-      "pair": "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps)",
-      "p1": 2488.3888,
-      "p2": 2487.485,
-      "spread_bps": 3.63,
-      "fee_floor_bps": 2.0,
-      "net_margin_bps": 1.63,
-      "borrow_symbol": "WETH",
-      "asm_v3_gross_usd": 0.7419
-    },
-    {
-      "pair": "WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps)",
-      "p1": 2488.5034,
-      "p2": 2487.9374,
-      "spread_bps": 2.27,
-      "fee_floor_bps": 2.0,
-      "net_margin_bps": 0.27,
-      "borrow_symbol": "WETH",
-      "asm_v3_gross_usd": 0.012
+      "asm_v3_gross_usd": 0.4723
     },
     {
       "pair": "LINK/WETH (UniV3 5.00bps <-> PancakeSwap V3 5.00bps)",
@@ -746,6 +723,42 @@
       "net_margin_bps": 0.74,
       "borrow_symbol": "WETH",
       "asm_v3_gross_usd": 0.0042
+    },
+    {
+      "pair": "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps) [Blk #517046662 \u2022 Top-of-Block QuoterV2]",
+      "p1": 84343.027,
+      "p2": 84313.1244,
+      "spread_bps": 3.55,
+      "fee_floor_bps": 2.07,
+      "net_margin_bps": 1.48,
+      "borrow_symbol": "WETH",
+      "asm_v3_gross_usd": 0.4723,
+      "net_profit_usd": 0.4666,
+      "block_number": 517046662
+    },
+    {
+      "pair": "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps) [Blk #517046599 \u2022 Top-of-Block QuoterV2]",
+      "p1": 2488.3888,
+      "p2": 2489.9787,
+      "spread_bps": 6.39,
+      "fee_floor_bps": 2.0,
+      "net_margin_bps": 4.39,
+      "borrow_symbol": "WETH",
+      "asm_v3_gross_usd": 4.89,
+      "net_profit_usd": 4.8842,
+      "block_number": 517046599
+    },
+    {
+      "pair": "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps) [Blk #517046521 \u2022 Top-of-Block QuoterV2]",
+      "p1": 2489.5054,
+      "p2": 2487.8818,
+      "spread_bps": 6.53,
+      "fee_floor_bps": 2.0,
+      "net_margin_bps": 4.53,
+      "borrow_symbol": "WETH",
+      "asm_v3_gross_usd": 7.9163,
+      "net_profit_usd": 7.9106,
+      "block_number": 517046521
     },
     {
       "pair": "TRI-3HOP: WETH -> USDC -> ARB -> WETH (CamV3 1bps -> CamV3 2.50bps -> CamV3 2.50bps) [Blk #517046435 \u2022 Top-of-Block QuoterV2]",
@@ -848,19 +861,6 @@
       "net_profit_usd": 1.7249,
       "block_number": 517046247,
       "tx_hash": "0xfed6b91ed53c95145cf5a1c5ab855f3dbd10781ac03b2120a2e34d99f075bd5a"
-    },
-    {
-      "pair": "ARB/USDC (Camelot V3 2.50bps <-> PancakeSwap V3 5.00bps) [Blk #517046246 \u2022 Tx 0x34c455f9...]",
-      "p1": 0.1912,
-      "p2": 0.1914,
-      "spread_bps": 12.4,
-      "fee_floor_bps": 7.5,
-      "net_margin_bps": 4.9,
-      "borrow_symbol": "USDC",
-      "asm_v3_gross_usd": 0.1061,
-      "net_profit_usd": 0.1004,
-      "block_number": 517046246,
-      "tx_hash": "0x34c455f9574a1fb0785834c507fbca6f38411f419c056d2ee6065b13707ce1d8"
     }
   ],
   "total_amount_100_usd": 0.88073,
@@ -871,9 +871,9 @@
   "binance_only_usdc_balance": 0.499198,
   "amount_saved_25_usd": 0.0,
   "amount_saved_25_inr": 0.0,
-  "last_swap_event_scan_block": 517046435,
-  "last_liq_event_scan_block": 517046435,
-  "hardware_filtered_non_profitable_swaps": 3297,
+  "last_swap_event_scan_block": 517046736,
+  "last_liq_event_scan_block": 517046736,
+  "hardware_filtered_non_profitable_swaps": 3323,
   "verified_swap_tx_keys": [
     "0x010ae1ce5211768d0311e336fb905c31316eb135c41d32016daf0488cbc72a37:WETH/USDC (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
     "0xb5e817d7848040b02556036642d26eed0d6739261ac77321251f70104a55b534:WETH/USDC (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
@@ -1025,8 +1025,8 @@
     "0x2e11b6b9d9f9a4882373b49614002e53c590eac91568e6d92f622bab4aa32443:WBTC/WETH (PancakeSwap V3 1.00bps <-> UniV3 5.00bps)",
     "0xcb8031e9f9a389eb8454a718d4c5dbeefd529ea28712346a0bdae1ad874c54ca:WETH/USDC (UniV3 0.01% 1.00bps <-> UniV3 0.05% 5.00bps)",
     "0x5692d2b10193540e4d6df865925e5b4f5c131a6822294d486fe1d8706f9460b5:WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps)",
-    "0x5c22ff5ec80d7fcd03ab8802a1dfefe8ca20f7c53778208787619f0ebcaf12a6:WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 1.00bps)",
     "0xa08e85c27eed5f45e75fafdfb63b71bbcd51d7dcb735b412a035620e24b34462:WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 1.00bps)",
+    "0x5c22ff5ec80d7fcd03ab8802a1dfefe8ca20f7c53778208787619f0ebcaf12a6:WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 1.00bps)",
     "0x14a1f7804f8eb15d46036030c21f03510a283c5aafde23452a6e2bec8cfde3dd:WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 0.05% 5.00bps)",
     "0xba5985a284f49ed8fe883c1e93c12588e671109bfda1d3053012574aa2ffc446:WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 1.00bps)",
     "0xd77aa18d0d1adf2c85994deacd9d8fb4471ef25731cff6d78a7ec6f10936ecac:ARB/WETH (Camelot V3 1.11bps <-> UniV3 0.05% 5.00bps)",
@@ -1174,8 +1174,8 @@
     "0x5c2c61ad9ca5c8a71adb65a7af406c97c7c5ef379114e0df2aff419628c10e84:WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 0.05% 5.00bps)",
     "0x4f83f27ad092ee040de3551edaf7be007d296a9e04028cb84daf485700afdef0:WETH/USDC (PancakeSwap V3 1.00bps <-> UniV3 1.00bps)",
     "0x2e11b6b9d9f9a4882373b49614002e53c590eac91568e6d92f622bab4aa32443:WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps)",
-    "0xc702ba84534afc33cadb612e4b5972342633917b8d34a76663d7ca1d7a134f08:WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps)",
     "0xd4f49dfe122bba563ffefdacd0436c3dcf10342ba9fc4ffa545b3c6a4595c26c:WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps)",
+    "0xc702ba84534afc33cadb612e4b5972342633917b8d34a76663d7ca1d7a134f08:WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps)",
     "0x99b5a95798b6f7742b14da60283b60e6ad37af17065beb54ff3b9879e56cd993:WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps)",
     "0xfb0eeac0c205b99a461fb2c63b9487a1aac26ab99e2d01d2c0609374b9daf62b:WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 5.00bps)",
     "0x952dcebd015b19dfed277da5516ed518a4dd33a274ea522f98b9fd48e3b77aa3:WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps)",
@@ -1684,12 +1684,12 @@
     "TRI-3HOP: WETH -> USDC -> ARB -> WETH (CamV3 1bps -> CamV3 2.50bps -> CamV3 2.50bps):2491.9847:2493.7235",
     "TRI-3HOP: WETH -> USDC -> ARB -> WETH (CamV3 1bps -> CamV3 2.50bps -> CamV3 2.50bps):2491.16332:2492.9675",
     "TRI-3HOP: WETH -> USDC -> USDT -> WETH (CamV3 1bps -> CamV3 0.25bps -> PcsV3 1bps):2489.05106:2489.6854",
-    "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2500.4136:2499.3065",
     "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps):84151.04604:84176.94168",
+    "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2500.4136:2499.3065",
     "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2496.9157:2495.163",
     "TRI-3HOP: WETH -> USDC -> ARB -> WETH (CamV3 1bps -> CamV3 2.50bps -> CamV3 2.50bps):2486.42718:2488.5034",
-    "ARB/WETH (Camelot V3 1.11bps <-> UniV3 0.05% 5.00bps):0.19599:0.19614",
     "TRI-3HOP: WETH -> USDC -> USDT -> WETH (CamV3 1bps -> CamV3 0.25bps -> PcsV3 1bps):2495.82769:2494.8601",
+    "ARB/WETH (Camelot V3 1.11bps <-> UniV3 0.05% 5.00bps):0.19599:0.19614",
     "TRI-3HOP: WETH -> USDC -> USDT -> WETH (CamV3 1bps -> CamV3 0.25bps -> PcsV3 1bps):2490.57004:2489.6854",
     "TRI-3HOP: WETH -> USDC -> USDT -> WETH (CamV3 1bps -> CamV3 0.25bps -> PcsV3 1bps):2496.78052:2495.6624",
     "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2488.6898:2489.4571",
@@ -1711,6 +1711,7 @@
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2495.4404:2494.1301",
     "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps):2497.0397:2496.2859",
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2488.3888:2489.6854",
+    "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps):84343.027:84313.12438",
     "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps):2494.8295:2496.7548",
     "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2489.5054:2487.485",
     "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps):2487.6112:2489.4571",
@@ -1752,8 +1753,8 @@
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2495.0905:2496.9706",
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2497.0903:2497.9106",
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2487.6988:2489.1876",
-    "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2497.1003:2497.6648",
     "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2495.418:2497.1711",
+    "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2497.1003:2497.6648",
     "TRI-3HOP: WETH -> USDC -> ARB -> WETH (CamV3 1bps -> CamV3 2.50bps -> CamV3 2.50bps):2490.23282:2488.1466",
     "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2498.0572:2496.2859",
     "TRI-3HOP: WETH -> USDC -> USDT -> WETH (CamV3 1bps -> CamV3 0.25bps -> PcsV3 1bps):2496.29435:2497.1653",
@@ -1776,6 +1777,7 @@
     "TRI-3HOP: WETH -> USDC -> USDT -> WETH (CamV3 1bps -> CamV3 0.25bps -> PcsV3 1bps):2487.71069:2489.1876",
     "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps):2497.0903:2495.163",
     "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps):84037.02718:84016.17245",
+    "WETH/USDT (Camelot V3 1.00bps <-> UniV3 0.01% 1.00bps):2488.3888:2489.9787",
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2487.6112:2488.6898",
     "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps):84330.8356:84306.50589",
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2497.1003:2498.478",
@@ -1814,6 +1816,7 @@
     "TRI-3HOP: WETH -> USDC -> USDT -> WETH (CamV3 1bps -> CamV3 0.25bps -> PcsV3 1bps):2497.19761:2497.9106",
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2499.31:2497.4151",
     "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2493.9213:2496.1024",
+    "WETH/USDT (PancakeSwap V3 1.00bps <-> UniV3 0.01% 1.00bps):2489.5054:2487.8818",
     "WETH/USDC (Camelot V3 1.00bps <-> UniV3 1.00bps):2496.244:2495.6391",
     "WBTC/WETH (Camelot V3 0.90bps <-> PancakeSwap V3 1.00bps):84316.39797:84293.36332",
     "WETH/USDT (Camelot V3 1.00bps <-> PancakeSwap V3 1.00bps):2497.1003:2495.9171",
@@ -1827,17 +1830,17 @@
   "profit_only_execution_mode": true,
   "sequencer_ws_connected": true,
   "sequencer_ws_endpoint": "wss://arb1.arbitrum.io/feed",
-  "sequencer_ws_latest_seq": 494838698,
-  "sequencer_ws_batches_decoded": 654,
-  "sequencer_ws_dex_signals": 673,
+  "sequencer_ws_latest_seq": 494838996,
+  "sequencer_ws_batches_decoded": 901,
+  "sequencer_ws_dex_signals": 907,
   "sequencer_ws_last_tokens": [
-    "USDC",
-    "USDT"
+    "WETH",
+    "ARB"
   ],
   "direct_pool_flash_swap_enabled": true,
   "direct_pool_est_gas_units": 174500,
   "direct_pool_gas_saved_pct": 54.1,
-  "latest_direct_pool_calldata": "0x9d64d23c000000000000000000000000c6962004f452be9203591991d15f6b388e09e8d0000000000000000000000000b1026b8e7276e7ac75410f1fcbbe21796e8f752600000000000000000000000082af49447d8a07e3bd95bd0d56f35241523fbab1000000000000000000000000af88d065e77c8cc2239327c5edb3a432268e583100000000000000000000000000000000000000000000001368fb349ddd2900000000000000000000000000000000000000000000000000000001987a8aa1ec5c000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-  "aave_v3_total_liquidity_usd": 395739385.94,
-  "balancer_v2_total_liquidity_usd": 800067.69
+  "latest_direct_pool_calldata": "0x9d64d23c000000000000000000000000c6962004f452be9203591991d15f6b388e09e8d0000000000000000000000000b1026b8e7276e7ac75410f1fcbbe21796e8f7526000000000000000000000000af88d065e77c8cc2239327c5edb3a432268e583100000000000000000000000082af49447d8a07e3bd95bd0d56f35241523fbab1000000000000000000000000000000000000000000000000000000329b11cd800000000000000000000000000000000000000000000000000000000000000bea000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
+  "aave_v3_total_liquidity_usd": 395741527.91,
+  "balancer_v2_total_liquidity_usd": 800067.56
 }
