@@ -61,7 +61,7 @@ WantedBy=multi-user.target
 EOF
 
 # keep the repo fresh + daily 00:00 IST (18:30 UTC) settlement is handled inside the broadcaster
-( crontab -l 2>/dev/null | grep -v arb-flash-engine; echo "*/30 * * * * cd $APP_DIR && git pull --rebase -q || true" ) | crontab -
+( crontab -l 2>/dev/null | grep -v arb-flash-engine; echo "*/30 * * * * cd $APP_DIR && git pull --rebase -q || true"; echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_aave_borrowers.py >> logs/discover.log 2>&1" ) | crontab -
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now arb-sniper arb-broadcaster

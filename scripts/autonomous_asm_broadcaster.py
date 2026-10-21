@@ -752,6 +752,27 @@ def main() -> int:
         ("0x875e726fa2e984570b32f505c9c64f864d1d2e5b", usdt, wbtc, 7000 * 10**6, 1, RELAYER_REIMB_USDC, False, "7% WBTC BONUS #2 (HF 1.1065): USDT_debt/WBTC_col (7,000 USDT = ₹6.64L Flash Loan on ₹1.07Cr Debt seizing 0.1089 WBTC • +₹46,510 Bonus)"),
     ]
 
+    # Merge on-chain-discovered borrowers (scripts/discover_aave_borrowers.py -> reports/aave_watch_extra.json).
+    # Same pre-flight eth_call gate applies: a liquidation only broadcasts if it succeeds on-chain (HF < 1.0).
+    try:
+        _extra_doc = json.loads((REPORTS_DIR / "aave_watch_extra.json").read_text())
+        _known = {e[0].lower() for e in aave_high_risk_watchlist}
+        _added = 0
+        for _x in _extra_doc.get("watch", []):
+            if _added >= 12 or _x["borrower"].lower() in _known:
+                continue
+            if time.time() - float(_extra_doc.get("ts", 0)) > 6 * 3600:
+                break  # stale discovery file: ignore rather than act on old data
+            _is_w = _x["debt_token"].lower() == weth.lower()
+            aave_high_risk_watchlist.append((
+                _x["borrower"], _x["debt_token"], _x["collateral_token"], int(_x["repay_amount_raw"]), 1,
+                RELAYER_REIMB_WEI if _is_w else RELAYER_REIMB_USDC, _is_w,
+                f"AUTO-DISCOVERED (HF {_x['hf']:.4f}): {_x['debt_symbol']}_debt/{_x['collateral_symbol']}_col (${_x['total_debt_usd']:,.0f} debt • ~${_x['est_bonus_usd']:,.0f} bonus)",
+            ))
+            _added += 1
+    except Exception:
+        pass
+
     # =========================================================================
     # PRIORITY #2 (OPTION 3): Triangular 3-Hop & SushiSwap V2 <-> UniV3 via Balancer 0%
     # =========================================================================
