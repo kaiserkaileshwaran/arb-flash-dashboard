@@ -20,96 +20,96 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792587056.4357953
+    "ts": 1792587243.7268949
   },
   "table2_under_2pct_fast_triggers": [
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
-      "hf": 1.026586,
+      "hf": 1.026639,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 2.6586,
+      "distance_pct": 2.6639,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x9f25248e8465a4a5106948615c6db2ed1e1b9052",
-      "hf": 1.02861,
+      "hf": 1.028584,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 2.861,
+      "distance_pct": 2.8584,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
-      "hf": 1.022885,
+      "hf": 1.022884,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 2.2885,
+      "distance_pct": 2.2884,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36",
-      "hf": 1.04389,
+      "hf": 1.043823,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.389,
+      "distance_pct": 4.3823,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x9cd61cab43075c6c4a56a95dacadad39df555d25",
-      "hf": 1.046955,
+      "hf": 1.046943,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.6955,
+      "distance_pct": 4.6943,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_PCS1_SUSHI5",
-      "gross_inr": 0.0492,
-      "net_inr": -1.2171,
+      "gross_inr": 0.0141,
+      "net_inr": -1.2467,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDC_S30_U5",
-      "gross_inr": 0.0603,
-      "net_inr": -1.206,
+      "gross_inr": 0.1058,
+      "net_inr": -1.155,
+      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
+    },
+    {
+      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
+      "target": "ARB_USDC_U1_U5",
+      "gross_inr": 0.0322,
+      "net_inr": -1.2286,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.1011,
-      "net_inr": -1.1652,
+      "net_inr": -1.1597,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_SUSHI5_UNI1",
       "gross_inr": 0.0463,
-      "net_inr": -1.22,
+      "net_inr": -1.2145,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_PCS1_UNI1",
       "gross_inr": 0.0271,
-      "net_inr": -1.2392,
+      "net_inr": -1.2337,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_UNI5_UNI1",
       "gross_inr": 0.0482,
-      "net_inr": -1.2181,
-      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
-    },
-    {
-      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
-      "target": "ARB_PCS1_UNI1",
-      "gross_inr": 0.1182,
-      "net_inr": -1.1481,
+      "net_inr": -1.2126,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -123,49 +123,51 @@
   "aave_v3_borrowers_monitored": 16,
   "multi_route_bundle_probes": 49,
   "total_rpc_checks_per_cycle": 82,
-  "cycles_scanned": 1,
-  "scan_duration_sec": 2.74,
-  "rpc_latency_min_ms": 2223.35,
-  "rpc_latency_avg_ms": 2223.35,
-  "aave_lowest_health_factor": 1.022885,
+  "cycles_scanned": 151,
+  "scan_duration_sec": 182.44,
+  "rpc_latency_min_ms": 93.07,
+  "rpc_latency_avg_ms": 725.52,
+  "aave_lowest_health_factor": 1.022884,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
-  "aave_closest_borrower_debt_usd": 125998.69,
-  "aave_closest_5pct_liq_bonus_inr": 298994.9,
+  "aave_closest_borrower_debt_usd": 125990.65,
+  "aave_closest_5pct_liq_bonus_inr": 298975.8,
   "aave_liquidatable_positions_now": 0,
   "aave_borrower_hfs": {
-    "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2": 1.026586,
-    "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.054205,
-    "0x9f25248e8465a4a5106948615c6db2ed1e1b9052": 1.02861,
-    "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb": 1.022885,
-    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.04389,
-    "0x9cd696c583ded4716d82012f7f22caeaf335266a": 1.086345,
-    "0x2012395e71a4af2e621d522b175f6c29232398db": 1.085053,
-    "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.046955,
-    "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.085761
+    "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2": 1.026639,
+    "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.054168,
+    "0x9f25248e8465a4a5106948615c6db2ed1e1b9052": 1.028584,
+    "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb": 1.022884,
+    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.043823,
+    "0x9cd696c583ded4716d82012f7f22caeaf335266a": 1.08627,
+    "0x2012395e71a4af2e621d522b175f6c29232398db": 1.084671,
+    "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.046943,
+    "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.085746
   },
-  "best_single_route_pre_gas_wei": 589749668462,
-  "best_single_route_pre_gas_inr": 0.1352,
-  "bundled_routes_count": 12,
+  "best_single_route_pre_gas_wei": 615215045231,
+  "best_single_route_pre_gas_inr": 0.141,
+  "bundled_routes_count": 14,
   "bundled_route_labels": [
+    "PENDLE_WETH_U5_P25(615215045231wei)",
     "USDCE_WETH_S5_S1(589749668462wei)",
-    "PENDLE_WETH_U5_P25(577384610343wei)",
     "PENDLE_WETH_P5_P25(575201368934wei)",
-    "ARB_PCS1_UNI1(515517960013wei)",
+    "ARB_USDCE_P1_U5(1150uUSD)",
+    "ARB_USDC_S30_U5(1115uUSD)",
     "USDT_AAVE_U1_P5(1065uUSD)",
+    "ARB_PCS1_UNI1(350713706277wei)",
     "USDCE_WETH_U1_S1(288642778171wei)",
-    "ARB_USDC_S30_U5(635uUSD)",
     "USDCE_UNI5_UNI1(210221672149wei)",
     "LUSD_WETH_U1_U5(140386069046wei)",
+    "ARB_USDC_U1_U5(339uUSD)",
     "USDCE_PCS1_UNI1(118113974921wei)",
     "USDT_USDCE_P1_U1(231uUSD)",
     "WSTETH_UNI5_UNI1(38861004952wei)"
   ],
-  "bundled_multi_route_gross_wei": 3853665028315,
-  "bundled_multi_route_gross_inr": 0.8834,
-  "l2_gas_cost_inr": 1.2663,
-  "bundled_total_gas_cost_inr": 8.9274,
-  "single_net_if_forced_inr": -1.1311,
-  "bundled_net_if_forced_inr": -8.044,
+  "bundled_multi_route_gross_wei": 4542012120439,
+  "bundled_multi_route_gross_inr": 1.0412,
+  "l2_gas_cost_inr": 1.2608,
+  "bundled_total_gas_cost_inr": 10.2755,
+  "single_net_if_forced_inr": -1.1198,
+  "bundled_net_if_forced_inr": -9.2343,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -182,10 +184,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 26440,
-    "per_route_ns": 1652.5,
+    "latency_ns": 27341,
+    "per_route_ns": 1708.81,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 2871600.0
   },
-  "ts": 1792587056.4362953
+  "ts": 1792587243.7274046
 }
