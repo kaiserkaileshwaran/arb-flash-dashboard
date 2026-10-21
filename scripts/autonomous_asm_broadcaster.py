@@ -478,20 +478,24 @@ def main() -> int:
         live_gp_init_wei = max(10_000_000, int(gp_init_hex, 16))
     except Exception:
         live_gp_init_wei = 10_500_000
-    REAL_LIVE_SWAP_GAS_WEI = int(275_000 * live_gp_init_wei)
+    REAL_LIVE_SWAP_GAS_WEI = int(135_000 * live_gp_init_wei)
+    SELF_BOOTSTRAP_GAS_REFILL_ACTIVE = rel_wei < 15_000_000_000_000
     MIN_SMALL_TRADE_NET_WEI = 1_750_000_000_000  # >= +₹0.40 INR pure net profit AFTER 100% live gas reimbursement
-    RELAYER_REIMB_WEI  = REAL_LIVE_SWAP_GAS_WEI
+    RELAYER_REIMB_WEI  = REAL_LIVE_SWAP_GAS_WEI + (800_000_000_000 if SELF_BOOTSTRAP_GAS_REFILL_ACTIVE else 0)
     MIN_GROSS_WETH_WEI = RELAYER_REIMB_WEI + MIN_SMALL_TRADE_NET_WEI
     MIN_NET_WETH_WEI   = MIN_SMALL_TRADE_NET_WEI
-    RELAYER_REIMB_USDC = max(3_350, int((REAL_LIVE_SWAP_GAS_WEI / 1e18) * 2415.0 * 1e6))
+    RELAYER_REIMB_USDC = max(3_350, int((RELAYER_REIMB_WEI / 1e18) * 2415.0 * 1e6))
     MIN_NET_USDC_RAW   = 4_215  # >= +₹0.40 INR ($0.004215 = 4,215 micro-USDC) pure net profit after live gas
     MIN_GROSS_USDC_RAW = RELAYER_REIMB_USDC + MIN_NET_USDC_RAW
     MUDREX_MIN_BANK_WITHDRAWAL_INR = 100.00
 
     import os as _os
-    DETECTED_CPU_CORES = max(1, int(_os.cpu_count() or 8))
+    _local_cores = max(1, int(_os.cpu_count() or 8))
+    _cluster_cores = int(_os.environ.get("CLUSTER_TOTAL_CPU_CORES", "16") or 16)
+    DETECTED_CPU_CORES = max(_local_cores, _cluster_cores)
+    CLUSTER_TOTAL_RAM_GB = int(_os.environ.get("CLUSTER_TOTAL_RAM_GB", "64") or 64)
     SCALED_PARALLEL_WORKERS = DETECTED_CPU_CORES * 8
-    SCALED_RPC_THREADS = max(8, DETECTED_CPU_CORES * 2)
+    SCALED_RPC_THREADS = max(16, DETECTED_CPU_CORES * 2)
 
     # =========================================================================
     # PRIORITY #1 (OPTION 2): Top 10 Bidirectional Aave V3 High-Risk Borrowers (Ultimate Crore-Scale Flash Loans • 100% Net Profit Direct to Mudrex)

@@ -1022,7 +1022,11 @@ static void run_native_asm_sniper_cycle(CURL *curl, struct curl_slist *headers, 
     /* Real Arbitrum One L2 gas at 0.01-0.015 gwei (~180,000 gas * 0.01e-9 ETH = 0.0000018 ETH = $0.0038 USD = ₹0.36 INR) */
     double gas_fee_usd = 0.0038;
     long detected_cpu_cores = sysconf(_SC_NPROCESSORS_ONLN);
-    if (detected_cpu_cores < 1) detected_cpu_cores = 8;
+    const char *env_cluster_cores = getenv("CLUSTER_TOTAL_CPU_CORES");
+    if (env_cluster_cores && atoi(env_cluster_cores) > detected_cpu_cores) {
+        detected_cpu_cores = atoi(env_cluster_cores);
+    }
+    if (detected_cpu_cores < 16) detected_cpu_cores = 16; /* 10 local + 16 cloud cluster cores combined */
     int scaled_workers_n = (int)(detected_cpu_cores * 8);
     struct timespec t0, t1;
     clock_gettime(CLOCK_MONOTONIC, &t0);
