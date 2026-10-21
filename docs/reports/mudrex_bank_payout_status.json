@@ -10,7 +10,7 @@
   "wss_sequencer_feed": {
     "connected": true,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 18,
+    "frames_received": 14,
     "oracle_updates_detected": 0
   },
   "gas_spike_circuit_breaker_tripped": false,
@@ -18,6 +18,6 @@
   "weth_to_usdc_auto_converter_1bp_ready": true,
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
-  "ts": 1792610617.3947737,
-  "hmac_sha256_integrity": "f2851a4de9cd01b18e4ddb862bf6b1ce5b92fb5e150e45dcefa6e289e995de06"
+  "ts": 1792610625.1644156,
+  "hmac_sha256_integrity": "26d106302888716de48042eee04a73090d6bacc6c92faae18404342b192a7447"
 }
