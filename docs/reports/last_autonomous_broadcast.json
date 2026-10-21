@@ -20,7 +20,7 @@
     "eligible_for_bank_withdrawal": false,
     "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
     "metamask_min_balance_required": 0.0,
-    "ts": 1792608566.6950994
+    "ts": 1792608573.3991957
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -72,8 +72,8 @@
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_P1_U5_OPT",
-      "gross_inr": 0.1056,
-      "net_inr": -0.2658,
+      "gross_inr": 0.0766,
+      "net_inr": -0.2948,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
@@ -123,9 +123,9 @@
   "multi_route_bundle_probes": 59,
   "total_rpc_checks_per_cycle": 99,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.94,
-  "rpc_latency_min_ms": 537.5,
-  "rpc_latency_avg_ms": 537.5,
+  "scan_duration_sec": 2.0,
+  "rpc_latency_min_ms": 1588.71,
+  "rpc_latency_avg_ms": 1588.71,
   "chainlink_eth_usd_price": 2508.31,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022277,
@@ -179,10 +179,10 @@
   "relayer_gas_ready_pct": 100.0,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 25799,
-    "per_route_ns": 1612.44,
+    "latency_ns": 28983,
+    "per_route_ns": 1811.44,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792608566.695821
+  "ts": 1792608573.3999686
 }
