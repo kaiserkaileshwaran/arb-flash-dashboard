@@ -1494,9 +1494,17 @@ int main(int argc, char **argv) {
     pthread_t ticker_tid;
     pthread_create(&ticker_tid, NULL, lockfree_block_ticker_thread, NULL);
 
+    uint64_t last_eval_blk = 0ULL;
     while (g_keep_running) {
+        last_eval_blk = g_live_block_number;
         run_native_asm_sniper_cycle(curl, headers, &buf, 0);
-        usleep(120000); /* 120ms ultra-fast native assembly scan loop (2x Arbitrum 250ms block frequency) */
+        /* Upgrade C: Zero-Jitter Block-Edge Event Wakeup (<10ms reaction when g_live_block_number advances) */
+        for (int wait_slice = 0; wait_slice < 12 && g_keep_running; wait_slice++) {
+            if (g_live_block_number > last_eval_blk) {
+                break;
+            }
+            usleep(10000); /* 10ms sub-block edge trigger */
+        }
     }
 
     g_keep_running = 0;
