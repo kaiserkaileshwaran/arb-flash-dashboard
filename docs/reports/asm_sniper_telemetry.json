@@ -15,8 +15,8 @@
   "parallel_workers_per_block": 128,
   "profitable_workers_completed_block": 9,
   "unprofitable_workers_terminated_block": 7,
-  "total_workers_spawned_session": 179584,
-  "total_unprofitable_terminated_session": 10327,
+  "total_workers_spawned_session": 180096,
+  "total_unprofitable_terminated_session": 10355,
   "aave_lowest_health_factor": 1.022735,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
   "aave_closest_5pct_liq_bonus_inr": 31936.12,
@@ -40,17 +40,17 @@
   "mudrex_min_deposit_inr": 0.47,
   "mudrex_usdc_balance": 0.381532,
   "mudrex_inr_balance": 36.22,
-  "asm_cycles_completed": 1403,
-  "arbitrum_blocks_profited_session": 793,
+  "asm_cycles_completed": 1407,
+  "arbitrum_blocks_profited_session": 797,
   "session_block_total_inr": 83.60,
   "session_mudrex_75_inr": 36.22,
   "session_saved_25_inr": 0.00,
   "min_guaranteed_block_profit_inr": 0.00,
-  "avg_block_profit_inr": 0.11,
+  "avg_block_profit_inr": 0.10,
   "daily_500k_blocks_floor_inr": 363053.47,
-  "cpu_eval_latency_nanoseconds": 245.03,
-  "cpu_eval_latency_microseconds": 0.2450,
-  "live_block_number": 517321125,
+  "cpu_eval_latency_nanoseconds": 245.87,
+  "cpu_eval_latency_microseconds": 0.2459,
+  "live_block_number": 517321149,
   "precached_nonce_ram": 18,
   "relayer_eth_balance": 0.00002136,
   "metamask_eth_balance": 0.00004558,
@@ -80,6 +80,10 @@
   "top_saved_25_inr": 0.00,
   "top_saved_25_usd": 0.0000,
   "per_block_profit_stream": [
+    {"block_number": 517321149, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 223.8306, "loan_inr": 172.33, "net_inr": 1.05, "mudrex_75_inr": 1.05, "mudrex_75_usdc": 0.0111, "saved_25_inr": 0.00, "eval_ns": 245.9},
+    {"block_number": 517321142, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 223.8306, "loan_inr": 172.33, "net_inr": 1.05, "mudrex_75_inr": 1.05, "mudrex_75_usdc": 0.0111, "saved_25_inr": 0.00, "eval_ns": 242.8},
+    {"block_number": 517321132, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 223.8306, "loan_inr": 172.33, "net_inr": 1.05, "mudrex_75_inr": 1.05, "mudrex_75_usdc": 0.0111, "saved_25_inr": 0.00, "eval_ns": 268.1},
+    {"block_number": 517321131, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 223.8306, "loan_inr": 172.33, "net_inr": 1.05, "mudrex_75_inr": 1.05, "mudrex_75_usdc": 0.0111, "saved_25_inr": 0.00, "eval_ns": 198.6},
     {"block_number": 517321125, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 223.8306, "loan_inr": 172.33, "net_inr": 1.05, "mudrex_75_inr": 1.05, "mudrex_75_usdc": 0.0111, "saved_25_inr": 0.00, "eval_ns": 245.0},
     {"block_number": 517321114, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 223.8306, "loan_inr": 172.33, "net_inr": 1.05, "mudrex_75_inr": 1.05, "mudrex_75_usdc": 0.0111, "saved_25_inr": 0.00, "eval_ns": 243.9},
     {"block_number": 517321112, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 223.8306, "loan_inr": 172.33, "net_inr": 1.05, "mudrex_75_inr": 1.05, "mudrex_75_usdc": 0.0111, "saved_25_inr": 0.00, "eval_ns": 239.1},
@@ -95,11 +99,7 @@
     {"block_number": 517321063, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.4444, "loan_inr": 163.88, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 244.5},
     {"block_number": 517321062, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.4444, "loan_inr": 163.88, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 274.2},
     {"block_number": 517321060, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.4444, "loan_inr": 163.88, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 341.6},
-    {"block_number": 517321059, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.4444, "loan_inr": 163.88, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 369.7},
-    {"block_number": 517321058, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.4444, "loan_inr": 163.88, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 502.2},
-    {"block_number": 517321056, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.4444, "loan_inr": 163.88, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 276.7},
-    {"block_number": 517321055, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.7146, "loan_inr": 164.02, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 244.6},
-    {"block_number": 517321053, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.7146, "loan_inr": 164.02, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 250.1}
+    {"block_number": 517321059, "route": "[9-Route Atomic Bundle] Top: [3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "regime": "CONFIRMED_ONCHAIN_MUDREX_TX", "spread_bps": 226.4444, "loan_inr": 163.88, "net_inr": 1.02, "mudrex_75_inr": 1.02, "mudrex_75_usdc": 0.0108, "saved_25_inr": 0.00, "eval_ns": 369.7}
   ],
   "routes": [
     {"rank": 1, "route": "[3-Hop Triangular] WETH->ARB->USDT->WETH (SushiV3 5bps <-> SushiV3 30bps)", "asset": "WETH", "p1": 0.179554, "p2": 0.183573, "spread_bps": 223.8306, "fee_floor_bps": 40.00, "net_margin_bps": 183.8306, "full_loan_inr": 31.69, "full_loan_usd": 0.33, "balancer_0pct_usd": 0.33, "overflow_usd": 0.00, "fee_saved_inr": 0.02, "fee_saved_usd": 0.00, "gross_inr": 0.2912, "gross_usd": 0.003068, "l2_gas_inr": 0.3607, "l2_gas_usd": 0.003800, "net_inr": 0.22, "net_usd": 0.0023, "transferred_75_inr": 0.22, "transferred_75_usd": 0.0023, "saved_25_inr": 0.00, "saved_25_usd": 0.0000},
@@ -117,6 +117,6 @@
     {"rank": 13, "route": "[Cross-DEX Spatial] UNI/WETH (SushiSwap V3 30bps <-> PancakeSwap V3 5bps)", "asset": "WETH", "p1": 7.060083, "p2": 7.030382, "spread_bps": 42.2470, "fee_floor_bps": 35.00, "net_margin_bps": 7.2470, "full_loan_inr": 1.52, "full_loan_usd": 0.02, "balancer_0pct_usd": 0.02, "overflow_usd": 0.00, "fee_saved_inr": 0.00, "fee_saved_usd": 0.00, "gross_inr": 0.0000, "gross_usd": 0.000000, "l2_gas_inr": 0.3607, "l2_gas_usd": 0.003800, "net_inr": 0.00, "net_usd": 0.0000, "transferred_75_inr": 0.00, "transferred_75_usd": 0.0000, "saved_25_inr": 0.00, "saved_25_usd": 0.0000},
     {"rank": 14, "route": "[Cross-DEX Spatial] UNI/USDT (UniV3 5bps <-> UniV3 30bps)", "asset": "USDT", "p1": 6.997159, "p2": 7.027686, "spread_bps": 43.6282, "fee_floor_bps": 35.00, "net_margin_bps": 8.6282, "full_loan_inr": 0.16, "full_loan_usd": 0.00, "balancer_0pct_usd": 0.00, "overflow_usd": 0.00, "fee_saved_inr": 0.00, "fee_saved_usd": 0.00, "gross_inr": 0.0000, "gross_usd": 0.000000, "l2_gas_inr": 0.3607, "l2_gas_usd": 0.003800, "net_inr": 0.00, "net_usd": 0.0000, "transferred_75_inr": 0.00, "transferred_75_usd": 0.0000, "saved_25_inr": 0.00, "saved_25_usd": 0.0000},
     {"rank": 15, "route": "[Cross-DEX Spatial] LINK/WETH (PancakeSwap V3 5bps <-> SushiSwap V3 30bps)", "asset": "WETH", "p1": 11.938579, "p2": 11.947055, "spread_bps": 7.0992, "fee_floor_bps": 35.00, "net_margin_bps": -27.9008, "full_loan_inr": 0.00, "full_loan_usd": 0.00, "balancer_0pct_usd": 0.00, "overflow_usd": 0.00, "fee_saved_inr": 0.00, "fee_saved_usd": 0.00, "gross_inr": 0.0000, "gross_usd": 0.000000, "l2_gas_inr": 0.3607, "l2_gas_usd": 0.003800, "net_inr": 0.00, "net_usd": 0.0000, "transferred_75_inr": 0.00, "transferred_75_usd": 0.0000, "saved_25_inr": 0.00, "saved_25_usd": 0.0000},
-    {"rank": 16, "route": "[Cross-DEX Spatial] LINK/WETH (UniV3 5bps <-> SushiSwap V3 30bps)", "asset": "WETH", "p1": 11.938815, "p2": 11.947055, "spread_bps": 6.9015, "fee_floor_bps": 35.00, "net_margin_bps": -28.0985, "full_loan_inr": 0.00, "full_loan_usd": 0.00, "balancer_0pct_usd": 0.00, "overflow_usd": 0.00, "fee_saved_inr": 0.00, "fee_saved_usd": 0.00, "gross_inr": 0.0000, "gross_usd": 0.000000, "l2_gas_inr": 0.3607, "l2_gas_usd": 0.003800, "net_inr": 0.00, "net_usd": 0.0000, "transferred_75_inr": 0.00, "transferred_75_usd": 0.0000, "saved_25_inr": 0.00, "saved_25_usd": 0.0000}
+    {"rank": 16, "route": "[Cross-DEX Spatial] LINK/WETH (UniV3 5bps <-> SushiSwap V3 30bps)", "asset": "WETH", "p1": 11.942989, "p2": 11.947055, "spread_bps": 3.4042, "fee_floor_bps": 35.00, "net_margin_bps": -31.5958, "full_loan_inr": 0.00, "full_loan_usd": 0.00, "balancer_0pct_usd": 0.00, "overflow_usd": 0.00, "fee_saved_inr": 0.00, "fee_saved_usd": 0.00, "gross_inr": 0.0000, "gross_usd": 0.000000, "l2_gas_inr": 0.3607, "l2_gas_usd": 0.003800, "net_inr": 0.00, "net_usd": 0.0000, "transferred_75_inr": 0.00, "transferred_75_usd": 0.0000, "saved_25_inr": 0.00, "saved_25_usd": 0.0000}
   ]
 }
