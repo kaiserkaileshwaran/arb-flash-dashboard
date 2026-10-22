@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 62,
+      "frames_received": 165,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 25,
+      "whale_swaps_decoded": 58,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792627338.3534195
+    "ts": 1792627369.7377825
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -107,35 +107,35 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1_OPT",
       "gross_inr": 0.0249,
-      "net_inr": -0.5966,
+      "net_inr": -0.5948,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1",
       "gross_inr": 0.1226,
-      "net_inr": -0.4989,
+      "net_inr": -0.4971,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_U5_P1_REV",
       "gross_inr": 0.0241,
-      "net_inr": -0.5974,
+      "net_inr": -0.5956,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.1,
-      "net_inr": -0.5215,
+      "net_inr": -0.5197,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5_OPT",
       "gross_inr": 0.1,
-      "net_inr": -0.5215,
+      "net_inr": -0.5197,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
@@ -238,10 +238,10 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 135,
   "cycles_scanned": 1,
-  "scan_duration_sec": 8.65,
-  "rpc_latency_min_ms": 8063.54,
-  "rpc_latency_avg_ms": 8063.54,
-  "chainlink_eth_usd_price": 2472.08,
+  "scan_duration_sec": 30.45,
+  "rpc_latency_min_ms": 8092.5,
+  "rpc_latency_avg_ms": 8092.5,
+  "chainlink_eth_usd_price": 2473.62,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022878,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
@@ -280,23 +280,22 @@
     "0x89d22f9fb20c006ee82603a4ee03a2afda8f32be": 1.112734
   },
   "best_single_route_pre_gas_wei": 1977639751552,
-  "best_single_route_pre_gas_inr": 0.4641,
-  "bundled_routes_count": 7,
+  "best_single_route_pre_gas_inr": 0.4643,
+  "bundled_routes_count": 6,
   "bundled_route_labels": [
     "ARB_USDT_U5_S30(4776uUSD)",
     "USDCE_WETH_U1_S1(758660595531wei)",
-    "ARB_USDCE_U5_U1(1655uUSD)",
+    "ARB_USDCE_U5_U1(1613uUSD)",
     "UNI_WETH_P5_S30(618034194495wei)",
     "ARB_UNI5_SUSHI5(526949717564wei)",
-    "USDT_AAVE_U1_P5(1053uUSD)",
-    "WETH_USDC_P25_U1(377462444751wei)"
+    "USDT_AAVE_U1_P5(1053uUSD)"
   ],
-  "bundled_multi_route_gross_wei": 5380071755652,
-  "bundled_multi_route_gross_inr": 1.2624,
-  "l2_gas_cost_inr": 0.6362,
-  "bundled_total_gas_cost_inr": 1.0815,
-  "single_net_if_forced_inr": -0.1721,
-  "bundled_net_if_forced_inr": 0.1809,
+  "bundled_multi_route_gross_wei": 4985218006553,
+  "bundled_multi_route_gross_inr": 1.1705,
+  "l2_gas_cost_inr": 0.6348,
+  "bundled_total_gas_cost_inr": 1.0792,
+  "single_net_if_forced_inr": -0.1705,
+  "bundled_net_if_forced_inr": 0.0913,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -318,11 +317,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 23295,
-    "per_route_ns": 1455.94,
+    "latency_ns": 20501,
+    "per_route_ns": 1281.31,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792627338.3541381,
-  "hmac_sha256_integrity": "00a899ca0b48407bc367331764f75c670043a8049224bb8474c6d049f5872cf9"
+  "ts": 1792627369.7384021,
+  "hmac_sha256_integrity": "86d34732d0a9e920e5d3372659ac3ef99ec94218e258a520ce86ad5ed826c9c7"
 }
