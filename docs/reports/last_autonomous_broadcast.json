@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 5,
+      "frames_received": 8,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 1,
+      "whale_swaps_decoded": 5,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792701060.7387753
+    "ts": 1792701069.7370398
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -89,8 +89,8 @@
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_U5_P1_REV",
-      "gross_inr": 0.0596,
-      "net_inr": -0.5593,
+      "gross_inr": 0.075,
+      "net_inr": -0.5439,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
@@ -147,9 +147,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.24,
-  "rpc_latency_min_ms": 362.83,
-  "rpc_latency_avg_ms": 362.83,
+  "scan_duration_sec": 1.09,
+  "rpc_latency_min_ms": 393.55,
+  "rpc_latency_avg_ms": 393.55,
   "chainlink_eth_usd_price": 2381.58,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022731,
@@ -214,11 +214,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 21360,
-    "per_route_ns": 1335.0,
+    "latency_ns": 22252,
+    "per_route_ns": 1390.75,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792701060.739478,
-  "hmac_sha256_integrity": "9d2a183d4ca71b00690d5f657e6820ebc652bab6cb7219bd3de9ec7ffabfe258"
+  "ts": 1792701069.7376258,
+  "hmac_sha256_integrity": "091c999ed4e5b9f6d59a9627cb9b87a4b7320232c1ce28579e74d8e5d3c576f0"
 }
