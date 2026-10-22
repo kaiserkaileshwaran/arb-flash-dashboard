@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 16,
+      "frames_received": 11,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 8,
+      "whale_swaps_decoded": 3,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792698561.0586433
+    "ts": 1792698567.6678288
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -91,49 +91,49 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_P1_U5",
       "gross_inr": 0.031,
-      "net_inr": -0.5914,
+      "net_inr": -0.5894,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.0653,
-      "net_inr": -0.5571,
+      "net_inr": -0.5551,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_P1_U5_OPT",
       "gross_inr": 0.0865,
-      "net_inr": -0.5359,
+      "net_inr": -0.5339,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5_OPT",
       "gross_inr": 0.0653,
-      "net_inr": -0.5571,
+      "net_inr": -0.5551,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "AAVE_PCS5_UNI100",
       "gross_inr": 0.0334,
-      "net_inr": -0.589,
+      "net_inr": -0.587,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "LUSD_UNI5_UNI30",
       "gross_inr": 0.2134,
-      "net_inr": -0.409,
+      "net_inr": -0.407,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "AAVE_UNI5_UNI100",
       "gross_inr": 0.0081,
-      "net_inr": -0.6143,
+      "net_inr": -0.6123,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
@@ -236,9 +236,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 3.13,
-  "rpc_latency_min_ms": 2022.87,
-  "rpc_latency_avg_ms": 2022.87,
+  "scan_duration_sec": 1.47,
+  "rpc_latency_min_ms": 556.93,
+  "rpc_latency_avg_ms": 556.93,
   "chainlink_eth_usd_price": 2379.55,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022729,
@@ -273,15 +273,15 @@
     "PENDLE_WETH_U5_P25(1046919723160wei)",
     "ARB_USDT_U5_S30(2344uUSD)",
     "LUSD_UNI5_UNI30(930752921449wei)",
-    "WETH_USDC_P25_U1(638522587663wei)",
+    "WETH_USDC_P25_U1(639526020610wei)",
     "WBTC_USDCE_P1_U5_OPT(911uUSD)"
   ],
-  "bundled_multi_route_gross_wei": 3964021319227,
-  "bundled_multi_route_gross_inr": 0.8953,
-  "l2_gas_cost_inr": 0.6133,
-  "bundled_total_gas_cost_inr": 1.0426,
-  "single_net_if_forced_inr": -0.3768,
-  "bundled_net_if_forced_inr": -0.1473,
+  "bundled_multi_route_gross_wei": 3965024752174,
+  "bundled_multi_route_gross_inr": 0.8956,
+  "l2_gas_cost_inr": 0.6113,
+  "bundled_total_gas_cost_inr": 1.0392,
+  "single_net_if_forced_inr": -0.3748,
+  "bundled_net_if_forced_inr": -0.1436,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -303,11 +303,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 24315,
-    "per_route_ns": 1519.69,
+    "latency_ns": 20559,
+    "per_route_ns": 1284.94,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792698561.0593462,
-  "hmac_sha256_integrity": "4b98a480e081e0080ec94fc850835e6b4252849cc5c5a07418ab2d642f0e10e7"
+  "ts": 1792698567.668396,
+  "hmac_sha256_integrity": "990007f799b9df0ba9d44f0eb46d7fdaeb02208d6a211a5d286975ec9406b40f"
 }
