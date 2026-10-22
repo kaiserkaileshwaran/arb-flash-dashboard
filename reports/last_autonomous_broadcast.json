@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 3,
+      "frames_received": 4,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 1,
+      "whale_swaps_decoded": 2,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792645011.366023
+    "ts": 1792645016.842037
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -149,9 +149,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.68,
-  "rpc_latency_min_ms": 345.66,
-  "rpc_latency_avg_ms": 345.66,
+  "scan_duration_sec": 0.61,
+  "rpc_latency_min_ms": 244.34,
+  "rpc_latency_avg_ms": 244.34,
   "chainlink_eth_usd_price": 2442.86,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022835,
@@ -170,7 +170,7 @@
     "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.045448,
     "0x7d7937bac6af9975bbacbcd53d53e5c61968cd36": 1.056162,
     "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.04509,
-    "0x572372831a9d6b2e3ee8fa284505599e6125fea9": 1.063129,
+    "0x572372831a9d6b2e3ee8fa284505599e6125fea9": 1.063128,
     "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.087129,
     "0xb71ae1fe3a27d8b3f9a769f033374cfe1587b07a": 1.098246,
     "0x9cd696c583ded4716d82012f7f22caeaf335266a": 1.093386,
@@ -216,11 +216,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 22392,
-    "per_route_ns": 1399.5,
+    "latency_ns": 24335,
+    "per_route_ns": 1520.94,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792645011.3666847,
-  "hmac_sha256_integrity": "73713b7b7e42bd26750da846402820d8d40600bb5f5f1ec79a5d49c7274472cf"
+  "ts": 1792645016.8426943,
+  "hmac_sha256_integrity": "e24ee0ac5f4f5c8e42d5e0601cfcdd0ae9905d18f128cb75fcd891442a9c9bd7"
 }
