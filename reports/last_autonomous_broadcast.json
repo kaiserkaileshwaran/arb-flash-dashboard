@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 8,
+      "frames_received": 7,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 4,
+      "whale_swaps_decoded": 2,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792698973.7926033
+    "ts": 1792698979.6590624
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -91,49 +91,49 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_P1_U5",
       "gross_inr": 0.1825,
-      "net_inr": -0.4387,
+      "net_inr": -0.437,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.0653,
-      "net_inr": -0.5559,
+      "net_inr": -0.5542,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_P1_U5_OPT",
       "gross_inr": 0.2079,
-      "net_inr": -0.4133,
+      "net_inr": -0.4116,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5_OPT",
       "gross_inr": 0.0653,
-      "net_inr": -0.5559,
+      "net_inr": -0.5542,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_P1_U5",
       "gross_inr": 0.0459,
-      "net_inr": -0.5753,
+      "net_inr": -0.5736,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "AAVE_PCS5_UNI100",
       "gross_inr": 0.0212,
-      "net_inr": -0.6,
+      "net_inr": -0.5983,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDC_U1_U5",
       "gross_inr": 0.0892,
-      "net_inr": -0.532,
+      "net_inr": -0.5303,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -148,14 +148,14 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.04,
-  "rpc_latency_min_ms": 370.88,
-  "rpc_latency_avg_ms": 370.88,
+  "scan_duration_sec": 1.16,
+  "rpc_latency_min_ms": 430.94,
+  "rpc_latency_avg_ms": 430.94,
   "chainlink_eth_usd_price": 2383.24,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.01,
   "aave_closest_borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
-  "aave_closest_borrower_debt_usd": 64349.71,
+  "aave_closest_borrower_debt_usd": 64349.72,
   "aave_closest_5pct_liq_bonus_inr": 152701.87,
   "aave_liquidatable_positions_now": 0,
   "aave_borrower_hfs": {
@@ -192,10 +192,10 @@
   ],
   "bundled_multi_route_gross_wei": 4422322651172,
   "bundled_multi_route_gross_inr": 1.0004,
-  "l2_gas_cost_inr": 0.613,
-  "bundled_total_gas_cost_inr": 1.0421,
-  "single_net_if_forced_inr": -0.4024,
-  "bundled_net_if_forced_inr": -0.0417,
+  "l2_gas_cost_inr": 0.6114,
+  "bundled_total_gas_cost_inr": 1.0394,
+  "single_net_if_forced_inr": -0.4008,
+  "bundled_net_if_forced_inr": -0.039,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -217,11 +217,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 24146,
-    "per_route_ns": 1509.12,
+    "latency_ns": 19306,
+    "per_route_ns": 1206.62,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792698973.7936013,
-  "hmac_sha256_integrity": "61ed6b517ce10f9dc8d99ddc9041403d399ccc656212c8bf48a9fd1a8d249b99"
+  "ts": 1792698979.6596527,
+  "hmac_sha256_integrity": "b5ea56b6261b2bd1db4b5e1afe5e2dcc60ebb75b132ab25a07c60f84f84a0679"
 }
