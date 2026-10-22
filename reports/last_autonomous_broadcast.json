@@ -23,7 +23,7 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 6,
+      "frames_received": 4,
       "oracle_updates_detected": 0,
       "whale_swaps_decoded": 4,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792697695.6279128
+    "ts": 1792697700.3035102
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -69,14 +69,6 @@
       "hf": 1.042898,
       "rounded_hf_1dec": 1.0,
       "distance_pct": 4.2898,
-      "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
-    },
-    {
-      "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
-      "target": "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36",
-      "hf": 1.049886,
-      "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.9886,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
@@ -135,6 +127,13 @@
       "gross_inr": 0.0235,
       "net_inr": -0.5954,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
+    },
+    {
+      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
+      "target": "ARB_UNI5_SUSHI5",
+      "gross_inr": 0.0613,
+      "net_inr": -0.5576,
+      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
   "parallel_workers_launched": 113,
@@ -148,10 +147,10 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.9,
-  "rpc_latency_min_ms": 494.22,
-  "rpc_latency_avg_ms": 494.22,
-  "chainlink_eth_usd_price": 2388.75,
+  "scan_duration_sec": 0.82,
+  "rpc_latency_min_ms": 400.36,
+  "rpc_latency_avg_ms": 400.36,
+  "chainlink_eth_usd_price": 2387.2,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022742,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
@@ -165,7 +164,7 @@
     "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.055782,
     "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.042898,
     "0x408dcf31e16b438a86fe01e258cd357651aa7b3f": 1.051116,
-    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.049886,
+    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.054776,
     "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.036114,
     "0x7d7937bac6af9975bbacbcd53d53e5c61968cd36": 1.055956,
     "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.057388,
@@ -179,7 +178,7 @@
     "0x875e726fa2e984570b32f505c9c64f864d1d2e5b": 1.104097
   },
   "best_single_route_pre_gas_wei": 1210766045548,
-  "best_single_route_pre_gas_inr": 0.2745,
+  "best_single_route_pre_gas_inr": 0.2744,
   "bundled_routes_count": 4,
   "bundled_route_labels": [
     "WBTC_USDCE_P1_U5_OPT(2924uUSD)",
@@ -188,11 +187,11 @@
     "PENDLE_WETH_U5_P25(495448754342wei)"
   ],
   "bundled_multi_route_gross_wei": 3195973932519,
-  "bundled_multi_route_gross_inr": 0.7247,
-  "l2_gas_cost_inr": 0.6122,
-  "bundled_total_gas_cost_inr": 1.0407,
-  "single_net_if_forced_inr": -0.3377,
-  "bundled_net_if_forced_inr": -0.316,
+  "bundled_multi_route_gross_inr": 0.7242,
+  "l2_gas_cost_inr": 0.6118,
+  "bundled_total_gas_cost_inr": 1.0401,
+  "single_net_if_forced_inr": -0.3374,
+  "bundled_net_if_forced_inr": -0.3159,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -214,11 +213,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 22222,
-    "per_route_ns": 1388.88,
+    "latency_ns": 22341,
+    "per_route_ns": 1396.31,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792697695.6285264,
-  "hmac_sha256_integrity": "1169b5cf0715700614356acde4c78f3e6dd2a390e25a7593063040deba5af046"
+  "ts": 1792697700.3041728,
+  "hmac_sha256_integrity": "dc8c9de7c79f3b173da1d792eb3bcc5e5aa0b48a0dcef108348d5cd533d4c92c"
 }
