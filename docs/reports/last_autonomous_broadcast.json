@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 8,
+      "frames_received": 5,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 6,
+      "whale_swaps_decoded": 2,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792647601.886842
+    "ts": 1792647607.991248
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -149,9 +149,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.61,
-  "rpc_latency_min_ms": 257.45,
-  "rpc_latency_avg_ms": 257.45,
+  "scan_duration_sec": 0.63,
+  "rpc_latency_min_ms": 253.83,
+  "rpc_latency_avg_ms": 253.83,
   "chainlink_eth_usd_price": 2438.82,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022827,
@@ -188,16 +188,16 @@
     "AAVE_UNI5_UNI100(1195348300154wei)",
     "ARB_USDCE_U5_U1(1958uUSD)",
     "ARB_PCS5_SUSHI5(788728758243wei)",
-    "WETH_USDC_P25_U1(427454640743wei)",
+    "WETH_USDC_P25_U1(422107526849wei)",
     "PENDLE_WETH_U5_P25(420837868759wei)",
     "USDT_AAVE_U1_P5(871uUSD)"
   ],
-  "bundled_multi_route_gross_wei": 7551095649849,
-  "bundled_multi_route_gross_inr": 1.748,
+  "bundled_multi_route_gross_wei": 7545748535955,
+  "bundled_multi_route_gross_inr": 1.7468,
   "l2_gas_cost_inr": 0.625,
   "bundled_total_gas_cost_inr": 1.0625,
   "single_net_if_forced_inr": -0.1951,
-  "bundled_net_if_forced_inr": 0.6855,
+  "bundled_net_if_forced_inr": 0.6843,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -219,11 +219,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 23464,
-    "per_route_ns": 1466.5,
+    "latency_ns": 21981,
+    "per_route_ns": 1373.81,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792647601.8887956,
-  "hmac_sha256_integrity": "79b62630cc6d1fd376520fd8e4f7336b6d40f1f1dac463d4ac28dc370a51a140"
+  "ts": 1792647607.9918916,
+  "hmac_sha256_integrity": "c3d65df2c044ad27d6a0ba6a52683a1b927e8e056658ad29b2a1b5324b4819b7"
 }
