@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 4,
+      "frames_received": 5,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 3,
+      "whale_swaps_decoded": 1,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792649149.251877
+    "ts": 1792649156.235886
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -99,42 +99,42 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_U5_P1_REV",
       "gross_inr": 0.0372,
-      "net_inr": -0.5857,
+      "net_inr": -0.5818,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "CAM_UNI1_WETH_USDT",
       "gross_inr": 0.0106,
-      "net_inr": -0.6123,
+      "net_inr": -0.6084,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.0797,
-      "net_inr": -0.5432,
+      "net_inr": -0.5393,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "UNI_WETH_P5_S30_OPT",
       "gross_inr": 0.1256,
-      "net_inr": -0.4973,
+      "net_inr": -0.4934,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "CAM_UNI1_WETH_USDT_S",
       "gross_inr": 0.0051,
-      "net_inr": -0.6178,
+      "net_inr": -0.6139,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5_OPT",
       "gross_inr": 0.0797,
-      "net_inr": -0.5432,
+      "net_inr": -0.5393,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -149,15 +149,15 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.62,
-  "rpc_latency_min_ms": 255.99,
-  "rpc_latency_avg_ms": 255.99,
+  "scan_duration_sec": 0.69,
+  "rpc_latency_min_ms": 286.87,
+  "rpc_latency_avg_ms": 286.87,
   "chainlink_eth_usd_price": 2437.57,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022824,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
   "aave_closest_borrower_debt_usd": 124470.62,
-  "aave_closest_5pct_liq_bonus_inr": 295368.78,
+  "aave_closest_5pct_liq_bonus_inr": 295368.79,
   "aave_liquidatable_positions_now": 0,
   "aave_borrower_hfs": {
     "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2": 1.054919,
@@ -190,10 +190,10 @@
   ],
   "bundled_multi_route_gross_wei": 3716375052458,
   "bundled_multi_route_gross_inr": 0.8599,
-  "l2_gas_cost_inr": 0.6287,
-  "bundled_total_gas_cost_inr": 1.0688,
-  "single_net_if_forced_inr": -0.3111,
-  "bundled_net_if_forced_inr": -0.2089,
+  "l2_gas_cost_inr": 0.6248,
+  "bundled_total_gas_cost_inr": 1.0622,
+  "single_net_if_forced_inr": -0.3072,
+  "bundled_net_if_forced_inr": -0.2023,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -215,11 +215,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 28002,
-    "per_route_ns": 1750.12,
+    "latency_ns": 21380,
+    "per_route_ns": 1336.25,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792649149.2526474,
-  "hmac_sha256_integrity": "f3c3d1db582265bf7d3b91fdaea9c4fa04eabee2b4363612e99191e9eec59404"
+  "ts": 1792649156.2365978,
+  "hmac_sha256_integrity": "91e9390e34a3ddd5df8857352f43d537875646245417e9b9c40e2f476e1c6c28"
 }
