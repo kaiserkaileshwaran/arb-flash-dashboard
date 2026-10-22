@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 126,
+      "frames_received": 39,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 65,
+      "whale_swaps_decoded": 9,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792627465.0432754
+    "ts": 1792627474.9918137
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -107,35 +107,35 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1_OPT",
       "gross_inr": 0.0249,
-      "net_inr": -0.5948,
+      "net_inr": -0.5941,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDCE_WETH_S5_S1",
       "gross_inr": 0.1226,
-      "net_inr": -0.4971,
+      "net_inr": -0.4964,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "CAM_UNI1_WETH_USDT",
       "gross_inr": 0.0888,
-      "net_inr": -0.5309,
+      "net_inr": -0.5302,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "CAM_UNI1_WETH_USDT_S",
       "gross_inr": 0.0205,
-      "net_inr": -0.5992,
+      "net_inr": -0.5985,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WETH_USDT_P1_U1",
       "gross_inr": 0.0956,
-      "net_inr": -0.5241,
+      "net_inr": -0.5234,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
@@ -238,9 +238,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 135,
   "cycles_scanned": 1,
-  "scan_duration_sec": 22.4,
-  "rpc_latency_min_ms": 8660.36,
-  "rpc_latency_avg_ms": 8660.36,
+  "scan_duration_sec": 9.05,
+  "rpc_latency_min_ms": 8578.35,
+  "rpc_latency_avg_ms": 8578.35,
   "chainlink_eth_usd_price": 2475.09,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022882,
@@ -277,7 +277,7 @@
     "0x25f5ba6623b40c52269b746d28215190833c2e39": 1.109637,
     "0x37aa7e3e1125acb92871b86a295146719e65ae35": 1.109904,
     "0x3ce17a6c31aec402c61730f818f6a10da7c59953": 1.111462,
-    "0x89d22f9fb20c006ee82603a4ee03a2afda8f32be": 1.113394
+    "0x89d22f9fb20c006ee82603a4ee03a2afda8f32be": 1.113367
   },
   "best_single_route_pre_gas_wei": 1653416149068,
   "best_single_route_pre_gas_inr": 0.3884,
@@ -286,17 +286,17 @@
     "ARB_USDT_U5_S30(3993uUSD)",
     "USDCE_WETH_U1_S1(758660595531wei)",
     "UNI_WETH_P5_S30(618034194495wei)",
-    "ARB_USDCE_U5_U1(1284uUSD)",
+    "ARB_USDCE_U5_U1(1199uUSD)",
     "WETH_USDT_P1_U1_OPT(453753877195wei)",
     "USDT_AAVE_U1_P5(1053uUSD)",
     "ARB_PCS5_SUSHI5(362684382111wei)"
   ],
-  "bundled_multi_route_gross_wei": 4814251061753,
-  "bundled_multi_route_gross_inr": 1.131,
-  "l2_gas_cost_inr": 0.6352,
-  "bundled_total_gas_cost_inr": 1.0798,
-  "single_net_if_forced_inr": -0.2468,
-  "bundled_net_if_forced_inr": 0.0512,
+  "bundled_multi_route_gross_wei": 4779054374382,
+  "bundled_multi_route_gross_inr": 1.1228,
+  "l2_gas_cost_inr": 0.6344,
+  "bundled_total_gas_cost_inr": 1.0785,
+  "single_net_if_forced_inr": -0.246,
+  "bundled_net_if_forced_inr": 0.0443,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -318,11 +318,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 27561,
-    "per_route_ns": 1722.56,
+    "latency_ns": 24297,
+    "per_route_ns": 1518.56,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792627465.04405,
-  "hmac_sha256_integrity": "18136fdfc0a6d95132e4a2f529a96baaf83b7cb796afe5e7564b13b9cd5c9e2b"
+  "ts": 1792627474.992518,
+  "hmac_sha256_integrity": "b0918f9f013a776c2f0e19723c41286f091cbd7304f32f814e6bf14e5bd91f39"
 }
