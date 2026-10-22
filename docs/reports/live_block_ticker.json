@@ -2,10 +2,10 @@
   "ok": true,
   "engine_binary": "./bin/arb_sniper_asm (Native C/Assembly Pthreads + HTTP/2 TCP_NODELAY)",
   "rpc_endpoint": "https://arbitrum-one.public.blastapi.io",
-  "asm_eval_ns": 74.2,
-  "asm_eval_us": 0.074,
-  "rpc_rtt_ms": 106.64,
-  "block_number": 517257910,
+  "asm_eval_ns": 79.5,
+  "asm_eval_us": 0.079,
+  "rpc_rtt_ms": 92.50,
+  "block_number": 517258609,
   "gas_price_gwei": 0.0200,
   "latest_nonce": 18,
   "latest_nonce_hex": "0x12",
@@ -22,5 +22,5 @@
   "total_onchain_inr": "83.60",
   "metamask_eth_balance": "0.00004558",
   "relayer_eth_balance": "0.00002136",
-  "updated_epoch": 1792681094
+  "updated_epoch": 1792681283
 }
