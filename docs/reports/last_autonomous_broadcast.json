@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 15,
+      "frames_received": 33,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 5,
+      "whale_swaps_decoded": 19,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792683574.9208446
+    "ts": 1792683581.452582
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -97,45 +97,133 @@
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
-      "target": "CAM_UNI1_WETH_USDC",
-      "gross_inr": 0.0008,
-      "net_inr": -0.6188,
-      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
-    },
-    {
-      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.0687,
-      "net_inr": -0.5509,
+      "net_inr": -0.5519,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5_OPT",
       "gross_inr": 0.0687,
-      "net_inr": -0.5509,
+      "net_inr": -0.5519,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_P1_U5",
       "gross_inr": 0.0367,
-      "net_inr": -0.5829,
+      "net_inr": -0.5839,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "AAVE_PCS5_UNI100",
       "gross_inr": 0.0574,
-      "net_inr": -0.5622,
+      "net_inr": -0.5632,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "WBTC_USDCE_U5_P1_REV",
       "gross_inr": 0.1419,
-      "net_inr": -0.4777,
+      "net_inr": -0.4787,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
+    },
+    {
+      "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
+      "target": "ARB_USDC_U1_U5",
+      "gross_inr": 0.0929,
+      "net_inr": -0.5277,
+      "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0x677313262fc22aaaccadab9a0f69240ef0969990",
+      "debt_usd": 98092.56,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 744875.66,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Whale #1 ($98,092 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0xca760aeef32c7f21ee398ab4aae595e041df2e74",
+      "debt_usd": 39008.62,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 296215.86,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Whale #2 ($39,008 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0x70fc1ad83afc32d20670fa96d39527e0792512b1",
+      "debt_usd": 21133.93,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 160482.61,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Mid #3 ($21,134 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0xd92aeb2c9dc7d959db4bc38676b38ec7c7136a1f",
+      "debt_usd": 15000.26,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 113905.97,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Mid #4 ($15,000 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0xe0a611b8fc2d873f6b271cb1de07c0c9eaae509b",
+      "debt_usd": 10253.95,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 77864.39,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Mid #5 ($10,254 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0x56df226cf336d687acc2c8e2e01ccdba5620d627",
+      "debt_usd": 7700.58,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 58475.12,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Retail #6 ($7,701 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0xbb8fb21289125c39b94bde7215bac35494fbfa57",
+      "debt_usd": 2000.06,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 15187.66,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Retail #7 ($2,000 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x6f7D514bbD4aFf3BcD1140B7344b32f063dEe486",
+      "target": "0xb7af31f78c5c0a2eaff7d7fc317c80fd1988265a",
+      "debt_usd": 1924.2,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 14611.61,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 WETH Comet Retail #8 (0.7712 WETH Debt \u2022 8% Absorb Bonus)"
     }
   ],
   "parallel_workers_launched": 113,
@@ -149,9 +237,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.27,
-  "rpc_latency_min_ms": 478.89,
-  "rpc_latency_avg_ms": 478.89,
+  "scan_duration_sec": 3.95,
+  "rpc_latency_min_ms": 3237.81,
+  "rpc_latency_avg_ms": 3237.81,
   "chainlink_eth_usd_price": 2395.82,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022758,
@@ -189,10 +277,10 @@
   ],
   "bundled_multi_route_gross_wei": 2149171096110,
   "bundled_multi_route_gross_inr": 0.4887,
-  "l2_gas_cost_inr": 0.6147,
-  "bundled_total_gas_cost_inr": 1.045,
-  "single_net_if_forced_inr": -0.3589,
-  "bundled_net_if_forced_inr": -0.5563,
+  "l2_gas_cost_inr": 0.6157,
+  "bundled_total_gas_cost_inr": 1.0467,
+  "single_net_if_forced_inr": -0.3599,
+  "bundled_net_if_forced_inr": -0.558,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -214,11 +302,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 22524,
-    "per_route_ns": 1407.75,
+    "latency_ns": 21803,
+    "per_route_ns": 1362.69,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792683574.9215071,
-  "hmac_sha256_integrity": "84f7350a0d267afdd6e4af3256e374a1bbc3250756ef7f141109f95e6fe25c8c"
+  "ts": 1792683581.4532254,
+  "hmac_sha256_integrity": "806d4ef8b47c0700e3665833b94d239190d75ed9332a6c11a7be14142ba0befd"
 }
