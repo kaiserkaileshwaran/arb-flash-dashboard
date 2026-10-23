@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 3,
+      "frames_received": 12,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 1,
+      "whale_swaps_decoded": 3,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,95 +44,95 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792738614.805858
+    "ts": 1792738803.3309793
   },
   "table2_under_2pct_fast_triggers": [
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x9f25248e8465a4a5106948615c6db2ed1e1b9052",
-      "hf": 1.036292,
+      "hf": 1.036445,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 3.6292,
+      "distance_pct": 3.6445,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
-      "hf": 1.022754,
+      "hf": 1.022752,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 2.2754,
+      "distance_pct": 2.2752,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x9cd61cab43075c6c4a56a95dacadad39df555d25",
-      "hf": 1.04434,
+      "hf": 1.044241,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.434,
+      "distance_pct": 4.4241,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0xc358f7803a0a28afe56b5bbce157664fe5e1624d",
-      "hf": 1.039254,
+      "hf": 1.03904,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 3.9254,
+      "distance_pct": 3.904,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "LINK_SUSHI30_PCS5_REV_OPT",
       "gross_inr": 0.5363,
-      "net_inr": -0.0826,
+      "net_inr": -0.0894,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.0779,
-      "net_inr": -0.541,
+      "net_inr": -0.5478,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "LINK_SUSHI30_PCS5_REV",
       "gross_inr": 0.4746,
-      "net_inr": -0.1443,
+      "net_inr": -0.1511,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5_OPT",
       "gross_inr": 0.0779,
-      "net_inr": -0.541,
+      "net_inr": -0.5478,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_P1_U5",
-      "gross_inr": 0.0011,
-      "net_inr": -0.6178,
+      "gross_inr": 0.0335,
+      "net_inr": -0.5922,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_UNI_U5_U30",
       "gross_inr": 0.0631,
-      "net_inr": -0.5558,
+      "net_inr": -0.5626,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "LINK_SUSHI30_UNI5_REV",
       "gross_inr": 0.1432,
-      "net_inr": -0.4757,
+      "net_inr": -0.4825,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "UNI_SUSHI30_PCS5",
       "gross_inr": 0.0919,
-      "net_inr": -0.527,
+      "net_inr": -0.5338,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -147,35 +147,35 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.6,
-  "rpc_latency_min_ms": 257.27,
-  "rpc_latency_avg_ms": 257.27,
+  "scan_duration_sec": 0.67,
+  "rpc_latency_min_ms": 250.14,
+  "rpc_latency_avg_ms": 250.14,
   "chainlink_eth_usd_price": 2405.9,
   "camelot_v3_dynamic_fee_bps": 1.0,
-  "aave_lowest_health_factor": 1.022754,
+  "aave_lowest_health_factor": 1.022752,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
-  "aave_closest_borrower_debt_usd": 123000.05,
-  "aave_closest_5pct_liq_bonus_inr": 291879.13,
+  "aave_closest_borrower_debt_usd": 122936.78,
+  "aave_closest_5pct_liq_bonus_inr": 291728.99,
   "aave_liquidatable_positions_now": 0,
   "aave_borrower_hfs": {
-    "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2": 1.080922,
-    "0x9f25248e8465a4a5106948615c6db2ed1e1b9052": 1.036292,
-    "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb": 1.022754,
-    "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.063838,
-    "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.04434,
-    "0x408dcf31e16b438a86fe01e258cd357651aa7b3f": 1.051212,
-    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.062645,
-    "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.039254,
+    "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2": 1.080474,
+    "0x9f25248e8465a4a5106948615c6db2ed1e1b9052": 1.036445,
+    "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb": 1.022752,
+    "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.063289,
+    "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.044241,
+    "0x408dcf31e16b438a86fe01e258cd357651aa7b3f": 1.051213,
+    "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.062108,
+    "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.03904,
     "0x7d7937bac6af9975bbacbcd53d53e5c61968cd36": 1.055947,
-    "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.062039,
-    "0x572372831a9d6b2e3ee8fa284505599e6125fea9": 1.063489,
-    "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.11175,
-    "0xb71ae1fe3a27d8b3f9a769f033374cfe1587b07a": 1.104096,
-    "0x9cd696c583ded4716d82012f7f22caeaf335266a": 1.094392,
-    "0x2012395e71a4af2e621d522b175f6c29232398db": 1.159929,
-    "0xea12ea09ecd81f19ec642d93ccd2c4723bdb592b": 1.099705,
-    "0xbfef061243c3da14d20aa9cb054350a9192d3a93": 1.125645,
-    "0x875e726fa2e984570b32f505c9c64f864d1d2e5b": 1.104392
+    "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa": 1.06149,
+    "0x572372831a9d6b2e3ee8fa284505599e6125fea9": 1.062949,
+    "0x4c2707ec572416256c939ca9cc653acbb1473145": 1.111673,
+    "0xb71ae1fe3a27d8b3f9a769f033374cfe1587b07a": 1.104284,
+    "0x9cd696c583ded4716d82012f7f22caeaf335266a": 1.094414,
+    "0x2012395e71a4af2e621d522b175f6c29232398db": 1.159296,
+    "0xea12ea09ecd81f19ec642d93ccd2c4723bdb592b": 1.099163,
+    "0xbfef061243c3da14d20aa9cb054350a9192d3a93": 1.126039,
+    "0x875e726fa2e984570b32f505c9c64f864d1d2e5b": 1.104359
   },
   "best_single_route_pre_gas_wei": 2339531749019,
   "best_single_route_pre_gas_inr": 0.5343,
@@ -187,10 +187,10 @@
   ],
   "bundled_multi_route_gross_wei": 3671299302716,
   "bundled_multi_route_gross_inr": 0.8384,
-  "l2_gas_cost_inr": 0.6166,
-  "bundled_total_gas_cost_inr": 1.0482,
-  "single_net_if_forced_inr": -0.0823,
-  "bundled_net_if_forced_inr": -0.2098,
+  "l2_gas_cost_inr": 0.6234,
+  "bundled_total_gas_cost_inr": 1.0598,
+  "single_net_if_forced_inr": -0.0891,
+  "bundled_net_if_forced_inr": -0.2214,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -212,11 +212,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 24777,
-    "per_route_ns": 1548.56,
+    "latency_ns": 25297,
+    "per_route_ns": 1581.06,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792738614.8066952,
-  "hmac_sha256_integrity": "3309d90fbe51e82f55304fec169a495f682864d6646b5a02b03dab9eb53e5857"
+  "ts": 1792738803.3316777,
+  "hmac_sha256_integrity": "eab787a1c08b1edcb26048afd14538e5adb38f4136ad7f1f97a9192b12878405"
 }
