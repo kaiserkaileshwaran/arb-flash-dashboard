@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792738029.0945685
+    "ts": 1792738033.7627401
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -147,9 +147,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.68,
-  "rpc_latency_min_ms": 256.1,
-  "rpc_latency_avg_ms": 256.1,
+  "scan_duration_sec": 0.73,
+  "rpc_latency_min_ms": 310.09,
+  "rpc_latency_avg_ms": 310.09,
   "chainlink_eth_usd_price": 2403.33,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.02275,
@@ -213,11 +213,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 44133,
-    "per_route_ns": 2758.31,
+    "latency_ns": 23794,
+    "per_route_ns": 1487.12,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792738029.095248,
-  "hmac_sha256_integrity": "c46a1cbeed629698ef1ad0a3ee0bdbd7944aa958e6fd8d6d32dae8a37a75948e"
+  "ts": 1792738033.7634585,
+  "hmac_sha256_integrity": "26422eb2c977628541e06a7660fe6befafa64fe15d9519ff21b77ac0f3aff716"
 }
