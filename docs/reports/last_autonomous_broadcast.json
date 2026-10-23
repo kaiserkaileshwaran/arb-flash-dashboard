@@ -23,7 +23,7 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 3,
+      "frames_received": 5,
       "oracle_updates_detected": 0,
       "whale_swaps_decoded": 1,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792735635.275583
+    "ts": 1792735641.5176713
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -147,9 +147,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.63,
-  "rpc_latency_min_ms": 269.33,
-  "rpc_latency_avg_ms": 269.33,
+  "scan_duration_sec": 0.84,
+  "rpc_latency_min_ms": 476.21,
+  "rpc_latency_avg_ms": 476.21,
   "chainlink_eth_usd_price": 2400.98,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022746,
@@ -215,11 +215,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 24726,
-    "per_route_ns": 1545.38,
+    "latency_ns": 24025,
+    "per_route_ns": 1501.56,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792735635.2762587,
-  "hmac_sha256_integrity": "827d8b5392f6d7ad3edb73f2310b1f31d522c14b7632417afb7f0aa742cd1bdc"
+  "ts": 1792735641.5183969,
+  "hmac_sha256_integrity": "8af9fbaf7fe68067a0e0f32b1ae4f5e3805538f7d680562e433b106485716e19"
 }
