@@ -10,7 +10,7 @@
   "wss_sequencer_feed": {
     "connected": true,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 6,
+    "frames_received": 3,
     "oracle_updates_detected": 0,
     "whale_swaps_decoded": 2,
     "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -31,6 +31,6 @@
   "weth_to_usdc_auto_converter_1bp_ready": true,
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
-  "ts": 1792734043.2810905,
-  "hmac_sha256_integrity": "e86c13c9aa44b722422958871ab9017d8d820e39abfad020137fb9eaea522949"
+  "ts": 1792734230.696602,
+  "hmac_sha256_integrity": "e1a1f7da8dc4d478394dec209d0d8a21ed660538bbb6d0d6f9b85e683ff08607"
 }
