@@ -8,11 +8,11 @@
   "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
   "metamask_min_balance_required": 0.0,
   "wss_sequencer_feed": {
-    "connected": true,
+    "connected": false,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 19,
+    "frames_received": 0,
     "oracle_updates_detected": 0,
-    "whale_swaps_decoded": 8,
+    "whale_swaps_decoded": 0,
     "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
   },
   "low_competition_lending_markets": {
@@ -31,6 +31,6 @@
   "weth_to_usdc_auto_converter_1bp_ready": true,
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
-  "ts": 1792769226.8310518,
-  "hmac_sha256_integrity": "b2ffb28051e866d68764b1e6020912e0ddca8277a608ca23734602c8279cc867"
+  "ts": 1792769234.3915823,
+  "hmac_sha256_integrity": "a5aa220f8f9d044cd55dbfddf482a3b70e947fa541bfb1ccd451200ee8458c57"
 }
