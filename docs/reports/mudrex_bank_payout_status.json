@@ -10,9 +10,9 @@
   "wss_sequencer_feed": {
     "connected": true,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 10,
+    "frames_received": 15,
     "oracle_updates_detected": 0,
-    "whale_swaps_decoded": 5,
+    "whale_swaps_decoded": 10,
     "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
   },
   "low_competition_lending_markets": {
@@ -31,6 +31,6 @@
   "weth_to_usdc_auto_converter_1bp_ready": true,
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
-  "ts": 1792782256.65715,
-  "hmac_sha256_integrity": "91a93851a92c25300ac8e13067344379af66546b12fd95fc498b63faf9e070b5"
+  "ts": 1792782445.3918812,
+  "hmac_sha256_integrity": "652a357a5c75ccb9905df608e2dfe5a2f75fbeb71e74230711c62174c92d1102"
 }
