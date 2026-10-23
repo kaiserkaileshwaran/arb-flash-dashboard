@@ -23,9 +23,9 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 11,
+      "frames_received": 6,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 7,
+      "whale_swaps_decoded": 2,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792783454.6130445
+    "ts": 1792783459.365733
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -107,35 +107,35 @@
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "CAM_UNI1_WETH_USDT",
       "gross_inr": 0.059,
-      "net_inr": -0.5665,
+      "net_inr": -0.5602,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.0665,
-      "net_inr": -0.559,
+      "net_inr": -0.5527,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "CAM_UNI1_WETH_USDT_S",
       "gross_inr": 0.0147,
-      "net_inr": -0.6108,
+      "net_inr": -0.6045,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5_OPT",
       "gross_inr": 0.0665,
-      "net_inr": -0.559,
+      "net_inr": -0.5527,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_P1_U5",
-      "gross_inr": 0.0833,
-      "net_inr": -0.5422,
+      "gross_inr": 0.1084,
+      "net_inr": -0.5108,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -150,9 +150,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.7,
-  "rpc_latency_min_ms": 280.16,
-  "rpc_latency_avg_ms": 280.16,
+  "scan_duration_sec": 0.68,
+  "rpc_latency_min_ms": 257.28,
+  "rpc_latency_avg_ms": 257.28,
   "chainlink_eth_usd_price": 2391.84,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.02272,
@@ -182,20 +182,21 @@
   },
   "best_single_route_pre_gas_wei": 930752921449,
   "best_single_route_pre_gas_inr": 0.2113,
-  "bundled_routes_count": 5,
+  "bundled_routes_count": 6,
   "bundled_route_labels": [
     "LUSD_UNI5_UNI30(930752921449wei)",
+    "ARB_USDCE_P1_U5(1142uUSD)",
     "LINK_PCS5_SUSHI30(459309683631wei)",
     "AAVE_PCS5_UNI100(457136352460wei)",
     "WETH_USDT_P1_U1_OPT(450696605557wei)",
     "ARB_USDT_U5_S30(948uUSD)"
   ],
-  "bundled_multi_route_gross_wei": 2690442146947,
-  "bundled_multi_route_gross_inr": 0.6108,
-  "l2_gas_cost_inr": 0.6195,
-  "bundled_total_gas_cost_inr": 1.0532,
-  "single_net_if_forced_inr": -0.4082,
-  "bundled_net_if_forced_inr": -0.4424,
+  "bundled_multi_route_gross_wei": 3163319993737,
+  "bundled_multi_route_gross_inr": 0.7182,
+  "l2_gas_cost_inr": 0.6133,
+  "bundled_total_gas_cost_inr": 1.0426,
+  "single_net_if_forced_inr": -0.402,
+  "bundled_net_if_forced_inr": -0.3244,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -217,11 +218,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 22232,
-    "per_route_ns": 1389.5,
+    "latency_ns": 21560,
+    "per_route_ns": 1347.5,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792783454.6136448,
-  "hmac_sha256_integrity": "fca26f3ce87afd479e3025ecfbb36b8314d6308f35a50103b6125ea4ef95c797"
+  "ts": 1792783459.3664358,
+  "hmac_sha256_integrity": "4e83e2611f45fc594263540d31c3d6c5f650d508381b8d268e4e17ee02702d88"
 }
