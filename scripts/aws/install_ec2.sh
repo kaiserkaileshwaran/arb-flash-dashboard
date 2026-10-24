@@ -14,7 +14,9 @@ sudo apt-get clean >/dev/null 2>&1 || true
 sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* "$HOME/.cache" 2>/dev/null || true
 
 if command -v apt-get >/dev/null; then
-  sudo apt-get update -y && sudo apt-get install -y --no-install-recommends git gcc make libc6-dev libcurl4-openssl-dev python3 python3-venv python3-pip ca-certificates
+  sudo dpkg --remove --force-remove-reinstreq linux-headers-7.0.0-1014-aws 2>/dev/null || true
+  sudo apt-get --fix-broken install -y >/dev/null 2>&1 || true
+  sudo apt-get update -y && sudo apt-get install -y --no-install-recommends git gcc make libc6-dev libcurl4-openssl-dev python3 python3-pip ca-certificates || true
   sudo apt-get clean >/dev/null 2>&1 || true
 else
   sudo dnf install -y git gcc make libcurl-devel python3 python3-pip
@@ -31,8 +33,13 @@ fi
 cd "$APP_DIR"
 mkdir -p bin reports logs
 
-python3 -m venv .venv
-.venv/bin/pip install -q --upgrade pip eth-account eth-utils
+if python3 -m venv .venv 2>/dev/null; then
+  .venv/bin/pip install -q --upgrade pip eth-account eth-utils
+  PY_BIN="$APP_DIR/.venv/bin/python"
+else
+  python3 -m pip install -q --break-system-packages --user eth-account eth-utils
+  PY_BIN="/usr/bin/python3"
+fi
 gcc -O3 -march=native -ffast-math engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
 gcc -O3 -march=native -ffast-math -shared -fPIC engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/libarb_asm_kernel.so
 echo "[ok] compiled bin/arb_sniper_asm + bin/libarb_asm_kernel.so"
@@ -88,7 +95,7 @@ StandardError=null
 Environment=IS_AWS_PRIMARY=1
 Environment=ARB_DISABLE_BROADCAST=0
 Environment=PATH=$APP_DIR/.venv/bin:/usr/local/bin:/usr/bin:/bin
-ExecStart=$APP_DIR/.venv/bin/python scripts/autonomous_asm_broadcaster.py --loop-seconds 300
+ExecStart=$PY_BIN scripts/autonomous_asm_broadcaster.py --loop-seconds 300
 Restart=always
 RestartSec=1
 [Install]
@@ -107,9 +114,9 @@ sudo systemctl restart systemd-journald 2>/dev/null || true
 # Keep repo fresh (shallow 1-commit fetch so 8GB disk never fills up) + run all 3 live discovery indexers
 ( crontab -l 2>/dev/null | grep -v arb-flash-engine; \
   echo "*/30 * * * * cd $APP_DIR && git fetch --depth 1 origin main -q && git reset --hard origin/main -q && git gc --prune=now -q && sudo journalctl --vacuum-size=20M >/dev/null 2>&1 || true"; \
-  echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_aave_borrowers.py > logs/discover_aave.log 2>&1"; \
-  echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_comet_borrowers.py > logs/discover_comet.log 2>&1"; \
-  echo "*/5  * * * * cd $APP_DIR && .venv/bin/python scripts/discover_live_pool_spreads.py > logs/discover_dstar.log 2>&1" \
+  echo "*/20 * * * * cd $APP_DIR && $PY_BIN scripts/discover_aave_borrowers.py > logs/discover_aave.log 2>&1"; \
+  echo "*/20 * * * * cd $APP_DIR && $PY_BIN scripts/discover_comet_borrowers.py > logs/discover_comet.log 2>&1"; \
+  echo "*/5  * * * * cd $APP_DIR && $PY_BIN scripts/discover_live_pool_spreads.py > logs/discover_dstar.log 2>&1" \
 ) | crontab -
 
 sudo systemctl daemon-reload
