@@ -23,7 +23,7 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 9,
+      "frames_received": 11,
       "oracle_updates_detected": 0,
       "whale_swaps_decoded": 6,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792861609.724573
+    "ts": 1792861614.4537199
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -239,9 +239,9 @@
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 139,
   "cycles_scanned": 1,
-  "scan_duration_sec": 1.29,
-  "rpc_latency_min_ms": 664.26,
-  "rpc_latency_avg_ms": 664.26,
+  "scan_duration_sec": 1.16,
+  "rpc_latency_min_ms": 524.59,
+  "rpc_latency_avg_ms": 524.59,
   "chainlink_eth_usd_price": 2312.84,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.016691,
@@ -278,7 +278,7 @@
     "0x782df99676f014b6fd6000626073c78dba205d2e": 1.099888,
     "0xf534563e8734989464506377f97d3b36f6f9e7e1": 1.109448,
     "0x60e993f043d02de1090f6bcb0c7bc6322d4a8eff": 1.111746,
-    "0x9a01ee42a7349dbff0362c175ff5e5d539f539ea": 1.12642,
+    "0x9a01ee42a7349dbff0362c175ff5e5d539f539ea": 1.125718,
     "0x2c48a579668f76dbf59c20b9273da9083be65f52": 1.131713,
     "0x29ad8aac822fbef453f35c4e788cc571ba1c1ed3": 1.133177
   },
@@ -317,11 +317,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 20640,
-    "per_route_ns": 1290.0,
+    "latency_ns": 18477,
+    "per_route_ns": 1154.81,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792861609.725198,
-  "hmac_sha256_integrity": "760a9f4e1147c88ed0764df3a8a46f191e0a1c8a0716ac18e13b74461a3ec668"
+  "ts": 1792861614.4543302,
+  "hmac_sha256_integrity": "a0d900196d7b7bd5ebd735fa2915eb3f90984725ac505659a511a10c0aaf9ceb"
 }
