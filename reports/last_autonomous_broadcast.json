@@ -22,10 +22,10 @@
     "metamask_min_balance_required": 0.0,
     "wss_sequencer_feed": {
       "connected": true,
-      "endpoint": "wss://arbitrum-one-rpc.publicnode.com/",
-      "frames_received": 712,
+      "endpoint": "wss://arb1-feed.arbitrum.io/feed",
+      "frames_received": 12,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 97,
+      "whale_swaps_decoded": 3,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792847646.3094385
+    "ts": 1792847653.9874394
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -137,6 +137,94 @@
       "gross_inr": 0.04,
       "net_inr": -0.5789,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0x677313262fc22aaaccadab9a0f69240ef0969990",
+      "debt_usd": 98092.56,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 744875.66,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Whale #1 ($98,092 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0xca760aeef32c7f21ee398ab4aae595e041df2e74",
+      "debt_usd": 39008.62,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 296215.86,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Whale #2 ($39,008 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0x70fc1ad83afc32d20670fa96d39527e0792512b1",
+      "debt_usd": 21133.93,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 160482.61,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Mid #3 ($21,134 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0xd92aeb2c9dc7d959db4bc38676b38ec7c7136a1f",
+      "debt_usd": 15000.26,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 113905.97,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Mid #4 ($15,000 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0xe0a611b8fc2d873f6b271cb1de07c0c9eaae509b",
+      "debt_usd": 10253.95,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 77864.39,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Mid #5 ($10,254 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0x56df226cf336d687acc2c8e2e01ccdba5620d627",
+      "debt_usd": 7700.58,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 58475.12,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Retail #6 ($7,701 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+      "target": "0xbb8fb21289125c39b94bde7215bac35494fbfa57",
+      "debt_usd": 2000.06,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 15187.66,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 USDC Comet Retail #7 ($2,000 USDC Debt \u2022 8% Absorb Bonus)"
+    },
+    {
+      "type": "LOW_COMP_COMPOUND_V3_COMET_WATCH",
+      "protocol": "Compound V3 Comet (90% Lower Bot Competition)",
+      "market": "0x6f7D514bbD4aFf3BcD1140B7344b32f063dEe486",
+      "target": "0xb7af31f78c5c0a2eaff7d7fc317c80fd1988265a",
+      "debt_usd": 1924.2,
+      "is_liquidatable_now": false,
+      "est_bonus_inr": 14611.61,
+      "status": "ACTIVE_LOW_COMP_WATCH_0_CAPITAL_ABSORB_READY",
+      "label": "Compound V3 WETH Comet Retail #8 (0.7712 WETH Debt \u2022 8% Absorb Bonus)"
     }
   ],
   "parallel_workers_launched": 113,
@@ -149,10 +237,10 @@
   "aave_v3_borrowers_monitored": 22,
   "multi_route_bundle_probes": 69,
   "total_rpc_checks_per_cycle": 113,
-  "cycles_scanned": 229,
-  "scan_duration_sec": 180.94,
-  "rpc_latency_min_ms": 328.66,
-  "rpc_latency_avg_ms": 597.41,
+  "cycles_scanned": 1,
+  "scan_duration_sec": 1.23,
+  "rpc_latency_min_ms": 633.04,
+  "rpc_latency_avg_ms": 633.04,
   "chainlink_eth_usd_price": 2367.19,
   "camelot_v3_dynamic_fee_bps": 1.0,
   "aave_lowest_health_factor": 1.022661,
@@ -214,11 +302,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 26039,
-    "per_route_ns": 1627.44,
+    "latency_ns": 20932,
+    "per_route_ns": 1308.25,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792847646.310142,
-  "hmac_sha256_integrity": "1a0a4ed2a6bf657780f2a68da18b059bc37024c63d5e141abafebb8fd6814fe6"
+  "ts": 1792847653.9881172,
+  "hmac_sha256_integrity": "da8c57f0908aa9bd7fbbfda3580d3568ea9dab61399f27e2c1aca254fd478e71"
 }
