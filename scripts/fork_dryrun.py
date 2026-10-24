@@ -89,7 +89,7 @@ def main():
         print(f"[2] WETH price source {src}: {price/1e8:.2f} -> {mock/1e8:.2f} USD (mock {int((1-DROP)*100)}% dip)")
 
         watch = json.loads((BASE / "reports" / "last_autonomous_broadcast.json").read_text()).get("aave_borrower_hfs", {})
-        liq = {u: hf(u) for u in list(watch)[:10]}
+        liq = {u: hf(u) for u in list(watch)[:4]}
         under = {u: h for u, h in liq.items() if 0 < h < 1.0}
         print(f"[3] watched borrowers: {len(liq)} | now HF<1.0 on the fork: {len(under)}")
         for u, h in sorted(under.items(), key=lambda x: x[1])[:5]:

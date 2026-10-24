@@ -991,7 +991,7 @@ def main() -> int:
     except Exception:
         pass
     if os.environ.get("ARB_RPC_OVERRIDE"):
-        aave_high_risk_watchlist = aave_high_risk_watchlist[:10]
+        aave_high_risk_watchlist = aave_high_risk_watchlist[:4]
 
     # =========================================================================
     # PRIORITY #2 (OPTION 3): 26 Triangular 3-Hop & SushiSwap V2 <-> UniV3 via Balancer 0% Across All 14 Core Tokens
@@ -1762,37 +1762,38 @@ def main() -> int:
     camelot_dyn_fee_bps = 1.00
     pre_oracle_radar_alerts = []
     try:
-        cl_hex = rpc_call("eth_call", [{"to": "0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612", "data": "0x50d25bcd"}, "latest"]).get("result", "0x0")
-        cl_val = int(cl_hex, 16) / 1e8
-        if 500.0 < cl_val < 20000.0:
-            chainlink_eth_usd = round(cl_val, 2)
-        u1_slot0 = rpc_call("eth_call", [{"to": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F", "data": "0x3850c7bd"}, "latest"]).get("result", "0x0")
-        if isinstance(u1_slot0, str) and len(u1_slot0) >= 66:
-            sqrt_px = int(u1_slot0[2:66], 16)
-            if sqrt_px > 0:
-                sp_val = ((sqrt_px / (2 ** 96)) ** 2) * (10 ** 12)
-                if 500.0 < sp_val < 20000.0:
-                    univ3_1bp_eth_spot_usd = round(sp_val, 2)
-        oracle_deviation_bps = round(abs(univ3_1bp_eth_spot_usd - chainlink_eth_usd) / max(1.0, chainlink_eth_usd) * 10000.0, 2)
-        for _b_k, _b_meta in aave_trigger_eth_map.items():
-            _p_liq = float(_b_meta.get("trigger_eth_usd", 0.0))
-            _dir = _b_meta.get("direction", "LONG_CRYPTO_SHORT_STABLE")
-            _crossed = (univ3_1bp_eth_spot_usd <= _p_liq) if _dir != "SHORT_CRYPTO_LONG_STABLE" else (univ3_1bp_eth_spot_usd >= _p_liq)
-            _dist_spot_bps = round(abs(univ3_1bp_eth_spot_usd - _p_liq) / max(1.0, _p_liq) * 10000.0, 1)
-            if _crossed or _dist_spot_bps <= 150.0:
-                pre_oracle_radar_alerts.append({
-                    "borrower": _b_k,
-                    "direction": _dir,
-                    "trigger_eth_usd": _p_liq,
-                    "univ3_spot_eth_usd": univ3_1bp_eth_spot_usd,
-                    "chainlink_eth_usd": chainlink_eth_usd,
-                    "spot_distance_bps": _dist_spot_bps,
-                    "pre_oracle_crossed": bool(_crossed),
-                    "status": "PRE_ORACLE_TRIGGER_CROSSED_FIRE_ON_NEXT_CHAINLINK_TICK" if _crossed else "WITHIN_150BPS_PRE_ORACLE_ALERT_WINDOW",
-                })
-        cam_hex = rpc_call("eth_call", [{"to": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526", "data": "0xe76c01e4"}, "latest"]).get("result", "0x0")
-        if len(cam_hex) >= 194:
-            camelot_dyn_fee_bps = round(int(cam_hex[130:194], 16) / 100.0, 2)
+        if not os.environ.get("ARB_RPC_OVERRIDE"):
+            cl_hex = rpc_call("eth_call", [{"to": "0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612", "data": "0x50d25bcd"}, "latest"]).get("result", "0x0")
+            cl_val = int(cl_hex, 16) / 1e8
+            if 500.0 < cl_val < 20000.0:
+                chainlink_eth_usd = round(cl_val, 2)
+            u1_slot0 = rpc_call("eth_call", [{"to": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F", "data": "0x3850c7bd"}, "latest"]).get("result", "0x0")
+            if isinstance(u1_slot0, str) and len(u1_slot0) >= 66:
+                sqrt_px = int(u1_slot0[2:66], 16)
+                if sqrt_px > 0:
+                    sp_val = ((sqrt_px / (2 ** 96)) ** 2) * (10 ** 12)
+                    if 500.0 < sp_val < 20000.0:
+                        univ3_1bp_eth_spot_usd = round(sp_val, 2)
+            oracle_deviation_bps = round(abs(univ3_1bp_eth_spot_usd - chainlink_eth_usd) / max(1.0, chainlink_eth_usd) * 10000.0, 2)
+            for _b_k, _b_meta in aave_trigger_eth_map.items():
+                _p_liq = float(_b_meta.get("trigger_eth_usd", 0.0))
+                _dir = _b_meta.get("direction", "LONG_CRYPTO_SHORT_STABLE")
+                _crossed = (univ3_1bp_eth_spot_usd <= _p_liq) if _dir != "SHORT_CRYPTO_LONG_STABLE" else (univ3_1bp_eth_spot_usd >= _p_liq)
+                _dist_spot_bps = round(abs(univ3_1bp_eth_spot_usd - _p_liq) / max(1.0, _p_liq) * 10000.0, 1)
+                if _crossed or _dist_spot_bps <= 150.0:
+                    pre_oracle_radar_alerts.append({
+                        "borrower": _b_k,
+                        "direction": _dir,
+                        "trigger_eth_usd": _p_liq,
+                        "univ3_spot_eth_usd": univ3_1bp_eth_spot_usd,
+                        "chainlink_eth_usd": chainlink_eth_usd,
+                        "spot_distance_bps": _dist_spot_bps,
+                        "pre_oracle_crossed": bool(_crossed),
+                        "status": "PRE_ORACLE_TRIGGER_CROSSED_FIRE_ON_NEXT_CHAINLINK_TICK" if _crossed else "WITHIN_150BPS_PRE_ORACLE_ALERT_WINDOW",
+                    })
+            cam_hex = rpc_call("eth_call", [{"to": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526", "data": "0xe76c01e4"}, "latest"]).get("result", "0x0")
+            if len(cam_hex) >= 194:
+                camelot_dyn_fee_bps = round(int(cam_hex[130:194], 16) / 100.0, 2)
     except Exception:
         pass
 
@@ -1856,6 +1857,8 @@ def main() -> int:
                     ))
     except Exception:
         pass
+    if os.environ.get("ARB_RPC_OVERRIDE"):
+        low_comp_comet_targets = []
     low_comp_liquidatable_now = 0
     try:
         lc_batch = []
