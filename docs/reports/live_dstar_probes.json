@@ -1,6 +1,6 @@
 {
-  "ts": 1792873279.2247622,
-  "univ3_1bp_eth_spot_usd": 2343.42,
+  "ts": 1792873699.8714657,
+  "univ3_1bp_eth_spot_usd": 2344.1,
   "pools_indexed": 38,
   "solved_dstar_pairs": 92,
   "top_probes": [
@@ -13,9 +13,9 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": false,
       "zero_for_one_sell": true,
-      "live_spread_bps": 295.213,
+      "live_spread_bps": 295.151,
       "fee_floor_bps": 30.0,
-      "live_edge_bps": 265.213
+      "live_edge_bps": 265.151
     },
     {
       "label": "DSTAR_WBTC_WETH_2_1",
@@ -52,9 +52,9 @@
       "d_star_raw": 18000000,
       "zero_for_one_borrow": false,
       "zero_for_one_sell": true,
-      "live_spread_bps": 217.62,
+      "live_spread_bps": 219.393,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": 211.62
+      "live_edge_bps": 213.393
     },
     {
       "label": "DSTAR_ARB_USDC_0_1",
@@ -78,9 +78,9 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 99.298,
+      "live_spread_bps": 97.133,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": 93.298
+      "live_edge_bps": 91.133
     },
     {
       "label": "DSTAR_WETH_USDCE_0_1",
@@ -91,9 +91,9 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 95.873,
+      "live_spread_bps": 93.709,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": 89.873
+      "live_edge_bps": 87.709
     },
     {
       "label": "DSTAR_WETH_USDCE_3_2",
@@ -130,9 +130,9 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": false,
       "zero_for_one_sell": true,
-      "live_spread_bps": 95.031,
+      "live_spread_bps": 86.302,
       "fee_floor_bps": 30.0,
-      "live_edge_bps": 65.031
+      "live_edge_bps": 56.302
     },
     {
       "label": "DSTAR_PENDLE_WETH_2_1",
@@ -143,9 +143,9 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": false,
       "zero_for_one_sell": true,
-      "live_spread_bps": 93.829,
+      "live_spread_bps": 82.3,
       "fee_floor_bps": 30.0,
-      "live_edge_bps": 63.829
+      "live_edge_bps": 52.3
     },
     {
       "label": "DSTAR_WETH_UNI_0_1",
@@ -182,9 +182,9 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 38.401,
+      "live_spread_bps": 35.425,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": 32.401
+      "live_edge_bps": 29.425
     },
     {
       "label": "DSTAR_WETH_ARB_0_1",
@@ -221,9 +221,9 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 50.835,
+      "live_spread_bps": 48.565,
       "fee_floor_bps": 35.0,
-      "live_edge_bps": 15.835
+      "live_edge_bps": 13.565
     },
     {
       "label": "DSTAR_WETH_ARB_3_4",
@@ -239,19 +239,6 @@
       "live_edge_bps": 12.318
     },
     {
-      "label": "DSTAR_WETH_ARB_3_2",
-      "pool_borrow": "0x0d7c4b40018969f81750d0a164c3839a77353efb",
-      "pool_sell": "0xc6f780497a95e246eb9449f5e4770916dcd6396a",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0x912CE59144191C1204E64559FE8253a0e49E6548",
-      "d_star_raw": 8000000000000000,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 21.23,
-      "fee_floor_bps": 10.0,
-      "live_edge_bps": 11.23
-    },
-    {
       "label": "DSTAR_WETH_ARB_0_3",
       "pool_borrow": "0x89a4026e9ade251c67b7fb38054931a39936d9c5",
       "pool_sell": "0x0d7c4b40018969f81750d0a164c3839a77353efb",
@@ -263,19 +250,6 @@
       "live_spread_bps": 17.135,
       "fee_floor_bps": 6.0,
       "live_edge_bps": 11.135
-    },
-    {
-      "label": "DSTAR_WETH_USDT_0_3",
-      "pool_borrow": "0x42161084d0672e1d3f26a9b53e653be2084ff19c",
-      "pool_sell": "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "d_star_raw": 8000000000000000,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 13.046,
-      "fee_floor_bps": 2.0,
-      "live_edge_bps": 11.046
     },
     {
       "label": "DSTAR_WEETH_WETH_1_0",
@@ -291,6 +265,19 @@
       "live_edge_bps": 10.198
     },
     {
+      "label": "DSTAR_WETH_ARB_3_2",
+      "pool_borrow": "0x0d7c4b40018969f81750d0a164c3839a77353efb",
+      "pool_sell": "0xc6f780497a95e246eb9449f5e4770916dcd6396a",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0x912CE59144191C1204E64559FE8253a0e49E6548",
+      "d_star_raw": 8000000000000000,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 18.259,
+      "fee_floor_bps": 10.0,
+      "live_edge_bps": 8.259
+    },
+    {
       "label": "DSTAR_WETH_ARB_1_4",
       "pool_borrow": "0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3",
       "pool_sell": "0x99543bf98ca1830aa20d3eb12c1b9962f8eadc11",
@@ -304,19 +291,6 @@
       "live_edge_bps": 6.697
     },
     {
-      "label": "DSTAR_WETH_USDT_0_2",
-      "pool_borrow": "0x42161084d0672e1d3f26a9b53e653be2084ff19c",
-      "pool_sell": "0x389938cf14be379217570d8e4619e51fbdafaa21",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "d_star_raw": 8000000000000000,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 8.652,
-      "fee_floor_bps": 2.0,
-      "live_edge_bps": 6.652
-    },
-    {
       "label": "DSTAR_WBTC_WETH_1_0",
       "pool_borrow": "0x03a3be7ab4aa263d42d63b6cc594f4fb3d3f3951",
       "pool_sell": "0x2f5e87c9312fa29aed5c179e456625d79015299c",
@@ -325,22 +299,22 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": false,
       "zero_for_one_sell": true,
-      "live_spread_bps": 11.845,
+      "live_spread_bps": 11.784,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": 5.845
+      "live_edge_bps": 5.784
     },
     {
-      "label": "DSTAR_WETH_ARB_1_2",
-      "pool_borrow": "0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3",
-      "pool_sell": "0xc6f780497a95e246eb9449f5e4770916dcd6396a",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "label": "DSTAR_ARB_USDC_1_2",
+      "pool_borrow": "0x93cce474015007b38da0ecea96671ee4dc3d40ad",
+      "pool_sell": "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8",
+      "borrow_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
       "target_token": "0x912CE59144191C1204E64559FE8253a0e49E6548",
-      "d_star_raw": 8000000000000000,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 11.609,
+      "d_star_raw": 18000000,
+      "zero_for_one_borrow": false,
+      "zero_for_one_sell": true,
+      "live_spread_bps": 10.5,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": 5.609
+      "live_edge_bps": 4.5
     },
     {
       "label": "DSTAR_WETH_ARB_3_1",
@@ -356,17 +330,17 @@
       "live_edge_bps": 3.609
     },
     {
-      "label": "DSTAR_WETH_USDCE_2_1",
-      "pool_borrow": "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40",
-      "pool_sell": "0xc31e54c7a869b9fcbecc14363cf510d1c41fa443",
+      "label": "DSTAR_WETH_USDT_0_2",
+      "pool_borrow": "0x42161084d0672e1d3f26a9b53e653be2084ff19c",
+      "pool_sell": "0x389938cf14be379217570d8e4619e51fbdafaa21",
       "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 13.295,
-      "fee_floor_bps": 10.0,
-      "live_edge_bps": 3.295
+      "live_spread_bps": 5.385,
+      "fee_floor_bps": 2.0,
+      "live_edge_bps": 3.385
     },
     {
       "label": "DSTAR_WETH_UNI_2_1",
@@ -382,6 +356,32 @@
       "live_edge_bps": 3.221
     },
     {
+      "label": "DSTAR_WETH_ARB_1_2",
+      "pool_borrow": "0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3",
+      "pool_sell": "0xc6f780497a95e246eb9449f5e4770916dcd6396a",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0x912CE59144191C1204E64559FE8253a0e49E6548",
+      "d_star_raw": 8000000000000000,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 8.641,
+      "fee_floor_bps": 6.0,
+      "live_edge_bps": 2.641
+    },
+    {
+      "label": "DSTAR_WETH_USDT_0_3",
+      "pool_borrow": "0x42161084d0672e1d3f26a9b53e653be2084ff19c",
+      "pool_sell": "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+      "d_star_raw": 8000000000000000,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 4.6,
+      "fee_floor_bps": 2.0,
+      "live_edge_bps": 2.6
+    },
+    {
       "label": "DSTAR_WETH_USDT_0_1",
       "pool_borrow": "0x42161084d0672e1d3f26a9b53e653be2084ff19c",
       "pool_sell": "0x641c00a822e8b671738d32a431a4fb6074e5c79d",
@@ -390,35 +390,9 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 8.861,
+      "live_spread_bps": 8.402,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": 2.861
-    },
-    {
-      "label": "DSTAR_ARB_USDC_1_2",
-      "pool_borrow": "0x93cce474015007b38da0ecea96671ee4dc3d40ad",
-      "pool_sell": "0xb0f6ca40411360c03d41c5ffc5f179b8403cdcf8",
-      "borrow_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "target_token": "0x912CE59144191C1204E64559FE8253a0e49E6548",
-      "d_star_raw": 18000000,
-      "zero_for_one_borrow": false,
-      "zero_for_one_sell": true,
-      "live_spread_bps": 8.763,
-      "fee_floor_bps": 6.0,
-      "live_edge_bps": 2.763
-    },
-    {
-      "label": "DSTAR_WETH_USDT_2_3",
-      "pool_borrow": "0x389938cf14be379217570d8e4619e51fbdafaa21",
-      "pool_sell": "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "d_star_raw": 8000000000000000,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 4.391,
-      "fee_floor_bps": 2.0,
-      "live_edge_bps": 2.391
+      "live_edge_bps": 2.402
     },
     {
       "label": "DSTAR_WETH_USDCE_3_0",
@@ -434,6 +408,19 @@
       "live_edge_bps": 1.392
     },
     {
+      "label": "DSTAR_WETH_USDCE_2_1",
+      "pool_borrow": "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40",
+      "pool_sell": "0xc31e54c7a869b9fcbecc14363cf510d1c41fa443",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+      "d_star_raw": 8000000000000000,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 11.149,
+      "fee_floor_bps": 10.0,
+      "live_edge_bps": 1.149
+    },
+    {
       "label": "DSTAR_WSTETH_WETH_1_0",
       "pool_borrow": "0xb93f8a075509e71325c1c2fc8fa6a75f2d536a13",
       "pool_sell": "0x35218a1cbac5bbc3e57fd9bd38219d37571b3537",
@@ -447,30 +434,17 @@
       "live_edge_bps": -0.848
     },
     {
-      "label": "DSTAR_WETH_USDC_0_3",
-      "pool_borrow": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
-      "pool_sell": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 21567611556801508,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 1.103,
-      "fee_floor_bps": 2.0,
-      "live_edge_bps": -0.897
-    },
-    {
-      "label": "DSTAR_WETH_USDT_1_3",
-      "pool_borrow": "0x641c00a822e8b671738d32a431a4fb6074e5c79d",
-      "pool_sell": "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358",
+      "label": "DSTAR_WETH_USDT_3_2",
+      "pool_borrow": "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358",
+      "pool_sell": "0x389938cf14be379217570d8e4619e51fbdafaa21",
       "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
       "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 4.181,
-      "fee_floor_bps": 6.0,
-      "live_edge_bps": -1.819
+      "live_spread_bps": 0.784,
+      "fee_floor_bps": 2.0,
+      "live_edge_bps": -1.216
     },
     {
       "label": "DSTAR_WETH_USDC_3_0",
@@ -478,51 +452,25 @@
       "pool_sell": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
       "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
       "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 21567611556801508,
+      "d_star_raw": 21564740009967888,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": -1.102,
+      "live_spread_bps": 0.599,
       "fee_floor_bps": 2.0,
-      "live_edge_bps": -3.102
+      "live_edge_bps": -1.401
     },
     {
-      "label": "DSTAR_WETH_USDC_0_1",
-      "pool_borrow": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
-      "pool_sell": "0xC6962004f452bE9203591991D15f6b388e09E8D0",
+      "label": "DSTAR_WETH_USDT_3_1",
+      "pool_borrow": "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358",
+      "pool_sell": "0x641c00a822e8b671738d32a431a4fb6074e5c79d",
       "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 25407347467620404,
+      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+      "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 2.803,
+      "live_spread_bps": 3.8,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": -3.197
-    },
-    {
-      "label": "DSTAR_WETH_USDC_3_1",
-      "pool_borrow": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
-      "pool_sell": "0xC6962004f452bE9203591991D15f6b388e09E8D0",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 139823280578539184,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 1.7,
-      "fee_floor_bps": 6.0,
-      "live_edge_bps": -4.3
-    },
-    {
-      "label": "DSTAR_WETH_USDC_2_3",
-      "pool_borrow": "0x7fCDC35463E3770c2fB992716Cd070B63540b947",
-      "pool_sell": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 46681391002770920,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 1.593,
-      "fee_floor_bps": 6.0,
-      "live_edge_bps": -4.407
+      "live_edge_bps": -2.2
     },
     {
       "label": "DSTAR_WETH_LINK_1_0",
@@ -533,9 +481,74 @@
       "d_star_raw": 8000000000000000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 5.496,
+      "live_spread_bps": 7.756,
       "fee_floor_bps": 10.0,
-      "live_edge_bps": -4.504
+      "live_edge_bps": -2.244
+    },
+    {
+      "label": "DSTAR_WETH_USDC_0_3",
+      "pool_borrow": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
+      "pool_sell": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "d_star_raw": 21564740009967888,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": -0.599,
+      "fee_floor_bps": 2.0,
+      "live_edge_bps": -2.599
+    },
+    {
+      "label": "DSTAR_WETH_USDT_2_3",
+      "pool_borrow": "0x389938cf14be379217570d8e4619e51fbdafaa21",
+      "pool_sell": "0x7cCCba38e2D959FE135e79aEBB57ccB27b128358",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+      "d_star_raw": 8000000000000000,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": -0.784,
+      "fee_floor_bps": 2.0,
+      "live_edge_bps": -2.784
+    },
+    {
+      "label": "DSTAR_WETH_USDT_2_1",
+      "pool_borrow": "0x389938cf14be379217570d8e4619e51fbdafaa21",
+      "pool_sell": "0x641c00a822e8b671738d32a431a4fb6074e5c79d",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+      "d_star_raw": 15882169451196054,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 3.016,
+      "fee_floor_bps": 6.0,
+      "live_edge_bps": -2.984
+    },
+    {
+      "label": "DSTAR_WETH_USDC_3_1",
+      "pool_borrow": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
+      "pool_sell": "0xC6962004f452bE9203591991D15f6b388e09E8D0",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "d_star_raw": 139814787995877744,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 1.054,
+      "fee_floor_bps": 6.0,
+      "live_edge_bps": -4.946
+    },
+    {
+      "label": "DSTAR_WETH_USDC_2_0",
+      "pool_borrow": "0x7fCDC35463E3770c2fB992716Cd070B63540b947",
+      "pool_sell": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "d_star_raw": 18644193520593976,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 1.025,
+      "fee_floor_bps": 6.0,
+      "live_edge_bps": -4.975
     },
     {
       "label": "DSTAR_WETH_USDCE_0_3",
@@ -551,43 +564,30 @@
       "live_edge_bps": -5.391
     },
     {
-      "label": "DSTAR_WETH_USDC_2_0",
-      "pool_borrow": "0x7fCDC35463E3770c2fB992716Cd070B63540b947",
-      "pool_sell": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
+      "label": "DSTAR_WETH_USDC_0_1",
+      "pool_borrow": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
+      "pool_sell": "0xC6962004f452bE9203591991D15f6b388e09E8D0",
       "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
       "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 18646759539848860,
+      "d_star_raw": 25403640202632396,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 0.491,
+      "live_spread_bps": 0.455,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": -5.509
+      "live_edge_bps": -5.545
     },
     {
-      "label": "DSTAR_WETH_USDT_2_1",
-      "pool_borrow": "0x389938cf14be379217570d8e4619e51fbdafaa21",
-      "pool_sell": "0x641c00a822e8b671738d32a431a4fb6074e5c79d",
+      "label": "DSTAR_WETH_USDC_2_3",
+      "pool_borrow": "0x7fCDC35463E3770c2fB992716Cd070B63540b947",
+      "pool_sell": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
       "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "d_star_raw": 15879620879528822,
+      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "d_star_raw": 46676877125885000,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 0.209,
+      "live_spread_bps": 0.426,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": -5.791
-    },
-    {
-      "label": "DSTAR_WETH_USDT_1_2",
-      "pool_borrow": "0x641c00a822e8b671738d32a431a4fb6074e5c79d",
-      "pool_sell": "0x389938cf14be379217570d8e4619e51fbdafaa21",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "d_star_raw": 15879620879528822,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": -0.209,
-      "fee_floor_bps": 6.0,
-      "live_edge_bps": -6.209
+      "live_edge_bps": -5.574
     }
   ]
 }
