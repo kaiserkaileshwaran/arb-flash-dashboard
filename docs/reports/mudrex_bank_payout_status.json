@@ -31,6 +31,6 @@
   "weth_to_usdc_auto_converter_1bp_ready": true,
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
-  "ts": 1792869751.3761666,
-  "hmac_sha256_integrity": "71f99df925640e6f47262f502d0f22c57f0a65c7b85307a138f1a7fef9aa191b"
+  "ts": 1792869756.377886,
+  "hmac_sha256_integrity": "10bc71fc76e53bc0e49493e60bc878c83de4660857f10ebfcc1afc35f16dbcd2"
 }
