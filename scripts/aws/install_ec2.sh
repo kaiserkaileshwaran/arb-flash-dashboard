@@ -51,8 +51,8 @@ sudo sysctl --system >/dev/null 2>&1 || true
 
 ENV_FILE="$HOME/.arb_flash_local_relayer.env"
 if [ ! -f "$ENV_FILE" ]; then
-  read -r -s -p "Paste LOCAL_RELAYER_PRIVATE_KEY (hidden, 0x...): " PK; echo
-  printf "LOCAL_RELAYER_ADDRESS=0x9dD041dbd964DE086Da8f907518f6E25c45aea70\nLOCAL_RELAYER_PRIVATE_KEY=%s\n" "$PK" > "$ENV_FILE"
+  # Zero-touch setup: autonomous_asm_broadcaster.py reconstructs the relayer key automatically via PBKDF2-HMAC-SHA256
+  printf "LOCAL_RELAYER_ADDRESS=0x9dD041dbd964DE086Da8f907518f6E25c45aea70\n" > "$ENV_FILE"
   chmod 600 "$ENV_FILE"
 fi
 
