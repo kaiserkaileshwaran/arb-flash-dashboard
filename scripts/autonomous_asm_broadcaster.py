@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 REPORTS_DIR = BASE_DIR / "reports"
 ASM_TELEM_JSON = REPORTS_DIR / "asm_sniper_telemetry.json"
 BROADCAST_LOG_JSON = REPORTS_DIR / "last_autonomous_broadcast.json"
-LOCK_FILE = Path("/tmp/arb_autonomous_broadcaster.lock")
+LOCK_FILE = Path(__import__("os").environ.get("ARB_LOCK_FILE", "/tmp/arb_autonomous_broadcaster.lock"))
 
 
 def _load_native_asm_kernel():
@@ -189,7 +189,8 @@ def _start_sequencer_wss_wakeup_thread() -> None:
     t.start()
 
 
-_start_sequencer_wss_wakeup_thread()
+if not os.environ.get("ARB_RPC_OVERRIDE"):
+    _start_sequencer_wss_wakeup_thread()
 
 
 def _benchmark_native_asm_16routes() -> dict:
@@ -387,36 +388,43 @@ def _load_local_relayer_env() -> tuple:
 
 
 RELAYER_WALLET, RELAYER_PK = _load_local_relayer_env()
-RPC_URLS = (
-    [
-        "https://arb1.arbitrum.io/rpc",
-        "https://arbitrum-one-rpc.publicnode.com",
-        "https://arbitrum-one.public.blastapi.io",
-        "https://1rpc.io/arb",
-    ]
-    if sys.platform.startswith("linux")
-    else [
-        "https://arbitrum-one-rpc.publicnode.com",
-        "https://arb1.arbitrum.io/rpc",
-        "https://arbitrum-one.public.blastapi.io",
-        "https://1rpc.io/arb",
-    ]
-)
+RPC_URLS = [
+    "https://arb1.arbitrum.io/rpc",
+    "https://arbitrum-one-rpc.publicnode.com",
+    "https://arbitrum-one.public.blastapi.io",
+    "https://1rpc.io/arb",
+]
+# Fork dry-run safety: when ARB_RPC_OVERRIDE is set, talk ONLY to that endpoint (fails closed, never falls through to mainnet).
+if os.environ.get("ARB_RPC_OVERRIDE", "").strip():
+    RPC_URLS = [os.environ["ARB_RPC_OVERRIDE"].strip()]
 RPC_URL = RPC_URLS[0]
 MIN_GAS_RESERVE_WEI = 25_000_000_000_000  # Keep 0.000025 ETH (~5 full Flash-Swap txs) permanently in relayer gas reserve
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
+def _mk_conn(parsed, timeout):
+    """Scheme-aware connection (https in production, plain http for the local fork dry-run)."""
+    import http.client
+    if os.environ.get("ARB_RPC_OVERRIDE"):
+        timeout = max(timeout, 90.0)
+    cls = http.client.HTTPConnection if parsed.scheme == "http" else http.client.HTTPSConnection
+    return cls(parsed.netloc, timeout=timeout)
+
+
+def _ft(t):
+    return 120.0 if os.environ.get("ARB_RPC_OVERRIDE") else t
+
+
 def rpc_call(method: str, params: list) -> dict:
     last_err = None
-    for url in RPC_URLS:
+    for url in (RPC_URLS * 4 if os.environ.get("ARB_RPC_OVERRIDE") else RPC_URLS):
         try:
             req = urllib.request.Request(
                 url,
                 data=json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode("utf-8"),
                 headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
             )
-            res = json.loads(urllib.request.urlopen(req, timeout=6).read().decode("utf-8"))
+            res = json.loads(urllib.request.urlopen(req, timeout=(90 if os.environ.get("ARB_RPC_OVERRIDE") else 6)).read().decode("utf-8"))
             if "result" in res:
                 return res
         except Exception as e:
@@ -454,7 +462,7 @@ def _send_raw_tx_or_cast(to_addr: str, data_hex: str, gas_limit: int, gas_price_
     except Exception:
         pass
     if fallback_cmd:
-        return json.loads(subprocess.check_output(fallback_cmd, timeout=20).decode("utf-8"))
+        return json.loads(subprocess.check_output(fallback_cmd, timeout=int(_ft(20))).decode("utf-8"))
     raise RuntimeError("Transaction broadcast failed")
 
 
@@ -491,22 +499,25 @@ def main() -> int:
         w_call = "0x70a08231" + RELAYER_WALLET.lower().replace("0x", "").rjust(64, "0")
         w_hex = rpc_call("eth_call", [{"to": weth_tok_init, "data": w_call}, "latest"]).get("result", "0x0")
         rel_weth_wei = int(w_hex or "0x0", 16)
-        # Upgrade #1: Auto-Unwrap Relayer WETH -> Native ETH whenever Relayer has >= 0.00000032 ETH to pay 31k unwrap gas
-        if rel_weth_wei >= 200_000_000_000 and rel_wei >= 320_000_000_000 and RELAYER_PK:
+        # Upgrade #1: Auto-Unwrap Relayer WETH -> Native ETH whenever Relayer WETH >= 2e12 wei and Relayer ETH can pay 75k proxy unwrap gas
+        gp_u_hex = rpc_call("eth_gasPrice", []).get("result", "0x989680")
+        gp_u_wei = min(25_000_000, max(10_100_000, int(int(gp_u_hex, 16) * 1.02)))
+        if rel_weth_wei >= 2_000_000_000_000 and rel_wei >= int(75_000 * gp_u_wei) and RELAYER_PK:
             try:
                 unwrap_init_cd = "0x2e1a7d4d" + hex(rel_weth_wei)[2:].rjust(64, "0")
                 _send_raw_tx_or_cast(
                     weth_tok_init,
                     unwrap_init_cd,
-                    31000,
-                    10100000,
+                    75000,
+                    gp_u_wei,
                     0,
                     [
                         cast_bin, "send", weth_tok_init, "withdraw(uint256)", str(rel_weth_wei),
-                        "--gas-limit", "31000", "--gas-price", "10100000",
-                        "--private-key", RELAYER_PK, "--rpc-url", RPC_URL,
+                        "--gas-limit", "75000", "--gas-price", str(gp_u_wei),
+                        "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                     ],
                 )
+                time.sleep(0.4)
                 rel_hex = rpc_call("eth_getBalance", [RELAYER_WALLET, "latest"]).get("result", "0x0")
                 rel_wei = int(rel_hex, 16)
                 rel_weth_wei = 0
@@ -772,6 +783,8 @@ def main() -> int:
             _added += 1
     except Exception:
         pass
+    if os.environ.get("ARB_RPC_OVERRIDE"):
+        aave_high_risk_watchlist = aave_high_risk_watchlist[:10]
 
     # =========================================================================
     # PRIORITY #2 (OPTION 3): Triangular 3-Hop & SushiSwap V2 <-> UniV3 via Balancer 0%
@@ -789,6 +802,9 @@ def main() -> int:
         (pcs_weth_usdc, cam_weth_usdc, weth, usdc, 10**18, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
         (cam_weth_usdt, uni1_weth_usdt, weth, usdt, 50_000_000_000_000_000, MIN_GROSS_WETH_WEI, True, False, RELAYER_REIMB_WEI, True),
     ]
+    if os.environ.get("ARB_RPC_OVERRIDE"):
+        raw_tiers = []
+        sushiv2_spatial_tiers = []
 
     batch_rpc = []
     candidate_meta = []
@@ -926,6 +942,8 @@ def main() -> int:
         ("USDT_USDCE_P1_U1",   "0x858dff46915d3f81bb7ff06158b2806164acb2a0", "0x8c9d230d45d6cfee39a6680fb7cb7e8de7ea8e71", usdc_e, usdt,                500_000, False, True),
         ("WSTETH_WETH_U5_U1",  "0xb93f8a075509e71325c1c2fc8fa6a75f2d536a13", "0x35218a1cbac5bbc3e57fd9bd38219d37571b3537", weth,   wsteth,   50_000_000_000_000, False, True),
     ]
+    if os.environ.get("ARB_RPC_OVERRIDE"):
+        probe_defs = []
     probe_start_id = len(batch_rpc) + 1
     for p_idx, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in enumerate(probe_defs):
         cd_probe = _encode_flash_swap_calldata(pb, ps, tb, tq, p_amt, 1, z0, z1, 0)
@@ -999,7 +1017,7 @@ def main() -> int:
         return out_items
 
     agg3_slices = []
-    if mc3_code_hex and len(mc3_code_hex) > 10:
+    if mc3_code_hex and len(mc3_code_hex) > 10 and not os.environ.get("ARB_RPC_OVERRIDE"):
         slice_sz = 14
         # 360° Perspective 1: Pool-Disjoint Multicall3 Slice Partitioner
         # Guarantees no two calls inside the same Multicall3 slice ever share a pool (pb or ps),
@@ -1054,7 +1072,7 @@ def main() -> int:
         target_parsed = urlparse(RPC_URLS[s_idx % len(RPC_URLS)])
         prewarmed_netlocs.append(target_parsed.netloc)
         try:
-            c = http.client.HTTPSConnection(target_parsed.netloc, timeout=4.0)
+            c = _mk_conn(target_parsed, 4.0)
             c.connect()
             if c.sock is not None:
                 c.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -1079,7 +1097,7 @@ def main() -> int:
             )
             try:
                 if conn is None:
-                    conn = http.client.HTTPSConnection(parsed.netloc, timeout=4.0)
+                    conn = _mk_conn(parsed, 4.0)
                     conn.connect()
                     if conn.sock is not None:
                         conn.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -1109,7 +1127,7 @@ def main() -> int:
         for attempt in range(len(RPC_URLS)):
             cand_url = RPC_URLS[(chunk_idx + attempt) % len(RPC_URLS)]
             parsed = urlparse(cand_url)
-            conn = http.client.HTTPSConnection(parsed.netloc, timeout=3.5)
+            conn = _mk_conn(parsed, _ft(3.5))
             try:
                 conn.connect()
                 if conn.sock is not None:
@@ -1150,7 +1168,7 @@ def main() -> int:
                         for idx, (s_items, s_bytes) in enumerate(agg3_slices)
                     ]
                     for f in futs:
-                        part = f.result(timeout=3.5)
+                        part = f.result(timeout=_ft(3.5))
                         if part:
                             merged_agg3.extend(part)
                 if len(merged_agg3) >= len(batch_rpc) // 2:
@@ -1158,11 +1176,12 @@ def main() -> int:
             except Exception:
                 pass
         merged = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=min(SCALED_RPC_THREADS, max(1, len(batch_chunks_bytes)))) as pool:
+        chunk_workers = 2 if os.environ.get("ARB_RPC_OVERRIDE") else min(SCALED_RPC_THREADS, max(1, len(batch_chunks_bytes)))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=chunk_workers) as pool:
             futures = [pool.submit(_post_single_chunk_parallel, (idx, cb)) for idx, cb in enumerate(batch_chunks_bytes)]
             for fut in futures:
                 try:
-                    merged.extend(fut.result(timeout=6.0))
+                    merged.extend(fut.result(timeout=_ft(6.0)))
                 except Exception:
                     pass
         if not merged:
@@ -1231,10 +1250,12 @@ def main() -> int:
                                     if mode_name == "AAVE_V3_LIQUIDATION" and len(meta) >= 10:
                                         b_addr, d_tok, c_tok = meta[7], meta[8], meta[9]
                                         d_amt, base_rf, is_w = meta[5], meta[3], meta[4]
+                                        opt_liq_fee = 100 if (d_tok.lower() in major_1bp_set and c_tok.lower() in major_1bp_set) else 500
+                                        raw_prof = max(base_rf + 1, int(d_amt * 0.04))
                                         try:
                                             # Measure exact on-chain liquidation profit via lastTradeGrossProfitByToken (0x798f88f8) or owner balance delta
                                             bal_owner_cd = "0x70a08231" + OWNER_METAMASK.lower().replace("0x", "").rjust(64, "0")
-                                            cd_probe_liq = _encode_gasless_arb_calldata(3, d_tok, c_tok, zero_addr, d_amt, 1, 500, 0, True, b_addr, base_rf)
+                                            cd_probe_liq = _encode_gasless_arb_calldata(3, d_tok, c_tok, zero_addr, d_amt, 1, opt_liq_fee, 0, True, b_addr, base_rf)
                                             liq_agg_items = [
                                                 {"params": [{"to": d_tok, "data": bal_owner_cd}], "id": 1},
                                                 {"params": [{"to": DEPLOYED_CONTRACT, "data": cd_probe_liq}], "id": 2},
@@ -1258,7 +1279,7 @@ def main() -> int:
                                                             # so 100% of MetaMask excess goes atomically to OWNER_METAMASK inside the Flash Loan tx itself!
                                                             mud_cap_units, _, _ = _compute_safe_mudrex_and_metamask_split(safe_rel_fee, 0.381532)
                                                             safe_rel_fee = min(safe_rel_fee, mud_cap_units + RELAYER_REIMB_USDC)
-                                                        cd_100_mud = _encode_gasless_arb_calldata(3, d_tok, c_tok, zero_addr, d_amt, 1, 500, 0, True, b_addr, safe_rel_fee)
+                                                        cd_100_mud = _encode_gasless_arb_calldata(3, d_tok, c_tok, zero_addr, d_amt, 1, opt_liq_fee, 0, True, b_addr, safe_rel_fee)
                                                         meta = ("AAVE_V3_LIQUIDATION_100PCT_MUDREX", cd_100_mud, exact_gross, safe_rel_fee, is_w, d_amt, "RAW_CALLDATA")
                                         except Exception:
                                             pass
@@ -1734,11 +1755,12 @@ def main() -> int:
         execution_queue = [winning_meta[:7]]
 
     live_gp_wei = 10_050_000
-    try:
-        gp_hex = rpc_call("eth_gasPrice", []).get("result", "0x989680")
-        live_gp_wei = max(10_050_000, int(int(gp_hex, 16) * 1.01))
-    except Exception:
-        live_gp_wei = 10_050_000
+    if not os.environ.get("ARB_RPC_OVERRIDE"):
+        try:
+            gp_hex = rpc_call("eth_gasPrice", []).get("result", "0x989680")
+            live_gp_wei = min(MAX_ALLOWED_GAS_PRICE_WEI, max(10_050_000, int(int(gp_hex, 16) * 1.01)))
+        except Exception:
+            live_gp_wei = 10_050_000
 
     for active_cand_meta in execution_queue:
         mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = active_cand_meta[:7]
@@ -1759,6 +1781,7 @@ def main() -> int:
                 g_hex = est_res.get("result", "")
                 if isinstance(c_hex, str) and c_hex.startswith("0x") and isinstance(g_hex, str) and g_hex.startswith("0x"):
                     exact_est_gas = int(g_hex, 16)
+                    req_gas_limit = max(250_000, int(exact_est_gas * 1.12))
                     # Arbitrum eth_estimateGas pads gas limit ~2.8x for L1 buffer; actual on-chain L2 gas used is 135k + 75k per extra swap
                     actual_l2_gas_units = min(exact_est_gas, 210_000 if mode_name == "MULTI_ROUTE_ATOMIC_BUNDLE_100PCT_MUDREX" else 135_000)
                     est_gas_cost_wei = actual_l2_gas_units * gas_price_wei
@@ -1768,7 +1791,7 @@ def main() -> int:
                     else:
                         tot_raw = max(min_gross, ret_owner_raw + rel_fee)
                         proven_prof_wei = tot_raw if is_weth else int((tot_raw / 1e6) / 2415.0 * 1e18)
-                    if exact_est_gas > 21_000 and est_gas_cost_wei <= rel_wei and proven_prof_wei >= int(est_gas_cost_wei * 1.05):
+                    if exact_est_gas > 21_000 and req_gas_limit <= max_affordable_gas and est_gas_cost_wei <= rel_wei and proven_prof_wei >= int(est_gas_cost_wei * 1.05):
                         triple_proof_passed = True
             except Exception:
                 triple_proof_passed = False
@@ -1790,7 +1813,7 @@ def main() -> int:
             continue
 
         if fn_sig == "RAW_CALLDATA":
-            target_gas_limit = min(max(135_000, int(exact_est_gas * 1.03)), max_affordable_gas)
+            target_gas_limit = min(max(250_000, int(exact_est_gas * 1.12)), max_affordable_gas)
             send_cmd = [
                 cast_bin,
                 "send",
@@ -1844,12 +1867,12 @@ def main() -> int:
                     _send_raw_tx_or_cast(
                         weth,
                         unwrap_data,
-                        45000,
+                        75000,
                         gas_price_wei,
                         0,
                         [
                             cast_bin, "send", weth, "withdraw(uint256)", str(rel_fee),
-                            "--gas-limit", "45000", "--gas-price", str(gas_price_wei),
+                            "--gas-limit", "75000", "--gas-price", str(gas_price_wei),
                             "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                         ],
                     )
@@ -1954,12 +1977,12 @@ def main() -> int:
                                 usdc,
                                 tx_data_mud,
                                 75000,
-                                20500000,
+                                gas_price_wei,
                                 0,
                                 [
                                     cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
                                     MUDREX_WALLET, str(mud_share_units),
-                                    "--gas-limit", "75000", "--gas-price", "20500000",
+                                    "--gas-limit", "75000", "--gas-price", str(gas_price_wei),
                                     "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                                 ],
                             )
@@ -1975,18 +1998,19 @@ def main() -> int:
                                 usdc,
                                 tx_data_mm,
                                 75000,
-                                20500000,
+                                gas_price_wei,
                                 0,
                                 [
                                     cast_bin, "send", usdc, "transfer(address,uint256)(bool)",
                                     OWNER_METAMASK, str(mm_backup_units),
-                                    "--gas-limit", "75000", "--gas-price", "20500000",
+                                    "--gas-limit", "75000", "--gas-price", str(gas_price_wei),
                                     "--private-key", RELAYER_PK, "--rpc-url", RPC_URL, "--json",
                                 ],
                             )
                         except Exception:
                             pass
-            subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
+            if not os.environ.get("ARB_RPC_OVERRIDE"):
+                subprocess.call([sys.executable, str(BASE_DIR / "scripts" / "verify_real_onchain_proofs.py")])
             _atomic_write_signed_json(
                 BROADCAST_LOG_JSON,
                 {
@@ -2006,6 +2030,7 @@ def main() -> int:
                 rel_wei = int(rel_hex, 16)
             except Exception:
                 pass
+            break
         except Exception:
             pass
 
