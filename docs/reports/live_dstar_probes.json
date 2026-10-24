@@ -1,5 +1,5 @@
 {
-  "ts": 1792873267.9078012,
+  "ts": 1792873279.2247622,
   "univ3_1bp_eth_spot_usd": 2343.42,
   "pools_indexed": 38,
   "solved_dstar_pairs": 92,
@@ -512,6 +512,19 @@
       "live_edge_bps": -4.3
     },
     {
+      "label": "DSTAR_WETH_USDC_2_3",
+      "pool_borrow": "0x7fCDC35463E3770c2fB992716Cd070B63540b947",
+      "pool_sell": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "d_star_raw": 46681391002770920,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 1.593,
+      "fee_floor_bps": 6.0,
+      "live_edge_bps": -4.407
+    },
+    {
       "label": "DSTAR_WETH_LINK_1_0",
       "pool_borrow": "0x977f5d9a39049c73bc26edb3fa15d5f7c0ac82e9",
       "pool_sell": "0x91308bc9ce8ca2db82aa30c65619856cc939d907",
@@ -538,30 +551,17 @@
       "live_edge_bps": -5.391
     },
     {
-      "label": "DSTAR_WETH_USDC_2_3",
+      "label": "DSTAR_WETH_USDC_2_0",
       "pool_borrow": "0x7fCDC35463E3770c2fB992716Cd070B63540b947",
-      "pool_sell": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
+      "pool_sell": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
       "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
       "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 46680123704647648,
+      "d_star_raw": 18646759539848860,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 0.569,
+      "live_spread_bps": 0.491,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": -5.431
-    },
-    {
-      "label": "DSTAR_WETH_USDC_0_2",
-      "pool_borrow": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
-      "pool_sell": "0x7fCDC35463E3770c2fB992716Cd070B63540b947",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 18646557328728228,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 0.534,
-      "fee_floor_bps": 6.0,
-      "live_edge_bps": -5.466
+      "live_edge_bps": -5.509
     },
     {
       "label": "DSTAR_WETH_USDT_2_1",
