@@ -1,0 +1,128 @@
+{
+  "ts": 1792866570.78401,
+  "relayer_wallet": "0x9dD041dbd964DE086Da8f907518f6E25c45aea70",
+  "base_nonce": 25,
+  "presigned_total_variants": 32,
+  "entries": [
+    {
+      "rank": 1,
+      "label": "CLOSEST HF #1 (1.0146): USDC_debt/WETH_col (118 USDC = \u20b911.2k Dust-Safe Slice of 1,133.62 USDC Debt \u2022 +\u20b9560 Bonus -> Mudrex)",
+      "nonce": 25,
+      "shotgun_nonces_prewarmed": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "gas_limit": 680000,
+      "gas_price_wei": 20114000,
+      "calldata_selector": "0x1034ef63",
+      "raw_tx_prefix": "0x461169e09a867ef22776a2f7069a0ce6fc6c7570..."
+    },
+    {
+      "rank": 2,
+      "label": "CLOSEST WHALE #1 (HF 1.0166): USDC_debt/WETH_col (28,044 USDC = \u20b926.62L Flash Loan \u2022 45.0% Close of 62,312 USDC Debt \u2022 +\u20b91,33,097 Bonus -> Mudrex)",
+      "nonce": 25,
+      "shotgun_nonces_prewarmed": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "gas_limit": 680000,
+      "gas_price_wei": 20114000,
+      "calldata_selector": "0x1034ef63",
+      "raw_tx_prefix": "0x9f7ef9d5a8e51d8e35b52b3b810823c176c0c9e4..."
+    },
+    {
+      "rank": 3,
+      "label": "CLOSEST HF #2 (1.0282): WETH_debt/USDT_col (2.85 WETH = \u20b96.53L Flash Loan \u2022 49.0% Close of 5.81 WETH Debt \u2022 +\u20b932,645 Bonus -> Mudrex)",
+      "nonce": 25,
+      "shotgun_nonces_prewarmed": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "gas_limit": 680000,
+      "gas_price_wei": 20114000,
+      "calldata_selector": "0x1034ef63",
+      "raw_tx_prefix": "0x82d7a647369c74c6ad5ffe84f91bac55416c117c..."
+    },
+    {
+      "rank": 4,
+      "label": "CLOSEST WHALE #2 (HF 1.0315): USDC_debt/WETH_col (28,811 USDC = \u20b927.35L Flash Loan \u2022 45.0% Close of 64,017 USDC Debt \u2022 +\u20b91,36,738 Bonus -> Mudrex)",
+      "nonce": 25,
+      "shotgun_nonces_prewarmed": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "gas_limit": 680000,
+      "gas_price_wei": 20114000,
+      "calldata_selector": "0x1034ef63",
+      "raw_tx_prefix": "0xd2ba22193e8dbfd4247128105b66684f49819af7..."
+    },
+    {
+      "rank": 5,
+      "label": "CLOSEST HF #3 (1.0351): USDT_debt/WETH_col (5,220 USDT = \u20b94.95L Flash Loan \u2022 45.0% Close of 11,588 USDT Debt \u2022 +\u20b924,774 Bonus -> Mudrex)",
+      "nonce": 25,
+      "shotgun_nonces_prewarmed": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "gas_limit": 680000,
+      "gas_price_wei": 20114000,
+      "calldata_selector": "0x1034ef63",
+      "raw_tx_prefix": "0x3168df99f8e1c8e5dc3fbab791ad00d0ce42a76a..."
+    },
+    {
+      "rank": 6,
+      "label": "WHALE #3 (HF 1.0459): USDC_debt/WETH_col (11,500 USDC = \u20b910.91L Flash Loan \u2022 49.1% Close of 23,413 USDC Debt \u2022 +\u20b954,585 Bonus)",
+      "nonce": 25,
+      "shotgun_nonces_prewarmed": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "gas_limit": 680000,
+      "gas_price_wei": 20114000,
+      "calldata_selector": "0x1034ef63",
+      "raw_tx_prefix": "0x11dc4ff2587c9e1ca53ec276b689e0a24dc070e8..."
+    },
+    {
+      "rank": 7,
+      "label": "CLOSEST HF #5 (1.0528): USDC_debt/WETH_col (5,000 USDC = \u20b94.75L Loan \u2022 48.2% Close of 10,366.52 USDC Debt \u2022 +\u20b923,732 Bonus)",
+      "nonce": 25,
+      "shotgun_nonces_prewarmed": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "gas_limit": 680000,
+      "gas_price_wei": 20114000,
+      "calldata_selector": "0x1034ef63",
+      "raw_tx_prefix": "0x40ebefda98a669045a7d8e9bf9d1955521fd9f48..."
+    },
+    {
+      "rank": 8,
+      "label": "CLOSEST HF #6 (1.0503): USDC_debt/WETH_col (2,950 USDC = \u20b92.80L Loan \u2022 48.8% Close of 6,041.73 USDC Debt \u2022 +\u20b914,002 Bonus)",
+      "nonce": 25,
+      "shotgun_nonces_prewarmed": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "gas_limit": 680000,
+      "gas_price_wei": 20114000,
+      "calldata_selector": "0x1034ef63",
+      "raw_tx_prefix": "0x4b7f86801393b86c493e4fc9a1794eaec720641c..."
+    }
+  ]
+}

@@ -21,7 +21,20 @@ mkdir -p bin reports logs
 python3 -m venv .venv
 .venv/bin/pip install -q --upgrade pip eth-account eth-utils
 gcc -O3 -march=native -ffast-math engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
-echo "[ok] compiled bin/arb_sniper_asm"
+gcc -O3 -march=native -ffast-math -shared -fPIC engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/libarb_asm_kernel.so
+echo "[ok] compiled bin/arb_sniper_asm + bin/libarb_asm_kernel.so"
+
+# Apply HFT Linux Kernel TCP/BBR + Low-Latency Socket Tuning (<1.4ms sequencer path)
+sudo tee /etc/sysctl.d/99-arb-hft.conf >/dev/null <<EOF
+net.core.default_qdisc = fq
+net.ipv4.tcp_congestion_control = bbr
+net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_low_latency = 1
+net.ipv4.tcp_tw_reuse = 1
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+EOF
+sudo sysctl --system >/dev/null 2>&1 || true
 
 ENV_FILE="$HOME/.arb_flash_local_relayer.env"
 if [ ! -f "$ENV_FILE" ]; then
@@ -32,11 +45,13 @@ fi
 
 sudo tee /etc/systemd/system/arb-sniper.service >/dev/null <<EOF
 [Unit]
-Description=Arbitrum C/ASM sniper daemon
+Description=Arbitrum C/ASM sniper daemon (HFT Nice=-20)
 After=network-online.target
 [Service]
 User=$USER
 WorkingDirectory=$APP_DIR
+Nice=-20
+Environment=IS_AWS_PRIMARY=1
 Environment=PATH=$APP_DIR/.venv/bin:/usr/local/bin:/usr/bin:/bin
 ExecStart=$APP_DIR/bin/arb_sniper_asm
 Restart=always
@@ -47,11 +62,14 @@ EOF
 
 sudo tee /etc/systemd/system/arb-broadcaster.service >/dev/null <<EOF
 [Unit]
-Description=Arbitrum autonomous broadcaster (designated single executor)
+Description=Arbitrum autonomous broadcaster (AWS us-east-1 primary executor with auto-failover heartbeat)
 After=network-online.target
 [Service]
 User=$USER
 WorkingDirectory=$APP_DIR
+Nice=-15
+Environment=IS_AWS_PRIMARY=1
+Environment=ARB_DISABLE_BROADCAST=0
 Environment=PATH=$APP_DIR/.venv/bin:/usr/local/bin:/usr/bin:/bin
 ExecStart=$APP_DIR/.venv/bin/python scripts/autonomous_asm_broadcaster.py --loop-seconds 300
 Restart=always
@@ -60,8 +78,13 @@ RestartSec=1
 WantedBy=multi-user.target
 EOF
 
-# keep the repo fresh + daily 00:00 IST (18:30 UTC) settlement is handled inside the broadcaster
-( crontab -l 2>/dev/null | grep -v arb-flash-engine; echo "*/30 * * * * cd $APP_DIR && git pull --rebase -q || true"; echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_aave_borrowers.py >> logs/discover.log 2>&1" ) | crontab -
+# Keep repo fresh + run all 3 live discovery indexers (Aave V3 deep borrower indexer, Compound V3 Comet scanner, Live Pool d* solver)
+( crontab -l 2>/dev/null | grep -v arb-flash-engine; \
+  echo "*/30 * * * * cd $APP_DIR && git pull --rebase -q || true"; \
+  echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_aave_borrowers.py >> logs/discover_aave.log 2>&1"; \
+  echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_comet_borrowers.py >> logs/discover_comet.log 2>&1"; \
+  echo "*/5  * * * * cd $APP_DIR && .venv/bin/python scripts/discover_live_pool_spreads.py >> logs/discover_dstar.log 2>&1" \
+) | crontab -
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now arb-sniper arb-broadcaster

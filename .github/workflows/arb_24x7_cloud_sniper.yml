@@ -47,6 +47,7 @@ jobs:
       - name: Run 4-Node Parallel Cloud Cluster (16 vCPU Cores • 64 GB RAM • 128 Workers in US-East Virginia)
         env:
           CLUSTER_NODE_ID: "${{ matrix.node_id }}"
+          SNIPER_NODE_ID: "${{ matrix.node_id }}"
           CLUSTER_TOTAL_CPU_CORES: "16"
           CLUSTER_TOTAL_RAM_GB: "64"
           OWNER_PROFIT_WALLET: "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
@@ -64,6 +65,8 @@ jobs:
           git config user.name "arb-sniper-bot"
           git config user.email "arb-sniper-bot@users.noreply.github.com"
           if [ "$CLUSTER_NODE_ID" = "1" ]; then
+            python3 scripts/discover_live_pool_spreads.py || true
+            python3 scripts/discover_comet_borrowers.py || true
             python3 scripts/discover_aave_borrowers.py || true
           fi
           ./bin/arb_sniper_asm --self-test || true

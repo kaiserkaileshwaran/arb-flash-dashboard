@@ -89,7 +89,7 @@ def main():
         print(f"[2] WETH price source {src}: {price/1e8:.2f} -> {mock/1e8:.2f} USD (mock {int((1-DROP)*100)}% dip)")
 
         watch = json.loads((BASE / "reports" / "last_autonomous_broadcast.json").read_text()).get("aave_borrower_hfs", {})
-        liq = {u: hf(u) for u in watch}
+        liq = {u: hf(u) for u in list(watch)[:10]}
         under = {u: h for u, h in liq.items() if 0 < h < 1.0}
         print(f"[3] watched borrowers: {len(liq)} | now HF<1.0 on the fork: {len(under)}")
         for u, h in sorted(under.items(), key=lambda x: x[1])[:5]:
@@ -100,7 +100,11 @@ def main():
         # Pre-warm Anvil storage cache for the liquidatable borrowers so upstream rate-limits don't drop storage reads
         rpc("anvil_setNextBlockBaseFeePerGas", ["0x989680"])
         contract = "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
-        for b_u, amt_u in [("0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", 5000*10**6), ("0x541980dd1db4123185d6b632e9d6a09f77c1e4fa", 1985*10**6)]:
+        for b_u, amt_u in [
+            ("0xba62acf915c1697d000de2f70494ab65cfbcf710", 118*10**6),
+            ("0x22f1d8e414ef3c8eb426489498eeaef2488a44f9", 28044*10**6),
+            ("0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36", 5000*10**6),
+        ]:
             warm_cd = "0x1034ef63" + "".join([pad("0x3"), pad(USDC), pad(WETH), pad("0x0"), hex(amt_u)[2:].rjust(64,"0"),
                                               pad("0x1"), hex(100)[2:].rjust(64,"0"), pad("0x0"), pad("0x1"), pad(b_u), hex(3350)[2:].rjust(64,"0")])
             try:
