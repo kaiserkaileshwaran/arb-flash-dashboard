@@ -22,8 +22,8 @@
     "silo_finance_repository": "0x8658047e48CC09161f4152c79155Dac1d710Ff0a",
     "dolomite_margin": "0x6Bd780E7fDf01D77e4d475c821f1e7AE05409072",
     "active_borrowers_monitored": 11,
-    "total_monitored_debt_usd": 227134.94,
-    "total_monitored_debt_inr": 21559648.5,
+    "total_monitored_debt_usd": 227135.0,
+    "total_monitored_debt_inr": 21559654.2,
     "liquidatable_now": 0
   },
   "gas_spike_circuit_breaker_tripped": false,
