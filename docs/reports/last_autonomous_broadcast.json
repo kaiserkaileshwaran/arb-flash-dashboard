@@ -22,10 +22,10 @@
     "metamask_min_balance_required": 0.0,
     "wss_sequencer_feed": {
       "connected": true,
-      "endpoint": "wss://arbitrum-one-rpc.publicnode.com/",
-      "frames_received": 774,
+      "endpoint": "wss://arb1-feed.arbitrum.io/feed",
+      "frames_received": 14,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 119,
+      "whale_swaps_decoded": 2,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -48,7 +48,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792876718.0656013
+    "ts": 1792876727.5945852
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -158,10 +158,10 @@
   "aave_v3_borrowers_monitored": 66,
   "multi_route_bundle_probes": 114,
   "total_rpc_checks_per_cycle": 263,
-  "cycles_scanned": 189,
-  "scan_duration_sec": 181.27,
-  "rpc_latency_min_ms": 387.1,
-  "rpc_latency_avg_ms": 789.31,
+  "cycles_scanned": 1,
+  "scan_duration_sec": 1.97,
+  "rpc_latency_min_ms": 809.39,
+  "rpc_latency_avg_ms": 809.39,
   "chainlink_eth_usd_price": 2332.44,
   "univ3_1bp_eth_spot_usd": 2333.01,
   "oracle_deviation_bps": 2.44,
@@ -172,14 +172,14 @@
   "aws_failover_state": {
     "role": "ACTIVE_FAILOVER_BROADCASTER",
     "aws_online": false,
-    "aws_heartbeat_age_sec": 7565.3,
+    "aws_heartbeat_age_sec": 7574.6,
     "broadcast_enabled": true
   },
   "camelot_v3_dynamic_fee_bps": 1.0,
-  "aave_lowest_health_factor": 1.01,
-  "aave_closest_borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
-  "aave_closest_borrower_debt_usd": 64018.35,
-  "aave_closest_5pct_liq_bonus_inr": 151915.55,
+  "aave_lowest_health_factor": 1.02084,
+  "aave_closest_borrower": "0xe171627de29a230147b235ed39b3ec0e1338e470",
+  "aave_closest_borrower_debt_usd": 46573.85,
+  "aave_closest_5pct_liq_bonus_inr": 110519.76,
   "aave_liquidatable_positions_now": 0,
   "aave_borrower_hfs": {
     "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.03082,
@@ -238,22 +238,20 @@
     "0x264d1784346b806f2093d7fd7d5e86849620ee1e": 1.113678,
     "0x0c1914d549eae46d1fe0a09dc95f20eac45b6791": 1.111371
   },
-  "best_single_route_pre_gas_wei": 2036789227482,
-  "best_single_route_pre_gas_inr": 0.4509,
-  "bundled_routes_count": 5,
+  "best_single_route_pre_gas_wei": 1127422292367,
+  "best_single_route_pre_gas_inr": 0.2496,
+  "bundled_routes_count": 3,
   "bundled_route_labels": [
-    "DSTAR_WETH_USDC_0_3(2036789227482wei)",
     "LUSD_UNI5_UNI30(1127422292367wei)",
-    "WETH_USDT_U1_P1(910388314211wei)",
-    "ARB_USDCE_U5_U1(2024uUSD)",
-    "ARB_UNI5_SUSHI5(372292471985wei)"
+    "ARB_USDCE_U5_U1(1954uUSD)",
+    "WETH_USDT_U1_P1(720932164435wei)"
   ],
-  "bundled_multi_route_gross_wei": 5284987544140,
-  "bundled_multi_route_gross_inr": 1.1701,
-  "l2_gas_cost_inr": 0.6028,
-  "bundled_total_gas_cost_inr": 1.0248,
-  "single_net_if_forced_inr": -0.1519,
-  "bundled_net_if_forced_inr": 0.1453,
+  "bundled_multi_route_gross_wei": 2657464187650,
+  "bundled_multi_route_gross_inr": 0.5883,
+  "l2_gas_cost_inr": 0.6012,
+  "bundled_total_gas_cost_inr": 1.022,
+  "single_net_if_forced_inr": -0.3516,
+  "bundled_net_if_forced_inr": -0.4337,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -275,11 +273,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 34845,
-    "per_route_ns": 2177.81,
+    "latency_ns": 21840,
+    "per_route_ns": 1365.0,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792876718.0662563,
-  "hmac_sha256_integrity": "54e2556e21277b121aa03c7ce0977aaafaa4f92767860bf2fe5b0a16928e1970"
+  "ts": 1792876727.5952365,
+  "hmac_sha256_integrity": "9508073c0c6a54114e8ebe0f3c6f8e6b222cee0b6d3539aabcb6af6cc5b65e33"
 }
