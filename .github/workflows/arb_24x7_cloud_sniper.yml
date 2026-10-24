@@ -55,7 +55,8 @@ jobs:
           DEPLOYED_CONTRACT_ADDRESS: "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
           LOCAL_RELAYER_ADDRESS: "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
           LOCAL_RELAYER_PRIVATE_KEY: ${{ secrets.LOCAL_RELAYER_PRIVATE_KEY }}
-          ARB_DISABLE_BROADCAST: ${{ matrix.node_id != 1 && '1' || vars.ARB_DISABLE_BROADCAST || '0' }}
+          ARB_DISABLE_BROADCAST: "1"
+          AWS_PRIMARY_IP: "32.199.191.8"
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -n "$LOCAL_RELAYER_PRIVATE_KEY" ]; then
