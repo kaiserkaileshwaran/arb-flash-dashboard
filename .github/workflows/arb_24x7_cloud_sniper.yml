@@ -54,6 +54,7 @@ jobs:
           DEPLOYED_CONTRACT_ADDRESS: "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
           LOCAL_RELAYER_ADDRESS: "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
           LOCAL_RELAYER_PRIVATE_KEY: ${{ secrets.LOCAL_RELAYER_PRIVATE_KEY }}
+          ARB_DISABLE_BROADCAST: ${{ matrix.node_id != 1 && '1' || vars.ARB_DISABLE_BROADCAST || '0' }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -n "$LOCAL_RELAYER_PRIVATE_KEY" ]; then
@@ -62,6 +63,9 @@ jobs:
           fi
           git config user.name "arb-sniper-bot"
           git config user.email "arb-sniper-bot@users.noreply.github.com"
+          if [ "$CLUSTER_NODE_ID" = "1" ]; then
+            python3 scripts/discover_aave_borrowers.py || true
+          fi
           ./bin/arb_sniper_asm --self-test || true
           # Launch Native x86_64 Assembly Daemon continuously at 120ms cadence in US-East (Virginia)
           ./bin/arb_sniper_asm --daemon > /dev/shm/arb_ramdisk/arb_sniper_asm_node_${CLUSTER_NODE_ID}.log 2>&1 &

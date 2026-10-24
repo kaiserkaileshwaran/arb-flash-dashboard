@@ -1,195 +1,74 @@
 {
-  "ts": 1792623154.527512,
-  "borrowers_scanned": 346,
-  "blocks_covered": 285000,
-  "candidates_under_hf": 43,
+  "ts": 1792861213.438557,
+  "borrowers_scanned": 121,
+  "blocks_covered": 114000,
+  "candidates_under_hf": 9,
   "watch": [
     {
-      "borrower": "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2",
-      "hf": 1.035903,
-      "total_debt_usd": 65973.1,
-      "debt_symbol": "WETH",
-      "debt_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "collateral_symbol": "USDC",
-      "collateral_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "repay_amount_raw": 11951990493663561728,
-      "est_bonus_usd": 1484.22
-    },
-    {
-      "borrower": "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa",
-      "hf": 1.04796,
-      "total_debt_usd": 4211.69,
-      "debt_symbol": "USDC",
-      "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 1895452283,
-      "est_bonus_usd": 94.77
-    },
-    {
       "borrower": "0x7d7937bac6af9975bbacbcd53d53e5c61968cd36",
-      "hf": 1.05617,
-      "total_debt_usd": 30198.27,
+      "hf": 1.055681,
+      "total_debt_usd": 30302.72,
       "debt_symbol": "USDC",
       "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
       "collateral_symbol": "USDT",
       "collateral_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "repay_amount_raw": 10448344759,
-      "est_bonus_usd": 522.42
+      "repay_amount_raw": 10496086567,
+      "est_bonus_usd": 524.8
     },
     {
-      "borrower": "0x22f1d8e414ef3c8eb426489498eeaef2488a44f9",
-      "hf": 1.064671,
-      "total_debt_usd": 63864.46,
+      "borrower": "0x541980dd1db4123185d6b632e9d6a09f77c1e4fa",
+      "hf": 1.059247,
+      "total_debt_usd": 2769.31,
       "debt_symbol": "USDC",
       "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
       "collateral_symbol": "WETH",
       "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 28741883039,
-      "est_bonus_usd": 1437.09
-    },
-    {
-      "borrower": "0x5cb506ea627eef89e6524629927ff7dad4053859",
-      "hf": 1.067457,
-      "total_debt_usd": 1437.39,
-      "debt_symbol": "USDT",
-      "debt_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 647333052,
-      "est_bonus_usd": 32.37
-    },
-    {
-      "borrower": "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36",
-      "hf": 1.073596,
-      "total_debt_usd": 10365.75,
-      "debt_symbol": "USDC",
-      "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 4665052152,
-      "est_bonus_usd": 233.25
-    },
-    {
-      "borrower": "0x2012395e71a4af2e621d522b175f6c29232398db",
-      "hf": 1.076815,
-      "total_debt_usd": 19158.46,
-      "debt_symbol": "USDC",
-      "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 8622171430,
-      "est_bonus_usd": 431.11
-    },
-    {
-      "borrower": "0x572372831a9d6b2e3ee8fa284505599e6125fea9",
-      "hf": 1.077259,
-      "total_debt_usd": 11725.78,
-      "debt_symbol": "USDT",
-      "debt_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "collateral_symbol": "USDC",
-      "collateral_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "repay_amount_raw": 4339184236,
-      "est_bonus_usd": 216.96
-    },
-    {
-      "borrower": "0x0947b8f803b1eb6dbffc04ea43f624a49e08fc72",
-      "hf": 1.09001,
-      "total_debt_usd": 22277.75,
-      "debt_symbol": "USDC",
-      "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 10025990712,
-      "est_bonus_usd": 501.3
-    },
-    {
-      "borrower": "0xbbcf3985eb53c30a8eea01d9357314d61fe0e727",
-      "hf": 1.098961,
-      "total_debt_usd": 1812.77,
-      "debt_symbol": "USDC",
-      "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 815828097,
-      "est_bonus_usd": 40.79
-    },
-    {
-      "borrower": "0x12bb24d553161036461ef1dc789c6f73765e1a57",
-      "hf": 1.10554,
-      "total_debt_usd": 11589.33,
-      "debt_symbol": "USDT",
-      "debt_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 5219293535,
-      "est_bonus_usd": 260.96
+      "repay_amount_raw": 1246350186,
+      "est_bonus_usd": 62.32
     },
     {
       "borrower": "0xc767ecd98c87182f272386e75086a1cfacc5c724",
-      "hf": 1.107136,
-      "total_debt_usd": 10449.02,
+      "hf": 1.064606,
+      "total_debt_usd": 9451.08,
       "debt_symbol": "USDC",
       "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
       "collateral_symbol": "WETH",
       "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 4702528682,
-      "est_bonus_usd": 235.13
+      "repay_amount_raw": 4253532006,
+      "est_bonus_usd": 212.68
     },
     {
-      "borrower": "0xcab8cbc983454d24a2f6261e09c788ca31175226",
-      "hf": 1.107867,
-      "total_debt_usd": 4184.58,
-      "debt_symbol": "USDT",
-      "debt_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 1884538529,
-      "est_bonus_usd": 94.23
-    },
-    {
-      "borrower": "0x25f5ba6623b40c52269b746d28215190833c2e39",
-      "hf": 1.113892,
-      "total_debt_usd": 6827.64,
+      "borrower": "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36",
+      "hf": 1.081963,
+      "total_debt_usd": 9406.84,
       "debt_symbol": "USDC",
       "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
       "collateral_symbol": "WETH",
       "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 3072744660,
-      "est_bonus_usd": 153.64
+      "repay_amount_raw": 4233621189,
+      "est_bonus_usd": 211.68
     },
     {
-      "borrower": "0x37aa7e3e1125acb92871b86a295146719e65ae35",
-      "hf": 1.114161,
-      "total_debt_usd": 11616.48,
+      "borrower": "0x782df99676f014b6fd6000626073c78dba205d2e",
+      "hf": 1.098752,
+      "total_debt_usd": 2588.99,
+      "debt_symbol": "WETH",
+      "debt_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "collateral_symbol": "USDC",
+      "collateral_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "repay_amount_raw": 502919784476918336,
+      "est_bonus_usd": 58.24
+    },
+    {
+      "borrower": "0xf534563e8734989464506377f97d3b36f6f9e7e1",
+      "hf": 1.109755,
+      "total_debt_usd": 36866.69,
       "debt_symbol": "USDT",
       "debt_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
       "collateral_symbol": "WETH",
       "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 5231521588,
-      "est_bonus_usd": 261.58
-    },
-    {
-      "borrower": "0x3ce17a6c31aec402c61730f818f6a10da7c59953",
-      "hf": 1.11543,
-      "total_debt_usd": 10096.2,
-      "debt_symbol": "USDC",
-      "debt_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 4543745094,
-      "est_bonus_usd": 227.19
-    },
-    {
-      "borrower": "0x89d22f9fb20c006ee82603a4ee03a2afda8f32be",
-      "hf": 1.115486,
-      "total_debt_usd": 8698.94,
-      "debt_symbol": "USDT",
-      "debt_token": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
-      "collateral_symbol": "WETH",
-      "collateral_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "repay_amount_raw": 1742951838,
-      "est_bonus_usd": 87.15
+      "repay_amount_raw": 7091137079,
+      "est_bonus_usd": 354.56
     }
   ]
 }

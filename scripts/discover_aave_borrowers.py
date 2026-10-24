@@ -13,23 +13,32 @@ RPCS = ["https://arb1.arbitrum.io/rpc", "https://arbitrum-one-rpc.publicnode.com
 POOL = "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
 DATA_PROVIDER = "0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654"
 BORROW_TOPIC = "0xb3d084820fb1a9decffb176436bd02558d15fac9b0ddfed8c465bc7359d7dce0"
-ASSETS = {  # symbol: (address, decimals, usd price source: 'eth' | 1.0)
+ASSETS = {  # symbol: (address, decimals)
     "WETH": ("0x82aF49447D8a07e3bd95BD0d56f35241523fBab1", 18),
     "USDC": ("0xaf88d065e77c8cC2239327C5EDb3A432268e5831", 6),
     "USDT": ("0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9", 6),
+    "USDC.e": ("0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8", 6),
     "WBTC": ("0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f", 8),
     "ARB": ("0x912CE59144191C1204E64559FE8253a0e49E6548", 18),
+    "wstETH": ("0x5979D7b546E38E414F7E9822514be443A4800529", 18),
 }
 DEBT_OK = {"WETH", "USDC", "USDT"}  # repay assets the broadcaster's reimbursement logic supports
-HF_MAX, MIN_DEBT_USD, WINDOW, WINDOWS = 1.15, 300.0, 9500, 30
+BONUS_BY_COL = {"WETH": 0.05, "USDC": 0.05, "USDT": 0.05, "USDC.e": 0.05, "wstETH": 0.05, "WBTC": 0.07, "ARB": 0.10}
+HF_MAX, MIN_DEBT_USD, WINDOW, WINDOWS = 1.15, 1100.0, 9500, 12
 
 
 def rpc(payload):
+    want_list = isinstance(payload, list)
     for u in RPCS:
         try:
             r = urllib.request.Request(u, data=json.dumps(payload).encode(),
                                        headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"})
-            return json.loads(urllib.request.urlopen(r, timeout=12).read())
+            parsed = json.loads(urllib.request.urlopen(r, timeout=10).read())
+            if want_list and not isinstance(parsed, list):
+                continue
+            if not want_list and (not isinstance(parsed, dict) or "error" in parsed):
+                continue
+            return parsed
         except Exception:
             continue
     return None
@@ -37,17 +46,19 @@ def rpc(payload):
 
 def one(m, p):
     r = rpc({"jsonrpc": "2.0", "id": 1, "method": m, "params": p})
-    return (r or {}).get("result")
+    return (r or {}).get("result") if isinstance(r, dict) else None
 
 
 def batch(calls):
     out = {}
-    for i in range(0, len(calls), 40):
-        chunk = calls[i:i + 40]
+    for i in range(0, len(calls), 30):
+        chunk = calls[i:i + 30]
         r = rpc([{"jsonrpc": "2.0", "id": j, "method": "eth_call", "params": [{"to": t, "data": d}, "latest"]}
                  for j, (t, d) in enumerate(chunk)])
-        for it in (r or []):
-            out[i + it["id"]] = it.get("result")
+        if isinstance(r, list):
+            for it in r:
+                if isinstance(it, dict) and "id" in it:
+                    out[i + it["id"]] = it.get("result")
     return out
 
 
@@ -56,8 +67,18 @@ def w(h, n):
 
 
 def main():
-    head = int(one("eth_blockNumber", []), 16)
+    head_hex = one("eth_blockNumber", [])
+    if not head_hex:
+        return 0
+    head = int(head_hex, 16)
     users = set()
+    try:
+        prev_doc = json.loads((BASE / "reports" / "aave_watch_extra.json").read_text())
+        for x in prev_doc.get("watch", []):
+            if x.get("borrower"):
+                users.add(x["borrower"].lower())
+    except Exception:
+        pass
     for k in range(WINDOWS):
         hi = head - k * WINDOW
         r = rpc({"jsonrpc": "2.0", "id": 1, "method": "eth_getLogs",
@@ -70,6 +91,10 @@ def main():
     eth_usd = 0.0
     cl = one("eth_call", [{"to": "0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612", "data": "0x50d25bcd"}, "latest"])
     eth_usd = int(cl, 16) / 1e8 if cl else 2400.0
+    cl_btc = one("eth_call", [{"to": "0x6ce185860a4963106506C203335A2910413708e9", "data": "0x50d25bcd"}, "latest"])
+    btc_usd = int(cl_btc, 16) / 1e8 if cl_btc else eth_usd * 28.0
+    cl_arb = one("eth_call", [{"to": "0xb2A824043730FE05F3DA2efaFa1CBbe83fa548D6", "data": "0x50d25bcd"}, "latest"])
+    arb_usd = int(cl_arb, 16) / 1e8 if cl_arb else 0.55
     cands = []
     for i, u in enumerate(users):
         h = res.get(i)
@@ -80,8 +105,16 @@ def main():
             cands.append((hf, debt_usd, u))
     cands.sort()
     out = []
-    price = {"WETH": eth_usd, "USDC": 1.0, "USDT": 1.0, "WBTC": eth_usd * 0.0, "ARB": 0.0}
-    for hf, debt_usd, u in cands[:25]:
+    price = {
+        "WETH": eth_usd,
+        "USDC": 1.0,
+        "USDT": 1.0,
+        "USDC.e": 1.0,
+        "WBTC": btc_usd,
+        "ARB": arb_usd,
+        "wstETH": eth_usd * 1.18,
+    }
+    for hf, debt_usd, u in cands[:30]:
         calls = [(DATA_PROVIDER, "0x28dd2d01" + pad(a) + pad(u)) for a, _ in ASSETS.values()]
         rd = batch(calls)
         best_debt, best_col = None, None
@@ -98,13 +131,27 @@ def main():
                     best_col = (sym, col_bal, val)
         if not best_debt or not best_col or best_debt[0] == best_col[0]:
             continue
-        repay = int(best_debt[1] * 0.45)
+        # Enforce Aave V3.2 MustNotLeaveDust() (0xb629b0e4) rule: remaining debt & collateral must stay >= $1,015 USD
+        debt_val_usd = best_debt[2]
+        col_val_usd = best_col[2]
+        bonus_rate = BONUS_BY_COL.get(best_col[0], 0.05)
+        max_repay_usd = min(
+            debt_val_usd * 0.45,
+            debt_val_usd - 1015.0,
+            (col_val_usd - 1015.0) / (1.0 + bonus_rate),
+        )
+        if max_repay_usd < 80.0:
+            continue
+        repay_fraction = max_repay_usd / debt_val_usd
+        repay = int(best_debt[1] * repay_fraction)
+        if repay <= 0:
+            continue
         out.append({
             "borrower": u, "hf": round(hf, 6), "total_debt_usd": round(debt_usd, 2),
             "debt_symbol": best_debt[0], "debt_token": ASSETS[best_debt[0]][0],
             "collateral_symbol": best_col[0], "collateral_token": ASSETS[best_col[0]][0],
             "repay_amount_raw": repay,
-            "est_bonus_usd": round(best_debt[2] * 0.45 * 0.05, 2),
+            "est_bonus_usd": round(max_repay_usd * bonus_rate, 2),
         })
     doc = {"ts": time.time(), "borrowers_scanned": len(users), "blocks_covered": WINDOW * WINDOWS,
            "candidates_under_hf": len(cands), "watch": out}
