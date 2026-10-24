@@ -111,12 +111,12 @@ RuntimeMaxUse=10M
 EOF
 sudo systemctl restart systemd-journald 2>/dev/null || true
 
-# Keep repo fresh (shallow 1-commit fetch so 8GB disk never fills up) + run all 3 live discovery indexers
+# Keep repo fresh (shallow 1-commit fetch so 8GB disk never fills up) + staggered low-RAM discovery indexers (Nice=+10)
 ( crontab -l 2>/dev/null | grep -v arb-flash-engine || true; \
   echo "*/30 * * * * cd $APP_DIR && git fetch --depth 1 origin main -q && git reset --hard origin/main -q && git gc --prune=now -q && sudo journalctl --vacuum-size=20M >/dev/null 2>&1 || true"; \
-  echo "*/20 * * * * cd $APP_DIR && $PY_BIN scripts/discover_aave_borrowers.py > logs/discover_aave.log 2>&1"; \
-  echo "*/20 * * * * cd $APP_DIR && $PY_BIN scripts/discover_comet_borrowers.py > logs/discover_comet.log 2>&1"; \
-  echo "*/5  * * * * cd $APP_DIR && $PY_BIN scripts/discover_live_pool_spreads.py > logs/discover_dstar.log 2>&1" \
+  echo "1,21,41 * * * * cd $APP_DIR && nice -n 10 $PY_BIN scripts/discover_aave_borrowers.py > logs/discover_aave.log 2>&1"; \
+  echo "8,28,48 * * * * cd $APP_DIR && nice -n 10 $PY_BIN scripts/discover_comet_borrowers.py > logs/discover_comet.log 2>&1"; \
+  echo "*/5     * * * * cd $APP_DIR && nice -n 10 $PY_BIN scripts/discover_live_pool_spreads.py > logs/discover_dstar.log 2>&1" \
 ) | crontab -
 
 sudo systemctl daemon-reload

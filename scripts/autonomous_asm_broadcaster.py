@@ -491,8 +491,10 @@ def _check_aws_failover_and_heartbeat() -> dict:
 
 def _presign_candidates_to_ram_cache(candidates: list, gas_price_wei: int, base_nonce: int) -> int:
     """
-    Pre-signs the top liquidation & arbitrage calldatas into RAM (PRESIGNED_RAM_MAP, /dev/shm, and reports/presigned_tx_cache.json)
-    across nonces (base_nonce .. base_nonce+3) so 0ms signing is required when a trigger fires.
+    Idea 8 (Cycle 4): Pre-signs the top 8 liquidation calldatas AND top 8 live d* DEX Flash-Swap calldatas
+    into RAM (PRESIGNED_RAM_MAP, /dev/shm/presigned_tx_cache.json, and reports/presigned_tx_cache.json)
+    across nonces (base_nonce .. base_nonce+3) = 64 pre-signed variants so both the C daemon (in 0.28ms)
+    and Python broadcaster require 0ms ECDSA signing when any liquidation or DEX spread triggers!
     """
     if not RELAYER_PK or os.environ.get("ARB_RPC_OVERRIDE"):
         return 0
@@ -509,7 +511,9 @@ def _presign_candidates_to_ram_cache(candidates: list, gas_price_wei: int, base_
             has_eth_account = False
         entries = []
         PRESIGNED_RAM_MAP.clear()
-        for idx, (lbl, cd_hex, gas_lim) in enumerate(candidates[:8]):
+        for idx, item in enumerate(candidates[:16]):
+            lbl, cd_hex, gas_lim = item[0], item[1], item[2]
+            cat = item[3] if len(item) >= 4 else ("LIQUIDATION" if idx < 8 else "DEX_ARB")
             cd_norm = cd_hex if cd_hex.startswith("0x") else ("0x" + cd_hex)
             for n_off in range(4):
                 n_val = base_nonce + n_off
@@ -538,12 +542,15 @@ def _presign_candidates_to_ram_cache(candidates: list, gas_price_wei: int, base_
                 if n_off == 0:
                     entries.append({
                         "rank": idx + 1,
+                        "category": cat,
                         "label": lbl,
                         "nonce": n_val,
                         "shotgun_nonces_prewarmed": [base_nonce, base_nonce + 1, base_nonce + 2, base_nonce + 3],
                         "gas_limit": int(gas_lim),
                         "gas_price_wei": int(gas_price_wei),
                         "calldata_selector": cd_norm[:10],
+                        "calldata_hex": cd_norm,
+                        "raw_tx_hex": raw_hex,
                         "raw_tx_prefix": raw_hex[:42] + "...",
                     })
         doc = {
@@ -551,6 +558,8 @@ def _presign_candidates_to_ram_cache(candidates: list, gas_price_wei: int, base_
             "relayer_wallet": RELAYER_WALLET,
             "base_nonce": base_nonce,
             "presigned_total_variants": len(PRESIGNED_RAM_MAP),
+            "presigned_liquidation_variants": sum(4 for x in entries if x.get("category") == "LIQUIDATION"),
+            "presigned_dex_arb_variants": sum(4 for x in entries if x.get("category") == "DEX_ARB"),
             "entries": entries,
         }
         PRESIGNED_CACHE_JSON.write_text(json.dumps(doc, indent=2), encoding="utf-8")
@@ -1808,7 +1817,8 @@ def main() -> int:
     except Exception:
         pass
 
-    # Pre-sign top 8 closest Aave V3 liquidation calldatas into 0ms RAM Cache (/dev/shm + reports/presigned_tx_cache.json) across 4 nonces
+    # Idea 8 (Cycle 4): Pre-sign top 8 closest Aave V3 liquidation calldatas AND top 8 live d* DEX Flash-Swap calldatas
+    # into 0ms RAM Cache (/dev/shm/presigned_tx_cache.json + reports/presigned_tx_cache.json) across 4 nonces = 64 variants!
     presigned_variants_count = 0
     try:
         if not os.environ.get("ARB_RPC_OVERRIDE") and RELAYER_PK:
@@ -1818,7 +1828,13 @@ def main() -> int:
             for _b_addr, _d_tok, _c_tok, _d_amt, _min_n, _rf, _is_w, _lbl in aave_high_risk_watchlist[:8]:
                 _opt_f = 100 if (_d_tok.lower() in major_1bp_set and _c_tok.lower() in major_1bp_set) else 500
                 _cd_ps = _encode_gasless_arb_calldata(3, _d_tok, _c_tok, zero_addr, _d_amt, _min_n, _opt_f, 0, True, _b_addr, _rf)
-                _presign_inputs.append((_lbl, _cd_ps, 680000))
+                _presign_inputs.append((_lbl, _cd_ps, 680000, "LIQUIDATION"))
+            for _p_lbl, _pb, _ps, _tb, _tq, _amt, _z0, _z1 in probe_defs[:8]:
+                _is_w_dex = _tb.lower() == weth.lower()
+                _min_g_dex = MIN_GROSS_WETH_WEI if _is_w_dex else MIN_GROSS_USDC_RAW
+                _rf_dex = RELAYER_REIMB_WEI if _is_w_dex else RELAYER_REIMB_USDC
+                _cd_dex = _encode_flash_swap_calldata(_pb, _ps, _tb, _tq, _amt, _min_g_dex, _z0, _z1, _rf_dex)
+                _presign_inputs.append((_p_lbl, _cd_dex, 420000, "DEX_ARB"))
             presigned_variants_count = _presign_candidates_to_ram_cache(_presign_inputs, live_gp_init_wei, _cur_nonce)
     except Exception:
         presigned_variants_count = 0
@@ -1852,11 +1868,12 @@ def main() -> int:
         (comet_usdc_addr, "0xbb8fb21289125c39b94bde7215bac35494fbfa57", 2000.06,  "Compound V3 USDC Comet Retail #7 ($2,000 USDC Debt • 8% Absorb Bonus)"),
         (comet_weth_addr, "0xb7af31f78c5c0a2eaff7d7fc317c80fd1988265a", 1924.20,  "Compound V3 WETH Comet Retail #8 (0.7712 WETH Debt • 8% Absorb Bonus)"),
     ]
+    low_comp_radiant_targets = []
     try:
         if _comet_extra_path.exists():
             _c_doc = json.loads(_comet_extra_path.read_text(encoding="utf-8"))
             _seen_comet = {(m.lower(), u.lower()) for m, u, _, _ in low_comp_comet_targets}
-            for _cw in (_c_doc.get("targets") or _c_doc.get("watch") or [])[:25]:
+            for _cw in (_c_doc.get("targets") or _c_doc.get("watch") or [])[:35]:
                 _ck = (_cw["market"].lower(), _cw["borrower"].lower())
                 if _ck not in _seen_comet:
                     _seen_comet.add(_ck)
@@ -1866,6 +1883,20 @@ def main() -> int:
                         float(_cw.get("debt_usd", 1000.0)),
                         _cw.get("label", f"Auto-Discovered {_cw.get('market_name', 'Comet')} Borrower (${_cw.get('debt_usd', 0):,.0f} Debt)"),
                     ))
+            for _rw in (_c_doc.get("radiant_targets") or [])[:25]:
+                low_comp_radiant_targets.append(_rw)
+                table2_under_2pct_fast_triggers.append({
+                    "type": "LOW_COMP_RADIANT_V2_WATCH",
+                    "protocol": "Radiant V2 (95% Lower Bot Competition • 12% Bonus)",
+                    "market": _rw.get("market", "0xF4B1486DD74D07706052A33d31d7c0AAFD0659E1"),
+                    "target": _rw["borrower"],
+                    "hf": round(float(_rw.get("hf", 1.2)), 4),
+                    "debt_usd": float(_rw.get("debt_usd", 0.0)),
+                    "is_liquidatable_now": bool(_rw.get("is_liquidatable", False)),
+                    "est_bonus_inr": round(float(_rw.get("est_bonus_usd", 0.0)) * 94.92, 2),
+                    "status": "LIQUIDATABLE_NOW_RADIANT_12PCT" if _rw.get("is_liquidatable") else "ACTIVE_LOW_COMP_RADIANT_WATCH",
+                    "label": _rw.get("label", ""),
+                })
     except Exception:
         pass
     if os.environ.get("ARB_RPC_OVERRIDE"):
@@ -1933,14 +1964,18 @@ def main() -> int:
     except Exception:
         pass
 
-    _tot_comet_debt_usd = round(sum(float(x[2]) for x in low_comp_comet_targets), 2)
+    _tot_comet_debt_usd = round(sum(float(x[2]) for x in low_comp_comet_targets) + sum(float(x.get("debt_usd", 0.0)) for x in low_comp_radiant_targets), 2)
     low_competition_lending_markets = {
         "compound_v3_usdc_comet": comet_usdc_addr,
+        "compound_v3_usdce_comet": "0xA5EDBDD9646f8dFF606d7448e414884C7d905dCA",
         "compound_v3_weth_comet": comet_weth_addr,
+        "compound_v3_usdt_comet": "0xd98Be00b5D27fc98112BdE293e487f8D4cA57d07",
         "radiant_v2_pool": "0xF4B1486DD74D07706052A33d31d7c0AAFD0659E1",
         "silo_finance_repository": "0x8658047e48CC09161f4152c79155Dac1d710Ff0a",
         "dolomite_margin": "0x6Bd780E7fDf01D77e4d475c821f1e7AE05409072",
-        "active_borrowers_monitored": len(low_comp_comet_targets),
+        "active_borrowers_monitored": len(low_comp_comet_targets) + len(low_comp_radiant_targets),
+        "comet_borrowers_monitored": len(low_comp_comet_targets),
+        "radiant_v2_borrowers_monitored": len(low_comp_radiant_targets),
         "total_monitored_debt_usd": _tot_comet_debt_usd,
         "total_monitored_debt_inr": round(_tot_comet_debt_usd * 94.92, 2),
         "liquidatable_now": low_comp_liquidatable_now,
