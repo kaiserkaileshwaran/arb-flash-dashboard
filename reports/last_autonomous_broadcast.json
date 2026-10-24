@@ -23,7 +23,7 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 8,
+      "frames_received": 10,
       "oracle_updates_detected": 0,
       "whale_swaps_decoded": 4,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792870354.2845566
+    "ts": 1792870359.195192
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -114,30 +114,30 @@
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0xf30ce556d501a23ee2d7812a4539dc50ee8f6d8f",
-      "hf": 1.046954,
+      "hf": 1.047008,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.6954,
+      "distance_pct": 4.7008,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "ARB_USDCE_U5_P1_REV",
       "gross_inr": 0.0451,
-      "net_inr": -0.5745,
+      "net_inr": -0.5762,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "CAM_UNI1_WETH_USDT",
       "gross_inr": 0.0059,
-      "net_inr": -0.6137,
+      "net_inr": -0.6154,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     },
     {
       "type": "DEX_SPREAD_UNDER_2PCT_FAST_PROFIT",
       "target": "USDT_AAVE_U1_P5",
       "gross_inr": 0.026,
-      "net_inr": -0.5936,
+      "net_inr": -0.5953,
       "status": "ABORTED_WOULD_BURN_GAS_TRYING_NEW_ROUTE"
     }
   ],
@@ -152,12 +152,12 @@
   "multi_route_bundle_probes": 114,
   "total_rpc_checks_per_cycle": 256,
   "cycles_scanned": 1,
-  "scan_duration_sec": 0.89,
-  "rpc_latency_min_ms": 411.73,
-  "rpc_latency_avg_ms": 411.73,
+  "scan_duration_sec": 0.94,
+  "rpc_latency_min_ms": 315.29,
+  "rpc_latency_avg_ms": 315.29,
   "chainlink_eth_usd_price": 2335.87,
-  "univ3_1bp_eth_spot_usd": 2336.05,
-  "oracle_deviation_bps": 0.77,
+  "univ3_1bp_eth_spot_usd": 2336.75,
+  "oracle_deviation_bps": 3.77,
   "pre_oracle_radar_alerts": [],
   "presigned_ram_cache_variants": 32,
   "auto_scale_tier": "TIER_1_BOOTSTRAP_SNIPER",
@@ -165,7 +165,7 @@
   "aws_failover_state": {
     "role": "ACTIVE_FAILOVER_BROADCASTER",
     "aws_online": false,
-    "aws_heartbeat_age_sec": 1201.7,
+    "aws_heartbeat_age_sec": 1206.6,
     "broadcast_enabled": true
   },
   "camelot_v3_dynamic_fee_bps": 1.0,
@@ -196,20 +196,20 @@
     "0xbfef061243c3da14d20aa9cb054350a9192d3a93": 1.140464,
     "0x875e726fa2e984570b32f505c9c64f864d1d2e5b": 1.103286,
     "0x4b32ad6d34d5e07ed48bf7e9ff87addca6995b7d": 1.037751,
-    "0xf30ce556d501a23ee2d7812a4539dc50ee8f6d8f": 1.046954,
-    "0x391a19ca9cf71d30d60b1667a7643ad116f02ecc": 1.050866,
-    "0xf5415033f7211ea19ba2a448ec04db9c99ead270": 1.055476,
-    "0xd54daa05976cd37816868fe800a4db5d99ddd22c": 1.06339,
-    "0xc767ecd98c87182f272386e75086a1cfacc5c724": 1.074667,
-    "0xf6305f5cfdf557de218743bdd24441526453f9dc": 1.077075,
-    "0xdbc75bb682c147f3df92e0948f5e19ac15628341": 1.081164,
+    "0xf30ce556d501a23ee2d7812a4539dc50ee8f6d8f": 1.047008,
+    "0x391a19ca9cf71d30d60b1667a7643ad116f02ecc": 1.050268,
+    "0xf5415033f7211ea19ba2a448ec04db9c99ead270": 1.054939,
+    "0xd54daa05976cd37816868fe800a4db5d99ddd22c": 1.063177,
+    "0xc767ecd98c87182f272386e75086a1cfacc5c724": 1.074056,
+    "0xf6305f5cfdf557de218743bdd24441526453f9dc": 1.076462,
+    "0xdbc75bb682c147f3df92e0948f5e19ac15628341": 1.080872,
     "0x26aecc32cd80e439391572e36849d655756b0bfc": 1.082929,
-    "0x782df99676f014b6fd6000626073c78dba205d2e": 1.089191,
-    "0x48b5c38110aab5da23946ee4dc385df1f2e42ab6": 1.090459,
-    "0xbcdadc6aee0e2339eeef951a61f0eedb7d387de2": 1.093912,
-    "0xc1ba486130dd91db3c3bb632a0a752b3ffee3867": 1.09564,
-    "0x1a199cd404b4eea21678fe6713c8bc807f9dacf4": 1.096499,
-    "0xc0e24c823d6ab235d10ebfb15df9974a5e4387b9": 1.110667,
+    "0x782df99676f014b6fd6000626073c78dba205d2e": 1.089812,
+    "0x48b5c38110aab5da23946ee4dc385df1f2e42ab6": 1.090237,
+    "0xbcdadc6aee0e2339eeef951a61f0eedb7d387de2": 1.093293,
+    "0xc1ba486130dd91db3c3bb632a0a752b3ffee3867": 1.095344,
+    "0x1a199cd404b4eea21678fe6713c8bc807f9dacf4": 1.095875,
+    "0xc0e24c823d6ab235d10ebfb15df9974a5e4387b9": 1.110633,
     "0x60e993f043d02de1090f6bcb0c7bc6322d4a8eff": 1.113459,
     "0x264d1784346b806f2093d7fd7d5e86849620ee1e": 1.11541,
     "0xf534563e8734989464506377f97d3b36f6f9e7e1": 1.115783,
@@ -220,7 +220,7 @@
     "0x4e25751094fc6b1b033dac1b2e1dcfd476bfbc1a": 1.140787,
     "0x29ad8aac822fbef453f35c4e788cc571ba1c1ed3": 1.143648,
     "0xedeaab21e8c3c32e4b4446ca2aafe152171a51f1": 1.144438,
-    "0xb5dd167076d4e6be55d2d1aaa0f591c1d5c3302c": 1.148266,
+    "0xb5dd167076d4e6be55d2d1aaa0f591c1d5c3302c": 1.148265,
     "0xf5bc7af89cde21e8aafc619196f9eb0e6238b626": 1.158533,
     "0x8a71bc78bdbe04b23085cd87b14ce2f1605bb577": 1.16518,
     "0x9750ddc8b30eaeabad1b20e71167de9bd776b080": 1.169532,
@@ -240,10 +240,10 @@
   ],
   "bundled_multi_route_gross_wei": 4687678201507,
   "bundled_multi_route_gross_inr": 1.0394,
-  "l2_gas_cost_inr": 0.5993,
-  "bundled_total_gas_cost_inr": 1.0188,
-  "single_net_if_forced_inr": -0.3073,
-  "bundled_net_if_forced_inr": 0.0206,
+  "l2_gas_cost_inr": 0.601,
+  "bundled_total_gas_cost_inr": 1.0217,
+  "single_net_if_forced_inr": -0.309,
+  "bundled_net_if_forced_inr": 0.0177,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -265,11 +265,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 18685,
-    "per_route_ns": 1167.81,
+    "latency_ns": 22021,
+    "per_route_ns": 1376.31,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792870354.2850885,
-  "hmac_sha256_integrity": "9b584276855639ed18bbbb943fd1d775a386361bfd129f006e52a152bdadd5bd"
+  "ts": 1792870359.1957676,
+  "hmac_sha256_integrity": "34eee9b0d5d0b9a70fe0e79404d36316cb62a91043dbbb11c283675fc49f2891"
 }
