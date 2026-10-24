@@ -440,13 +440,22 @@ PRESIGNED_RAM_MAP = {}
 def _check_aws_failover_and_heartbeat() -> dict:
     """
     Automatic AWS us-east-1 Primary <-> GitHub Actions Standby Failover:
-    - If running on AWS (IS_AWS_PRIMARY=1 or AWS_EXECUTION_ENV set), writes fresh heartbeat to reports/aws_heartbeat.json.
+    - If running on AWS (IS_AWS_PRIMARY=1 or AWS_EXECUTION_ENV set, or /sys/hypervisor/uuid / /sys/devices/virtual/dmi/id/product_uuid is EC2), writes fresh heartbeat to reports/aws_heartbeat.json.
     - If running on GitHub Actions Node 1, checks reports/aws_heartbeat.json:
       * If AWS heartbeat is fresh (< 180s old), sets ARB_DISABLE_BROADCAST=1 (Standby mode, 0 nonce conflict).
       * If AWS heartbeat is stale/offline (>= 180s old or missing), sets ARB_DISABLE_BROADCAST=0 (Active Failover Broadcaster!).
     """
     now = time.time()
     is_aws = bool(os.environ.get("IS_AWS_PRIMARY", "").strip() == "1" or os.environ.get("AWS_EXECUTION_ENV"))
+    if not is_aws and os.environ.get("GITHUB_ACTIONS", "").strip().lower() != "true":
+        for dmi_p in ("/sys/devices/virtual/dmi/id/board_vendor", "/sys/devices/virtual/dmi/id/sys_vendor", "/etc/hostname"):
+            try:
+                txt = Path(dmi_p).read_text(encoding="utf-8", errors="ignore").lower()
+                if "amazon" in txt or "ip-172-" in txt or "ec2" in txt:
+                    is_aws = True
+                    break
+            except Exception:
+                pass
     if is_aws:
         hb = {"ts": now, "host": "aws-us-east-1-primary", "active": True}
         try:
@@ -643,6 +652,8 @@ def main() -> int:
         fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         return 0
+
+    _check_aws_failover_and_heartbeat()
 
     loop_seconds = 0
     for idx_arg, arg in enumerate(sys.argv[1:]):

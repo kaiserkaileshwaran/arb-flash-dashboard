@@ -112,7 +112,7 @@ EOF
 sudo systemctl restart systemd-journald 2>/dev/null || true
 
 # Keep repo fresh (shallow 1-commit fetch so 8GB disk never fills up) + run all 3 live discovery indexers
-( crontab -l 2>/dev/null | grep -v arb-flash-engine; \
+( crontab -l 2>/dev/null | grep -v arb-flash-engine || true; \
   echo "*/30 * * * * cd $APP_DIR && git fetch --depth 1 origin main -q && git reset --hard origin/main -q && git gc --prune=now -q && sudo journalctl --vacuum-size=20M >/dev/null 2>&1 || true"; \
   echo "*/20 * * * * cd $APP_DIR && $PY_BIN scripts/discover_aave_borrowers.py > logs/discover_aave.log 2>&1"; \
   echo "*/20 * * * * cd $APP_DIR && $PY_BIN scripts/discover_comet_borrowers.py > logs/discover_comet.log 2>&1"; \
