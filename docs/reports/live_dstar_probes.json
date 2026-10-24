@@ -1,5 +1,5 @@
 {
-  "ts": 1792873262.4653091,
+  "ts": 1792873267.9078012,
   "univ3_1bp_eth_spot_usd": 2343.42,
   "pools_indexed": 38,
   "solved_dstar_pairs": 92,
@@ -473,19 +473,6 @@
       "live_edge_bps": -1.819
     },
     {
-      "label": "DSTAR_WETH_USDC_0_1",
-      "pool_borrow": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
-      "pool_sell": "0xC6962004f452bE9203591991D15f6b388e09E8D0",
-      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 25407346769639312,
-      "zero_for_one_borrow": true,
-      "zero_for_one_sell": false,
-      "live_spread_bps": 3.102,
-      "fee_floor_bps": 6.0,
-      "live_edge_bps": -2.898
-    },
-    {
       "label": "DSTAR_WETH_USDC_3_0",
       "pool_borrow": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
       "pool_sell": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
@@ -499,17 +486,30 @@
       "live_edge_bps": -3.102
     },
     {
+      "label": "DSTAR_WETH_USDC_0_1",
+      "pool_borrow": "0x6f38e884725a116C9C7fBF208e79FE8828a2595F",
+      "pool_sell": "0xC6962004f452bE9203591991D15f6b388e09E8D0",
+      "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+      "d_star_raw": 25407347467620404,
+      "zero_for_one_borrow": true,
+      "zero_for_one_sell": false,
+      "live_spread_bps": 2.803,
+      "fee_floor_bps": 6.0,
+      "live_edge_bps": -3.197
+    },
+    {
       "label": "DSTAR_WETH_USDC_3_1",
       "pool_borrow": "0xB1026b8e7276e7AC75410F1fcbbe21796e8f7526",
       "pool_sell": "0xC6962004f452bE9203591991D15f6b388e09E8D0",
       "borrow_token": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
       "target_token": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-      "d_star_raw": 139823259439564192,
+      "d_star_raw": 139823280578539184,
       "zero_for_one_borrow": true,
       "zero_for_one_sell": false,
-      "live_spread_bps": 1.999,
+      "live_spread_bps": 1.7,
       "fee_floor_bps": 6.0,
-      "live_edge_bps": -4.001
+      "live_edge_bps": -4.3
     },
     {
       "label": "DSTAR_WETH_LINK_1_0",
