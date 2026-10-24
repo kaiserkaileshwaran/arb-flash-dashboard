@@ -1,5 +1,5 @@
 {
-  "ts": 1792870365.6769984,
+  "ts": 1792870368.5718436,
   "relayer_wallet": "0x9dD041dbd964DE086Da8f907518f6E25c45aea70",
   "base_nonce": 25,
   "presigned_total_variants": 32,
@@ -15,9 +15,9 @@
         28
       ],
       "gas_limit": 680000,
-      "gas_price_wei": 20032000,
+      "gas_price_wei": 20000000,
       "calldata_selector": "0x1034ef63",
-      "raw_tx_prefix": "0xbea072507e27a5e4cf6515efc1ca3571050f17fe..."
+      "raw_tx_prefix": "0x92f92c52f2860516ea8f61ffe796ed6ebb06b6f2..."
     },
     {
       "rank": 2,
@@ -30,9 +30,9 @@
         28
       ],
       "gas_limit": 680000,
-      "gas_price_wei": 20032000,
+      "gas_price_wei": 20000000,
       "calldata_selector": "0x1034ef63",
-      "raw_tx_prefix": "0xcabab3814176611ed3acfe7b6de1a6e5d3d37dcd..."
+      "raw_tx_prefix": "0xa085f0d6828d8be53e618cb77c74b6837ee6dd19..."
     },
     {
       "rank": 3,
@@ -45,9 +45,9 @@
         28
       ],
       "gas_limit": 680000,
-      "gas_price_wei": 20032000,
+      "gas_price_wei": 20000000,
       "calldata_selector": "0x1034ef63",
-      "raw_tx_prefix": "0x4166078b080dcf825de76af31fb618ef0de7d727..."
+      "raw_tx_prefix": "0xaebee1786aeb726f76f360d0591b03ecc7112d6c..."
     },
     {
       "rank": 4,
@@ -60,9 +60,9 @@
         28
       ],
       "gas_limit": 680000,
-      "gas_price_wei": 20032000,
+      "gas_price_wei": 20000000,
       "calldata_selector": "0x1034ef63",
-      "raw_tx_prefix": "0x0aa603a8f414cc390b8cbb3910213cb07a3feec0..."
+      "raw_tx_prefix": "0x815f8ca32e1e17b1d470f81362bfaa03831430b9..."
     },
     {
       "rank": 5,
@@ -75,9 +75,9 @@
         28
       ],
       "gas_limit": 680000,
-      "gas_price_wei": 20032000,
+      "gas_price_wei": 20000000,
       "calldata_selector": "0x1034ef63",
-      "raw_tx_prefix": "0x98c680acc67a931e558661f742202943ac5c7a54..."
+      "raw_tx_prefix": "0xd27b4805198f3721ad23c2b2e41617cc2edcf302..."
     },
     {
       "rank": 6,
@@ -90,9 +90,9 @@
         28
       ],
       "gas_limit": 680000,
-      "gas_price_wei": 20032000,
+      "gas_price_wei": 20000000,
       "calldata_selector": "0x1034ef63",
-      "raw_tx_prefix": "0x974ed6e88ac830c4b0b0079509d233d11f627be0..."
+      "raw_tx_prefix": "0x898919917e3cab519ca56d8051fed5487b264c25..."
     },
     {
       "rank": 7,
@@ -105,9 +105,9 @@
         28
       ],
       "gas_limit": 680000,
-      "gas_price_wei": 20032000,
+      "gas_price_wei": 20000000,
       "calldata_selector": "0x1034ef63",
-      "raw_tx_prefix": "0x1bfcb006d0801e5c2ec20e3bf1e3819038acbf29..."
+      "raw_tx_prefix": "0xee2de5cfd1adf52cbc5e49ca98498c7444751ab6..."
     },
     {
       "rank": 8,
@@ -120,9 +120,9 @@
         28
       ],
       "gas_limit": 680000,
-      "gas_price_wei": 20032000,
+      "gas_price_wei": 20000000,
       "calldata_selector": "0x1034ef63",
-      "raw_tx_prefix": "0xdb331dbe9186c4a66a587b78d77bd7efb4370eef..."
+      "raw_tx_prefix": "0x64b07586271801ee3870241b6bbcf21521347e42..."
     }
   ]
 }
