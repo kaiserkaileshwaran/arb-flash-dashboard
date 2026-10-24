@@ -22,10 +22,10 @@
     "metamask_min_balance_required": 0.0,
     "wss_sequencer_feed": {
       "connected": true,
-      "endpoint": "wss://arbitrum-one-rpc.publicnode.com/",
-      "frames_received": 674,
+      "endpoint": "wss://arb1-feed.arbitrum.io/feed",
+      "frames_received": 7,
       "oracle_updates_detected": 0,
-      "whale_swaps_decoded": 101,
+      "whale_swaps_decoded": 4,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
     "low_competition_lending_markets": {
@@ -44,7 +44,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1792870553.4862747
+    "ts": 1792870559.0453565
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -74,9 +74,9 @@
     {
       "type": "AAVE_PRE_LIQ_ROUND_1_0_PREWARMED",
       "target": "0x12bb24d553161036461ef1dc789c6f73765e1a57",
-      "hf": 1.044302,
+      "hf": 1.044301,
       "rounded_hf_1dec": 1.0,
-      "distance_pct": 4.4302,
+      "distance_pct": 4.4301,
       "status": "PRE_WARMED_AT_ROUND_1_0_ZERO_DELAY_READY"
     },
     {
@@ -151,10 +151,10 @@
   "aave_v3_borrowers_monitored": 63,
   "multi_route_bundle_probes": 114,
   "total_rpc_checks_per_cycle": 256,
-  "cycles_scanned": 215,
-  "scan_duration_sec": 180.95,
-  "rpc_latency_min_ms": 320.79,
-  "rpc_latency_avg_ms": 685.12,
+  "cycles_scanned": 1,
+  "scan_duration_sec": 1.08,
+  "rpc_latency_min_ms": 424.44,
+  "rpc_latency_avg_ms": 424.44,
   "chainlink_eth_usd_price": 2338.73,
   "univ3_1bp_eth_spot_usd": 2337.97,
   "oracle_deviation_bps": 3.25,
@@ -165,21 +165,21 @@
   "aws_failover_state": {
     "role": "ACTIVE_FAILOVER_BROADCASTER",
     "aws_online": false,
-    "aws_heartbeat_age_sec": 1400.8,
+    "aws_heartbeat_age_sec": 1406.4,
     "broadcast_enabled": true
   },
   "camelot_v3_dynamic_fee_bps": 1.0,
-  "aave_lowest_health_factor": 1.022608,
+  "aave_lowest_health_factor": 1.022612,
   "aave_closest_borrower": "0x954b9cfb8055fcfcc74b2252d4b2b9827dfb44bb",
-  "aave_closest_borrower_debt_usd": 119365.92,
-  "aave_closest_5pct_liq_bonus_inr": 283255.33,
+  "aave_closest_borrower_debt_usd": 119523.83,
+  "aave_closest_5pct_liq_bonus_inr": 283630.05,
   "aave_liquidatable_positions_now": 0,
   "aave_borrower_hfs": {
     "0xba62acf915c1697d000de2f70494ab65cfbcf710": 1.033446,
     "0x22f1d8e414ef3c8eb426489498eeaef2488a44f9": 1.027447,
     "0x9f25248e8465a4a5106948615c6db2ed1e1b9052": 1.045836,
     "0x270d1c8c0f13ff925f710dff38bf806bdbb4e6b2": 1.052859,
-    "0x12bb24d553161036461ef1dc789c6f73765e1a57": 1.044302,
+    "0x12bb24d553161036461ef1dc789c6f73765e1a57": 1.044301,
     "0xc358f7803a0a28afe56b5bbce157664fe5e1624d": 1.03501,
     "0x50dd9ba784f9e3658f7bade66c2a9e19ad3dde36": 1.066438,
     "0x9cd61cab43075c6c4a56a95dacadad39df555d25": 1.038742,
@@ -237,14 +237,14 @@
     "USDCE_UNI5_UNI1(740196639842wei)",
     "ARB_USDCE_U5_U1(1644uUSD)",
     "ARB_USDC_U1_U5(1278uUSD)",
-    "ARB_UNI5_SUSHI5(438397097227wei)"
+    "ARB_UNI5_SUSHI5(475222321933wei)"
   ],
-  "bundled_multi_route_gross_wei": 5818304441068,
-  "bundled_multi_route_gross_inr": 1.2916,
+  "bundled_multi_route_gross_wei": 5855129665774,
+  "bundled_multi_route_gross_inr": 1.2998,
   "l2_gas_cost_inr": 0.5994,
   "bundled_total_gas_cost_inr": 1.019,
   "single_net_if_forced_inr": -0.2845,
-  "bundled_net_if_forced_inr": 0.2726,
+  "bundled_net_if_forced_inr": 0.2808,
   "real_net_profit_executed_inr": 0.0,
   "mudrex_deposit_gate_met": false,
   "mudrex_level0_fiat_withdraw_limit": 12500.0,
@@ -266,11 +266,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 21731,
-    "per_route_ns": 1358.19,
+    "latency_ns": 20718,
+    "per_route_ns": 1294.88,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1792870553.486795,
-  "hmac_sha256_integrity": "1646dca6340d7ad822d2406037bd9acc34ce30d7b2a8b82bce97f40358557247"
+  "ts": 1792870559.045881,
+  "hmac_sha256_integrity": "a9ab279ed9bf11c382fe2c59097dd31da76204730d1681e4abec21a2f66c7b94"
 }
