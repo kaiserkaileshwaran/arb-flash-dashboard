@@ -8,13 +8,26 @@ set -euo pipefail
 REPO_URL="${1:?usage: install_ec2.sh <git repo url>}"
 APP_DIR="$HOME/arb-flash-engine"
 
+# 0. Free up disk space & inodes on 8GB AWS Free-Tier EBS before installing
+sudo journalctl --vacuum-size=20M >/dev/null 2>&1 || true
+sudo apt-get clean >/dev/null 2>&1 || true
+sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* "$HOME/.cache" 2>/dev/null || true
+
 if command -v apt-get >/dev/null; then
-  sudo apt-get update -y && sudo apt-get install -y git gcc make libcurl4-openssl-dev python3 python3-venv python3-pip
+  sudo apt-get update -y && sudo apt-get install -y --no-install-recommends git gcc make libc6-dev libcurl4-openssl-dev python3 python3-venv python3-pip ca-certificates
+  sudo apt-get clean >/dev/null 2>&1 || true
 else
   sudo dnf install -y git gcc make libcurl-devel python3 python3-pip
 fi
 
-[ -d "$APP_DIR/.git" ] && git -C "$APP_DIR" pull --rebase || git clone "$REPO_URL" "$APP_DIR"
+if [ -d "$APP_DIR/.git" ]; then
+  git -C "$APP_DIR" fetch --depth 1 origin main
+  git -C "$APP_DIR" reset --hard origin/main
+  git -C "$APP_DIR" reflog expire --expire=now --all && git -C "$APP_DIR" gc --prune=now -q || true
+else
+  rm -rf "$APP_DIR"
+  git clone --depth 1 "$REPO_URL" "$APP_DIR"
+fi
 cd "$APP_DIR"
 mkdir -p bin reports logs
 
@@ -78,12 +91,12 @@ RestartSec=1
 WantedBy=multi-user.target
 EOF
 
-# Keep repo fresh + run all 3 live discovery indexers (Aave V3 deep borrower indexer, Compound V3 Comet scanner, Live Pool d* solver)
+# Keep repo fresh (shallow 1-commit fetch so 8GB disk never fills up) + run all 3 live discovery indexers
 ( crontab -l 2>/dev/null | grep -v arb-flash-engine; \
-  echo "*/30 * * * * cd $APP_DIR && git pull --rebase -q || true"; \
-  echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_aave_borrowers.py >> logs/discover_aave.log 2>&1"; \
-  echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_comet_borrowers.py >> logs/discover_comet.log 2>&1"; \
-  echo "*/5  * * * * cd $APP_DIR && .venv/bin/python scripts/discover_live_pool_spreads.py >> logs/discover_dstar.log 2>&1" \
+  echo "*/30 * * * * cd $APP_DIR && git fetch --depth 1 origin main -q && git reset --hard origin/main -q && git gc --prune=now -q && sudo journalctl --vacuum-size=20M >/dev/null 2>&1 || true"; \
+  echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_aave_borrowers.py > logs/discover_aave.log 2>&1"; \
+  echo "*/20 * * * * cd $APP_DIR && .venv/bin/python scripts/discover_comet_borrowers.py > logs/discover_comet.log 2>&1"; \
+  echo "*/5  * * * * cd $APP_DIR && .venv/bin/python scripts/discover_live_pool_spreads.py > logs/discover_dstar.log 2>&1" \
 ) | crontab -
 
 sudo systemctl daemon-reload
