@@ -64,6 +64,8 @@ After=network-online.target
 User=$USER
 WorkingDirectory=$APP_DIR
 Nice=-20
+StandardOutput=null
+StandardError=null
 Environment=IS_AWS_PRIMARY=1
 Environment=PATH=$APP_DIR/.venv/bin:/usr/local/bin:/usr/bin:/bin
 ExecStart=$APP_DIR/bin/arb_sniper_asm
@@ -81,6 +83,8 @@ After=network-online.target
 User=$USER
 WorkingDirectory=$APP_DIR
 Nice=-15
+StandardOutput=null
+StandardError=null
 Environment=IS_AWS_PRIMARY=1
 Environment=ARB_DISABLE_BROADCAST=0
 Environment=PATH=$APP_DIR/.venv/bin:/usr/local/bin:/usr/bin:/bin
@@ -90,6 +94,15 @@ RestartSec=1
 [Install]
 WantedBy=multi-user.target
 EOF
+
+# Permanently cap systemd-journald disk usage at 15MB so 8GB AWS disk never fills up
+sudo mkdir -p /etc/systemd/journald.conf.d
+sudo tee /etc/systemd/journald.conf.d/99-arb-cap.conf >/dev/null <<EOF
+[Journal]
+SystemMaxUse=15M
+RuntimeMaxUse=10M
+EOF
+sudo systemctl restart systemd-journald 2>/dev/null || true
 
 # Keep repo fresh (shallow 1-commit fetch so 8GB disk never fills up) + run all 3 live discovery indexers
 ( crontab -l 2>/dev/null | grep -v arb-flash-engine; \
