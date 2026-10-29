@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Vercel Serverless API Handler for Arbitrum Flash-Loan Telemetry & On-Chain Verification.
+Vercel Serverless Web & API Handler for Arbitrum Flash-Loan Visual Dashboard & On-Chain Verification.
+Serves HTML dashboards (/, /dashboard, /docs), JSON telemetry (/reports/*), and API endpoints (/api/*).
 Uses only Python Standard Library so Vercel deploys with zero external build dependencies.
 """
 
@@ -21,8 +22,9 @@ if str(BASE_DIR) not in sys.path:
 
 
 def _read_json_report(filename: str) -> Dict[str, Any]:
+    clean_name = Path(filename).name
     for folder in (REPORTS_DIR, DOCS_REPORTS_DIR):
-        candidate = folder / filename
+        candidate = folder / clean_name
         if candidate.exists():
             try:
                 return json.loads(candidate.read_text(encoding="utf-8"))
@@ -32,6 +34,15 @@ def _read_json_report(filename: str) -> Dict[str, Any]:
 
 
 class handler(BaseHTTPRequestHandler):
+    def _send_html(self, html_bytes: bytes, status: int = 200) -> None:
+        self.send_response(status)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(html_bytes)))
+        self.end_headers()
+        self.wfile.write(html_bytes)
+
     def _send_json(self, payload: Dict[str, Any], status: int = 200) -> None:
         raw = json.dumps(payload).encode("utf-8")
         self.send_response(status)
@@ -49,9 +60,48 @@ class handler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         parsed_url = urlparse(self.path)
-        req_path = parsed_url.path
         qs = parse_qs(parsed_url.query)
 
+        # Resolve original request path across Vercel rewrite query param, headers, or direct URL path
+        forwarded_path = qs.get("__path", [None])[0]
+        if not forwarded_path:
+            raw_path = parsed_url.path or "/"
+            if raw_path in ("/api/index.py", "/api/index"):
+                forwarded_path = "/"
+            else:
+                forwarded_path = raw_path
+        req_path = "/" + forwarded_path.lstrip("/")
+
+        # 1. Serve Visual HTML Dashboards at /, /index.html, /dashboard, /docs
+        if req_path in ("/", "/index.html"):
+            for candidate in (BASE_DIR / "index.html", BASE_DIR / "docs" / "index.html"):
+                if candidate.exists():
+                    self._send_html(candidate.read_bytes())
+                    return
+
+        if req_path in ("/dashboard", "/dashboard/", "/dashboard/index.html"):
+            dash_file = BASE_DIR / "dashboard" / "index.html"
+            if dash_file.exists():
+                self._send_html(dash_file.read_bytes())
+                return
+
+        if req_path in ("/docs", "/docs/", "/docs/index.html"):
+            docs_file = BASE_DIR / "docs" / "index.html"
+            if docs_file.exists():
+                self._send_html(docs_file.read_bytes())
+                return
+
+        # 2. Serve Static JSON Reports (/reports/*.json and /docs/reports/*.json)
+        if req_path.startswith("/reports/") or req_path.startswith("/docs/reports/"):
+            rep_name = Path(req_path).name
+            data = _read_json_report(rep_name)
+            if data:
+                self._send_json(data)
+                return
+            self._send_json({"ok": False, "error": f"Report {rep_name} not found"}, status=404)
+            return
+
+        # 3. Serve API Endpoints (/api/*)
         if req_path.startswith("/api/health"):
             self._send_json({
                 "ok": True,
@@ -84,7 +134,6 @@ class handler(BaseHTTPRequestHandler):
             self._send_json({"ok": True, **cfg})
             return
 
-        # Delegate live RPC calls to scripts/serve_metamask_portal.py helpers when available
         try:
             from scripts import serve_metamask_portal as portal
 
@@ -112,14 +161,22 @@ class handler(BaseHTTPRequestHandler):
         except Exception:
             pass
 
-        # Static report fallback for /api/state
-        self._send_json({
-            "ok": True,
-            "summary": _read_json_report("two_hour_test_summary.json"),
-            "asm_sniper_telemetry": _read_json_report("asm_sniper_telemetry.json"),
-            "autonomous_broadcast": _read_json_report("last_autonomous_broadcast.json"),
-            "wallet_balances": {},
-        })
+        if req_path.startswith("/api/"):
+            self._send_json({
+                "ok": True,
+                "summary": _read_json_report("two_hour_test_summary.json"),
+                "asm_sniper_telemetry": _read_json_report("asm_sniper_telemetry.json"),
+                "autonomous_broadcast": _read_json_report("last_autonomous_broadcast.json"),
+                "wallet_balances": {},
+            })
+            return
+
+        # 4. Default Fallback: Serve index.html for any non-API browser route
+        if (BASE_DIR / "index.html").exists():
+            self._send_html((BASE_DIR / "index.html").read_bytes())
+            return
+
+        self._send_json({"ok": False, "error": "Not found"}, status=404)
 
     def do_POST(self) -> None:
         self.do_GET()
