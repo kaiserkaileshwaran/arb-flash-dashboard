@@ -10,11 +10,10 @@
   "wss_sequencer_feed": {
     "connected": true,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 16,
+    "frames_received": 31,
     "oracle_updates_detected": 0,
-    "whale_swaps_decoded": 1,
-    "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)",
-    "last_hot_pair_hint": "WETH_USDT"
+    "whale_swaps_decoded": 0,
+    "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
   },
   "low_competition_lending_markets": {
     "compound_v3_usdc_comet": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
@@ -24,11 +23,11 @@
     "radiant_v2_pool": "0xF4B1486DD74D07706052A33d31d7c0AAFD0659E1",
     "silo_finance_repository": "0x8658047e48CC09161f4152c79155Dac1d710Ff0a",
     "dolomite_margin": "0x6Bd780E7fDf01D77e4d475c821f1e7AE05409072",
-    "active_borrowers_monitored": 26,
-    "comet_borrowers_monitored": 26,
+    "active_borrowers_monitored": 27,
+    "comet_borrowers_monitored": 27,
     "radiant_v2_borrowers_monitored": 0,
-    "total_monitored_debt_usd": 610945.3,
-    "total_monitored_debt_inr": 57990927.88,
+    "total_monitored_debt_usd": 942884.56,
+    "total_monitored_debt_inr": 89498602.44,
     "liquidatable_now": 0
   },
   "gas_spike_circuit_breaker_tripped": false,
@@ -36,6 +35,6 @@
   "weth_to_usdc_auto_converter_1bp_ready": true,
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
-  "ts": 1793294661.760308,
-  "hmac_sha256_integrity": "e9253a01ed25d05c490dee294cbd192eba22c13e768a36f92f3d62f159fe39da"
+  "ts": 1793295666.382724,
+  "hmac_sha256_integrity": "273d8226a50bbb00c6482723738dd94aef1bba8848828b007e169affc0eea127"
 }
