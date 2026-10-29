@@ -1,0 +1,131 @@
+name: Arbitrum One 24x7 Cloud Flash Loan Sniper & US-East Keep-Alive
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: arb-sniper-24x7-cloud
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  cloud-sniper-24x7:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        node_id: [1, 2, 3, 4]
+    steps:
+      - name: Checkout Repository (4-Node Cluster = 16 vCPU Cores & 64 GB DDR5 RAM Free)
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11 & C/Assembly Compiler
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Foundry (cast) for On-Chain Flash-Swap Broadcasts
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Mount 8GB DDR5 RAMDisk (/dev/shm) & Compile Native x86_64 AVX2 Assembly Daemon
+        run: |
+          pip install --quiet eth-account eth-utils
+          sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev
+          mkdir -p /dev/shm/arb_ramdisk bin reports
+          gcc -O3 -march=native -flto -ffast-math -funroll-loops -S engine/arb_sniper_daemon.c -o engine/arb_sniper_daemon_cloud_x86_64.s || true
+          gcc -O3 -march=native -flto -ffast-math -funroll-loops -fPIC -shared engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/libarb_asm_kernel.so || true
+          gcc -O3 -march=native -flto -ffast-math -funroll-loops engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
+
+      - name: Run 4-Node Parallel Cloud Cluster (16 vCPU Cores • 64 GB RAM • 128 Workers in US-East Virginia)
+        env:
+          CLUSTER_NODE_ID: "${{ matrix.node_id }}"
+          SNIPER_NODE_ID: "${{ matrix.node_id }}"
+          CLUSTER_TOTAL_CPU_CORES: "16"
+          CLUSTER_TOTAL_RAM_GB: "64"
+          OWNER_PROFIT_WALLET: "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
+          MUDREX_DEPOSIT_WALLET: "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
+          DEPLOYED_CONTRACT_ADDRESS: "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
+          LOCAL_RELAYER_ADDRESS: "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
+          LOCAL_RELAYER_PRIVATE_KEY: ${{ secrets.LOCAL_RELAYER_PRIVATE_KEY }}
+          ARB_DISABLE_BROADCAST: "${{ matrix.node_id == 1 && '0' || '1' }}"
+          AWS_PRIMARY_IP: "32.199.191.8"
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$LOCAL_RELAYER_PRIVATE_KEY" ]; then
+            printf "LOCAL_RELAYER_ADDRESS=0x9dD041dbd964DE086Da8f907518f6E25c45aea70\nLOCAL_RELAYER_PRIVATE_KEY=%s\n" "$LOCAL_RELAYER_PRIVATE_KEY" > ~/.arb_flash_local_relayer.env
+            chmod 600 ~/.arb_flash_local_relayer.env
+          fi
+          git config user.name "arb-sniper-bot"
+          git config user.email "arb-sniper-bot@users.noreply.github.com"
+          if [ "$CLUSTER_NODE_ID" = "1" ]; then
+            python3 scripts/discover_live_pool_spreads.py || true
+            python3 scripts/discover_comet_borrowers.py || true
+            python3 scripts/discover_aave_borrowers.py || true
+          fi
+          ./bin/arb_sniper_asm --self-test || true
+          # Launch Native x86_64 Assembly Daemon continuously at 120ms cadence in US-East (Virginia)
+          ./bin/arb_sniper_asm --daemon > /dev/shm/arb_ramdisk/arb_sniper_asm_node_${CLUSTER_NODE_ID}.log 2>&1 &
+          ASM_PID=$!
+          # Run 110 continuous 3-minute cycles (= 330 minutes = 5.5 hours non-stop across 16 vCPU Cores & 64 GB RAM)
+          for cycle in $(seq 1 110); do
+            if [ "$CLUSTER_NODE_ID" = "1" ]; then
+              python3 scripts/discover_live_pool_spreads.py || true
+            fi
+            for subpass in $(seq 1 11); do
+              python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 15 --once || true
+              sleep 0.2
+            done
+            if [ "$CLUSTER_NODE_ID" = "1" ]; then
+              if [ "$cycle" -eq 1 ] || [ $((cycle % 20)) -eq 0 ] || [ "$cycle" -eq 110 ]; then
+                python3 scripts/verify_real_onchain_proofs.py || true
+                mkdir -p docs/reports && cp -f reports/*.json docs/reports/ || true
+                git add reports/two_hour_test_summary.json reports/verified_onchain_proofs.json reports/asm_sniper_telemetry.json reports/last_autonomous_broadcast.json reports/live_dstar_probes.json reports/presigned_tx_cache.json reports/live_block_ticker.json docs/reports/ || true
+                if ! git diff --cached --quiet; then
+                  git commit -m "chore(cloud-sniper): live 16-Core/64GB US-East cluster cycle #$cycle proof sync [skip ci]" || true
+                  (git pull --rebase origin main || (git checkout --theirs reports/ docs/reports/ index.html docs/index.html && git add -u && GIT_EDITOR=true git rebase --continue)) || true
+                  git push origin main || true
+                fi
+              fi
+              # Pre-spawn overlapping next 5.5h US-East 16-Core cluster at cycle 108 (6 minutes BEFORE exit -> 0ms gap!)
+              if [ "$cycle" -eq 108 ]; then
+                curl -s -X POST \
+                  -H "Accept: application/vnd.github+json" \
+                  -H "Authorization: Bearer $GH_TOKEN" \
+                  https://api.github.com/repos/${{ github.repository }}/actions/workflows/arb_24x7_cloud_sniper.yml/dispatches \
+                  -d '{"ref":"main"}' || true
+              fi
+            fi
+          done
+          kill $ASM_PID 2>/dev/null || true
+
+      - name: Commit & Push Updated On-Chain Telemetry to GitHub Pages (Master Node 1 Only)
+        if: matrix.node_id == 1
+        run: |
+          git config user.name "arb-sniper-bot"
+          git config user.email "arb-sniper-bot@users.noreply.github.com"
+          git add reports/two_hour_test_summary.json reports/verified_onchain_proofs.json reports/asm_sniper_telemetry.json reports/last_autonomous_broadcast.json docs/reports/ || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(cloud-sniper): auto-sync verified Arbitrum One on-chain proofs (16-Core/64GB Cluster)"
+            git pull --rebase origin main || true
+            git push origin main || true
+          fi
+
+      - name: Self-Chain Next 24/7 Cloud Sniper 16-Core/64GB Cluster (Runs Even When Laptop is Off)
+        if: always() && matrix.node_id == 1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/arb_24x7_cloud_sniper.yml/dispatches \
+            -d '{"ref":"main"}' || true

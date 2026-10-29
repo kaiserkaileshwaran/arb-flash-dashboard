@@ -1,0 +1,12 @@
+{
+  "name": "Arbitrum One v25.0 24/7 Cloud Flash Loan Engine",
+  "postStartCommand": "nohup python3 scripts/serve_metamask_portal.py > /tmp/portal_v25.log 2>&1 < /dev/null & nohup python3 -m engine.live_rpc_scanner --duration-seconds 86400 --daemon > /tmp/scanner_v25.log 2>&1 < /dev/null &",
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Arbitrum One v25.0 Live Control Center",
+      "onAutoForward": "silent",
+      "visibility": "public"
+    }
+  }
+}

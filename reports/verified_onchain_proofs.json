@@ -1,0 +1,669 @@
+{
+  "ok": true,
+  "data_integrity_mode": "100_PERCENT_REAL_ONCHAIN_MAINNET_ONLY",
+  "verified_at_epoch": 1793280054.850914,
+  "chain_id": 42161,
+  "live_block_number": 519367821,
+  "chainlink_eth_usd": 2324.6663,
+  "deployed_solidity_contract": "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3",
+  "deployed_yul_contract": "0x690ff36ae25e1cf2441edaf061b750ff2701b5a7",
+  "owner_metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
+  "mudrex_deposit_wallet": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+  "binance_deposit_wallet": "0xb411f0Bf1E010FCc81585eDD2b65C5a49d3d0099",
+  "authorized_relayer_wallet": "0x9dD041dbd964DE086Da8f907518f6E25c45aea70",
+  "onchain_contract_total_trades_executed": 16,
+  "onchain_contract_cumulative_profit_weth_wei": 1143888056528,
+  "onchain_contract_cumulative_profit_weth_eth": 1.143888056528e-06,
+  "onchain_contract_cumulative_profit_usdc_raw": 0,
+  "onchain_contract_cumulative_flash_profit_usd": 0.002659,
+  "onchain_contract_cumulative_flash_profit_inr": 0.2524,
+  "total_gas_spent_eth": 7.0283e-05,
+  "total_gas_spent_usd": 0.163386,
+  "net_profit_after_gas_usd": -0.160727,
+  "real_mudrex_usdc_balance": 0.381532,
+  "real_mudrex_inr_balance": 36.22,
+  "real_binance_usdc_balance": 0.499198,
+  "real_metamask_usdc_balance": 0.0,
+  "real_combined_wallets_usdc": 0.88073,
+  "real_combined_wallets_inr": 83.6,
+  "real_metamask_eth_balance": 4.72e-06,
+  "real_relayer_eth_balance": 2.001e-05,
+  "real_relayer_eth_wei": 20011654510949,
+  "verified_onchain_trades": [
+    {
+      "trade_number": 1,
+      "block_number": 516006847,
+      "tx_hash": "0x076774e09e329a25bd2a38ae954ff43bbb4240ea12bfba8ee77813342f10129f",
+      "settlement_tx_hash": "0x30cd5781df32cd232db517d4f61aadd9e3d582866f3fc8d0fd5e7fac9dc0df37",
+      "tx_category": "CONTRACT_DIRECT_POOL_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "description": "Contract 0xeFA5...7Bd3 executeDirectPoolFlashSwap (PancakeV3 <-> CamelotV3 WETH/USDC) + Separate Mudrex USDC Transfer",
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.0008,
+      "real_borrow_amount_usd": 1.859733,
+      "onchain_contract_profit_weth_wei": 106207140485,
+      "onchain_contract_profit_usd": 0.000247,
+      "net_after_gas_usd": -0.023992,
+      "wallet_usdc_transfer_usd": 0.047549,
+      "gas_fee_paid_usd": 0.026118,
+      "onchain_confirmed": true
+    },
+    {
+      "trade_number": 2,
+      "block_number": 516020281,
+      "tx_hash": "0x221862d5325d94f2fb7a1b1fac75542c61bb7a73076df2a6c182a129e6a3a745",
+      "settlement_tx_hash": "0x221862d5325d94f2fb7a1b1fac75542c61bb7a73076df2a6c182a129e6a3a745",
+      "tx_category": "DIRECT_ERC20_USDC_TRANSFER",
+      "touches_flash_contract": false,
+      "description": "Direct ERC-20 USDC Transfer to Mudrex Deposit Wallet (Does NOT call FlashLoanArbitrage contract)",
+      "borrow_token_symbol": "NONE",
+      "real_borrow_amount_token": 0.0,
+      "real_borrow_amount_usd": 0.0,
+      "onchain_contract_profit_weth_wei": 0,
+      "onchain_contract_profit_usd": 0.0,
+      "net_after_gas_usd": -0.001879,
+      "wallet_usdc_transfer_usd": 0.105595,
+      "gas_fee_paid_usd": 0.001879,
+      "onchain_confirmed": true
+    },
+    {
+      "trade_number": 3,
+      "block_number": 516037509,
+      "tx_hash": "0x8838e6a79e51d0040e117d3f3a8c396ee536fa0967c20fad5d1d9a59d30194f1",
+      "settlement_tx_hash": "0xf95c0d590c6999cfeb2e8afb925e1178f087860fa640d9c230406bde7ed7475d",
+      "tx_category": "CONTRACT_DIRECT_POOL_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "description": "Contract 0xeFA5...7Bd3 executeDirectPoolFlashSwap (PENDLE/WETH) + Separate Mudrex USDC Transfer",
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.001,
+      "real_borrow_amount_usd": 2.324666,
+      "onchain_contract_profit_weth_wei": 199896580393,
+      "onchain_contract_profit_usd": 0.000465,
+      "net_after_gas_usd": -0.01227,
+      "wallet_usdc_transfer_usd": 0.014202,
+      "gas_fee_paid_usd": 0.019055,
+      "onchain_confirmed": true
+    },
+    {
+      "trade_number": 4,
+      "block_number": 516343677,
+      "tx_hash": "0x2121f82b5a3c065dc757c44efe061e25acad257046aecb8c5b023b5045c8e7bb",
+      "settlement_tx_hash": "0x72ca01e7eb14cc8ecddc54b60ba444da6909494fb31b6f77845cfdeb123446dc",
+      "tx_category": "CONTRACT_DIRECT_POOL_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "description": "Contract 0xeFA5...7Bd3 executeDirectPoolFlashSwap (UNI/WETH) + Separate Mudrex USDC Transfer",
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.0002,
+      "real_borrow_amount_usd": 0.464933,
+      "onchain_contract_profit_weth_wei": 428079020217,
+      "onchain_contract_profit_usd": 0.000995,
+      "net_after_gas_usd": -0.014002,
+      "wallet_usdc_transfer_usd": 0.03599,
+      "gas_fee_paid_usd": 0.021315,
+      "onchain_confirmed": true
+    },
+    {
+      "trade_number": 5,
+      "block_number": 516349818,
+      "tx_hash": "0xdb2bf6f845fd4bec315037e42a75fb3c1e9e871d45fedc69729eaf1cab7d5b32",
+      "settlement_tx_hash": "0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd",
+      "tx_category": "CONTRACT_DIRECT_POOL_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "description": "Contract 0xeFA5...7Bd3 executeDirectPoolFlashSwap (ARB/WETH) + Separate Mudrex USDC Transfer",
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.00018,
+      "real_borrow_amount_usd": 0.41844,
+      "onchain_contract_profit_weth_wei": 58948968884,
+      "onchain_contract_profit_usd": 0.000137,
+      "net_after_gas_usd": -0.014615,
+      "wallet_usdc_transfer_usd": 0.010071,
+      "gas_fee_paid_usd": 0.021092,
+      "onchain_confirmed": true
+    },
+    {
+      "trade_number": 6,
+      "block_number": 516642657,
+      "tx_hash": "0x53629af551f5588f362d7e7b32517dd5e2ec85f03169fdfab41ec8bc4310ce97",
+      "settlement_tx_hash": "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+      "tx_category": "CONTRACT_MULTI_MAX_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "description": "Contract 0xeFA5...7Bd3 executeMultiMaxDirectPoolFlashSwaps (5-Route Bundle) + Separate Mudrex USDC Transfer",
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.000349,
+      "real_borrow_amount_usd": 0.811308,
+      "onchain_contract_profit_weth_wei": 221468281364,
+      "onchain_contract_profit_usd": 0.000515,
+      "net_after_gas_usd": -0.049163,
+      "wallet_usdc_transfer_usd": 0.005862,
+      "gas_fee_paid_usd": 0.051608,
+      "onchain_confirmed": true
+    },
+    {
+      "trade_number": 7,
+      "block_number": 516661486,
+      "tx_hash": "0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c",
+      "settlement_tx_hash": "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+      "tx_category": "CONTRACT_MULTI_MAX_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "description": "Contract 0xeFA5...7Bd3 executeMultiMaxDirectPoolFlashSwaps (2-Route Bundle)",
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 9e-05,
+      "real_borrow_amount_usd": 0.20922,
+      "onchain_contract_profit_weth_wei": 129288065181,
+      "onchain_contract_profit_usd": 0.000301,
+      "net_after_gas_usd": -0.022018,
+      "wallet_usdc_transfer_usd": 0.005862,
+      "gas_fee_paid_usd": 0.024249,
+      "onchain_confirmed": true
+    }
+  ],
+  "verified_tx_receipts": [
+    {
+      "tx_hash": "0x076774e09e329a25bd2a38ae954ff43bbb4240ea12bfba8ee77813342f10129f",
+      "to_address": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+      "selector": "0x3260f1cc",
+      "tx_category": "CONTRACT_DIRECT_POOL_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.0008,
+      "real_borrow_amount_usd": 1.859733,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516006847,
+      "gas_used": 521189,
+      "gas_fee_eth": 1.0427e-05,
+      "gas_fee_usd": 0.024239,
+      "usdc_transfers": [],
+      "weth_transfers": [
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 0.000800106207,
+          "amount_wei": 800106207140485
+        },
+        {
+          "to": "0x389938cf14be379217570d8e4619e51fbdafaa21",
+          "amount_weth": 0.0008,
+          "amount_wei": 800000000000000
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 1.06207e-07,
+          "amount_wei": 106207140485
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x076774e09e329a25bd2a38ae954ff43bbb4240ea12bfba8ee77813342f10129f"
+    },
+    {
+      "tx_hash": "0x30cd5781df32cd232db517d4f61aadd9e3d582866f3fc8d0fd5e7fac9dc0df37",
+      "to_address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "selector": "0xa9059cbb",
+      "tx_category": "DIRECT_ERC20_USDC_TRANSFER",
+      "touches_flash_contract": false,
+      "borrow_token_symbol": "NONE",
+      "real_borrow_amount_token": 0.0,
+      "real_borrow_amount_usd": 0.0,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516013482,
+      "gas_used": 40424,
+      "gas_fee_eth": 8.08e-07,
+      "gas_fee_usd": 0.001879,
+      "usdc_transfers": [
+        {
+          "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+          "amount_usdc": 0.047549
+        }
+      ],
+      "weth_transfers": [],
+      "arbiscan_url": "https://arbiscan.io/tx/0x30cd5781df32cd232db517d4f61aadd9e3d582866f3fc8d0fd5e7fac9dc0df37"
+    },
+    {
+      "tx_hash": "0x221862d5325d94f2fb7a1b1fac75542c61bb7a73076df2a6c182a129e6a3a745",
+      "to_address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "selector": "0xa9059cbb",
+      "tx_category": "DIRECT_ERC20_USDC_TRANSFER",
+      "touches_flash_contract": false,
+      "borrow_token_symbol": "NONE",
+      "real_borrow_amount_token": 0.0,
+      "real_borrow_amount_usd": 0.0,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516020281,
+      "gas_used": 40390,
+      "gas_fee_eth": 8.08e-07,
+      "gas_fee_usd": 0.001879,
+      "usdc_transfers": [
+        {
+          "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+          "amount_usdc": 0.105595
+        }
+      ],
+      "weth_transfers": [],
+      "arbiscan_url": "https://arbiscan.io/tx/0x221862d5325d94f2fb7a1b1fac75542c61bb7a73076df2a6c182a129e6a3a745"
+    },
+    {
+      "tx_hash": "0x8838e6a79e51d0040e117d3f3a8c396ee536fa0967c20fad5d1d9a59d30194f1",
+      "to_address": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+      "selector": "0x3260f1cc",
+      "tx_category": "CONTRACT_DIRECT_POOL_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.001,
+      "real_borrow_amount_usd": 2.324666,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516037509,
+      "gas_used": 273827,
+      "gas_fee_eth": 5.478e-06,
+      "gas_fee_usd": 0.012735,
+      "usdc_transfers": [],
+      "weth_transfers": [
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 0.001000199897,
+          "amount_wei": 1000199896580393
+        },
+        {
+          "to": "0xb08a8794a5d3ccca3725d92964696858d3201909",
+          "amount_weth": 0.001,
+          "amount_wei": 1000000000000000
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 1.99897e-07,
+          "amount_wei": 199896580393
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x8838e6a79e51d0040e117d3f3a8c396ee536fa0967c20fad5d1d9a59d30194f1"
+    },
+    {
+      "tx_hash": "0xf95c0d590c6999cfeb2e8afb925e1178f087860fa640d9c230406bde7ed7475d",
+      "to_address": "0xe592427a0aece92de3edee1f18e0157c05861564",
+      "selector": "0x414bf389",
+      "tx_category": "WALLET_TRANSACTION",
+      "touches_flash_contract": false,
+      "borrow_token_symbol": "NONE",
+      "real_borrow_amount_token": 0.0,
+      "real_borrow_amount_usd": 0.0,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516038930,
+      "gas_used": 135925,
+      "gas_fee_eth": 2.719e-06,
+      "gas_fee_usd": 0.00632,
+      "usdc_transfers": [
+        {
+          "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+          "amount_usdc": 0.014202
+        }
+      ],
+      "weth_transfers": [
+        {
+          "to": "0xe592427a0aece92de3edee1f18e0157c05861564",
+          "amount_weth": 6e-06,
+          "amount_wei": 6000000000000
+        },
+        {
+          "to": "0xc6962004f452be9203591991d15f6b388e09e8d0",
+          "amount_weth": 6e-06,
+          "amount_wei": 6000000000000
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0xf95c0d590c6999cfeb2e8afb925e1178f087860fa640d9c230406bde7ed7475d"
+    },
+    {
+      "tx_hash": "0x2121f82b5a3c065dc757c44efe061e25acad257046aecb8c5b023b5045c8e7bb",
+      "to_address": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+      "selector": "0x3260f1cc",
+      "tx_category": "CONTRACT_DIRECT_POOL_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.0002,
+      "real_borrow_amount_usd": 0.464933,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516343677,
+      "gas_used": 321914,
+      "gas_fee_eth": 6.451e-06,
+      "gas_fee_usd": 0.014997,
+      "usdc_transfers": [],
+      "weth_transfers": [
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 0.000201878079,
+          "amount_wei": 201878079020217
+        },
+        {
+          "to": "0xf57dbfb951136d273c793f40f546160c9b8a0edb",
+          "amount_weth": 0.0002,
+          "amount_wei": 200000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 1.45e-06,
+          "amount_wei": 1450000000000
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 4.28079e-07,
+          "amount_wei": 428079020217
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x2121f82b5a3c065dc757c44efe061e25acad257046aecb8c5b023b5045c8e7bb"
+    },
+    {
+      "tx_hash": "0x72ca01e7eb14cc8ecddc54b60ba444da6909494fb31b6f77845cfdeb123446dc",
+      "to_address": "0xe592427a0aece92de3edee1f18e0157c05861564",
+      "selector": "0x414bf389",
+      "tx_category": "WALLET_TRANSACTION",
+      "touches_flash_contract": false,
+      "borrow_token_symbol": "NONE",
+      "real_borrow_amount_token": 0.0,
+      "real_borrow_amount_usd": 0.0,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516343377,
+      "gas_used": 135713,
+      "gas_fee_eth": 2.718e-06,
+      "gas_fee_usd": 0.006318,
+      "usdc_transfers": [
+        {
+          "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+          "amount_usdc": 0.03599
+        }
+      ],
+      "weth_transfers": [
+        {
+          "to": "0xe592427a0aece92de3edee1f18e0157c05861564",
+          "amount_weth": 1.5e-05,
+          "amount_wei": 15000000000000
+        },
+        {
+          "to": "0xc6962004f452be9203591991d15f6b388e09e8d0",
+          "amount_weth": 1.5e-05,
+          "amount_wei": 15000000000000
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x72ca01e7eb14cc8ecddc54b60ba444da6909494fb31b6f77845cfdeb123446dc"
+    },
+    {
+      "tx_hash": "0xdb2bf6f845fd4bec315037e42a75fb3c1e9e871d45fedc69729eaf1cab7d5b32",
+      "to_address": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+      "selector": "0x3260f1cc",
+      "tx_category": "CONTRACT_DIRECT_POOL_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.00018,
+      "real_borrow_amount_usd": 0.41844,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516349818,
+      "gas_used": 316477,
+      "gas_fee_eth": 6.346e-06,
+      "gas_fee_usd": 0.014752,
+      "usdc_transfers": [],
+      "weth_transfers": [
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 0.000180463949,
+          "amount_wei": 180463948968884
+        },
+        {
+          "to": "0x0d7c4b40018969f81750d0a164c3839a77353efb",
+          "amount_weth": 0.00018,
+          "amount_wei": 180000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 4.05e-07,
+          "amount_wei": 405000000000
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 5.8949e-08,
+          "amount_wei": 58948968884
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0xdb2bf6f845fd4bec315037e42a75fb3c1e9e871d45fedc69729eaf1cab7d5b32"
+    },
+    {
+      "tx_hash": "0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd",
+      "to_address": "0xe592427a0aece92de3edee1f18e0157c05861564",
+      "selector": "0x414bf389",
+      "tx_category": "WALLET_TRANSACTION",
+      "touches_flash_contract": false,
+      "borrow_token_symbol": "NONE",
+      "real_borrow_amount_token": 0.0,
+      "real_borrow_amount_usd": 0.0,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516349834,
+      "gas_used": 136262,
+      "gas_fee_eth": 2.727e-06,
+      "gas_fee_usd": 0.00634,
+      "usdc_transfers": [
+        {
+          "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+          "amount_usdc": 0.010071
+        }
+      ],
+      "weth_transfers": [
+        {
+          "to": "0xe592427a0aece92de3edee1f18e0157c05861564",
+          "amount_weth": 4.2e-06,
+          "amount_wei": 4200000000000
+        },
+        {
+          "to": "0xc6962004f452be9203591991d15f6b388e09e8d0",
+          "amount_weth": 4.2e-06,
+          "amount_wei": 4200000000000
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x921ddfefe0814300c599fc9e815d0b4e2d23b1daf1405410f27a2082bf3c4edd"
+    },
+    {
+      "tx_hash": "0x53629af551f5588f362d7e7b32517dd5e2ec85f03169fdfab41ec8bc4310ce97",
+      "to_address": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+      "selector": "0xd34ac4bb",
+      "tx_category": "CONTRACT_MULTI_MAX_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 0.000349,
+      "real_borrow_amount_usd": 0.811308,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516642657,
+      "gas_used": 1064450,
+      "gas_fee_eth": 2.137e-05,
+      "gas_fee_usd": 0.049678,
+      "usdc_transfers": [],
+      "weth_transfers": [
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 3.5857131e-05,
+          "amount_wei": 35857131071886
+        },
+        {
+          "to": "0x2bcfb04e64cacfacd2ea9c1db76a0ca999bcb65a",
+          "amount_weth": 3.5e-05,
+          "amount_wei": 35000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 7.71418e-07,
+          "amount_wei": 771417964697
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 8.5713e-08,
+          "amount_wei": 85713107189
+        },
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 0.000120581064,
+          "amount_wei": 120581064239110
+        },
+        {
+          "to": "0x977f5d9a39049c73bc26edb3fa15d5f7c0ac82e9",
+          "amount_weth": 0.00012,
+          "amount_wei": 120000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 5.22958e-07,
+          "amount_wei": 522957815199
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 5.8106e-08,
+          "amount_wei": 58106423911
+        },
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 0.000150426156,
+          "amount_wei": 150426156273739
+        },
+        {
+          "to": "0x11d53ec50bc8f54b9357fbfe2a7de034fc00f8b3",
+          "amount_weth": 0.00015,
+          "amount_wei": 150000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 3.83541e-07,
+          "amount_wei": 383540646365
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 4.2616e-08,
+          "amount_wei": 42615627374
+        },
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 2.4353884e-05,
+          "amount_wei": 24353884250203
+        },
+        {
+          "to": "0xc46f301f589c6027b440778252dd9da239160fbc",
+          "amount_weth": 2.4e-05,
+          "amount_wei": 24000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 3.19284e-07,
+          "amount_wei": 319284117685
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 3.46e-08,
+          "amount_wei": 34600132518
+        },
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 2.000433e-05,
+          "amount_wei": 20004329903712
+        },
+        {
+          "to": "0x14353445c8329df76e6f15e9ead18fa2d45a8bb6",
+          "amount_weth": 2e-05,
+          "amount_wei": 20000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 3.897e-09,
+          "amount_wei": 3896913340
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 4.33e-10,
+          "amount_wei": 432990372
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0x53629af551f5588f362d7e7b32517dd5e2ec85f03169fdfab41ec8bc4310ce97"
+    },
+    {
+      "tx_hash": "0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109",
+      "to_address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "selector": "0xa9059cbb",
+      "tx_category": "DIRECT_ERC20_USDC_TRANSFER",
+      "touches_flash_contract": false,
+      "borrow_token_symbol": "NONE",
+      "real_borrow_amount_token": 0.0,
+      "real_borrow_amount_usd": 0.0,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516644741,
+      "gas_used": 41482,
+      "gas_fee_eth": 8.3e-07,
+      "gas_fee_usd": 0.00193,
+      "usdc_transfers": [
+        {
+          "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
+          "amount_usdc": 0.005862
+        }
+      ],
+      "weth_transfers": [],
+      "arbiscan_url": "https://arbiscan.io/tx/0x76dd406900e699dbc96c5a5ca61421df91b30626bd244cfe355d8ba67f497109"
+    },
+    {
+      "tx_hash": "0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c",
+      "to_address": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+      "selector": "0xd34ac4bb",
+      "tx_category": "CONTRACT_MULTI_MAX_FLASH_SWAP",
+      "touches_flash_contract": true,
+      "borrow_token_symbol": "WETH",
+      "real_borrow_amount_token": 9e-05,
+      "real_borrow_amount_usd": 0.20922,
+      "status": 1,
+      "verified_success": true,
+      "block_number": 516661486,
+      "gas_used": 471477,
+      "gas_fee_eth": 9.601e-06,
+      "gas_fee_usd": 0.022319,
+      "usdc_transfers": [],
+      "weth_transfers": [
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 5.0792809e-05,
+          "amount_wei": 50792808583164
+        },
+        {
+          "to": "0x15e444da5b343c5a0931f5d3e85d158d1efc3d40",
+          "amount_weth": 5e-05,
+          "amount_wei": 50000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 7.13528e-07,
+          "amount_wei": 713527724847
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 7.9281e-08,
+          "amount_wei": 79280858317
+        },
+        {
+          "to": "0xefa5ff871fd48e23ccc3a9dcd2444f3727007bd3",
+          "amount_weth": 4.0500072e-05,
+          "amount_wei": 40500072068635
+        },
+        {
+          "to": "0xff96d42dc8e2700abab1f1f82ecf699caa1a2056",
+          "amount_weth": 4e-05,
+          "amount_wei": 40000000000000
+        },
+        {
+          "to": "0x9dd041dbd964de086da8f907518f6e25c45aea70",
+          "amount_weth": 4.50065e-07,
+          "amount_wei": 450064861771
+        },
+        {
+          "to": "0xff3c34daf159741c931f7c421350f8289a9d89be",
+          "amount_weth": 5.0007e-08,
+          "amount_wei": 50007206864
+        }
+      ],
+      "arbiscan_url": "https://arbiscan.io/tx/0xf53cf53db79e58ef944779bf3610ddebf6e5460cd0716225d4ab30e37d585a1c"
+    }
+  ]
+}

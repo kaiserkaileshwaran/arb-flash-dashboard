@@ -1,0 +1,11 @@
+bin/
+cache/
+out/
+lib/
+*.dylib
+*.so
+engine/fast_sniper_native
+.DS_Store
+__pycache__/
+*.pyc
+.my_arbitrum_wallet.env

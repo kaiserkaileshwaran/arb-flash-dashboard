@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "aws_host": "ubuntu@32.199.191.8",
+  "sync_rtt_ms": 5526.7,
+  "files_synced": [
+    "last_autonomous_broadcast.json",
+    "asm_sniper_telemetry.json",
+    "live_dstar_probes.json",
+    "presigned_tx_cache.json",
+    "mudrex_bank_payout_status.json"
+  ],
+  "relayer_eth_wei": 27632952898949,
+  "relayer_eth": null,
+  "presigned_total_variants": 104,
+  "pre_oracle_10ms_hyperpoll_active": true,
+  "targeted_hot_pair_hint": "WETH_USDC",
+  "dstar_top_probes_count": 60,
+  "dstar_multi_sizing_tiers": [
+    "0.50x_d_star",
+    "0.82x_d_star",
+    "1.00x_d_star",
+    "1.18x_d_star",
+    "1.75x_d_star"
+  ],
+  "aave_lowest_hf": null,
+  "live_block_number": 518399500,
+  "ts": 1793006449.7109818
+}

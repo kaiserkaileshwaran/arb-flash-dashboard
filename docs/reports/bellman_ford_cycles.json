@@ -1,0 +1,20 @@
+{
+  "ts": 1792621813.4083579,
+  "pools_in_graph": 74,
+  "tokens": 18,
+  "directed_edges": 148,
+  "negative_cycles_found": 1,
+  "cycles": [
+    [
+      {
+        "token": "3fbab1",
+        "pool": "0xf57dbfb951136d273c793f40f546160c9b8a0edb"
+      },
+      {
+        "token": "f1f7f0",
+        "pool": "0xff96d42dc8e2700abab1f1f82ecf699caa1a2056"
+      }
+    ]
+  ],
+  "note": "Pre-gas, pre-slippage, mid-price. Real profit needs eth_call verification + size optimisation."
+}
