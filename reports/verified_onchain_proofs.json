@@ -1,10 +1,10 @@
 {
   "ok": true,
   "data_integrity_mode": "100_PERCENT_REAL_ONCHAIN_MAINNET_ONLY",
-  "verified_at_epoch": 1793281909.324471,
+  "verified_at_epoch": 1793283375.4103057,
   "chain_id": 42161,
-  "live_block_number": 519374939,
-  "chainlink_eth_usd": 2320.6076,
+  "live_block_number": 519380577,
+  "chainlink_eth_usd": 2325.9327,
   "deployed_solidity_contract": "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3",
   "deployed_yul_contract": "0x690ff36ae25e1cf2441edaf061b750ff2701b5a7",
   "owner_metamask_wallet": "0xFF3c34DAF159741C931F7c421350f8289A9d89BE",
@@ -15,11 +15,11 @@
   "onchain_contract_cumulative_profit_weth_wei": 1143888056528,
   "onchain_contract_cumulative_profit_weth_eth": 1.143888056528e-06,
   "onchain_contract_cumulative_profit_usdc_raw": 0,
-  "onchain_contract_cumulative_flash_profit_usd": 0.002655,
-  "onchain_contract_cumulative_flash_profit_inr": 0.252,
+  "onchain_contract_cumulative_flash_profit_usd": 0.002661,
+  "onchain_contract_cumulative_flash_profit_inr": 0.2526,
   "total_gas_spent_eth": 7.0283e-05,
-  "total_gas_spent_usd": 0.163104,
-  "net_profit_after_gas_usd": -0.160449,
+  "total_gas_spent_usd": 0.163475,
+  "net_profit_after_gas_usd": -0.160814,
   "real_mudrex_usdc_balance": 0.381532,
   "real_mudrex_inr_balance": 36.22,
   "real_binance_usdc_balance": 0.499198,
@@ -40,12 +40,12 @@
       "description": "Contract 0xeFA5...7Bd3 executeDirectPoolFlashSwap (PancakeV3 <-> CamelotV3 WETH/USDC) + Separate Mudrex USDC Transfer",
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.0008,
-      "real_borrow_amount_usd": 1.856486,
+      "real_borrow_amount_usd": 1.860746,
       "onchain_contract_profit_weth_wei": 106207140485,
-      "onchain_contract_profit_usd": 0.000246,
-      "net_after_gas_usd": -0.023951,
+      "onchain_contract_profit_usd": 0.000247,
+      "net_after_gas_usd": -0.024005,
       "wallet_usdc_transfer_usd": 0.047549,
-      "gas_fee_paid_usd": 0.026073,
+      "gas_fee_paid_usd": 0.026132,
       "onchain_confirmed": true
     },
     {
@@ -61,9 +61,9 @@
       "real_borrow_amount_usd": 0.0,
       "onchain_contract_profit_weth_wei": 0,
       "onchain_contract_profit_usd": 0.0,
-      "net_after_gas_usd": -0.001876,
+      "net_after_gas_usd": -0.00188,
       "wallet_usdc_transfer_usd": 0.105595,
-      "gas_fee_paid_usd": 0.001876,
+      "gas_fee_paid_usd": 0.00188,
       "onchain_confirmed": true
     },
     {
@@ -76,12 +76,12 @@
       "description": "Contract 0xeFA5...7Bd3 executeDirectPoolFlashSwap (PENDLE/WETH) + Separate Mudrex USDC Transfer",
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.001,
-      "real_borrow_amount_usd": 2.320608,
+      "real_borrow_amount_usd": 2.325933,
       "onchain_contract_profit_weth_wei": 199896580393,
-      "onchain_contract_profit_usd": 0.000464,
-      "net_after_gas_usd": -0.012249,
+      "onchain_contract_profit_usd": 0.000465,
+      "net_after_gas_usd": -0.012277,
       "wallet_usdc_transfer_usd": 0.014202,
-      "gas_fee_paid_usd": 0.019022,
+      "gas_fee_paid_usd": 0.019065,
       "onchain_confirmed": true
     },
     {
@@ -94,12 +94,12 @@
       "description": "Contract 0xeFA5...7Bd3 executeDirectPoolFlashSwap (UNI/WETH) + Separate Mudrex USDC Transfer",
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.0002,
-      "real_borrow_amount_usd": 0.464122,
+      "real_borrow_amount_usd": 0.465187,
       "onchain_contract_profit_weth_wei": 428079020217,
-      "onchain_contract_profit_usd": 0.000993,
-      "net_after_gas_usd": -0.013978,
+      "onchain_contract_profit_usd": 0.000996,
+      "net_after_gas_usd": -0.014009,
       "wallet_usdc_transfer_usd": 0.03599,
-      "gas_fee_paid_usd": 0.021278,
+      "gas_fee_paid_usd": 0.021326,
       "onchain_confirmed": true
     },
     {
@@ -112,12 +112,12 @@
       "description": "Contract 0xeFA5...7Bd3 executeDirectPoolFlashSwap (ARB/WETH) + Separate Mudrex USDC Transfer",
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.00018,
-      "real_borrow_amount_usd": 0.417709,
+      "real_borrow_amount_usd": 0.418668,
       "onchain_contract_profit_weth_wei": 58948968884,
       "onchain_contract_profit_usd": 0.000137,
-      "net_after_gas_usd": -0.01459,
+      "net_after_gas_usd": -0.014623,
       "wallet_usdc_transfer_usd": 0.010071,
-      "gas_fee_paid_usd": 0.021056,
+      "gas_fee_paid_usd": 0.021104,
       "onchain_confirmed": true
     },
     {
@@ -130,12 +130,12 @@
       "description": "Contract 0xeFA5...7Bd3 executeMultiMaxDirectPoolFlashSwaps (5-Route Bundle) + Separate Mudrex USDC Transfer",
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.000349,
-      "real_borrow_amount_usd": 0.809892,
+      "real_borrow_amount_usd": 0.811751,
       "onchain_contract_profit_weth_wei": 221468281364,
-      "onchain_contract_profit_usd": 0.000514,
-      "net_after_gas_usd": -0.049077,
+      "onchain_contract_profit_usd": 0.000515,
+      "net_after_gas_usd": -0.04919,
       "wallet_usdc_transfer_usd": 0.005862,
-      "gas_fee_paid_usd": 0.051518,
+      "gas_fee_paid_usd": 0.051636,
       "onchain_confirmed": true
     },
     {
@@ -148,12 +148,12 @@
       "description": "Contract 0xeFA5...7Bd3 executeMultiMaxDirectPoolFlashSwaps (2-Route Bundle)",
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 9e-05,
-      "real_borrow_amount_usd": 0.208854,
+      "real_borrow_amount_usd": 0.209334,
       "onchain_contract_profit_weth_wei": 129288065181,
-      "onchain_contract_profit_usd": 0.0003,
-      "net_after_gas_usd": -0.021981,
+      "onchain_contract_profit_usd": 0.000301,
+      "net_after_gas_usd": -0.022031,
       "wallet_usdc_transfer_usd": 0.005862,
-      "gas_fee_paid_usd": 0.024208,
+      "gas_fee_paid_usd": 0.024263,
       "onchain_confirmed": true
     }
   ],
@@ -166,13 +166,13 @@
       "touches_flash_contract": true,
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.0008,
-      "real_borrow_amount_usd": 1.856486,
+      "real_borrow_amount_usd": 1.860746,
       "status": 1,
       "verified_success": true,
       "block_number": 516006847,
       "gas_used": 521189,
       "gas_fee_eth": 1.0427e-05,
-      "gas_fee_usd": 0.024197,
+      "gas_fee_usd": 0.024252,
       "usdc_transfers": [],
       "weth_transfers": [
         {
@@ -207,7 +207,7 @@
       "block_number": 516013482,
       "gas_used": 40424,
       "gas_fee_eth": 8.08e-07,
-      "gas_fee_usd": 0.001876,
+      "gas_fee_usd": 0.00188,
       "usdc_transfers": [
         {
           "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
@@ -231,7 +231,7 @@
       "block_number": 516020281,
       "gas_used": 40390,
       "gas_fee_eth": 8.08e-07,
-      "gas_fee_usd": 0.001876,
+      "gas_fee_usd": 0.00188,
       "usdc_transfers": [
         {
           "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
@@ -249,13 +249,13 @@
       "touches_flash_contract": true,
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.001,
-      "real_borrow_amount_usd": 2.320608,
+      "real_borrow_amount_usd": 2.325933,
       "status": 1,
       "verified_success": true,
       "block_number": 516037509,
       "gas_used": 273827,
       "gas_fee_eth": 5.478e-06,
-      "gas_fee_usd": 0.012713,
+      "gas_fee_usd": 0.012742,
       "usdc_transfers": [],
       "weth_transfers": [
         {
@@ -290,7 +290,7 @@
       "block_number": 516038930,
       "gas_used": 135925,
       "gas_fee_eth": 2.719e-06,
-      "gas_fee_usd": 0.006309,
+      "gas_fee_usd": 0.006323,
       "usdc_transfers": [
         {
           "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
@@ -319,13 +319,13 @@
       "touches_flash_contract": true,
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.0002,
-      "real_borrow_amount_usd": 0.464122,
+      "real_borrow_amount_usd": 0.465187,
       "status": 1,
       "verified_success": true,
       "block_number": 516343677,
       "gas_used": 321914,
       "gas_fee_eth": 6.451e-06,
-      "gas_fee_usd": 0.014971,
+      "gas_fee_usd": 0.015005,
       "usdc_transfers": [],
       "weth_transfers": [
         {
@@ -365,7 +365,7 @@
       "block_number": 516343377,
       "gas_used": 135713,
       "gas_fee_eth": 2.718e-06,
-      "gas_fee_usd": 0.006307,
+      "gas_fee_usd": 0.006321,
       "usdc_transfers": [
         {
           "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
@@ -394,13 +394,13 @@
       "touches_flash_contract": true,
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.00018,
-      "real_borrow_amount_usd": 0.417709,
+      "real_borrow_amount_usd": 0.418668,
       "status": 1,
       "verified_success": true,
       "block_number": 516349818,
       "gas_used": 316477,
       "gas_fee_eth": 6.346e-06,
-      "gas_fee_usd": 0.014727,
+      "gas_fee_usd": 0.01476,
       "usdc_transfers": [],
       "weth_transfers": [
         {
@@ -440,7 +440,7 @@
       "block_number": 516349834,
       "gas_used": 136262,
       "gas_fee_eth": 2.727e-06,
-      "gas_fee_usd": 0.006329,
+      "gas_fee_usd": 0.006344,
       "usdc_transfers": [
         {
           "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
@@ -469,13 +469,13 @@
       "touches_flash_contract": true,
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 0.000349,
-      "real_borrow_amount_usd": 0.809892,
+      "real_borrow_amount_usd": 0.811751,
       "status": 1,
       "verified_success": true,
       "block_number": 516642657,
       "gas_used": 1064450,
       "gas_fee_eth": 2.137e-05,
-      "gas_fee_usd": 0.049591,
+      "gas_fee_usd": 0.049705,
       "usdc_transfers": [],
       "weth_transfers": [
         {
@@ -595,7 +595,7 @@
       "block_number": 516644741,
       "gas_used": 41482,
       "gas_fee_eth": 8.3e-07,
-      "gas_fee_usd": 0.001927,
+      "gas_fee_usd": 0.001931,
       "usdc_transfers": [
         {
           "to": "0xd2529585059e3e5c09c912f0f9570000c2a53f05",
@@ -613,13 +613,13 @@
       "touches_flash_contract": true,
       "borrow_token_symbol": "WETH",
       "real_borrow_amount_token": 9e-05,
-      "real_borrow_amount_usd": 0.208854,
+      "real_borrow_amount_usd": 0.209334,
       "status": 1,
       "verified_success": true,
       "block_number": 516661486,
       "gas_used": 471477,
       "gas_fee_eth": 9.601e-06,
-      "gas_fee_usd": 0.022281,
+      "gas_fee_usd": 0.022332,
       "usdc_transfers": [],
       "weth_transfers": [
         {
