@@ -203,7 +203,21 @@ class TelemetryRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(body)
             return
 
-        if self.path in ("/", "/index.html"):
+        clean_path = self.path.split("?", 1)[0]
+        if clean_path.startswith("/reports/") or clean_path.startswith("/docs/reports/"):
+            rel_file = (BASE_DIR / clean_path.lstrip("/")).resolve()
+            if str(rel_file).startswith(str(BASE_DIR.resolve())) and rel_file.exists() and rel_file.suffix == ".json":
+                body = rel_file.read_bytes()
+                self.send_response(200)
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(body)
+                return
+
+        if clean_path in ("/", "/index.html", "/dashboard", "/dashboard/", "/dashboard/index.html"):
             body = render_ssr_html()
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")

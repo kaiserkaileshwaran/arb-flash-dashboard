@@ -139,11 +139,13 @@ def _sync_real_onchain_ledger(s: Dict[str, Any]) -> Dict[str, Any]:
     for idx, item in enumerate(merged, start=1):
         item["trade_number"] = idx
 
+    flash_contract_usd = float(s.get("onchain_contract_cumulative_flash_profit_usd", 0.0) or 0.0)
+    flash_contract_inr = round(flash_contract_usd * 94.92, 4)
     s["per_trade_profit_ledger"] = merged
-    s["profitable_flash_blocks_count"] = len(merged)
-    s["cumulative_flash_net_profit_usd"] = tot_100_usd
-    s["cumulative_flash_net_profit_inr_pre_tax"] = tot_100_inr
-    s["cumulative_flash_net_profit_inr_post_tax"] = tot_100_inr
+    s["profitable_flash_blocks_count"] = int(s.get("onchain_contract_total_trades_executed", len(merged)) or len(merged))
+    s["cumulative_flash_net_profit_usd"] = flash_contract_usd if flash_contract_usd > 0 else tot_100_usd
+    s["cumulative_flash_net_profit_inr_pre_tax"] = flash_contract_inr if flash_contract_inr > 0 else tot_100_inr
+    s["cumulative_flash_net_profit_inr_post_tax"] = flash_contract_inr if flash_contract_inr > 0 else tot_100_inr
     s["total_amount_100_usd"] = tot_100_usd
     s["total_amount_100_inr"] = tot_100_inr
     s["amount_transferred_75_usd"] = trans_75_usd
@@ -1997,7 +1999,7 @@ async function tickLiveBlockEverySecond() {
 
 async function fetchState() {
   try {
-    if (window.location.hostname.includes('github.io')) {
+    if (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app')) {
       await fetchStateDirectBrowserFallback();
       return;
     }
@@ -2014,7 +2016,7 @@ async function fetchState() {
 }
 
 function startZeroRefreshStream() {
-  if (window.location.hostname.includes('github.io') || typeof EventSource === 'undefined') {
+  if (window.location.hostname.includes('github.io') || window.location.hostname.includes('vercel.app') || typeof EventSource === 'undefined') {
     setInterval(fetchState, 1500);
     return;
   }
@@ -2333,12 +2335,33 @@ class LivePortalHandler(http.server.BaseHTTPRequestHandler):
                     time.sleep(0.5)
             except Exception:
                 return
-        if self.path.startswith("/reports/"):
-            rel_name = self.path.split("?", 1)[0].lstrip("/")
-            rep_file = BASE_DIR / rel_name
-            if rep_file.exists() and rep_file.suffix == ".json":
+        clean_req_path = self.path.split("?", 1)[0]
+        if clean_req_path.startswith("/reports/") or clean_req_path.startswith("/docs/reports/"):
+            rel_name = clean_req_path.lstrip("/")
+            rep_file = (BASE_DIR / rel_name).resolve()
+            if str(rep_file).startswith(str(BASE_DIR.resolve())) and rep_file.exists() and rep_file.suffix == ".json":
                 self._send_json(json.loads(rep_file.read_text(encoding="utf-8")))
                 return
+        if clean_req_path in ("/dashboard", "/dashboard/", "/dashboard/index.html") and (BASE_DIR / "dashboard" / "index.html").exists():
+            raw = (BASE_DIR / "dashboard" / "index.html").read_bytes()
+            self.send_response(200)
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(raw)))
+            self.end_headers()
+            self.wfile.write(raw)
+            return
+        if clean_req_path in ("/docs", "/docs/", "/docs/index.html") and (BASE_DIR / "docs" / "index.html").exists():
+            raw = (BASE_DIR / "docs" / "index.html").read_bytes()
+            self.send_response(200)
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(raw)))
+            self.end_headers()
+            self.wfile.write(raw)
+            return
         if self.path.startswith("/api/live-verified-bundle"):
             try:
                 import urllib.request

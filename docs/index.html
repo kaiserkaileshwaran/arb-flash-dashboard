@@ -2006,14 +2006,19 @@ function renderDashboard(payload) {
 
 async function _fetchReportWithRawFallback(relPath) {
   const ts = Date.now();
-  try {
-    const r = await fetch(relPath + '?t=' + ts);
-    if (r.ok) return await r.json();
-  } catch (_) {}
-  try {
-    const r2 = await fetch('https://raw.githubusercontent.com/kaiserkaileshwaran/arb-flash-dashboard/main/' + relPath + '?t=' + ts);
-    if (r2.ok) return await r2.json();
-  } catch (_) {}
+  const cleanRel = String(relPath || '').replace(/^\/+/, '');
+  const candidateUrls = [
+    `${cleanRel}?t=${ts}`,
+    `/${cleanRel}?t=${ts}`,
+    `../${cleanRel}?t=${ts}`,
+    `/docs/${cleanRel}?t=${ts}`,
+  ];
+  for (let i = 0; i < candidateUrls.length; i++) {
+    try {
+      const r = await fetch(candidateUrls[i], { cache: 'no-store' });
+      if (r.ok) return await r.json();
+    } catch (_) {}
+  }
   return null;
 }
 
