@@ -39,7 +39,7 @@
     "USDC.e": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
     "weETH": "0x35751007a407ca6FEFfE80b3cB397736D2cf4dbe"
   },
-  "updated_at": "2026-11-02T13:49:58Z",
+  "updated_at": "2026-11-02T14:03:59Z",
   "data_integrity_mode": "100_PERCENT_REAL_ONCHAIN_MAINNET_ONLY",
   "deployed_solidity_contract": "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3",
   "onchain_contract_total_trades_executed": 16,
@@ -48,7 +48,7 @@
   "net_profit_after_gas_usd": -0.160727,
   "real_mudrex_usdc_balance": 0.381532,
   "real_binance_usdc_balance": 0.499198,
-  "last_scanner_block": 520584157,
-  "last_scanner_rpc": "https://arbitrum-one-rpc.publicnode.com",
-  "last_scanner_latency_ms": 227.88
+  "last_scanner_block": 520587166,
+  "last_scanner_rpc": "https://arb1.arbitrum.io/rpc",
+  "last_scanner_latency_ms": 339.93
 }
