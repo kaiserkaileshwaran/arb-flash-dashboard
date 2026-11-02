@@ -2163,7 +2163,7 @@ def verify_arbitrum_tx_receipt(tx_hash: str, binance_wallet: str = "0xd252958505
     """
     Strictly verifies real Arbitrum One eth_getTransactionReceipt on-chain (NO fake fallback receipts).
     """
-    for _ in range(4):
+    for _ in range(2):
         try:
             res = _arb_rpc_call("eth_getTransactionReceipt", [tx_hash])
             rcpt = res.get("result")
@@ -2182,9 +2182,11 @@ def verify_arbitrum_tx_receipt(tx_hash: str, binance_wallet: str = "0xd252958505
                     "binance_usdc_balance": wb.get("binance_usdc_balance", "0.499198"),
                     "metamask_usdc_balance": wb.get("usdc_balance", "0.162263"),
                 }
+            if "result" in res and rcpt is None:
+                break
         except Exception:
             pass
-        time.sleep(0.25)
+        time.sleep(0.1)
 
     return {
         "ok": False,

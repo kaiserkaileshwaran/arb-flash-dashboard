@@ -805,7 +805,9 @@ def _check_aws_failover_and_heartbeat() -> dict:
         else:
             os.environ["ARB_DISABLE_BROADCAST"] = "1"
 
-    bcast_enabled = os.environ.get("ARB_DISABLE_BROADCAST", "0").strip() != "1"
+    if "ARB_DISABLE_BROADCAST" not in os.environ:
+        os.environ["ARB_DISABLE_BROADCAST"] = "1"
+    bcast_enabled = os.environ.get("ARB_DISABLE_BROADCAST", "1").strip() != "1"
     return {
         "role": "GITHUB_STANDBY_NODE" if aws_online else "ACTIVE_FAILOVER_BROADCASTER",
         "aws_online": aws_online,

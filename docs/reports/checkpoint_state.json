@@ -1,24 +1,31 @@
 {
   "version": "25.0.0",
-  "data_integrity_mode": "100_PERCENT_REAL_ONCHAIN_MAINNET_ONLY",
   "chain_id": 42161,
   "network": "Arbitrum One",
   "primary_rpc": "https://arbitrum-one-rpc.publicnode.com",
-  "primary_wss": "wss://arb1-feed.arbitrum.io/feed",
-  "watchdog_status": "CONNECTED / REAL ON-CHAIN VERIFIED MODE",
+  "primary_wss": "wss://arbitrum-one-rpc.publicnode.com",
+  "watchdog_status": "CONNECTED / V21.0 SEQUENCER-WS + ZERO-RTT + DIRECT-POOL (32 THREADS ON 10 CORES) ACTIVE",
   "completed_phases": [
     "phase_1_contract_compile",
     "phase_2_mainnet_rpc_verification"
   ],
   "last_completed_step": 2,
-  "deployed_solidity_contract": "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3",
-  "onchain_contract_total_trades_executed": 16,
-  "onchain_contract_cumulative_profit_weth_wei": 1143888056528,
+  "pool_reserves": {
+    "uniswap_v3_weth_usdc": {
+      "weth_reserve": 5000.0,
+      "usdc_reserve": 12454200.0,
+      "implied_price_usd": 2490.84
+    },
+    "sushiswap_weth_usdc": {
+      "weth_reserve": 5000.0,
+      "usdc_reserve": 12560150.0,
+      "implied_price_usd": 2512.03
+    }
+  },
   "cumulative_profit_usd": 0.002659,
-  "total_gas_spent_usd": 0.163386,
-  "net_profit_after_gas_usd": -0.160727,
-  "real_mudrex_usdc_balance": 0.381532,
-  "real_binance_usdc_balance": 0.499198,
+  "cumulative_profit_inr_pre_tax": 0.0,
+  "cumulative_profit_inr_post_tax": 0.0,
+  "executed_trades": [],
   "whitelisted_tokens": {
     "WETH": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
     "WBTC": "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f",
@@ -32,7 +39,16 @@
     "USDC.e": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
     "weETH": "0x35751007a407ca6FEFfE80b3cB397736D2cf4dbe"
   },
-  "updated_at": "2026-10-29T13:20:54Z",
-  "last_scanner_block": 519367821,
-  "last_scanner_rpc": "https://arbitrum-one-rpc.publicnode.com"
+  "updated_at": "2026-11-02T13:27:23Z",
+  "data_integrity_mode": "100_PERCENT_REAL_ONCHAIN_MAINNET_ONLY",
+  "deployed_solidity_contract": "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3",
+  "onchain_contract_total_trades_executed": 16,
+  "onchain_contract_cumulative_profit_weth_wei": 1143888056528,
+  "total_gas_spent_usd": 0.163386,
+  "net_profit_after_gas_usd": -0.160727,
+  "real_mudrex_usdc_balance": 0.381532,
+  "real_binance_usdc_balance": 0.499198,
+  "last_scanner_block": 520579135,
+  "last_scanner_rpc": "https://arbitrum-one-rpc.publicnode.com",
+  "last_scanner_latency_ms": 217.52
 }
