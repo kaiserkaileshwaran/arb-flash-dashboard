@@ -35,9 +35,10 @@ if [ "$(uname -s)" = "Linux" ]; then
   gcc -O3 -march=native -flto -ffast-math -funroll-loops engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm 2>/dev/null || true
 fi
 
-pkill -f "serve_metamask_portal.py" 2>/dev/null || true
-pkill -f "arb_sniper_asm" 2>/dev/null || true
-pkill -f "us_east_server_failover_orchestrator.py" 2>/dev/null || true
+pkill -f "python3 scripts/serve_metamask_portal.py" 2>/dev/null || true
+pkill -f "./bin/arb_sniper_asm --daemon" 2>/dev/null || true
+pkill -f "python3 scripts/autonomous_asm_broadcaster.py" 2>/dev/null || true
+pkill -f "python3 scripts/us_east_server_failover_orchestrator.py" 2>/dev/null || true
 
 nohup python3 scripts/serve_metamask_portal.py > /tmp/portal_us_east.log 2>&1 < /dev/null &
 if [ -x "./bin/arb_sniper_asm" ]; then
