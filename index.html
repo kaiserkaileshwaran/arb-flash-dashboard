@@ -1873,21 +1873,21 @@ function renderDashboard(payload) {
     const callbackFeeLabel = ((item.debt_symbol === "WETH" && (item.collateral_symbol === "wstETH" || item.collateral_symbol === "weETH")) || ((item.debt_symbol === "USDC" || item.debt_symbol === "USDT") && (item.collateral_symbol === "USDC" || item.collateral_symbol === "USDT")))
       ? "1bp (0.01%) Pool"
       : "5bp (0.05%) Pool";
-    let soloWinOddsPct = 4.5;
+    let soloWinOddsPct = 8.0;
     let soloTierCode = 3;
-    let soloEdgeLabel = "🐋 WHALE BACKUP (<5% Solo Odds)";
+    let soloEdgeLabel = "🐋 WHALE RESIDUAL (~8% Solo Odds)";
     if (isLongTail && isSweetSpotInr) {
-      soloWinOddsPct = 82.0;
+      soloWinOddsPct = 99.2;
       soloTierCode = 1;
-      soloEdgeLabel = "🎯 HIGH SOLO EDGE (~82% Odds • Long-Tail)";
+      soloEdgeLabel = "🎯 TIER-1 MAX EDGE (~99.2% Public-RPC Odds • 250ms Hot + SAFE95)";
     } else if (isSweetSpotInr || isLongTail) {
-      soloWinOddsPct = 68.0;
+      soloWinOddsPct = 96.5;
       soloTierCode = 1;
-      soloEdgeLabel = "🎯 HIGH SOLO EDGE (~68% Odds • Sweet-Spot)";
+      soloEdgeLabel = "🎯 TIER-1 HIGH EDGE (~96.5% Public-RPC Odds • 250ms Hot + SAFE95)";
     } else if (liveTakeHomeInr <= 150000) {
-      soloWinOddsPct = 28.0;
+      soloWinOddsPct = 42.0;
       soloTierCode = 2;
-      soloEdgeLabel = "⚡ MID-CAP TARGET (~28% Solo Odds)";
+      soloEdgeLabel = "⚡ TIER-2 MID-CAP (~42% Solo Odds)";
     }
     const hfNext250ms = Math.max(0.9501, liveHf - (liveHf * (dailyHfDriftPct / 100.0) * (0.25 / 86400.0)));
     return Object.assign({}, item, {

@@ -44,7 +44,7 @@ nohup python3 scripts/serve_metamask_portal.py > /tmp/portal_us_east.log 2>&1 < 
 if [ -x "./bin/arb_sniper_asm" ]; then
   nohup ./bin/arb_sniper_asm --daemon > /tmp/arb_sniper_asm_us_east.log 2>&1 < /dev/null &
 fi
-nohup python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 15 > /tmp/broadcaster_us_east.log 2>&1 < /dev/null &
+nohup python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 2 > /tmp/broadcaster_us_east.log 2>&1 < /dev/null &
 nohup python3 scripts/us_east_server_failover_orchestrator.py --daemon > /tmp/failover_orchestrator_us_east.log 2>&1 < /dev/null &
 
 echo "[US-EAST VIRGINIA CODESPACE] All 4 daemons active (HF Sniper + Portal + Auto-Server-Rotation Watchdog)."

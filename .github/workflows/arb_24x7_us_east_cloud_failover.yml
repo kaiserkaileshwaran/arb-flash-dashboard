@@ -60,9 +60,9 @@ jobs:
           ./bin/arb_sniper_asm --daemon > /dev/shm/arb_ramdisk/arb_sniper_asm_us_east.log 2>&1 &
           ASM_PID=$!
           for cycle in $(seq 1 110); do
-            for subpass in $(seq 1 11); do
-              python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 15 --once || true
-              sleep 0.2
+            for subpass in $(seq 1 30); do
+              python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 2 --once || true
+              sleep 0.1
             done
             if [ "$cycle" -eq 1 ] || [ $((cycle % 25)) -eq 0 ] || [ "$cycle" -eq 110 ]; then
               python3 scripts/us_east_server_failover_orchestrator.py || true
