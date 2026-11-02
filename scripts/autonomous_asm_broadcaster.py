@@ -376,7 +376,8 @@ def _start_live_dstar_refresh_thread() -> None:
 
 if not os.environ.get("ARB_RPC_OVERRIDE"):
     _start_sequencer_wss_wakeup_thread()
-    _start_live_dstar_refresh_thread()
+    if os.environ.get("ARB_FREEZE_NON_HF_SWAPS", "1").strip() != "1":
+        _start_live_dstar_refresh_thread()
 
 
 def _benchmark_native_asm_16routes() -> dict:
@@ -1796,7 +1797,8 @@ def _run_broadcaster_pass(loop_seconds: int = 0) -> int:
     candidate_meta = []
 
     _cached_low_hf = float(_CACHED_ORACLE_STATE.get("lowest_aave_hf", 1.02))
-    if _cached_low_hf <= 1.0005 and not os.environ.get("ARB_RPC_OVERRIDE"):
+    _freeze_non_hf_all = (os.environ.get("ARB_FREEZE_NON_HF_SWAPS", "1").strip() == "1") and not os.environ.get("ARB_RPC_OVERRIDE")
+    if (_cached_low_hf <= 1.0005 or _freeze_non_hf_all) and not os.environ.get("ARB_RPC_OVERRIDE"):
         raw_tiers = []
         sushiv2_spatial_tiers = []
     elif not os.environ.get("ARB_RPC_OVERRIDE"):
@@ -2297,6 +2299,9 @@ def _run_broadcaster_pass(loop_seconds: int = 0) -> int:
             ]
         else:
             probe_defs = []
+    elif os.environ.get("ARB_FREEZE_NON_HF_SWAPS", "1").strip() == "1":
+        # Non-HF small DEX swaps are 100% frozen: stop all Non-HF DEX RPC probes and dedicate 100% of RPC/CPU bandwidth to HF Liquidations!
+        probe_defs = []
     probe_start_id = len(batch_rpc) + 1
     for p_idx, (p_lbl, pb, ps, tb, tq, p_amt, z0, z1) in enumerate(probe_defs):
         cd_probe = _encode_flash_swap_calldata(pb, ps, tb, tq, p_amt, 1, z0, z1, 0)
@@ -3513,7 +3518,7 @@ def _run_broadcaster_pass(loop_seconds: int = 0) -> int:
                         _safe_min_n = 1
                 _cd_ps = _encode_gasless_arb_calldata(3, _d_tok, _c_tok, zero_addr, _dyn_amt, _safe_min_n, _opt_f, 0, True, _b_addr, _safe_rf)
                 _presign_inputs.append((_lbl, _cd_ps, _liq_gas_lim, "LIQUIDATION"))
-            if len(bundle_loans) >= 2:
+            if os.environ.get("ARB_FREEZE_NON_HF_SWAPS", "1").strip() != "1" and len(bundle_loans) >= 2:
                 _bundle_gas_lim = min(240_000 + 165_000 * len(bundle_loans), _max_aff_ps)
                 _bundle_min_gross_wei = int(_bundle_gas_lim * live_gp_init_wei) + MIN_SMALL_TRADE_NET_WEI
                 _tot_eq_b = max(1, sum(bundle_equiv_weis)) if len(bundle_equiv_weis) == len(bundle_loans) else len(bundle_loans)
@@ -3526,7 +3531,7 @@ def _run_broadcaster_pass(loop_seconds: int = 0) -> int:
                 _cd_bundle_ps = _encode_multi_flash_swaps_calldata(_ps_bundle_loans, _bundle_f_ps)
                 _presign_inputs.append((f"MULTI_BUNDLE_{len(bundle_loans)}LEG", _cd_bundle_ps, _bundle_gas_lim, "DEX_ARB"))
             _live_prof_map = {p_def[0]: int(eq_w) for eq_w, _, p_def in cycle_positive_probes}
-            _base_dex_probes = [p for p in probe_defs if not p[0].endswith(("_05X", "_175X", "_25X", "_60X", "_SURGE_300X", "_SEQ_BACKRUN_250X", "_SEQ_BACKRUN_600X"))]
+            _base_dex_probes = [] if os.environ.get("ARB_FREEZE_NON_HF_SWAPS", "1").strip() == "1" else [p for p in probe_defs if not p[0].endswith(("_05X", "_175X", "_25X", "_60X", "_SURGE_300X", "_SEQ_BACKRUN_250X", "_SEQ_BACKRUN_600X"))]
             _sorted_dex_probes = sorted(
                 _base_dex_probes,
                 key=lambda p: (
