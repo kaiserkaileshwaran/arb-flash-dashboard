@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "ts": 1793630019.6343849,
+  "co_location_region": "EastUs (Northern Virginia \u2014 Co-Located with Arbitrum One Sequencer)",
+  "active_codespaces_count": 0,
+  "total_us_east_codespaces": 1,
+  "us_east_codespaces": [
+    {
+      "name": "arb-sniper-us-east-j7g6qrr97xr2qrrw",
+      "display_name": "arb-sniper-us-east",
+      "repo": "kaiserkaileshwaran/arb-flash-engine",
+      "location": "EastUs",
+      "state": "Shutdown",
+      "machine": "basicLinux32gb",
+      "idle_timeout_minutes": 30,
+      "last_used_at": "2026-10-18T22:11:43+05:30"
+    }
+  ],
+  "auto_rotation_policy": "15m before any US-East Codespace hits its 240m session limit or 120 core-hr/mo quota, automatically syncs checkpoint_state.json, wakes/creates a backup EastUs Codespace, and dispatches the unlimited-free-minutes public repo Azure US-East GitHub Actions cluster."
+}

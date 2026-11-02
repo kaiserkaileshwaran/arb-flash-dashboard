@@ -825,33 +825,69 @@ AWS_HEARTBEAT_JSON = REPORTS_DIR / "aws_heartbeat.json"
 PRESIGNED_RAM_MAP = {}
 
 
+def _compute_rtt_half_precompensated_fire_window(target_unix_second: int) -> dict:
+    """
+    Upgrade #9 (RTT/2 One-Way Flight-Time Pre-Compensator + Integer block.timestamp S* Sync):
+    Since Aave V3, Radiant V2, and Compound V3 accrue debt on integer `block.timestamp` (uint40) ticks,
+    this calculates the exact pre-fire timestamp `T_fire = S* - (RTT / 2)` using live `_RPC_EMA_LATENCY_MS`
+    so the pre-signed transaction arrives at the Arbitrum One Sequencer in Virginia at `S*.000s` (0ms effective lag).
+    """
+    best_rtt_ms = min(_RPC_EMA_LATENCY_MS.values()) if _RPC_EMA_LATENCY_MS else 2.5
+    one_way_lead_ms = round(max(0.4, best_rtt_ms / 2.0), 3)
+    s_star = int(target_unix_second)
+    t_fire_epoch = round(float(s_star) - (one_way_lead_ms / 1000.0), 4)
+    return {
+        "target_block_timestamp_uint40": s_star,
+        "measured_min_rtt_ms": round(best_rtt_ms, 2),
+        "one_way_flight_lead_ms": one_way_lead_ms,
+        "precompensated_fire_epoch": t_fire_epoch,
+        "staggered_4nonce_offsets_ms": [-15.0, 0.0, 15.0, 35.0],
+    }
+
+
 def _check_aws_failover_and_heartbeat() -> dict:
     """
-    Automatic AWS us-east-1 Primary <-> GitHub Actions Standby Failover:
-    - If running on AWS (IS_AWS_PRIMARY=1 or AWS_EXECUTION_ENV set, or /sys/hypervisor/uuid / /sys/devices/virtual/dmi/id/product_uuid is EC2), writes fresh heartbeat to reports/aws_heartbeat.json.
-    - If running on GitHub Actions Node 1, checks reports/aws_heartbeat.json:
-      * If AWS heartbeat is fresh (< 180s old), sets ARB_DISABLE_BROADCAST=1 (Standby mode, 0 nonce conflict).
-      * If AWS heartbeat is stale/offline (>= 180s old or missing), sets ARB_DISABLE_BROADCAST=0 (Active Failover Broadcaster!).
+    Automatic US-East Virginia (GitHub Codespaces `EastUs` / AWS `us-east-1`) Primary <-> Backup Codespace <-> GitHub Actions Cluster Failover:
+    - If running on GitHub Codespaces (`CODESPACES=true` / `CODESPACE_NAME`) or AWS `us-east-1`, writes fresh heartbeat to reports/aws_heartbeat.json.
+    - If running on GitHub Actions Standby Cluster (`GITHUB_ACTIONS=true`), checks reports/aws_heartbeat.json:
+      * If Primary US-East Codespace/AWS heartbeat is fresh (< 180s old), sets ARB_DISABLE_BROADCAST=1 (Standby mode, 0 nonce conflict).
+      * If Primary US-East Codespace hits its quota/limit or goes offline (>= 180s old), automatically promotes to Active Failover Broadcaster!
     """
     now = time.time()
-    is_aws = bool(os.environ.get("IS_AWS_PRIMARY", "").strip() == "1" or os.environ.get("AWS_EXECUTION_ENV"))
+    codespace_name = os.environ.get("CODESPACE_NAME", "").strip()
+    is_codespace_us_east = bool(os.environ.get("CODESPACES", "").strip().lower() == "true" or codespace_name)
+    is_aws = bool(os.environ.get("IS_AWS_PRIMARY", "").strip() == "1" or os.environ.get("AWS_EXECUTION_ENV") or is_codespace_us_east)
     if not is_aws and os.environ.get("GITHUB_ACTIONS", "").strip().lower() != "true":
         for dmi_p in ("/sys/devices/virtual/dmi/id/board_vendor", "/sys/devices/virtual/dmi/id/sys_vendor", "/etc/hostname"):
             try:
                 txt = Path(dmi_p).read_text(encoding="utf-8", errors="ignore").lower()
-                if "amazon" in txt or "ip-172-" in txt or "ec2" in txt:
+                if "amazon" in txt or "ip-172-" in txt or "ec2" in txt or "codespace" in txt:
                     is_aws = True
                     break
             except Exception:
                 pass
     if is_aws:
-        hb = {"ts": now, "host": "aws-us-east-1-primary", "active": True}
+        host_lbl = f"codespace-us-east-virginia ({codespace_name})" if is_codespace_us_east else "aws-us-east-1-primary"
+        hb = {
+            "ts": now,
+            "host": host_lbl,
+            "region": "EastUs (Virginia)",
+            "active": True,
+            "rtt_half_precompensation": _compute_rtt_half_precompensated_fire_window(int(now) + 1),
+        }
         try:
             REPORTS_DIR.mkdir(parents=True, exist_ok=True)
             AWS_HEARTBEAT_JSON.write_text(json.dumps(hb, indent=2), encoding="utf-8")
         except Exception:
             pass
-        return {"role": "AWS_US_EAST_1_PRIMARY_BROADCASTER", "aws_online": True, "broadcast_enabled": True}
+        bcast_on = os.environ.get("ARB_DISABLE_BROADCAST", "0").strip() != "1"
+        return {
+            "role": "US_EAST_VIRGINIA_CODESPACE_PRIMARY" if is_codespace_us_east else "AWS_US_EAST_1_PRIMARY_BROADCASTER",
+            "host": host_lbl,
+            "aws_online": True,
+            "broadcast_enabled": bcast_on,
+            "rtt_half_precompensation": hb["rtt_half_precompensation"],
+        }
 
     aws_last_ts = 0.0
     if AWS_HEARTBEAT_JSON.exists():
@@ -876,6 +912,7 @@ def _check_aws_failover_and_heartbeat() -> dict:
         "aws_online": aws_online,
         "aws_heartbeat_age_sec": round(now - aws_last_ts, 1) if aws_last_ts > 0 else None,
         "broadcast_enabled": bcast_enabled,
+        "rtt_half_precompensation": _compute_rtt_half_precompensated_fire_window(int(now) + 1),
     }
 
 

@@ -8,9 +8,9 @@
   "auto_bank_payout_state": "ACCUMULATING_100PCT_NET_TO_MUDREX_NEED_INR_63.78_MORE",
   "metamask_min_balance_required": 0.0,
   "wss_sequencer_feed": {
-    "connected": true,
+    "connected": false,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 9,
+    "frames_received": 0,
     "oracle_updates_detected": 0,
     "whale_swaps_decoded": 0,
     "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -23,11 +23,11 @@
     "radiant_v2_pool": "0xF4B1486DD74D07706052A33d31d7c0AAFD0659E1",
     "silo_finance_repository": "0x8658047e48CC09161f4152c79155Dac1d710Ff0a",
     "dolomite_margin": "0x6Bd780E7fDf01D77e4d475c821f1e7AE05409072",
-    "active_borrowers_monitored": 32,
-    "comet_borrowers_monitored": 32,
+    "active_borrowers_monitored": 33,
+    "comet_borrowers_monitored": 33,
     "radiant_v2_borrowers_monitored": 0,
-    "total_monitored_debt_usd": 951321.55,
-    "total_monitored_debt_inr": 90299441.53,
+    "total_monitored_debt_usd": 961450.46,
+    "total_monitored_debt_inr": 91260877.66,
     "liquidatable_now": 0
   },
   "gas_spike_circuit_breaker_tripped": false,
@@ -35,6 +35,6 @@
   "weth_to_usdc_auto_converter_1bp_ready": true,
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
-  "ts": 1793629084.6009128,
-  "hmac_sha256_integrity": "eebd309a63b95512112107f605096762a241e635203fe74d76df5a62bfd4b26c"
+  "ts": 1793630014.477685,
+  "hmac_sha256_integrity": "84ad85a1385bda3b9f44c4c5bc38560ee3f19946013357a3cb66e71b2789eb1c"
 }

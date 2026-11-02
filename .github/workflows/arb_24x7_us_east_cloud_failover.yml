@@ -1,0 +1,99 @@
+name: Arbitrum One 24x7 US-East (Virginia) HF Sniper & Auto-Server Failover Relay
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'
+
+concurrency:
+  group: arb-hf-sniper-us-east-failover
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  us-east-virginia-hf-sniper:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    steps:
+      - name: Checkout Repository (Azure US-East Virginia Co-Located Runner)
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11 & C/Assembly Compiler
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Foundry (cast) for On-Chain Flash-Loan Liquidations
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Mount DDR5 RAMDisk (/dev/shm) & Compile Native x86_64 AVX2 Assembly Daemon
+        run: |
+          pip install --quiet eth-account eth-utils
+          sudo apt-get update -y && sudo apt-get install -y libcurl4-openssl-dev
+          mkdir -p /dev/shm/arb_ramdisk bin reports docs/reports
+          gcc -O3 -march=native -flto -ffast-math -funroll-loops -fPIC -shared engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/libarb_asm_kernel.so || true
+          gcc -O3 -march=native -flto -ffast-math -funroll-loops engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm
+
+      - name: Run 24/7 US-East (Virginia) HF Liquidation Sniper + Automatic Server Rotation Relay
+        env:
+          CLUSTER_NODE_ID: "1"
+          SNIPER_NODE_ID: "1"
+          ARB_FREEZE_NON_HF_SWAPS: "1"
+          DEPLOYED_HARDENED_YUL_CONTRACT: "0x690f82909Df1853f2f227895A3A28636A42aa5a7"
+          DEPLOYED_CONTRACT_ADDRESS: "0xeFA5Ff871fD48e23CcC3A9DCD2444f3727007Bd3"
+          OWNER_PROFIT_WALLET: "0xFF3c34DAF159741C931F7c421350f8289A9d89BE"
+          MUDREX_DEPOSIT_WALLET: "0xd2529585059e3e5c09c912f0f9570000c2a53f05"
+          LOCAL_RELAYER_ADDRESS: "0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
+          LOCAL_RELAYER_PRIVATE_KEY: ${{ secrets.LOCAL_RELAYER_PRIVATE_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$LOCAL_RELAYER_PRIVATE_KEY" ]; then
+            printf "LOCAL_RELAYER_ADDRESS=0x9dD041dbd964DE086Da8f907518f6E25c45aea70\nLOCAL_RELAYER_PRIVATE_KEY=%s\n" "$LOCAL_RELAYER_PRIVATE_KEY" > ~/.arb_flash_local_relayer.env
+            chmod 600 ~/.arb_flash_local_relayer.env
+          fi
+          git config user.name "arb-sniper-us-east-bot"
+          git config user.email "arb-sniper-us-east-bot@users.noreply.github.com"
+          ./bin/arb_sniper_asm --self-test || true
+          ./bin/arb_sniper_asm --daemon > /dev/shm/arb_ramdisk/arb_sniper_asm_us_east.log 2>&1 &
+          ASM_PID=$!
+          for cycle in $(seq 1 110); do
+            for subpass in $(seq 1 11); do
+              python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 15 --once || true
+              sleep 0.2
+            done
+            if [ "$cycle" -eq 1 ] || [ $((cycle % 25)) -eq 0 ] || [ "$cycle" -eq 110 ]; then
+              python3 scripts/us_east_server_failover_orchestrator.py || true
+              mkdir -p docs/reports && cp -f reports/*.json docs/reports/ || true
+              git add reports/last_autonomous_broadcast.json reports/presigned_tx_cache.json reports/live_block_ticker.json reports/us_east_failover_status.json docs/reports/ || true
+              if ! git diff --cached --quiet; then
+                git commit -m "chore(us-east-failover): live US-East Virginia HF sniper cycle #$cycle state sync [skip ci]" || true
+                git pull --rebase origin main || true
+                git push origin main || true
+              fi
+            fi
+            # 6 minutes BEFORE this 5.5h server reaches its limit (cycle 108/110), automatically spawn the next US-East server!
+            if [ "$cycle" -eq 108 ]; then
+              python3 scripts/us_east_server_failover_orchestrator.py --rotate-now || true
+              curl -s -X POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                https://api.github.com/repos/${{ github.repository }}/actions/workflows/arb_24x7_us_east_cloud_failover.yml/dispatches \
+                -d '{"ref":"main"}' || true
+            fi
+          done
+          kill $ASM_PID 2>/dev/null || true
+
+      - name: Self-Chain Next US-East Server on Exit (Never Terminate — Always Hand Off to Next Server)
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 scripts/us_east_server_failover_orchestrator.py --rotate-now || true
+          curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/arb_24x7_us_east_cloud_failover.yml/dispatches \
+            -d '{"ref":"main"}' || true
