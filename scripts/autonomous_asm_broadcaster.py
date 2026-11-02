@@ -3733,10 +3733,18 @@ def _run_broadcaster_pass(loop_seconds: int = 0) -> int:
     except Exception:
         next_relayer_nonce = None
 
+    # Cryo-Freeze all Non-HF small-value DEX swaps by default (`ARB_FREEZE_NON_HF_SWAPS=1`),
+    # preserving all 51 routes in the live telemetry tables for future high-capital inventory
+    # while guaranteeing 0 wei of gas is ever spent on non-HF DEX swaps.
+    freeze_non_hf_swaps = os.environ.get("ARB_FREEZE_NON_HF_SWAPS", "1").strip() == "1"
+
     for active_cand_meta in execution_queue:
         if shots_fired_this_cycle >= max_shots_per_cycle:
             break
         mode_name, call_tuple, min_gross, rel_fee, is_weth, winning_loan_amt, fn_sig = active_cand_meta[:7]
+        if freeze_non_hf_swaps and "LIQUIDATION" not in mode_name:
+            # Non-HF small-value DEX swaps are frozen/paused (0 wei gas spent); only HF-based flash-loan liquidations (HF < 1.000000) are eligible.
+            continue
         if shots_fired_this_cycle >= 1 and "AAVE_V3_LIQUIDATION" in mode_name and isinstance(call_tuple, str) and call_tuple.startswith("0x1034ef63") and len(call_tuple) == 714:
             # Multi-Whale Same-Block Cascade Guard: if Shot #1 already filled the ₹12,500 Mudrex daily limit,
             # clamp Shot #2..#N rel_fee to exact gas reimbursement so 100% of Shot #2..#N profit goes atomically inside the flash loan directly to MetaMask (0 extra transfer gas)!
