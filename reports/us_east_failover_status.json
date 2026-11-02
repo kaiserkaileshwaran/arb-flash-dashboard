@@ -1,30 +1,9 @@
 {
-  "ok": true,
-  "ts": 1793630069.2942662,
+  "ok": false,
+  "ts": 1793631822.170729,
   "co_location_region": "EastUs (Northern Virginia \u2014 Co-Located with Arbitrum One Sequencer)",
-  "active_codespaces_count": 1,
-  "total_us_east_codespaces": 2,
-  "us_east_codespaces": [
-    {
-      "name": "arb-sniper-us-east-j7g6qrr97xr2qrrw",
-      "display_name": "arb-sniper-us-east",
-      "repo": "kaiserkaileshwaran/arb-flash-engine",
-      "location": "EastUs",
-      "state": "Shutdown",
-      "machine": "basicLinux32gb",
-      "idle_timeout_minutes": 30,
-      "last_used_at": "2026-10-18T22:11:43+05:30"
-    },
-    {
-      "name": "arb-hf-sniper-us-east-primary-vr54qppwrwg2p94r",
-      "display_name": "arb-hf-sniper-us-east-primary",
-      "repo": "kaiserkaileshwaran/arb-flash-dashboard",
-      "location": "EastUs",
-      "state": "Available",
-      "machine": "basicLinux32gb",
-      "idle_timeout_minutes": 240,
-      "last_used_at": "2026-11-02T20:04:07+05:30"
-    }
-  ],
+  "active_codespaces_count": 0,
+  "total_us_east_codespaces": 0,
+  "us_east_codespaces": [],
   "auto_rotation_policy": "15m before any US-East Codespace hits its 240m session limit or 120 core-hr/mo quota, automatically syncs checkpoint_state.json, wakes/creates a backup EastUs Codespace, and dispatches the unlimited-free-minutes public repo Azure US-East GitHub Actions cluster."
 }
