@@ -707,6 +707,11 @@ MIN_GAS_RESERVE_WEI = 18_000_000_000_000  # Keep 0.000018 ETH (~5 Pure-Yul Flash
 MIN_MUDREX_USDC_UNITS = 5001  # Strictly > 0.005 USDC minimum deposit on Mudrex Arbitrum One
 
 
+_PERSISTENT_TLS_POOL = {}
+_PERSISTENT_TLS_LOCK = threading.Lock()
+_RPC_EMA_LATENCY_MS = {u: 45.0 for u in RPC_URLS}
+
+
 def _mk_conn(parsed, timeout):
     """Scheme-aware connection (https in production, plain http for the local fork dry-run)."""
     import http.client
@@ -714,6 +719,66 @@ def _mk_conn(parsed, timeout):
         timeout = max(timeout, 90.0)
     cls = http.client.HTTPConnection if parsed.scheme == "http" else http.client.HTTPSConnection
     return cls(parsed.netloc, timeout=timeout)
+
+
+def _post_json_persistent_tls(url: str, payload_bytes: bytes, timeout: float = 4.0) -> dict:
+    """
+    Master Upgrade #1 (₹0 Cost): Reuses persistent HTTP/1.1 Keep-Alive TLS 1.3 sockets across cycles,
+    eliminating ~85ms of DNS + TCP + TLS handshake overhead on eth_call and eth_sendRawTransaction.
+    """
+    import urllib.parse
+    t0 = time.perf_counter()
+    parsed = urllib.parse.urlparse(url)
+    host_key = f"{parsed.scheme}://{parsed.netloc}"
+    path_str = parsed.path or "/"
+    if parsed.query:
+        path_str += "?" + parsed.query
+    conn = None
+    with _PERSISTENT_TLS_LOCK:
+        conn = _PERSISTENT_TLS_POOL.pop(host_key, None)
+    for attempt in range(2):
+        try:
+            if conn is None:
+                conn = _mk_conn(parsed, timeout)
+            conn.request(
+                "POST",
+                path_str,
+                body=payload_bytes,
+                headers={
+                    "Content-Type": "application/json",
+                    "Connection": "keep-alive",
+                    "User-Agent": "ArbFlashEngine/2.0",
+                },
+            )
+            resp = conn.getresponse()
+            raw_body = resp.read()
+            if resp.status == 200:
+                lat_ms = (time.perf_counter() - t0) * 1000.0
+                _RPC_EMA_LATENCY_MS[url] = round(0.7 * _RPC_EMA_LATENCY_MS.get(url, lat_ms) + 0.3 * lat_ms, 2)
+                with _PERSISTENT_TLS_LOCK:
+                    _PERSISTENT_TLS_POOL[host_key] = conn
+                return json.loads(raw_body.decode("utf-8"))
+            try:
+                conn.close()
+            except Exception:
+                pass
+            conn = None
+        except Exception:
+            try:
+                if conn is not None:
+                    conn.close()
+            except Exception:
+                pass
+            conn = None
+    req = urllib.request.Request(
+        url,
+        data=payload_bytes,
+        headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
+    )
+    res = json.loads(urllib.request.urlopen(req, timeout=timeout).read().decode("utf-8"))
+    lat_ms = (time.perf_counter() - t0) * 1000.0
+    _RPC_EMA_LATENCY_MS[url] = round(0.7 * _RPC_EMA_LATENCY_MS.get(url, lat_ms) + 0.3 * lat_ms, 2)
+    return res
 
 
 def _ft(t):
@@ -732,12 +797,8 @@ def rpc_call(method: str, params: list) -> dict:
         if now_t < _MUTED_RPC_UNTIL.get(url, 0.0):
             continue
         try:
-            req = urllib.request.Request(
-                url,
-                data=json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode("utf-8"),
-                headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
-            )
-            res = json.loads(urllib.request.urlopen(req, timeout=(90 if os.environ.get("ARB_RPC_OVERRIDE") else 5)).read().decode("utf-8"))
+            payload_b = json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}).encode("utf-8")
+            res = _post_json_persistent_tls(url, payload_b, timeout=(90 if os.environ.get("ARB_RPC_OVERRIDE") else 5))
             if "result" in res:
                 return res
             if "error" in res:
@@ -869,7 +930,7 @@ def _presign_candidates_to_ram_cache(candidates: list, gas_price_wei: int, base_
 
         if not has_eth_account:
             missing_cast_jobs = []
-            for idx, item in enumerate(candidates[:26]):
+            for idx, item in enumerate(candidates[:42]):
                 lbl, cd_hex, gas_lim = item[0], item[1], item[2]
                 cd_norm = cd_hex if cd_hex.startswith("0x") else ("0x" + cd_hex)
                 raw_target = DEPLOYED_YUL_CONTRACT if (cd_norm.startswith("0x3260f1cc") or cd_norm.startswith("0xd34ac4bb")) else DEPLOYED_CONTRACT
@@ -885,7 +946,7 @@ def _presign_candidates_to_ram_cache(candidates: list, gas_price_wei: int, base_
                         if signed_hex:
                             PRESIGNED_RAM_MAP[c_key] = signed_hex
 
-        for idx, item in enumerate(candidates[:26]):
+        for idx, item in enumerate(candidates[:42]):
             lbl, cd_hex, gas_lim = item[0], item[1], item[2]
             cat = item[3] if len(item) >= 4 else ("LIQUIDATION" if idx < 8 else "DEX_ARB")
             cd_norm = cd_hex if cd_hex.startswith("0x") else ("0x" + cd_hex)
@@ -957,12 +1018,8 @@ def _fanout_send_raw_tx_parallel(raw_hex: str) -> str:
         return rpc_call("eth_sendRawTransaction", [raw_hex]).get("result")
 
     def _post_one(url: str):
-        req = urllib.request.Request(
-            url,
-            data=json.dumps({"jsonrpc": "2.0", "id": 1, "method": "eth_sendRawTransaction", "params": [raw_hex]}).encode("utf-8"),
-            headers={"Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
-        )
-        res = json.loads(urllib.request.urlopen(req, timeout=4).read().decode("utf-8"))
+        payload_b = json.dumps({"jsonrpc": "2.0", "id": 1, "method": "eth_sendRawTransaction", "params": [raw_hex]}).encode("utf-8")
+        res = _post_json_persistent_tls(url, payload_b, timeout=3.5)
         if isinstance(res, dict) and res.get("result"):
             return str(res["result"])
         return None
@@ -1796,9 +1853,13 @@ def _run_broadcaster_pass(loop_seconds: int = 0) -> int:
         else:
             eta_sec = int((hf_v - 0.999999) / max(1e-12, per_sec_decay))
         now_u = int(time.time())
+        hf_next_250ms = round(max(0.0, hf_v - (per_sec_decay * 0.25)), 8)
+        hf_next_60s = round(max(0.0, hf_v - (per_sec_decay * 60.0)), 8)
         return {
             "net_decay_apy_pct": round(net_decay_apy * 100.0, 2),
             "daily_hf_drift": daily_hf_drift,
+            "hf_next_250ms_block": hf_next_250ms,
+            "hf_next_60s": hf_next_60s,
             "eta_seconds": eta_sec,
             "eta_hours": round(eta_sec / 3600.0, 2),
             "predicted_liq_unix_ts": now_u + eta_sec,
@@ -3379,7 +3440,7 @@ def _run_broadcaster_pass(loop_seconds: int = 0) -> int:
             )
             _sorted_aave_watch = []
             _seen_ps_borrowers = set()
-            _max_hf_presign_slots = 24 if os.environ.get("ARB_FREEZE_NON_HF_SWAPS", "1").strip() == "1" else 12
+            _max_hf_presign_slots = 40 if os.environ.get("ARB_FREEZE_NON_HF_SWAPS", "1").strip() == "1" else 12
             for _entry_a in _raw_sorted_aave:
                 _b_low_ps = _entry_a[0].lower()
                 if _b_low_ps in _seen_ps_borrowers:
@@ -3914,10 +3975,11 @@ def _run_broadcaster_pass(loop_seconds: int = 0) -> int:
                         and proven_prof_wei >= (est_gas_cost_wei + req_net_wei)
                     ):
                         triple_proof_passed = True
-                        # Tier 3 Whale Priority Gas Bidder: bid up to 1% of confirmed whale liquidation profit in priority gas
-                        if auto_scale_tier == "TIER_3_WHALE_PRIORITY_GAS_BIDDER" and "AAVE_V3_LIQUIDATION" in mode_name:
-                            prio_gp = min(250_000_000, max(gas_price_wei, int((proven_prof_wei * 0.01) // max(1, actual_l2_gas_units))))
-                            if rel_wei > 6_000_000_000_000 and req_gas_limit * prio_gp <= (rel_wei - 6_000_000_000_000):
+                        # Master Upgrade #8 (₹0 User Capital Risk): All-Tier Self-Funded Dynamic Priority Gas Bidder
+                        # Bids up to 1.2% of eth_call-proven liquidation profit as priority gas (strictly capped by existing relayer ETH reserve)
+                        if "LIQUIDATION" in mode_name:
+                            prio_gp = min(250_000_000, max(gas_price_wei, int((proven_prof_wei * 0.012) // max(1, actual_l2_gas_units))))
+                            if rel_wei > 4_000_000_000_000 and req_gas_limit * prio_gp <= (rel_wei - 4_000_000_000_000):
                                 gas_price_wei = prio_gp
                                 max_affordable_gas = max(185_000, int((rel_wei - 50_000_000) // gas_price_wei))
                     elif (
