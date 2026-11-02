@@ -25,8 +25,8 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 19,
-      "oracle_updates_detected": 1,
+      "frames_received": 8,
+      "oracle_updates_detected": 0,
       "whale_swaps_decoded": 0,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
     },
@@ -50,7 +50,7 @@
     "weth_to_usdc_auto_converter_1bp_ready": true,
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
-    "ts": 1793652900.80743
+    "ts": 1793652903.0717852
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -66,7 +66,7 @@
         "hf_next_60s": 1.01049279,
         "eta_seconds": 6128431,
         "eta_hours": 1702.34,
-        "predicted_liq_unix_ts": 1799781330,
+        "predicted_liq_unix_ts": 1799781332,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_C_MEGA_WHALE_BACKUP",
@@ -84,7 +84,7 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.01122456,
         "hf_next_60s": 1.01122453,
-        "eta_seconds": 19667189,
+        "eta_seconds": 19667187,
         "eta_hours": 5463.11,
         "predicted_liq_unix_ts": 1813320088,
         "quiet_block_sniper_armed": false
@@ -102,11 +102,11 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
-        "hf_next_250ms_block": 1.01164123,
+        "hf_next_250ms_block": 1.01164122,
         "hf_next_60s": 1.01164112,
         "eta_seconds": 6799059,
         "eta_hours": 1888.63,
-        "predicted_liq_unix_ts": 1800451958,
+        "predicted_liq_unix_ts": 1800451960,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -126,7 +126,7 @@
         "hf_next_60s": 1.012068,
         "eta_seconds": 7048354,
         "eta_hours": 1957.88,
-        "predicted_liq_unix_ts": 1800701253,
+        "predicted_liq_unix_ts": 1800701255,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -144,9 +144,9 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.02204876,
         "hf_next_60s": 1.02204872,
-        "eta_seconds": 38631174,
+        "eta_seconds": 38631173,
         "eta_hours": 10730.88,
-        "predicted_liq_unix_ts": 1832284073,
+        "predicted_liq_unix_ts": 1832284074,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_LONG_TAIL_SWEET_SPOT",
@@ -164,7 +164,7 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.02219288,
         "hf_next_60s": 1.02219285,
-        "eta_seconds": 38883680,
+        "eta_seconds": 38883678,
         "eta_hours": 10801.02,
         "predicted_liq_unix_ts": 1832536579,
         "quiet_block_sniper_armed": false
@@ -182,11 +182,11 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
-        "hf_next_250ms_block": 1.02575506,
+        "hf_next_250ms_block": 1.02575505,
         "hf_next_60s": 1.02575495,
-        "eta_seconds": 15041536,
+        "eta_seconds": 15041535,
         "eta_hours": 4178.2,
-        "predicted_liq_unix_ts": 1808694435,
+        "predicted_liq_unix_ts": 1808694436,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -202,11 +202,11 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
-        "hf_next_250ms_block": 1.02645469,
+        "hf_next_250ms_block": 1.02645468,
         "hf_next_60s": 1.02645458,
         "eta_seconds": 15450120,
         "eta_hours": 4291.7,
-        "predicted_liq_unix_ts": 1809103019,
+        "predicted_liq_unix_ts": 1809103021,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -224,9 +224,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.02803661,
         "hf_next_60s": 1.02803651,
-        "eta_seconds": 16373964,
+        "eta_seconds": 16373963,
         "eta_hours": 4548.32,
-        "predicted_liq_unix_ts": 1810026863,
+        "predicted_liq_unix_ts": 1810026864,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -242,9 +242,9 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 1.8,
         "daily_hf_drift": 4.9e-05,
-        "hf_next_250ms_block": 1.03559646,
+        "hf_next_250ms_block": 1.03559645,
         "hf_next_60s": 1.03559642,
-        "eta_seconds": 62366741,
+        "eta_seconds": 62366739,
         "eta_hours": 17324.09,
         "predicted_liq_unix_ts": 1856019640,
         "quiet_block_sniper_armed": false
@@ -262,11 +262,11 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
-        "hf_next_250ms_block": 1.03799178,
+        "hf_next_250ms_block": 1.03799177,
         "hf_next_60s": 1.03799167,
-        "eta_seconds": 22187781,
+        "eta_seconds": 22187780,
         "eta_hours": 6163.27,
-        "predicted_liq_unix_ts": 1815840680,
+        "predicted_liq_unix_ts": 1815840681,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_B_MID_CAP_BORROWER",
@@ -284,9 +284,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.04079144,
         "hf_next_60s": 1.04079133,
-        "eta_seconds": 23822783,
+        "eta_seconds": 23822782,
         "eta_hours": 6617.44,
-        "predicted_liq_unix_ts": 1817475682,
+        "predicted_liq_unix_ts": 1817475683,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -704,20 +704,20 @@
   "aave_v3_borrowers_monitored": 186,
   "multi_route_bundle_probes": 0,
   "total_rpc_checks_per_cycle": 140,
-  "cycles_scanned": 9,
-  "scan_duration_sec": 0.138,
-  "rpc_latency_min_ms": 138.27,
-  "rpc_latency_avg_ms": 229.87,
-  "chainlink_eth_usd_price": 2247.8,
+  "cycles_scanned": 1,
+  "scan_duration_sec": 0.277,
+  "rpc_latency_min_ms": 276.01,
+  "rpc_latency_avg_ms": 276.01,
+  "chainlink_eth_usd_price": 2249.14,
   "univ3_1bp_eth_spot_usd": 2249.34,
-  "oracle_deviation_bps": 6.85,
+  "oracle_deviation_bps": 0.89,
   "pre_oracle_radar_alerts": [
     {
       "borrower": "0xcb6586874cc04b01cc4fdb777de502cea7b3d6c1",
       "direction": "CROSS_CRYPTO",
       "trigger_eth_usd": 2221.25,
       "univ3_spot_eth_usd": 2249.34,
-      "chainlink_eth_usd": 2247.8,
+      "chainlink_eth_usd": 2249.14,
       "spot_distance_bps": 126.5,
       "pre_oracle_crossed": false,
       "status": "WITHIN_150BPS_PRE_ORACLE_ALERT_WINDOW"
@@ -727,7 +727,7 @@
       "direction": "CROSS_CRYPTO",
       "trigger_eth_usd": 2219.64,
       "univ3_spot_eth_usd": 2249.34,
-      "chainlink_eth_usd": 2247.8,
+      "chainlink_eth_usd": 2249.14,
       "spot_distance_bps": 133.8,
       "pre_oracle_crossed": false,
       "status": "WITHIN_150BPS_PRE_ORACLE_ALERT_WINDOW"
@@ -737,7 +737,7 @@
       "direction": "LONG_CRYPTO_SHORT_STABLE",
       "trigger_eth_usd": 2217.86,
       "univ3_spot_eth_usd": 2249.34,
-      "chainlink_eth_usd": 2247.8,
+      "chainlink_eth_usd": 2249.14,
       "spot_distance_bps": 141.9,
       "pre_oracle_crossed": false,
       "status": "WITHIN_150BPS_PRE_ORACLE_ALERT_WINDOW"
@@ -757,13 +757,13 @@
   "aws_failover_state": {
     "role": "ACTIVE_FAILOVER_BROADCASTER",
     "aws_online": false,
-    "aws_heartbeat_age_sec": 566096.1,
+    "aws_heartbeat_age_sec": 566098.5,
     "broadcast_enabled": true,
     "rtt_half_precompensation": {
-      "target_block_timestamp_uint40": 1793652901,
+      "target_block_timestamp_uint40": 1793652903,
       "measured_min_rtt_ms": 45.0,
       "one_way_flight_lead_ms": 22.5,
-      "precompensated_fire_epoch": 1793652900.9775,
+      "precompensated_fire_epoch": 1793652902.9775,
       "staggered_4nonce_offsets_ms": [
         -15.0,
         0.0,
@@ -922,8 +922,8 @@
   "bundled_route_labels": [],
   "bundled_multi_route_gross_wei": 0,
   "bundled_multi_route_gross_inr": 0.0,
-  "l2_gas_cost_inr": 0.879,
-  "bundled_total_gas_cost_inr": 0.879,
+  "l2_gas_cost_inr": 0.8846,
+  "bundled_total_gas_cost_inr": 0.8846,
   "single_net_if_forced_inr": 0.0,
   "bundled_net_if_forced_inr": 0.0,
   "real_net_profit_executed_inr": 0.0,
@@ -947,11 +947,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 20971,
-    "per_route_ns": 1310.69,
+    "latency_ns": 22554,
+    "per_route_ns": 1409.62,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1793652900.8082662,
-  "hmac_sha256_integrity": "226f10b29266b36bf43454eac7905f28670a88d21e82b16f284e30d0fa3b9829"
+  "ts": 1793652903.0725837,
+  "hmac_sha256_integrity": "1d6e724d1d207bc3b0859bf553698768c9d00ee87534f5e27677353d5ae23b68"
 }
