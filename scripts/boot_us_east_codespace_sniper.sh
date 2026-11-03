@@ -23,6 +23,15 @@ export LOCAL_RELAYER_ADDRESS="0x9dD041dbd964DE086Da8f907518f6E25c45aea70"
 if [ -n "${LOCAL_RELAYER_PRIVATE_KEY:-}" ]; then
   printf "LOCAL_RELAYER_ADDRESS=0x9dD041dbd964DE086Da8f907518f6E25c45aea70\nLOCAL_RELAYER_PRIVATE_KEY=%s\n" "$LOCAL_RELAYER_PRIVATE_KEY" > ~/.arb_flash_local_relayer.env
   chmod 600 ~/.arb_flash_local_relayer.env
+  cp -f ~/.arb_flash_local_relayer.env /workspaces/.codespaces/.persistedshare/.arb_flash_local_relayer.env 2>/dev/null || true
+  export ARB_DISABLE_BROADCAST="${ARB_DISABLE_BROADCAST:-0}"
+elif [ -f /workspaces/.codespaces/.persistedshare/.arb_flash_local_relayer.env ]; then
+  cp -f /workspaces/.codespaces/.persistedshare/.arb_flash_local_relayer.env ~/.arb_flash_local_relayer.env
+  chmod 600 ~/.arb_flash_local_relayer.env
+  export ARB_DISABLE_BROADCAST="${ARB_DISABLE_BROADCAST:-0}"
+elif [ -f ~/.arb_flash_local_relayer.env ]; then
+  chmod 600 ~/.arb_flash_local_relayer.env
+  cp -f ~/.arb_flash_local_relayer.env /workspaces/.codespaces/.persistedshare/.arb_flash_local_relayer.env 2>/dev/null || true
   export ARB_DISABLE_BROADCAST="${ARB_DISABLE_BROADCAST:-0}"
 else
   export ARB_DISABLE_BROADCAST="${ARB_DISABLE_BROADCAST:-1}"
