@@ -36,6 +36,6 @@
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
   "stealth_5_shields_active": true,
-  "ts": 1793742666.0477886,
-  "hmac_sha256_integrity": "c22036422e994074e602a2944f506e19884e7fd84f63d1025cf1068c8f82ec86"
+  "ts": 1793743368.1972508,
+  "hmac_sha256_integrity": "17f1a2a2a45bc7ef0ea0d0f7071bbe795481a55b4fe2c246d58ec9d82ec1dd80"
 }
