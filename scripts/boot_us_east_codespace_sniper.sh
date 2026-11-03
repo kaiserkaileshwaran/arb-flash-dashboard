@@ -39,6 +39,9 @@ fi
 
 mkdir -p /dev/shm/arb_ramdisk bin reports docs/reports 2>/dev/null || true
 
+# Ensure eth-account is installed for 0.4ms in-RAM ECDSA transaction pre-signing (240 variants / 480 RAM keys)
+python3 -c "import eth_account" 2>/dev/null || pip install --quiet eth-account 2>/dev/null || python3 -m pip install --quiet eth-account 2>/dev/null || true
+
 # Compile fresh Linux x86_64 AVX2 native binary if running on Linux and not already ELF compiled
 if [ "$(uname -s)" = "Linux" ]; then
   if ! head -c 4 bin/libarb_asm_kernel.so 2>/dev/null | grep -q "ELF"; then
