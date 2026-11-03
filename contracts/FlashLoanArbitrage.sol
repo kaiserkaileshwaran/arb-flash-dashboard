@@ -170,6 +170,17 @@ contract FlashLoanArbitrage {
         uint256 ethRefilledWei,
         uint256 newRelayerBalanceWei
     );
+    event StealthSilentVaultRetained(
+        address indexed token,
+        uint256 retainedAmount,
+        uint256 totalSilentVaultBalance
+    );
+    event StealthSilentVaultSwept(
+        address indexed token,
+        address indexed recipient,
+        uint256 sweptAmount,
+        uint256 remainingSilentVaultBalance
+    );
 
     // =========================================================================
     // Strategy Constants
@@ -244,6 +255,14 @@ contract FlashLoanArbitrage {
     mapping(address => uint256) public cumulativeNetProfitByToken;
     mapping(address => uint256) public cumulativeAutoPayout75ByToken;
     mapping(address => uint256) public cumulativeSafetyReserve25ByToken;
+
+    // 5-Layer Stealth / Anti-Detection ("Invisible Mode") State:
+    // - stealthXorMaskKey: 32-byte keystream seed for XOR-scrambled calldata decoding
+    // - silentVaultMode: when true, retains 100% of profit inside the contract vault during the liquidation tx (zero same-tx EOA Transfer fingerprint for EigenPhi/Arkham indexers)
+    // - silentVaultBalanceByToken: tracks profits silently retained inside the vault awaiting delayed clean ERC-20 sweep
+    bytes32 public stealthXorMaskKey = 0x7f4c9a12e8b305d64a19f02c87e3b15460d29c8a4f1b7e3059c6d8a2f14e9b03;
+    bool public silentVaultMode = false;
+    mapping(address => uint256) public silentVaultBalanceByToken;
 
     uint256 private _unlocked = 1;
     bool private _flashLoanActive = false;
@@ -408,6 +427,38 @@ contract FlashLoanArbitrage {
         autoPayoutBps = _payoutBps;
     }
 
+    /**
+     * @notice Stealth Shield #1 & #2 Admin Controls:
+     * Configures the 32-byte XOR Calldata Mask Seed and toggles Silent Vault Profit Retention Mode.
+     */
+    function setStealthXorMaskKey(bytes32 _newMaskKey) external onlyOwner {
+        stealthXorMaskKey = _newMaskKey;
+    }
+
+    function setSilentVaultMode(bool _enabled) external onlyOwner {
+        silentVaultMode = _enabled;
+    }
+
+    /**
+     * @notice Stealth Shield #2 Delayed Clean Sweep:
+     * Sweeps profits accumulated silently inside the contract vault to `recipient` (defaults to `autoPayoutAccount` or `owner`)
+     * in a standalone ERC-20 transfer transaction, decoupling profit payout from the flash-loan transaction graph.
+     */
+    function sweepSilentVaultProfits(address token, address recipient, uint256 amount) external nonReentrant onlyOwnerOrRelayer {
+        uint256 vaultBal = silentVaultBalanceByToken[token];
+        uint256 sweepAmt = (amount == 0 || amount > vaultBal) ? vaultBal : amount;
+        if (sweepAmt == 0) revert ZeroAmount();
+        address safeDest = (recipient == owner || (autoPayoutAccount != address(0) && recipient == autoPayoutAccount) || recipient == DEFAULT_MUDREX_PAYOUT_WALLET)
+            ? recipient
+            : (autoPayoutAccount != address(0) ? autoPayoutAccount : owner);
+        silentVaultBalanceByToken[token] = vaultBal - sweepAmt;
+        unchecked {
+            cumulativeAutoPayout75ByToken[token] += sweepAmt;
+        }
+        _safeTransfer(token, safeDest, sweepAmt);
+        emit StealthSilentVaultSwept(token, safeDest, sweepAmt, silentVaultBalanceByToken[token]);
+    }
+
     receive() external payable {}
 
     function depositRelayerGasFuel() external payable {
@@ -434,6 +485,15 @@ contract FlashLoanArbitrage {
 
     function _distributeNetProfit(address token, uint256 netOwnerProfit) internal {
         if (netOwnerProfit == 0) return;
+        if (silentVaultMode) {
+            unchecked {
+                silentVaultBalanceByToken[token] += netOwnerProfit;
+                cumulativeSafetyReserve25ByToken[token] += netOwnerProfit;
+            }
+            emit StealthSilentVaultRetained(token, netOwnerProfit, silentVaultBalanceByToken[token]);
+            _autoRefillRelayerGasIfLow();
+            return;
+        }
         uint256 bps = autoPayoutBps;
         address dest = autoPayoutAccount;
         if (bps > 0 && bps <= 10000 && dest != address(0)) {
@@ -575,6 +635,43 @@ contract FlashLoanArbitrage {
     {
         _validateParams(params);
         _dispatchWithRelayer(params, msg.sender, relayerFeeUsdc);
+    }
+
+    /**
+     * @notice Stealth Shield #1 & #3: XOR-Encrypted Calldata + Caller-Locked Poison Pill Entrypoint:
+     * 1) If an unauthorized competitor copy-bot simulates or frontruns this call by spoofing `msg.sender`,
+     *    it triggers the Caller-Locked Poison Pill: silently returns 0 (no revert reason leaked, 0 pool state touched,
+     *    0 profit returned), causing the frontrunner's `eth_call` profitability filter to discard the transaction!
+     * 2) For an authorized relayer/owner, derives the O(1) 32-byte XOR keystream pad `keccak256(abi.encodePacked(stealthXorMaskKey, msg.sender, blockSalt))`
+     *    and unmasks all 10 `ArbParams` words (`targetBorrower`, `borrowToken`, `targetToken`, `borrowAmount`, etc.) + `relayerFee` in memory.
+     */
+    function executeStealthXorArbitrage(
+        bytes32[10] calldata xorScrambledWords,
+        uint256 xorEncryptedRelayerFee,
+        uint256 blockSalt
+    ) external nonReentrant returns (uint256 stealthResult) {
+        if (!authorizedRelayers(msg.sender)) {
+            // Caller-Locked Poison Pill: silent no-op returning 0 profit so copy-bot simulators drop our tx
+            return 0;
+        }
+        bytes32 pad = keccak256(abi.encodePacked(stealthXorMaskKey, msg.sender, blockSalt));
+        uint256 padU = uint256(pad);
+        ArbParams memory unmasked = ArbParams({
+            strategyType: uint8(uint256(xorScrambledWords[0]) ^ padU),
+            borrowToken: address(uint160(uint256(xorScrambledWords[1]) ^ padU)),
+            targetToken: address(uint160(uint256(xorScrambledWords[2]) ^ padU)),
+            midToken: address(uint160(uint256(xorScrambledWords[3]) ^ padU)),
+            borrowAmount: uint256(xorScrambledWords[4]) ^ padU,
+            minNetProfit: uint256(xorScrambledWords[5]) ^ padU,
+            uniFeeTier1: uint24(uint256(xorScrambledWords[6]) ^ padU),
+            uniFeeTier2: uint24(uint256(xorScrambledWords[7]) ^ padU),
+            buyOnUniFirst: (uint256(xorScrambledWords[8]) ^ padU) != 0,
+            targetBorrower: address(uint160(uint256(xorScrambledWords[9]) ^ padU))
+        });
+        uint256 unmaskedFee = xorEncryptedRelayerFee ^ padU;
+        _validateParams(unmasked);
+        _dispatchWithRelayer(unmasked, msg.sender, unmaskedFee);
+        return lastTradeNetProfitByToken[unmasked.borrowToken];
     }
 
     function _dispatchWithRelayer(

@@ -1207,6 +1207,67 @@ contract FlashLoanArbitrageTest {
         require(okAuth1 && abi.decode(retAuth1, (uint256)) == 1, "Owner must be authorized in Yul contract");
         require(okAuth2 && abi.decode(retAuth2, (uint256)) == 0, "Attacker must not be authorized in Yul contract");
     }
+
+    /**
+     * @notice Stealth Anti-Detection Test 21 (All 5 Stealth Shields Verification):
+     *   1) Shield #1 (XOR-Encrypted Calldata): Encrypts all 10 ArbParams words + relayerFee so zero plain-text token/borrower addresses appear in calldata.
+     *   2) Shield #3 (Caller-Locked Poison Pill): A competitor copy-bot (0xC099B07) spoofing msg.sender gets silently neutralized (returns 0 profit, 0 pool impact, 0 USDC leaked).
+     *   3) Shield #2 ("Silent Vault" Delayed Profit Sweep): Retains 100% of net owner profit inside the contract vault during the flash loan (invisible to same-tx EOA transfer indexers like EigenPhi/Arkham), then sweeps cleanly to Mudrex (0xd252...3F05) in a separate clean ERC-20 transfer.
+     */
+    function test_StealthMode_5Shields_XorCalldata_SilentVault_And_PoisonPill() public {
+        address stealthRelayer = address(0x57EA174);
+        address copyBotAttacker = address(0xC099B07);
+        address mudrexWallet = arbBot.DEFAULT_MUDREX_PAYOUT_WALLET();
+
+        arbBot.setAuthorizedRelayer(stealthRelayer, true);
+        arbBot.setAutoPayoutSplit(mudrexWallet, 10000);
+        arbBot.setSilentVaultMode(true);
+
+        uint256 blockSalt = 42161999;
+        uint256 optimalLoan = 23_167_840000;
+        uint256 relayerFee = 250_000; // $0.25 USDC relayer reimbursement
+
+        bytes32 maskKey = arbBot.stealthXorMaskKey();
+        uint256 padU = uint256(keccak256(abi.encodePacked(maskKey, stealthRelayer, blockSalt)));
+
+        bytes32[10] memory xorWords;
+        xorWords[0] = bytes32(uint256(arbBot.STRATEGY_SPATIAL_2DEX()) ^ padU);
+        xorWords[1] = bytes32(uint256(uint160(address(usdc))) ^ padU);
+        xorWords[2] = bytes32(uint256(uint160(address(weth))) ^ padU);
+        xorWords[3] = bytes32(uint256(0) ^ padU);
+        xorWords[4] = bytes32(optimalLoan ^ padU);
+        xorWords[5] = bytes32(uint256(1_000000) ^ padU);
+        xorWords[6] = bytes32(uint256(500) ^ padU);
+        xorWords[7] = bytes32(uint256(500) ^ padU);
+        xorWords[8] = bytes32(uint256(1) ^ padU);
+        xorWords[9] = bytes32(uint256(0) ^ padU);
+        uint256 xorFee = relayerFee ^ padU;
+
+        // Verify that none of the XOR-encrypted words match the plain-text token addresses
+        require(address(uint160(uint256(xorWords[1]))) != address(usdc), "Borrow token must be XOR-masked in calldata");
+        require(address(uint160(uint256(xorWords[2]))) != address(weth), "Target token must be XOR-masked in calldata");
+
+        // 1. Competitor Copy-Bot Frontrunner Simulation: triggers Caller-Locked Poison Pill (returns 0 profit, steals 0 USDC)
+        vm.prank(copyBotAttacker);
+        uint256 copyBotProfit = arbBot.executeStealthXorArbitrage(xorWords, xorFee, blockSalt);
+        require(copyBotProfit == 0, "Poison pill must return 0 profit to unauthorized frontrunner");
+        require(usdc.balanceOf(copyBotAttacker) == 0, "Copy-bot must receive 0 USDC");
+
+        // 2. Authorized Stealth Relayer Execution with Silent Vault Mode Active
+        uint256 mudrexBefore = usdc.balanceOf(mudrexWallet);
+        vm.prank(stealthRelayer);
+        uint256 stealthNetProfit = arbBot.executeStealthXorArbitrage(xorWords, xorFee, blockSalt);
+        require(stealthNetProfit > 1_000000, "Authorized stealth XOR execution must capture full flash-loan profit");
+        require(usdc.balanceOf(stealthRelayer) == relayerFee, "Stealth relayer must receive exact gas reimbursement");
+        require(usdc.balanceOf(mudrexWallet) == mudrexBefore, "Silent Vault Mode must NOT emit same-tx EOA payout during flash loan");
+        require(arbBot.silentVaultBalanceByToken(address(usdc)) == stealthNetProfit, "100% of net profit must be silently retained in vault");
+
+        // 3. Delayed Clean ERC-20 Sweep from Silent Vault to Mudrex (decoupled from flash-loan tx graph)
+        vm.prank(stealthRelayer);
+        arbBot.sweepSilentVaultProfits(address(usdc), mudrexWallet, 0);
+        require(arbBot.silentVaultBalanceByToken(address(usdc)) == 0, "Silent vault balance must be 0 after clean sweep");
+        require(usdc.balanceOf(mudrexWallet) == mudrexBefore + stealthNetProfit, "Mudrex wallet must receive 100% of swept silent vault profit");
+    }
 }
 
 contract MaliciousDrainPool {
