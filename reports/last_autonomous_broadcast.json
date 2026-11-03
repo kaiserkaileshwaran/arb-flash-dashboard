@@ -91,7 +91,7 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 19,
+      "frames_received": 8,
       "oracle_updates_detected": 0,
       "whale_swaps_decoded": 0,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -117,7 +117,7 @@
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
     "stealth_5_shields_active": true,
-    "ts": 1793743589.434569
+    "ts": 1793743592.6093986
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -133,7 +133,7 @@
         "hf_next_60s": 1.01046343,
         "eta_seconds": 6111284,
         "eta_hours": 1697.58,
-        "predicted_liq_unix_ts": 1799854871,
+        "predicted_liq_unix_ts": 1799854874,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_C_MEGA_WHALE_BACKUP",
@@ -151,7 +151,7 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.01121333,
         "hf_next_60s": 1.0112133,
-        "eta_seconds": 19647512,
+        "eta_seconds": 19647509,
         "eta_hours": 5457.64,
         "predicted_liq_unix_ts": 1813391099,
         "quiet_block_sniper_armed": false
@@ -173,7 +173,7 @@
         "hf_next_60s": 1.01161134,
         "eta_seconds": 6781666,
         "eta_hours": 1883.8,
-        "predicted_liq_unix_ts": 1800525253,
+        "predicted_liq_unix_ts": 1800525256,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -190,10 +190,10 @@
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.01422135,
-        "hf_next_60s": 1.01422125,
-        "eta_seconds": 8305851,
+        "hf_next_60s": 1.01422124,
+        "eta_seconds": 8305850,
         "eta_hours": 2307.18,
-        "predicted_liq_unix_ts": 1802049438,
+        "predicted_liq_unix_ts": 1802049440,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -211,9 +211,9 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.02203045,
         "hf_next_60s": 1.02203041,
-        "eta_seconds": 38599098,
+        "eta_seconds": 38599097,
         "eta_hours": 10721.97,
-        "predicted_liq_unix_ts": 1832342685,
+        "predicted_liq_unix_ts": 1832342687,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_LONG_TAIL_SWEET_SPOT",
@@ -231,7 +231,7 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.02222274,
         "hf_next_60s": 1.02222271,
-        "eta_seconds": 38935994,
+        "eta_seconds": 38935991,
         "eta_hours": 10815.55,
         "predicted_liq_unix_ts": 1832679581,
         "quiet_block_sniper_armed": false
@@ -249,11 +249,11 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 1.8,
         "daily_hf_drift": 4.9e-05,
-        "hf_next_250ms_block": 1.03562671,
+        "hf_next_250ms_block": 1.0356267,
         "hf_next_60s": 1.03562667,
-        "eta_seconds": 62419742,
+        "eta_seconds": 62419738,
         "eta_hours": 17338.82,
-        "predicted_liq_unix_ts": 1856163329,
+        "predicted_liq_unix_ts": 1856163328,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_LONG_TAIL_SWEET_SPOT",
@@ -271,9 +271,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.03830344,
         "hf_next_60s": 1.03830334,
-        "eta_seconds": 22369794,
+        "eta_seconds": 22369792,
         "eta_hours": 6213.83,
-        "predicted_liq_unix_ts": 1816113381,
+        "predicted_liq_unix_ts": 1816113382,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -290,10 +290,10 @@
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.04075089,
-        "hf_next_60s": 1.04075079,
-        "eta_seconds": 23799103,
+        "hf_next_60s": 1.04075078,
+        "eta_seconds": 23799102,
         "eta_hours": 6610.86,
-        "predicted_liq_unix_ts": 1817542690,
+        "predicted_liq_unix_ts": 1817542692,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -311,9 +311,9 @@
         "daily_hf_drift": 8.8e-05,
         "hf_next_250ms_block": 1.04093554,
         "hf_next_60s": 1.04093548,
-        "eta_seconds": 40342959,
+        "eta_seconds": 40342958,
         "eta_hours": 11206.38,
-        "predicted_liq_unix_ts": 1834086546,
+        "predicted_liq_unix_ts": 1834086548,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -331,9 +331,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.04495944,
         "hf_next_60s": 1.04495934,
-        "eta_seconds": 26256898,
+        "eta_seconds": 26256896,
         "eta_hours": 7293.58,
-        "predicted_liq_unix_ts": 1820000485,
+        "predicted_liq_unix_ts": 1820000486,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -351,9 +351,9 @@
         "daily_hf_drift": 8.8e-05,
         "hf_next_250ms_block": 1.04859056,
         "hf_next_60s": 1.0485905,
-        "eta_seconds": 47886985,
+        "eta_seconds": 47886984,
         "eta_hours": 13301.94,
-        "predicted_liq_unix_ts": 1841630572,
+        "predicted_liq_unix_ts": 1841630574,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -782,10 +782,10 @@
   "aave_v3_borrowers_monitored": 182,
   "multi_route_bundle_probes": 0,
   "total_rpc_checks_per_cycle": 137,
-  "cycles_scanned": 13,
-  "scan_duration_sec": 0.082,
-  "rpc_latency_min_ms": 82.41,
-  "rpc_latency_avg_ms": 193.68,
+  "cycles_scanned": 1,
+  "scan_duration_sec": 0.21,
+  "rpc_latency_min_ms": 209.88,
+  "rpc_latency_avg_ms": 209.88,
   "chainlink_eth_usd_price": 2291.88,
   "univ3_1bp_eth_spot_usd": 2292.01,
   "oracle_deviation_bps": 0.57,
@@ -835,13 +835,13 @@
   "aws_failover_state": {
     "role": "ACTIVE_FAILOVER_BROADCASTER",
     "aws_online": false,
-    "aws_heartbeat_age_sec": 656784.9,
+    "aws_heartbeat_age_sec": 656788.0,
     "broadcast_enabled": true,
     "rtt_half_precompensation": {
-      "target_block_timestamp_uint40": 1793743590,
+      "target_block_timestamp_uint40": 1793743593,
       "measured_min_rtt_ms": 45.0,
       "one_way_flight_lead_ms": 22.5,
-      "precompensated_fire_epoch": 1793743589.9775,
+      "precompensated_fire_epoch": 1793743592.9775,
       "staggered_4nonce_offsets_ms": [
         -15.0,
         0.0,
@@ -998,8 +998,8 @@
   "bundled_route_labels": [],
   "bundled_multi_route_gross_wei": 0,
   "bundled_multi_route_gross_inr": 0.0,
-  "l2_gas_cost_inr": 0.8967,
-  "bundled_total_gas_cost_inr": 0.8967,
+  "l2_gas_cost_inr": 0.8963,
+  "bundled_total_gas_cost_inr": 0.8963,
   "single_net_if_forced_inr": 0.0,
   "bundled_net_if_forced_inr": 0.0,
   "real_net_profit_executed_inr": 0.0,
@@ -1023,11 +1023,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 17486,
-    "per_route_ns": 1092.88,
+    "latency_ns": 19560,
+    "per_route_ns": 1222.5,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1793743589.4646876,
-  "hmac_sha256_integrity": "1f8b192a17c10770afe5d5456ead14b88b7bbc7460e9c840d7e5f57173085adb"
+  "ts": 1793743592.6155927,
+  "hmac_sha256_integrity": "fa38b89b68033a32001579d08e256400f938d673eb68a86314006e292e6bef29"
 }
