@@ -30,22 +30,30 @@ fi
 
 mkdir -p /dev/shm/arb_ramdisk bin reports docs/reports 2>/dev/null || true
 
-# Compile fresh Linux x86_64 AVX2 native binary if running on Linux
+# Compile fresh Linux x86_64 AVX2 native binary if running on Linux and not already ELF compiled
 if [ "$(uname -s)" = "Linux" ]; then
-  gcc -O3 -march=native -flto -ffast-math -funroll-loops -fPIC -shared engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/libarb_asm_kernel.so 2>/dev/null || true
-  gcc -O3 -march=native -flto -ffast-math -funroll-loops engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm 2>/dev/null || true
+  if ! head -c 4 bin/libarb_asm_kernel.so 2>/dev/null | grep -q "ELF"; then
+    gcc -O3 -march=native -ffast-math -funroll-loops -fPIC -shared engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/libarb_asm_kernel.so 2>/dev/null || true
+  fi
+  if ! head -c 4 bin/arb_sniper_asm 2>/dev/null | grep -q "ELF"; then
+    gcc -O3 -march=native -ffast-math -funroll-loops engine/arb_sniper_daemon.c -lcurl -lpthread -lm -o bin/arb_sniper_asm 2>/dev/null || true
+  fi
 fi
+
+export PYTHONUNBUFFERED=1
 
 pkill -f "python3 scripts/serve_metamask_portal.py" 2>/dev/null || true
 pkill -f "./bin/arb_sniper_asm --daemon" 2>/dev/null || true
 pkill -f "python3 scripts/autonomous_asm_broadcaster.py" 2>/dev/null || true
 pkill -f "python3 scripts/us_east_server_failover_orchestrator.py" 2>/dev/null || true
+sleep 0.5
 
-nohup python3 scripts/serve_metamask_portal.py > /tmp/portal_us_east.log 2>&1 < /dev/null &
+setsid nohup python3 scripts/serve_metamask_portal.py > /tmp/portal_us_east.log 2>&1 < /dev/null &
 if [ -x "./bin/arb_sniper_asm" ]; then
-  nohup ./bin/arb_sniper_asm --daemon > /tmp/arb_sniper_asm_us_east.log 2>&1 < /dev/null &
+  setsid nohup ./bin/arb_sniper_asm --daemon > /tmp/arb_sniper_asm_us_east.log 2>&1 < /dev/null &
 fi
-nohup python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 2 > /tmp/broadcaster_us_east.log 2>&1 < /dev/null &
-nohup python3 scripts/us_east_server_failover_orchestrator.py --daemon > /tmp/failover_orchestrator_us_east.log 2>&1 < /dev/null &
+setsid nohup python3 scripts/autonomous_asm_broadcaster.py --loop-seconds 2 > /tmp/broadcaster_us_east.log 2>&1 < /dev/null &
+setsid nohup python3 scripts/us_east_server_failover_orchestrator.py --daemon > /tmp/failover_orchestrator_us_east.log 2>&1 < /dev/null &
+sleep 1
 
 echo "[US-EAST VIRGINIA CODESPACE] All 4 daemons active (HF Sniper + Portal + Auto-Server-Rotation Watchdog)."
