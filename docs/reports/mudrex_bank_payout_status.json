@@ -26,8 +26,8 @@
     "active_borrowers_monitored": 37,
     "comet_borrowers_monitored": 37,
     "radiant_v2_borrowers_monitored": 0,
-    "total_monitored_debt_usd": 1241295.27,
-    "total_monitored_debt_inr": 117823747.03,
+    "total_monitored_debt_usd": 1122674.1,
+    "total_monitored_debt_inr": 106564225.57,
     "liquidatable_now": 0
   },
   "gas_spike_circuit_breaker_tripped": false,
@@ -36,6 +36,6 @@
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
   "stealth_5_shields_active": true,
-  "ts": 1794058468.495328,
-  "hmac_sha256_integrity": "c45ed87e687b25a080cee25d9d99c7709c661a97ecdab3c88d1f5f5dcc9b5b60"
+  "ts": 1794058593.797828,
+  "hmac_sha256_integrity": "57cbb723591ee3bd91567fd2a7fe667092ba0752f58df32a3b4903c81e071016"
 }
