@@ -19,10 +19,10 @@
       "active": true,
       "entrypoint": "executeStealthXorArbitrage(bytes32[10],uint256,uint256)",
       "closest_target_masked_preview": "0xcb6586...b3d6c1 [XOR-CLOAKED]",
-      "xor_encrypted_calldata_prefix": "0x8f4e2b91c08c1bde37cd3be1aebc1261c90a735d...",
+      "xor_encrypted_calldata_prefix": "0x8f4e2b91cb6dd3b8270dc00468949d63df9cd137...",
       "xor_encrypted_total_bytes": 388,
       "plaintext_addresses_exposed_in_xor_payload": 0,
-      "polymorphic_tail_envelope_digest": "0x639b102f0db60479...",
+      "polymorphic_tail_envelope_digest": "0x64cc71fb9f28758c...",
       "deployed_abi_tail_cloaking_compatible": true
     },
     "shield_2_silent_vault_delayed_sweep": {
@@ -91,7 +91,7 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 12,
+      "frames_received": 3,
       "oracle_updates_detected": 0,
       "whale_swaps_decoded": 0,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -117,7 +117,7 @@
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
     "stealth_5_shields_active": true,
-    "ts": 1794037991.4621415
+    "ts": 1794037993.2790422
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -133,7 +133,7 @@
         "hf_next_60s": 1.01037069,
         "eta_seconds": 6057126,
         "eta_hours": 1682.54,
-        "predicted_liq_unix_ts": 1800095116,
+        "predicted_liq_unix_ts": 1800095117,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_C_MEGA_WHALE_BACKUP",
@@ -151,7 +151,7 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.01045597,
         "hf_next_60s": 1.01045587,
-        "eta_seconds": 6106871,
+        "eta_seconds": 6106870,
         "eta_hours": 1696.35,
         "predicted_liq_unix_ts": 1800144861,
         "quiet_block_sniper_armed": false
@@ -171,9 +171,9 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.01117448,
         "hf_next_60s": 1.01117445,
-        "eta_seconds": 19579447,
-        "eta_hours": 5438.74,
-        "predicted_liq_unix_ts": 1813617437,
+        "eta_seconds": 19579445,
+        "eta_hours": 5438.73,
+        "predicted_liq_unix_ts": 1813617436,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_LONG_TAIL_SWEET_SPOT",
@@ -191,7 +191,7 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.01506367,
         "hf_next_60s": 1.01506357,
-        "eta_seconds": 8797767,
+        "eta_seconds": 8797766,
         "eta_hours": 2443.82,
         "predicted_liq_unix_ts": 1802835757,
         "quiet_block_sniper_armed": false
@@ -211,9 +211,9 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.01772633,
         "hf_next_60s": 1.0177263,
-        "eta_seconds": 31058287,
+        "eta_seconds": 31058284,
         "eta_hours": 8627.3,
-        "predicted_liq_unix_ts": 1825096277,
+        "predicted_liq_unix_ts": 1825096275,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -231,9 +231,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.02181323,
         "hf_next_60s": 1.02181313,
-        "eta_seconds": 12739513,
+        "eta_seconds": 12739511,
         "eta_hours": 3538.75,
-        "predicted_liq_unix_ts": 1806777503,
+        "predicted_liq_unix_ts": 1806777502,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -251,7 +251,7 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.02199196,
         "hf_next_60s": 1.02199192,
-        "eta_seconds": 38531661,
+        "eta_seconds": 38531660,
         "eta_hours": 10703.24,
         "predicted_liq_unix_ts": 1832569651,
         "quiet_block_sniper_armed": false
@@ -273,7 +273,7 @@
         "hf_next_60s": 1.03014156,
         "eta_seconds": 17603312,
         "eta_hours": 4889.81,
-        "predicted_liq_unix_ts": 1811641302,
+        "predicted_liq_unix_ts": 1811641303,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -291,7 +291,7 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.03057349,
         "hf_next_60s": 1.03057339,
-        "eta_seconds": 17855503,
+        "eta_seconds": 17855502,
         "eta_hours": 4959.86,
         "predicted_liq_unix_ts": 1811893493,
         "quiet_block_sniper_armed": false
@@ -311,7 +311,7 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.03554036,
         "hf_next_60s": 1.03554026,
-        "eta_seconds": 20756155,
+        "eta_seconds": 20756154,
         "eta_hours": 5765.6,
         "predicted_liq_unix_ts": 1814794145,
         "quiet_block_sniper_armed": false
@@ -330,10 +330,10 @@
         "net_decay_apy_pct": 1.8,
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.03568847,
-        "hf_next_60s": 1.03568844,
-        "eta_seconds": 62527950,
-        "eta_hours": 17368.88,
-        "predicted_liq_unix_ts": 1856565940,
+        "hf_next_60s": 1.03568843,
+        "eta_seconds": 62527948,
+        "eta_hours": 17368.87,
+        "predicted_liq_unix_ts": 1856565939,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_LONG_TAIL_SWEET_SPOT",
@@ -351,9 +351,9 @@
         "daily_hf_drift": 8.8e-05,
         "hf_next_250ms_block": 1.03962607,
         "hf_next_60s": 1.03962601,
-        "eta_seconds": 39052477,
+        "eta_seconds": 39052478,
         "eta_hours": 10847.91,
-        "predicted_liq_unix_ts": 1833090467,
+        "predicted_liq_unix_ts": 1833090469,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -782,10 +782,10 @@
   "aave_v3_borrowers_monitored": 190,
   "multi_route_bundle_probes": 0,
   "total_rpc_checks_per_cycle": 147,
-  "cycles_scanned": 14,
-  "scan_duration_sec": 0.076,
-  "rpc_latency_min_ms": 75.68,
-  "rpc_latency_avg_ms": 133.13,
+  "cycles_scanned": 1,
+  "scan_duration_sec": 0.182,
+  "rpc_latency_min_ms": 181.35,
+  "rpc_latency_avg_ms": 181.35,
   "chainlink_eth_usd_price": 2242.73,
   "univ3_1bp_eth_spot_usd": 2243.48,
   "oracle_deviation_bps": 3.34,
@@ -845,13 +845,13 @@
   "aws_failover_state": {
     "role": "ACTIVE_FAILOVER_BROADCASTER",
     "aws_online": false,
-    "aws_heartbeat_age_sec": 951186.9,
+    "aws_heartbeat_age_sec": 951188.8,
     "broadcast_enabled": true,
     "rtt_half_precompensation": {
-      "target_block_timestamp_uint40": 1794037992,
+      "target_block_timestamp_uint40": 1794037994,
       "measured_min_rtt_ms": 45.0,
       "one_way_flight_lead_ms": 22.5,
-      "precompensated_fire_epoch": 1794037991.9775,
+      "precompensated_fire_epoch": 1794037993.9775,
       "staggered_4nonce_offsets_ms": [
         -15.0,
         0.0,
@@ -1041,11 +1041,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 36605,
-    "per_route_ns": 2287.81,
+    "latency_ns": 17657,
+    "per_route_ns": 1103.56,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1794037991.46755,
-  "hmac_sha256_integrity": "3649cd2bd28f06286e9537adf2b3fd6682c4acdcb651d559e4c0b1824e7c68dd"
+  "ts": 1794037993.2843883,
+  "hmac_sha256_integrity": "ce8fe6ad86c537fb5a75b6db37d752193b33c436588139cfae2300f4937e0879"
 }
