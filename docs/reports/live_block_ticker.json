@@ -4,8 +4,8 @@
   "rpc_endpoint": "https://arbitrum-one.public.blastapi.io",
   "asm_eval_ns": 192.0,
   "asm_eval_us": 0.192,
-  "rpc_rtt_ms": 69.69,
-  "block_number": 522270992,
+  "rpc_rtt_ms": 65.78,
+  "block_number": 522270995,
   "gas_price_gwei": 0.0200,
   "latest_nonce": 30,
   "latest_nonce_hex": "0x1e",
@@ -22,5 +22,5 @@
   "total_onchain_inr": "83.60",
   "metamask_eth_balance": "0.00000472",
   "relayer_eth_balance": "0.00002001",
-  "updated_epoch": 1794110139
+  "updated_epoch": 1794110140
 }
