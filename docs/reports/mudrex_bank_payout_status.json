@@ -10,7 +10,7 @@
   "wss_sequencer_feed": {
     "connected": true,
     "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-    "frames_received": 34,
+    "frames_received": 23,
     "oracle_updates_detected": 0,
     "whale_swaps_decoded": 0,
     "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -26,8 +26,8 @@
     "active_borrowers_monitored": 37,
     "comet_borrowers_monitored": 37,
     "radiant_v2_borrowers_monitored": 0,
-    "total_monitored_debt_usd": 1420915.52,
-    "total_monitored_debt_inr": 134873301.16,
+    "total_monitored_debt_usd": 1425856.8,
+    "total_monitored_debt_inr": 135342327.46,
     "liquidatable_now": 0
   },
   "gas_spike_circuit_breaker_tripped": false,
@@ -36,6 +36,6 @@
   "bidirectional_reverse_mirrors_active": true,
   "liquidation_swap_fee_tier_1bp_active": true,
   "stealth_5_shields_active": true,
-  "ts": 1795191433.476239,
-  "hmac_sha256_integrity": "c2499bc725f9936c615a59cb88ab09cab4f989ad55f723a6e356791c968c88cf"
+  "ts": 1795193786.113762,
+  "hmac_sha256_integrity": "cf845c3109bf84dc016c5374a41733b6c0eb84a30d75c994aba9ef5780ce27ad"
 }
