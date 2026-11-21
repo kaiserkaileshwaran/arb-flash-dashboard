@@ -1,6 +1,6 @@
 {
-  "ts": 1795253204.3845565,
-  "pairs_scanned": 2052,
+  "ts": 1795253224.8223236,
+  "pairs_scanned": 2051,
   "active_borrowers": 46,
   "radiant_active_borrowers": 0,
   "targets": [
@@ -9,7 +9,7 @@
       "market": "0xd98Be00b5D27fc98112BdE293e487f8D4cA57d07",
       "borrower": "0x0c46979e0da0e9661e0a3526fcba024f2f300f11",
       "symbol": "USDT",
-      "debt_usd": 153777.55,
+      "debt_usd": 153777.56,
       "is_liquidatable": false,
       "est_bonus_usd": 12302.2,
       "label": "Compound V3 USDT Comet ($153,778 USDT Debt \u2022 8% Zero-Capital Absorb Bonus)"
@@ -39,7 +39,7 @@
       "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
       "borrower": "0x677313262fc22aaaccadab9a0f69240ef0969990",
       "symbol": "USDC",
-      "debt_usd": 98416.85,
+      "debt_usd": 98416.86,
       "is_liquidatable": false,
       "est_bonus_usd": 7873.35,
       "label": "Compound V3 USDC Comet ($98,417 USDC Debt \u2022 8% Zero-Capital Absorb Bonus)"
@@ -79,7 +79,7 @@
       "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
       "borrower": "0xe6654edcff8c184ee76a1d80f9a60edd8658c7f3",
       "symbol": "USDC",
-      "debt_usd": 43783.32,
+      "debt_usd": 43783.33,
       "is_liquidatable": false,
       "est_bonus_usd": 3502.67,
       "label": "Compound V3 USDC Comet ($43,783 USDC Debt \u2022 8% Zero-Capital Absorb Bonus)"
@@ -189,7 +189,7 @@
       "market": "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
       "borrower": "0x0d5bc29206aef1f32e0613bb2c915d74407a8b67",
       "symbol": "USDC",
-      "debt_usd": 14611.08,
+      "debt_usd": 14611.09,
       "is_liquidatable": false,
       "est_bonus_usd": 1168.89,
       "label": "Compound V3 USDC Comet ($14,611 USDC Debt \u2022 8% Zero-Capital Absorb Bonus)"
