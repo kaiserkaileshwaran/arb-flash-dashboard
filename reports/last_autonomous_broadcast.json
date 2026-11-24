@@ -91,7 +91,7 @@
     "wss_sequencer_feed": {
       "connected": true,
       "endpoint": "wss://arb1-feed.arbitrum.io/feed",
-      "frames_received": 32,
+      "frames_received": 5,
       "oracle_updates_detected": 0,
       "whale_swaps_decoded": 0,
       "co_location_region": "AWS us-east-1 (N. Virginia \u2014 Co-Located with Arbitrum Sequencer)"
@@ -117,7 +117,7 @@
     "bidirectional_reverse_mirrors_active": true,
     "liquidation_swap_fee_tier_1bp_active": true,
     "stealth_5_shields_active": true,
-    "ts": 1795554357.0047426
+    "ts": 1795554358.9676898
   },
   "table2_under_2pct_fast_triggers": [
     {
@@ -131,9 +131,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.00824898,
         "hf_next_60s": 1.00824888,
-        "eta_seconds": 4817991,
+        "eta_seconds": 4817987,
         "eta_hours": 1338.33,
-        "predicted_liq_unix_ts": 1800372346,
+        "predicted_liq_unix_ts": 1800372344,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -151,9 +151,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.00892876,
         "hf_next_60s": 1.00892865,
-        "eta_seconds": 5214978,
-        "eta_hours": 1448.61,
-        "predicted_liq_unix_ts": 1800769333,
+        "eta_seconds": 5214977,
+        "eta_hours": 1448.6,
+        "predicted_liq_unix_ts": 1800769334,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -171,9 +171,9 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.01038788,
         "hf_next_60s": 1.01038784,
-        "eta_seconds": 18201313,
+        "eta_seconds": 18201310,
         "eta_hours": 5055.92,
-        "predicted_liq_unix_ts": 1813755668,
+        "predicted_liq_unix_ts": 1813755667,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -191,9 +191,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.01042097,
         "hf_next_60s": 1.01042087,
-        "eta_seconds": 6086433,
+        "eta_seconds": 6086432,
         "eta_hours": 1690.68,
-        "predicted_liq_unix_ts": 1801640788,
+        "predicted_liq_unix_ts": 1801640789,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -211,9 +211,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.01144474,
         "hf_next_60s": 1.01144464,
-        "eta_seconds": 6684315,
+        "eta_seconds": 6684314,
         "eta_hours": 1856.75,
-        "predicted_liq_unix_ts": 1802238670,
+        "predicted_liq_unix_ts": 1802238671,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_B_MID_CAP_BORROWER",
@@ -231,9 +231,9 @@
         "daily_hf_drift": 8.8e-05,
         "hf_next_250ms_block": 1.01354485,
         "hf_next_60s": 1.01354479,
-        "eta_seconds": 13349436,
+        "eta_seconds": 13349435,
         "eta_hours": 3708.18,
-        "predicted_liq_unix_ts": 1808903791,
+        "predicted_liq_unix_ts": 1808903792,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -251,9 +251,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.01629709,
         "hf_next_60s": 1.01629699,
-        "eta_seconds": 9518086,
+        "eta_seconds": 9518085,
         "eta_hours": 2643.91,
-        "predicted_liq_unix_ts": 1805072441,
+        "predicted_liq_unix_ts": 1805072442,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -269,10 +269,10 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
-        "hf_next_250ms_block": 1.01716099,
+        "hf_next_250ms_block": 1.01716098,
         "hf_next_60s": 1.01716088,
-        "eta_seconds": 10022600,
-        "eta_hours": 2784.06,
+        "eta_seconds": 10022598,
+        "eta_hours": 2784.05,
         "predicted_liq_unix_ts": 1805576955,
         "quiet_block_sniper_armed": false
       },
@@ -291,9 +291,9 @@
         "daily_hf_drift": 4.9e-05,
         "hf_next_250ms_block": 1.02188144,
         "hf_next_60s": 1.0218814,
-        "eta_seconds": 38338032,
+        "eta_seconds": 38338031,
         "eta_hours": 10649.45,
-        "predicted_liq_unix_ts": 1833892387,
+        "predicted_liq_unix_ts": 1833892388,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_LONG_TAIL_SWEET_SPOT",
@@ -311,9 +311,9 @@
         "daily_hf_drift": 0.000148,
         "hf_next_250ms_block": 1.02482191,
         "hf_next_60s": 1.02482181,
-        "eta_seconds": 14496582,
+        "eta_seconds": 14496578,
         "eta_hours": 4026.83,
-        "predicted_liq_unix_ts": 1810050937,
+        "predicted_liq_unix_ts": 1810050935,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_LONG_TAIL_SWEET_SPOT",
@@ -329,11 +329,11 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
-        "hf_next_250ms_block": 1.02764414,
+        "hf_next_250ms_block": 1.02764413,
         "hf_next_60s": 1.02764403,
-        "eta_seconds": 16144759,
-        "eta_hours": 4484.66,
-        "predicted_liq_unix_ts": 1811699114,
+        "eta_seconds": 16144756,
+        "eta_hours": 4484.65,
+        "predicted_liq_unix_ts": 1811699113,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -349,11 +349,11 @@
       "interest_creep_eta": {
         "net_decay_apy_pct": 5.4,
         "daily_hf_drift": 0.000148,
-        "hf_next_250ms_block": 1.03546579,
-        "hf_next_60s": 1.03546569,
-        "eta_seconds": 20712606,
+        "hf_next_250ms_block": 1.03546578,
+        "hf_next_60s": 1.03546568,
+        "eta_seconds": 20712602,
         "eta_hours": 5753.5,
-        "predicted_liq_unix_ts": 1816266961,
+        "predicted_liq_unix_ts": 1816266959,
         "quiet_block_sniper_armed": false
       },
       "solo_win_tier": "TIER_A_SOLO_SWEET_SPOT",
@@ -782,10 +782,10 @@
   "aave_v3_borrowers_monitored": 212,
   "multi_route_bundle_probes": 0,
   "total_rpc_checks_per_cycle": 152,
-  "cycles_scanned": 6,
-  "scan_duration_sec": 0.261,
-  "rpc_latency_min_ms": 261.23,
-  "rpc_latency_avg_ms": 346.71,
+  "cycles_scanned": 1,
+  "scan_duration_sec": 0.17,
+  "rpc_latency_min_ms": 169.78,
+  "rpc_latency_avg_ms": 169.78,
   "chainlink_eth_usd_price": 1671.38,
   "univ3_1bp_eth_spot_usd": 1671.62,
   "oracle_deviation_bps": 1.44,
@@ -865,13 +865,13 @@
   "aws_failover_state": {
     "role": "ACTIVE_FAILOVER_BROADCASTER",
     "aws_online": false,
-    "aws_heartbeat_age_sec": 2467552.4,
+    "aws_heartbeat_age_sec": 2467554.4,
     "broadcast_enabled": true,
     "rtt_half_precompensation": {
-      "target_block_timestamp_uint40": 1795554357,
+      "target_block_timestamp_uint40": 1795554359,
       "measured_min_rtt_ms": 45.0,
       "one_way_flight_lead_ms": 22.5,
-      "precompensated_fire_epoch": 1795554356.9775,
+      "precompensated_fire_epoch": 1795554358.9775,
       "staggered_4nonce_offsets_ms": [
         -15.0,
         0.0,
@@ -1049,8 +1049,8 @@
   "bundled_route_labels": [],
   "bundled_multi_route_gross_wei": 0,
   "bundled_multi_route_gross_inr": 0.0,
-  "l2_gas_cost_inr": 0.6699,
-  "bundled_total_gas_cost_inr": 0.6699,
+  "l2_gas_cost_inr": 0.6597,
+  "bundled_total_gas_cost_inr": 0.6597,
   "single_net_if_forced_inr": 0.0,
   "bundled_net_if_forced_inr": 0.0,
   "real_net_profit_executed_inr": 0.0,
@@ -1074,11 +1074,11 @@
   "liquidation_swap_fee_tier_1bp_active": true,
   "asm_kernel_complexity": {
     "asm_loaded": true,
-    "latency_ns": 18350,
-    "per_route_ns": 1146.88,
+    "latency_ns": 16746,
+    "per_route_ns": 1046.62,
     "complexity": "O(1) Time | O(1) Auxiliary Space | O(1) Closed-Form Lagrangian Math",
     "top_sweet_spot_usd": 44270.5
   },
-  "ts": 1795554357.00999,
-  "hmac_sha256_integrity": "8bf41b6a18daa672a2f0c15f44cb72a1c388f5580a73fefaacdbd9559f964ae3"
+  "ts": 1795554358.9729419,
+  "hmac_sha256_integrity": "c8acb28204516a6bafd5311857d5149f09fb2e34cf2068d49eded8dc9b7014e1"
 }
